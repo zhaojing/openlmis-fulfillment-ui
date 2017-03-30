@@ -8,5 +8,7 @@
     "/openlmis-ui-layout",
     "/openlmis-referencedata-ui"
   ],
-  "fulfillmentServiceURL": "/"
+  "fulfillmentServiceURL": "/",
+  "transifexProjectName": "openlmis-requisition-ui",
+  "defaultLanguage": "en"
 }
