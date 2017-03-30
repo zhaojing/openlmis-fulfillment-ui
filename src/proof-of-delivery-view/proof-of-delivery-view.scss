@@ -1,13 +1,13 @@
 .pod-info {
-    @extend .requisition-info;
+    @extend .requisition-info !optional;
 }
 
 .pod-regular {
-    @extend .requisition-type;
-    @extend .requisition-type.regular;
+    @extend .requisition-type !optional;
+    @extend .requisition-type.regular !optional;
 }
 
 .pod-emergency {
-    @extend .requisition-type;
-    @extend .requisition-type.emergency;
+    @extend .requisition-type !optional;
+    @extend .requisition-type.emergency !optional;
 }
