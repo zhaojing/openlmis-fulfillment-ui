@@ -37,4 +37,4 @@ services:
       - '/openlmis-ui-layout'
   image:
     build: .
-    image: openlmis/fulfillment-ui:4.0.1-SNAPSHOT
+    image: openlmis/fulfillment-ui
