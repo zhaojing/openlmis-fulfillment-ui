@@ -186,7 +186,7 @@
             stateParams.program = vm.selectedProgramId;
             stateParams.isSupervised = vm.isSupervised;
 
-            $state.go('openlmis.orders.podManage', stateParams, {
+            $state.go('orders.podManage', stateParams, {
                 reload: true
             });
         }
@@ -204,7 +204,7 @@
          */
         function openPod(orderId) {
             withUiBlocking(orderFactory.getPod(orderId)).then(function(pod) {
-                $state.go('openlmis.orders.podView', {
+                $state.go('orders.podView', {
                     podId: pod.id
                 });
             }, function() {

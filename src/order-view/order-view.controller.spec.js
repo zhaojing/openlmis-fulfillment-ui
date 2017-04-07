@@ -96,7 +96,7 @@ describe('OrderViewController', function() {
 
             vm.loadOrders();
 
-            expect($state.go).toHaveBeenCalledWith('openlmis.orders.view', {
+            expect($state.go).toHaveBeenCalledWith('orders.view', {
                 supplyingFacility: null,
                 program: vm.program.id,
                 requestingFacility: null
@@ -108,7 +108,7 @@ describe('OrderViewController', function() {
 
             vm.loadOrders();
 
-            expect($state.go).toHaveBeenCalledWith('openlmis.orders.view', {
+            expect($state.go).toHaveBeenCalledWith('orders.view', {
                 supplyingFacility: vm.supplyingFacility.id,
                 program: null,
                 requestingFacility: null
@@ -120,7 +120,7 @@ describe('OrderViewController', function() {
 
             vm.loadOrders();
 
-            expect($state.go).toHaveBeenCalledWith('openlmis.orders.view', {
+            expect($state.go).toHaveBeenCalledWith('orders.view', {
                 supplyingFacility: null,
                 program: null,
                 requestingFacility: vm.requestingFacility.id

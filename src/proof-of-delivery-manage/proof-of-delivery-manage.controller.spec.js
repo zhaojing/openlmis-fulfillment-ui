@@ -157,7 +157,7 @@ describe('ProofOfDeliveryManageController', function() {
             vm.requestingFacilityId = 'facility-one';
             vm.loadOrders();
 
-            expect($state.go).toHaveBeenCalledWith('openlmis.orders.podManage', {
+            expect($state.go).toHaveBeenCalledWith('orders.podManage', {
                 requestingFacility: vm.requestingFacilityId,
                 program: undefined,
                 isSupervised: false
@@ -168,7 +168,7 @@ describe('ProofOfDeliveryManageController', function() {
             vm.selectedProgramId = 'facility-one';
             vm.loadOrders();
 
-            expect($state.go).toHaveBeenCalledWith('openlmis.orders.podManage', {
+            expect($state.go).toHaveBeenCalledWith('orders.podManage', {
                 requestingFacility: 'facility-one',
                 program: vm.selectedProgramId,
                 isSupervised: false
@@ -179,7 +179,7 @@ describe('ProofOfDeliveryManageController', function() {
             vm.isSupervised = 'true';
             vm.loadOrders();
 
-            expect($state.go).toHaveBeenCalledWith('openlmis.orders.podManage', {
+            expect($state.go).toHaveBeenCalledWith('orders.podManage', {
                 requestingFacility: 'facility-one',
                 program: undefined,
                 isSupervised: vm.isSupervised
@@ -240,7 +240,7 @@ describe('ProofOfDeliveryManageController', function() {
             deferred.resolve(pod);
             $rootScope.$apply();
 
-            expect($state.go).toHaveBeenCalledWith('openlmis.orders.podView', {podId: 'pod-one'});
+            expect($state.go).toHaveBeenCalledWith('orders.podView', {podId: 'pod-one'});
         });
     });
 

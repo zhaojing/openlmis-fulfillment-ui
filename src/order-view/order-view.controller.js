@@ -144,7 +144,7 @@
             stateParams.requestingFacility = vm.requestingFacility ? vm.requestingFacility.id : null;
             stateParams.program = vm.program ? vm.program.id : null;
 
-            $state.go('openlmis.orders.view', stateParams, {
+            $state.go('orders.view', stateParams, {
                 reload: true
             });
         }
