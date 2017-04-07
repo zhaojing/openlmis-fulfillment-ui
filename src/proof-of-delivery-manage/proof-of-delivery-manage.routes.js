@@ -25,7 +25,7 @@
 
     function routes($stateProvider, FULFILLMENT_RIGHTS, REQUISITION_RIGHTS) {
 
-        $stateProvider.state('orders.podManage', {
+        $stateProvider.state('openlmis.orders.podManage', {
 			showInNavigation: true,
 			label: 'link.orders.podManage',
             url: '/manage?requestingFacility&program&isSupervised&page&size',

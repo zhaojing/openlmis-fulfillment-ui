@@ -25,7 +25,7 @@
 
     function routes($stateProvider) {
 
-        $stateProvider.state('orders.podView', {
+        $stateProvider.state('openlmis.orders.podView', {
             url: '^/pod/:podId?page&size',
             templateUrl: 'proof-of-delivery-view/proof-of-delivery-view.html',
             controller: 'ProofOfDeliveryViewController',

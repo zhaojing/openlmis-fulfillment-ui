@@ -25,7 +25,7 @@
 
     function config($stateProvider, REQUISITION_RIGHTS, FULFILLMENT_RIGHTS) {
 
-        $stateProvider.state('orders.view', {
+        $stateProvider.state('openlmis.orders.view', {
             controller: 'OrderViewController',
             controllerAs: 'vm',
             label: 'link.viewOrders',
