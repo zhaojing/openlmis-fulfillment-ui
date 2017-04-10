@@ -67,7 +67,7 @@ the UI module.
 
 ```shell
 > docker-compose pull
-> docker-compose run ./build.sh fulfillment-ui
+> docker-compose run --entrypoint ./build.sh fulfillment-ui
 > docker-compose build image
 ```
 
