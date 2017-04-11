@@ -27,7 +27,7 @@
 
         $stateProvider.state('orders.podManage', {
 			showInNavigation: true,
-			label: 'link.orders.podManage',
+			label: 'proofOfDeliveryManage.managePods',
             url: '/manage?requestingFacility&program&isSupervised&page&size',
             controller: 'ProofOfDeliveryManageController',
             controllerAs: 'vm',

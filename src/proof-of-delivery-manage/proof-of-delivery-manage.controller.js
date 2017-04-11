@@ -208,7 +208,7 @@
                     podId: pod.id
                 });
             }, function() {
-                notificationService.error('msg.noOrderFound');
+                notificationService.error('proofOfDeliveryManage.noOrderFound');
             });
         }
 
@@ -229,7 +229,7 @@
                 withUiBlocking(getUserSupervisedFacilities(programId)).then(function(facilities) {
                     vm.requestingFacilities = facilities;
                 }, function() {
-                    notificationService.error('msg.invalidProgramOrRight');
+                    notificationService.error('proofOfDeliveryManage.invalidProgramOrRight');
                 });
             } else {
                 vm.requestingFacilities = [];

@@ -34,7 +34,7 @@
                 pod: function($stateParams, proofOfDeliveryFactory) {
                     return proofOfDeliveryFactory.get($stateParams.podId);
                 },
-                lineItems: function(paginationService, pod, $stateParams, requisitionValidator) {
+                lineItems: function(paginationService, pod, $stateParams) {
 					return paginationService.registerList(pod.isLineItemValid, $stateParams, function() {
                         return pod.proofOfDeliveryLineItems;
 					});

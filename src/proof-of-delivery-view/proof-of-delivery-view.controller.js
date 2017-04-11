@@ -84,16 +84,16 @@
          * Saves current POD after confirming it.
          */
         function savePod() {
-            confirmService.confirm('msg.orders.savePodQuestion').then(function() {
+            confirmService.confirm('proofOfDeliveryView.savePod.confirm').then(function() {
                 if(vm.pod.isValid()) {
                     proofOfDeliveryService.save(vm.pod).then(function() {
-                        notificationService.success('msg.podSaved');
+                        notificationService.success('proofOfDeliveryView.savePod.success');
                         $state.reload();
                     }, function() {
-                        notificationService.error('msg.podSavedFailed');
+                        notificationService.error('proofOfDeliveryView.savePod.failure');
                     });
                 } else {
-                    notificationService.error('error.podInvalid');
+                    notificationService.error('proofOfDeliveryView.invalidPod');
                 }
             });
         }
@@ -107,20 +107,20 @@
          * Submits current POD after confirming it.
          */
         function submitPod() {
-            confirmService.confirm('msg.orders.submitPodQuestion').then(function() {
+            confirmService.confirm('proofOfDeliveryView.submitPod.confirm').then(function() {
                 if(vm.pod.isValid()) {
                     proofOfDeliveryService.save(vm.pod).then(function() {
                         proofOfDeliveryService.submit(vm.pod.id).then(function() {
-                            notificationService.success('msg.podSubmitted');
+                            notificationService.success('proofOfDeliveryView.submitPod.success');
                             $state.reload();
                         }, function() {
-                            notificationService.error('msg.podSubmitFailed');
+                            notificationService.error('proofOfDeliveryView.submitPod.failure');
                         });
                     }, function() {
-                        notificationService.error('msg.podSavedFailed');
+                        notificationService.error('proofOfDeliveryView.savePod.failure');
                     });
                 } else {
-                    notificationService.error('error.podInvalid');
+                    notificationService.error('proofOfDeliveryView.invalidPod');
                 }
             });
         }
@@ -150,7 +150,7 @@
          * @return {String} Order type message
          */
         function typeMessage() {
-            return vm.pod.order.emergency ? 'label.emergency' : 'msg.regular';
+            return 'proofOfDeliveryView.' + (vm.pod.order.emergency ? 'emergency' : 'regular');
         }
     }
 }());

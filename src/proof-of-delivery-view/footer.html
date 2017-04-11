@@ -1,6 +1,6 @@
 <aside class="pod-footer">
     <dl>
-        <dt>{{'label.deliveredBy' | message}}</dt>
+        <dt>{{'proofOfDeliveryView.deliveredBy' | message}}</dt>
         <dd>
             <div ng-if="!vm.isSubmitted()">
                 <input type="text" ng-model="vm.pod.deliveredBy" ng-change="vm.pod.validateRequiredField('deliveredBy')" ng-blur="vm.pod.validateRequiredField('deliveredBy')"/>
@@ -8,7 +8,7 @@
             </div>
             <div ng-if="vm.isSubmitted()">{{vm.pod.deliveredBy}}</div>
         </dd>
-        <dt>{{'label.receivedBy' | message}}</dt>
+        <dt>{{'proofOfDeliveryView.receivedBy' | message}}</dt>
         <dd>
             <div ng-if="!vm.isSubmitted()">
                 <input type="text" ng-model="vm.pod.receivedBy" ng-change="vm.pod.validateRequiredField('receivedBy')" ng-blur="vm.pod.validateRequiredField('receivedBy')"/>
@@ -16,7 +16,7 @@
             </div>
             <div ng-if="vm.isSubmitted()">{{vm.pod.receivedBy}}</div>
         </dd>
-        <dt>{{'label.receivedDate' | message}}</dt>
+        <dt>{{'proofOfDeliveryView.receivedDate' | message}}</dt>
         <dd>
             <div ng-if="!vm.isSubmitted()">
                 <openlmis-datepicker input-id="receivedDate" value="vm.pod.receivedDate"

@@ -1,72 +1,72 @@
 <div class="page">
-    <h2>{{'header.managePod' | message}}</h2>
+    <h2>{{'proofOfDeliveryManage.managePod' | message}}</h2>
     <section class="openlmis-table-container">
         <form ng-submit="vm.loadOrders()">
             <fieldset class="form-group">
-                <legend>{{'label.requisition.facilityType' | message}}</legend>
+                <legend>{{'proofOfDeliveryManage.facilityType' | message}}</legend>
                 <label class="radio">
                     <input type="radio" ng-model="vm.isSupervised" ng-value="false"
                            ng-change="vm.updateFacilityType()"/>
-                    {{'label.myFacility' | message}}
+                    {{'proofOfDeliveryManage.myFacility' | message}}
                 </label>
                 <label class="radio">
                     <input type="radio" ng-model="vm.isSupervised" ng-value="true"
                            ng-change="vm.updateFacilityType()"
                            ng-disabled="!vm.supervisedPrograms.length"/>
-                    {{'label.supervised.Facility' | message}}
+                    {{'proofOfDeliveryManage.supervisedFacilitiy' | message}}
                 </label>
             </fieldset>
             <fieldset ng-show="!vm.isSupervised">
-                <label for="requestingFacility">{{'label.requestingFacility' | message}}</label>
+                <label for="requestingFacility">{{'proofOfDeliveryManage.requestingFacility' | message}}</label>
                 <select id="requestingFacility" ng-model="vm.requestingFacilityId"
                         ng-options="facility.id as facility.name for facility in vm.requestingFacilities"
-                        placeholder="label.select.facility" required>
+                        placeholder="proofOfDeliveryManage.selectFacility" required>
                 </select>
-                <label for="programListMyFacility">{{'label.program' | message}}</label>
+                <label for="programListMyFacility">{{'proofOfDeliveryManage.program' | message}}</label>
                 <select id="programListMyFacility" ng-model="vm.selectedProgramId"
                         ng-options="program.id as program.name for program in vm.programs"
-                        placeholder="{{'label.select.program' | message}}" required>
+                        placeholder="{{'proofOfDeliveryManage.selectProgram' | message}}" required>
                 </select>
             </fieldset>
             <fieldset ng-show="vm.isSupervised">
-                <label for="programListSupervisedFacility">{{'label.program' | message}}</label>
+                <label for="programListSupervisedFacility">{{'proofOfDeliveryManage.program' | message}}</label>
                 <select id="programListSupervisedFacility" ng-model="vm.selectedProgramId"
                         ng-options="program.id as program.name for program in vm.programs"
                         ng-change="vm.loadFacilitiesForProgram(vm.selectedProgramId)"
-                        placeholder="{{'label.select.program' | message}}" required>
+                        placeholder="{{'proofOfDeliveryManage.selectProgram' | message}}" required>
                 </select>
                 <label for="supervisedFacilityName">
-                    {{'label.requestingFacility' | message}}
+                    {{'proofOfDeliveryManage.requestingFacility' | message}}
                 </label>
                 <select id="supervisedFacilityName" ng-model="vm.requestingFacilityId"
                         ng-options="facility.id as facility.name for facility in vm.requestingFacilities | unique:'id'"
-                        placeholder="{{'label.select.facility' | message}}" required>
+                        placeholder="{{'proofOfDeliveryManage.selectFacility' | message}}" required>
                 </select>
             </fieldset>
-            <input type="submit" value="{{'button.search'|message}}"/>
+            <input type="submit" value="{{'proofOfDeliveryManage.search' | message}}"/>
         </form>
         <table>
             <caption ng-if="vm.pods && !vm.pods.length">
-                {{'msg.noPodsFound' | message}}
+                {{'proofOfDeliveryManage.noPodsFound' | message}}
             </caption>
             <caption ng-if="vm.programs && !vm.programs.length">
-                {{'msg.no.program.available' | message}}
+                {{'proofOfDeliveryManage.noProgramAvailable' | message}}
             </caption>
             <caption ng-if="vm.requestingFacilities && !vm.requestingFacilities.length && !vm.programs.length">
-                {{'msg.no.facility.available' | message}}
+                {{'proofOfDeliveryManage.noFacilityAvailable' | message}}
             </caption>
             <thead>
                 <tr>
-                    <th>{{'label.orderNumber' | message}}</th>
-                    <th>{{'label.supplyingDepot' | message}}</th>
-                    <th>{{'label.facility' | message}}</th>
-                    <th>{{'program.header' | message}}</th>
-                    <th>{{'label.period' | message}}</th>
-                    <th>{{'label.startDate' | message}}</th>
-                    <th>{{'label.endDate' | message}}</th>
-                    <th>{{'label.orderDate' | message}}</th>
-                    <th>{{'label.emergency' | message}}</th>
-                    <th class="col-sticky">{{'label.actions' | message}}</th>
+                    <th>{{'proofOfDeliveryManage.orderNumber' | message}}</th>
+                    <th>{{'proofOfDeliveryManage.supplyingDepot' | message}}</th>
+                    <th>{{'proofOfDeliveryManage.facility' | message}}</th>
+                    <th>{{'proofOfDeliveryManage.program' | message}}</th>
+                    <th>{{'proofOfDeliveryManage.period' | message}}</th>
+                    <th>{{'proofOfDeliveryManage.startDate' | message}}</th>
+                    <th>{{'proofOfDeliveryManage.endDate' | message}}</th>
+                    <th>{{'proofOfDeliveryManage.orderDate' | message}}</th>
+                    <th>{{'proofOfDeliveryManage.emergency' | message}}</th>
+                    <th class="col-sticky">{{'proofOfDeliveryManage.actions' | message}}</th>
                 </tr>
             </thead>
             <tbody>
@@ -83,7 +83,9 @@
                         <i ng-class="{'icon-ok': order.emergency}"></i>
                     </td>
                     <td>
-                        <button class="primary" ng-click="vm.openPod(order.id)">{{'button.viewOrder' | message}}</button>
+                        <button class="primary" ng-click="vm.openPod(order.id)">
+                            {{'proofOfDeliveryManage.viewOrder' | message}}
+                        </button>
                     </td>
                 </tr>
             </tbody>

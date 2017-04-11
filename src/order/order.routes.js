@@ -30,7 +30,7 @@
             url: '/orders',
             showInNavigation: true,
             priority: 1,
-            label: 'link.orders',
+            label: 'order.orders',
             template: '<div ui-view></div>'
         });
     }

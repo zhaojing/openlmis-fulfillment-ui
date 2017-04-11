@@ -1,0 +1,20 @@
+{
+    "orderView.actions": "Actions",
+    "orderView.district": "District",
+    "orderView.download": "Download",
+    "orderView.emergency": "Emergency",
+    "orderView.endDate": "End date",
+    "orderView.facility": "Facility",
+    "orderView.noOrdersFound": "No orders found",
+    "orderView.orderNumber": "Order no.",
+    "orderView.period": "Period",
+    "orderView.print": "Print",
+    "orderView.program": "Program",
+    "orderView.program": "Program",
+    "orderView.requestingFacility": "Requesting facility",
+    "orderView.search": "search",
+    "orderView.startDate": "Start date",
+    "orderView.status": "Status",
+    "orderView.supplyingFacility": "Supplying facility",
+    "orderView.viewOrders": "View orders"
+}

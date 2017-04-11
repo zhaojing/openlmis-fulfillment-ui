@@ -28,7 +28,7 @@
         $stateProvider.state('orders.view', {
             controller: 'OrderViewController',
             controllerAs: 'vm',
-            label: 'link.viewOrders',
+            label: 'orderView.viewOrders',
             showInNavigation: true,
             templateUrl: 'order-view/order-view.html',
             url: '/view?supplyingFacility&requestingFacility&program&page&size',

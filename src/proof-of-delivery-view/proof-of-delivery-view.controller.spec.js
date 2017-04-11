@@ -98,7 +98,8 @@ describe('PodViewController', function() {
         it('should show confirmation modal', function() {
             callSave(true);
 
-            expect(confirmServiceMock.confirm).toHaveBeenCalledWith('msg.orders.savePodQuestion');
+            expect(confirmServiceMock.confirm)
+                .toHaveBeenCalledWith('proofOfDeliveryView.savePod.confirm');
         });
 
         it('should save pod', function() {
@@ -110,7 +111,7 @@ describe('PodViewController', function() {
         it('should show error notification if validation was not successful', function() {
             callSave(false);
 
-            expect(notificationServiceMock.error).toHaveBeenCalledWith('error.podInvalid');
+            expect(notificationServiceMock.error).toHaveBeenCalledWith('proofOfDeliveryView.invalidPod');
         });
 
         it('should show success notification if save was successful', function() {
@@ -118,7 +119,8 @@ describe('PodViewController', function() {
             deferred.resolve();
             $rootScope.$apply();
 
-            expect(notificationServiceMock.success).toHaveBeenCalledWith('msg.podSaved');
+            expect(notificationServiceMock.success)
+                .toHaveBeenCalledWith('proofOfDeliveryView.savePod.success');
         });
 
         it('should reload state if save was successful', function() {
@@ -134,7 +136,8 @@ describe('PodViewController', function() {
             deferred.reject();
             $rootScope.$apply();
 
-            expect(notificationServiceMock.error).toHaveBeenCalledWith('msg.podSavedFailed');
+            expect(notificationServiceMock.error)
+                .toHaveBeenCalledWith('proofOfDeliveryView.savePod.failure');
         });
 
         it('should not reload state if save failed', function() {
@@ -167,7 +170,8 @@ describe('PodViewController', function() {
         it('should show confirmation modal', function() {
             callSubmit(true);
 
-            expect(confirmServiceMock.confirm).toHaveBeenCalledWith('msg.orders.submitPodQuestion');
+            expect(confirmServiceMock.confirm)
+                .toHaveBeenCalledWith('proofOfDeliveryView.submitPod.confirm');
         });
 
         it('should save POD before submit', function() {
@@ -185,7 +189,8 @@ describe('PodViewController', function() {
         it('should show error notification if validation was not successful', function() {
             callSubmit(false);
 
-            expect(notificationServiceMock.error).toHaveBeenCalledWith('error.podInvalid');
+            expect(notificationServiceMock.error)
+                .toHaveBeenCalledWith('proofOfDeliveryView.invalidPod');
         });
 
         it('should show success notification if save was successful', function() {
@@ -193,7 +198,8 @@ describe('PodViewController', function() {
             deferred.resolve();
             $rootScope.$apply();
 
-            expect(notificationServiceMock.success).toHaveBeenCalledWith('msg.podSubmitted');
+            expect(notificationServiceMock.success)
+                .toHaveBeenCalledWith('proofOfDeliveryView.submitPod.success');
         });
 
         it('should reload state if save was successful', function() {
@@ -209,7 +215,8 @@ describe('PodViewController', function() {
             deferred.reject();
             $rootScope.$apply();
 
-            expect(notificationServiceMock.error).toHaveBeenCalledWith('msg.podSubmitFailed');
+            expect(notificationServiceMock.error)
+                .toHaveBeenCalledWith('proofOfDeliveryView.submitPod.failure');
         });
 
         it('should not reload state if save failed', function() {
@@ -259,7 +266,7 @@ describe('PodViewController', function() {
 
             var result = vm.typeMessage();
 
-            expect(result).toEqual('label.emergency');
+            expect(result).toEqual('proofOfDeliveryView.emergency');
         });
 
         it('should return regular if pod order is not emergency', function() {
@@ -267,7 +274,7 @@ describe('PodViewController', function() {
 
             var result = vm.typeMessage();
 
-            expect(result).toEqual('msg.regular');
+            expect(result).toEqual('proofOfDeliveryView.regular');
         });
 
     });
