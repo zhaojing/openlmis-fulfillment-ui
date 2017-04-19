@@ -15,7 +15,7 @@
             <select id="program"
                     ng-model="vm.program"
                     ng-options="program.name for program in vm.programs"></select>
-            <input type="submit" class="btn btn-primary" value="{{'button.search' | message}}"/>
+            <input type="submit" class="btn btn-primary" value="{{'orderView.search' | message}}"/>
         </form>
         <table>
             <caption ng-if="!vm.orders.length">{{'orderView.noOrdersFound' | message}}</caption>
