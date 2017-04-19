@@ -25,7 +25,7 @@
 
     function routes($stateProvider) {
 
-        $stateProvider.state('orders', {
+        $stateProvider.state('openlmis.orders', {
             abstract: true,
             url: '/orders',
             showInNavigation: true,
