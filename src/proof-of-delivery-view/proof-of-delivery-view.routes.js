@@ -25,20 +25,25 @@
 
     function routes($stateProvider) {
 
-        $stateProvider.state('openlmis.orders.podView', {
+        $stateProvider.state('openlmis.orders.podManage.podView', {
+            label: 'proofOfDeliveryView.viewPod',
             url: '^/pod/:podId?page&size',
-            templateUrl: 'proof-of-delivery-view/proof-of-delivery-view.html',
-            controller: 'ProofOfDeliveryViewController',
-            controllerAs: 'vm',
-            resolve: {
-                pod: function($stateParams, proofOfDeliveryFactory) {
-                    return proofOfDeliveryFactory.get($stateParams.podId);
-                },
-                lineItems: function(paginationService, pod, $stateParams) {
-					return paginationService.registerList(pod.isLineItemValid, $stateParams, function() {
-                        return pod.proofOfDeliveryLineItems;
-					});
-				}
+            views: {
+                '@openlmis': {
+                    templateUrl: 'proof-of-delivery-view/proof-of-delivery-view.html',
+                    controller: 'ProofOfDeliveryViewController',
+                    controllerAs: 'vm',
+                    resolve: {
+                        pod: function($stateParams, proofOfDeliveryFactory) {
+                            return proofOfDeliveryFactory.get($stateParams.podId);
+                        },
+                        lineItems: function(paginationService, pod, $stateParams) {
+                            return paginationService.registerList(pod.isLineItemValid, $stateParams, function() {
+                                return pod.proofOfDeliveryLineItems;
+                            });
+                        }
+                    }
+                }
             }
         });
     }

@@ -240,7 +240,7 @@ describe('ProofOfDeliveryManageController', function() {
             deferred.resolve(pod);
             $rootScope.$apply();
 
-            expect($state.go).toHaveBeenCalledWith('openlmis.orders.podView', {podId: 'pod-one'});
+            expect($state.go).toHaveBeenCalledWith('openlmis.orders.podManage.podView', {podId: 'pod-one'});
         });
     });
 

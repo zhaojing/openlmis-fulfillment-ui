@@ -24,9 +24,12 @@
     "proofOfDeliveryView.required": "This field is required",
     "proofOfDeliveryView.savePod.confirm": "Are you sure you want to save this Proof of Delivery?",
     "proofOfDeliveryView.savePod.failure": "Failed to save Proof of Delivery!",
+    "proofOfDeliveryView.savePod.label": "Sync",
     "proofOfDeliveryView.savePod.success": "Proof of Delivery saved!",
     "proofOfDeliveryView.submitPod.confirm": "Are you sure you want to submit this Proof of Delivery?",
     "proofOfDeliveryView.submitPod.failure": "Failed to submit Proof of Delivery!",
+    "proofOfDeliveryView.submitPod.label": "Submit",
     "proofOfDeliveryView.submitPod.success": "Proof of Delivery submitted!",
-    "proofOfDeliveryView.supplyingDepot": "Supplying depot"
+    "proofOfDeliveryView.supplyingDepot": "Supplying depot",
+    "proofOfDeliveryView.viewPod": "View POD"
 }

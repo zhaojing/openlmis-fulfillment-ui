@@ -204,7 +204,7 @@
          */
         function openPod(orderId) {
             withUiBlocking(orderFactory.getPod(orderId)).then(function(pod) {
-                $state.go('openlmis.orders.podView', {
+                $state.go('openlmis.orders.podManage.podView', {
                     podId: pod.id
                 });
             }, function() {
