@@ -26,11 +26,11 @@
                 <td>{{lineItem.orderLineItem.packsToShip}}</td>
                 <td>{{lineItem.quantityShipped}}</td>
                 <td class="requisition-product-grid-cell" popover="{{lineItem.$errors.quantityReceived}}" ng-class="{'is-invalid': lineItem.$errors.quantityReceived}">
-                    <input positive-integer type="text" ng-hide="vm.isSubmitted()" ng-model="lineItem.quantityReceived" ng-change="lineItem.validate()" ng-blur="lineItem.validate()"/>
+                    <input positive-integer type="number" ng-hide="vm.isSubmitted()" ng-model="lineItem.quantityReceived" ng-change="lineItem.validate()" ng-blur="lineItem.validate()"/>
                     <div ng-hide="!vm.isSubmitted()">{{lineItem.quantityReceived}}</div>
                 </td>
                 <td class="requisition-product-grid-cell">
-                    <input positive-integer type="text" ng-hide="vm.isSubmitted()" ng-model="lineItem.quantityReturned"/>
+                    <input positive-integer type="number" ng-hide="vm.isSubmitted()" ng-model="lineItem.quantityReturned"/>
                     <div ng-hide="!vm.isSubmitted()">{{lineItem.quantityReturned}}</div>
                 </td>
                 <td>{{lineItem.replacedProductCode}}</td>
