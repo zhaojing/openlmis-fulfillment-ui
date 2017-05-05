@@ -29,7 +29,7 @@
             abstract: true,
             url: '/orders',
             showInNavigation: true,
-            priority: 1,
+            priority: 0,
             label: 'order.orders',
             template: '<div ui-view></div>'
         });
