@@ -12,9 +12,9 @@
     "orderView.program": "Program",
     "orderView.program": "Program",
     "orderView.requestingFacility": "Requesting facility",
-    "orderView.search": "search",
+    "orderView.search": "Search",
     "orderView.startDate": "Start date",
     "orderView.status": "Status",
     "orderView.supplyingFacility": "Supplying facility",
-    "orderView.viewOrders": "View orders"
+    "orderView.viewOrders": "View Orders"
 }
