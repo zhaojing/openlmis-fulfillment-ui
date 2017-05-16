@@ -1,3 +1,11 @@
+5.0.1 / Coming soon
+==================
+
+Bug fixes
+
+* [OLMIS-2445](https://openlmis.atlassian.net/browse/OLMIS-2445) - Button and title capitalization are consistent.
+* [OLMIS-2488](https://openlmis.atlassian.net/browse/OLMIS-2488) - Fixed proof of Delivery screen action button text was not translated.
+
 5.0.0 / 2017-05-08
 ==================
 
