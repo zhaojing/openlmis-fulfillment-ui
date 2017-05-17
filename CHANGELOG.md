@@ -5,6 +5,7 @@ Bug fixes
 
 * [OLMIS-2445](https://openlmis.atlassian.net/browse/OLMIS-2445) - Button and title capitalization are consistent.
 * [OLMIS-2488](https://openlmis.atlassian.net/browse/OLMIS-2488) - Fixed proof of Delivery screen action button text was not translated.
+* View Orders screen will now only require either ORDERS_VIER or PODS_MANAGE right to enter(https://github.com/OpenLMIS/openlmis-fulfillment-ui/pull/1).
 
 5.0.0 / 2017-05-08
 ==================
