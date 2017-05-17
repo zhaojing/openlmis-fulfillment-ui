@@ -21,9 +21,9 @@
         .module('order-view')
         .config(config);
 
-    config.$inject = ['$stateProvider', 'REQUISITION_RIGHTS', 'FULFILLMENT_RIGHTS'];
+    config.$inject = ['$stateProvider', 'FULFILLMENT_RIGHTS'];
 
-    function config($stateProvider, REQUISITION_RIGHTS, FULFILLMENT_RIGHTS) {
+    function config($stateProvider, FULFILLMENT_RIGHTS) {
 
         $stateProvider.state('openlmis.orders.view', {
             controller: 'OrderViewController',
@@ -33,12 +33,10 @@
             templateUrl: 'order-view/order-view.html',
             url: '/view?supplyingFacility&requestingFacility&program&page&size',
             accessRights: [
-                REQUISITION_RIGHTS.REQUISITION_CREATE,
-                REQUISITION_RIGHTS.REQUISITION_AUTHORIZE,
                 FULFILLMENT_RIGHTS.PODS_MANAGE,
                 FULFILLMENT_RIGHTS.ORDERS_VIEW
             ],
-            areAllRightsRequired: true,
+            areAllRightsRequired: false,
             resolve: {
                 supplyingFacilities: function(facilityFactory, authorizationService) {
                     return facilityFactory.getSupplyingFacilities(
