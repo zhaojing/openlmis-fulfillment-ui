@@ -148,9 +148,7 @@
         function updateFacilityType() {
             if (vm.isSupervised) {
                 vm.programs = vm.supervisedPrograms;
-                if (!$stateParams.requestingFacility) {
-                    vm.requestingFacilityId = undefined;
-                }
+                vm.requestingFacilityId = undefined;
                 vm.selectedProgramId = undefined;
 
                 if (vm.programs.length === 1) {
