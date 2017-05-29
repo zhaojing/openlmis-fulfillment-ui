@@ -203,9 +203,10 @@ describe('ProofOfDeliveryManageController', function() {
             expect(vm.requestingFacilityId).toEqual(undefined);
         });
 
-        it('should clear requesting facility if is supervised', function() {
+        it('should clear requesting facility when requestingFacility in $stateParams', function() {
             vm.$onInit();
             vm.isSupervised = true;
+            $stateParams.requestingFacility = "some-uuid";
             vm.updateFacilityType();
 
             expect(vm.requestingFacilityId).toEqual(undefined);
