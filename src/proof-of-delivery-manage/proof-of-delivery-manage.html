@@ -19,7 +19,7 @@
             <label for="requestingFacility">{{'proofOfDeliveryManage.requestingFacility' | message}}</label>
             <select id="requestingFacility" ng-model="vm.requestingFacilityId"
                     ng-options="facility.id as facility.name for facility in vm.requestingFacilities"
-                    placeholder="{{proofOfDeliveryManage.selectFacility} | message}" required>
+                    placeholder="{{proofOfDeliveryManage.selectFacility | message}}" required>
             </select>
             <label for="programListMyFacility">{{'proofOfDeliveryManage.program' | message}}</label>
             <select id="programListMyFacility" ng-model="vm.selectedProgramId"
