@@ -203,6 +203,14 @@ describe('ProofOfDeliveryManageController', function() {
             expect(vm.requestingFacilityId).toEqual(undefined);
         });
 
+        it('should clear requesting facility if is supervised', function() {
+            vm.$onInit();
+            vm.isSupervised = true;
+            vm.updateFacilityType();
+
+            expect(vm.requestingFacilityId).toEqual(undefined);
+        });
+
         it('should load proper data for home facility', function() {
             vm.$onInit();
             vm.updateFacilityType();
