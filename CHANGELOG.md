@@ -1,3 +1,10 @@
+5.0.2 / WIP
+==================
+
+Bug fixes
+
+* [OLMIS-2532](https://openlmis.atlassian.net/browse/OLMIS-2532) - Fixed manage PODs view always displayed the previously facility.
+
 5.0.1 / 2017-05-26
 ==================
 
