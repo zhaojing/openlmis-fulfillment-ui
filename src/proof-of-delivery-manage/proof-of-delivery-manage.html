@@ -1,47 +1,11 @@
 <h2>{{'proofOfDeliveryManage.managePod' | message}}</h2>
 <section class="openlmis-table-container">
     <form ng-submit="vm.loadOrders()">
-        <fieldset class="form-group">
-            <legend>{{'proofOfDeliveryManage.facilityType' | message}}</legend>
-            <label class="radio">
-                <input type="radio" ng-model="vm.isSupervised" ng-value="false"
-                       ng-change="vm.updateFacilityType()"/>
-                {{'proofOfDeliveryManage.myFacility' | message}}
-            </label>
-            <label class="radio">
-                <input type="radio" ng-model="vm.isSupervised" ng-value="true"
-                       ng-change="vm.updateFacilityType()"
-                       ng-disabled="!vm.supervisedPrograms.length"/>
-                {{'proofOfDeliveryManage.supervisedFacilitiy' | message}}
-            </label>
-        </fieldset>
-        <fieldset ng-show="!vm.isSupervised">
-            <label for="requestingFacility">{{'proofOfDeliveryManage.requestingFacility' | message}}</label>
-            <select id="requestingFacility" ng-model="vm.requestingFacilityId"
-                    ng-options="facility.id as facility.name for facility in vm.requestingFacilities"
-                    placeholder="{{proofOfDeliveryManage.selectFacility | message}}" required>
-            </select>
-            <label for="programListMyFacility">{{'proofOfDeliveryManage.program' | message}}</label>
-            <select id="programListMyFacility" ng-model="vm.selectedProgramId"
-                    ng-options="program.id as program.name for program in vm.programs"
-                    placeholder="{{'proofOfDeliveryManage.selectProgram' | message}}" required>
-            </select>
-        </fieldset>
-        <fieldset ng-show="vm.isSupervised">
-            <label for="programListSupervisedFacility">{{'proofOfDeliveryManage.program' | message}}</label>
-            <select id="programListSupervisedFacility" ng-model="vm.selectedProgramId"
-                    ng-options="program.id as program.name for program in vm.programs"
-                    ng-change="vm.loadFacilitiesForProgram(vm.selectedProgramId)"
-                    placeholder="{{'proofOfDeliveryManage.selectProgram' | message}}" required>
-            </select>
-            <label for="supervisedFacilityName">
-                {{'proofOfDeliveryManage.requestingFacility' | message}}
-            </label>
-            <select id="supervisedFacilityName" ng-model="vm.requestingFacilityId"
-                    ng-options="facility.id as facility.name for facility in vm.requestingFacilities | unique:'id'"
-                    placeholder="{{'proofOfDeliveryManage.selectFacility' | message}}" required>
-            </select>
-        </fieldset>
+        <openlmis-facility-program-select
+            is-supervised="vm.isSupervised"
+            program="vm.program"
+            facility="vm.facility">
+        </openlmis-facility-program-select>
         <input type="submit" value="{{'proofOfDeliveryManage.search' | message}}"/>
     </form>
     <table>

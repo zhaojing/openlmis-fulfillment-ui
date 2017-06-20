@@ -50,7 +50,6 @@ describe('ProofOfDeliveryManageController', function() {
 
         module('proof-of-delivery-manage', function($provide) {
             orderFactoryMock = jasmine.createSpyObj('orderFactory', ['getPod']);
-            facilityFactoryMock = jasmine.createSpyObj('facilityFactory', ['getUserSupervisedFacilities']);
             loadingModalServiceMock = jasmine.createSpyObj('loadingModalService', ['open', 'close']);
 
             $provide.factory('orderFactory', function() {
@@ -59,10 +58,6 @@ describe('ProofOfDeliveryManageController', function() {
 
             $provide.factory('loadingModalService', function() {
                 return loadingModalServiceMock;
-            });
-
-            $provide.factory('facilityFactory', function() {
-                return facilityFactoryMock;
             });
 
         });
@@ -75,175 +70,46 @@ describe('ProofOfDeliveryManageController', function() {
             $controller = $injector.get('$controller');
             $stateParams = $injector.get('$stateParams');
             vm = $controller('ProofOfDeliveryManageController', {
-                userId: 'user_one',
-                facility: facility,
-                facilities: facilities,
-                homePrograms: programs,
-                supervisedPrograms: programs,
-                pods: items
+                pods: [pod],
+                $stateParams: stateParams
             });
         });
     });
 
-    describe('initialization', function() {
-        it('should assign requesting facility as home facility', function() {
-            vm.$onInit();
-            expect(vm.requestingFacilityId).toEqual(facility.id);
-            expect(vm.requestingFacilities).toEqual([facility]);
-        });
+    it('initialization should expose pod', function() {
+        vm.$onInit();
 
-        it('should assign programs as home programs', function() {
-            vm.$onInit();
-            expect(vm.programs).toEqual(programs);
-        });
-
-        it('should assign selected program as undefined', function() {
-            vm.$onInit();
-            expect(vm.selectedProgramId).toEqual(undefined);
-        });
-
-        it('should assign selected program from $stateParams', function() {
-            $stateParams.program = 'program';
-            facilityFactoryMock.getUserSupervisedFacilities.andReturn(deferred.promise);
-
-            vm.$onInit();
-
-            expect(vm.selectedProgramId).toEqual($stateParams.program);
-        });
-
-        it('should load requestingFacilities from dependency when isSupervised is true', function() {
-            $stateParams.isSupervised = 'true';
-
-            vm.$onInit();
-
-            expect(vm.requestingFacilities).toEqual(facilities);
-        });
-
-        it('should load home facility when isSupervised is false', function() {
-            $stateParams.isSupervised = 'false';
-
-            vm.$onInit();
-
-            expect(vm.requestingFacilities).toEqual([facility]);
-        });
-
-        it('should assign requestingFacilityId from $stateParams', function() {
-            $stateParams.requestingFacility = 'facility-three';
-            facilityFactoryMock.getUserSupervisedFacilities.andReturn(deferred.promise);
-
-            vm.$onInit();
-
-            expect(vm.requestingFacilityId).toEqual($stateParams.requestingFacility);
-        });
-
-        it('should assign isSupervised from $stateParams', function() {
-            $stateParams.isSupervised = 'true';
-            facilityFactoryMock.getUserSupervisedFacilities.andReturn(deferred.promise);
-
-            vm.$onInit();
-
-            expect(vm.isSupervised).toEqual(true);
-        });
+        expect(vm.pods).toEqual([pod]);
     });
 
-    describe('loadOrders', function() {
+    it('loadOrders should reload state with right params', function() {
+        spyOn($state, 'go');
 
-        beforeEach(function() {
-            vm.$onInit();
-            spyOn($state, 'go');
-        });
+        vm.facility =  {
+            id: 'facility-one'
+        };
 
-        it('should set requesting facility', function() {
-            vm.requestingFacilityId = 'facility-one';
-            vm.loadOrders();
+        vm.program = {
+            id: 'program-one'
+        };
+        vm.isSupervised = true;
 
-            expect($state.go).toHaveBeenCalledWith('openlmis.orders.podManage', {
-                requestingFacility: vm.requestingFacilityId,
-                program: undefined,
-                isSupervised: false
-            }, {reload: true});
-        });
+        vm.$onInit();
+        vm.loadOrders();
 
-        it('should set program', function() {
-            vm.selectedProgramId = 'facility-one';
-            vm.loadOrders();
-
-            expect($state.go).toHaveBeenCalledWith('openlmis.orders.podManage', {
-                requestingFacility: 'facility-one',
-                program: vm.selectedProgramId,
-                isSupervised: false
-            }, {reload: true});
-        });
-
-        it('should set requesting facility', function() {
-            vm.isSupervised = 'true';
-            vm.loadOrders();
-
-            expect($state.go).toHaveBeenCalledWith('openlmis.orders.podManage', {
-                requestingFacility: 'facility-one',
-                program: undefined,
-                isSupervised: vm.isSupervised
-            }, {reload: true});
-        });
-
-        it('should call state go', function() {
-            vm.loadOrders();
-
-            expect($state.go).toHaveBeenCalled();
-        });
-    });
-
-    describe('updateFacilityType', function() {
-        it('should load proper data for supervised facility', function() {
-            vm.$onInit();
-            vm.isSupervised = true;
-            vm.updateFacilityType();
-
-            expect(vm.programs).toEqual(vm.supervisedPrograms);
-            expect(vm.requestingFacilityId).toEqual(undefined);
-        });
-
-        it('should clear requesting facility when requestingFacility in $stateParams', function() {
-            vm.$onInit();
-            vm.isSupervised = true;
-            $stateParams.requestingFacility = "some-uuid";
-            vm.updateFacilityType();
-
-            expect(vm.requestingFacilityId).toEqual(undefined);
-        });
-
-        it('should load proper data for home facility', function() {
-            vm.$onInit();
-            vm.updateFacilityType();
-
-            expect(vm.requestingFacilities).toEqual([facility]);
-            expect(vm.programs).toEqual(vm.homePrograms);
-            expect(vm.requestingFacilityId).toEqual(facility.id);
-        });
-    });
-
-    describe('loadFacilitiesForProgram', function() {
-        it('should load list of facilities for selected program', function() {
-            facilityFactoryMock.getUserSupervisedFacilities.andReturn(deferred.promise);
-
-            vm.loadFacilitiesForProgram('program-one');
-            deferred.resolve([facility]);
-            $rootScope.$apply();
-
-            expect(vm.requestingFacilities).toEqual([facility]);
-        });
-
-        it('should return empty list of facilities for undefined program', function() {
-            vm.loadFacilitiesForProgram(undefined);
-
-            expect(vm.requestingFacilities).toEqual([]);
-        });
+        expect($state.go).toHaveBeenCalledWith('openlmis.orders.podManage', {
+            facility: vm.facility.id,
+            program: vm.program.id,
+            supervised: vm.isSupervised,
+            page: 0,
+            size: 10
+        }, {reload: true});
     });
 
     describe('openPod', function() {
         it('should change state when user select order to view its POD', function() {
             orderFactoryMock.getPod.andReturn(deferred.promise);
-            spyOn($state, 'go');
+            spyOn($state, 'go').andReturn();
 
             vm.openPod('order-one');
             deferred.resolve(pod);

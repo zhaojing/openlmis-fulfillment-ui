@@ -28,7 +28,7 @@
         $stateProvider.state('openlmis.orders.podManage', {
 			showInNavigation: true,
 			label: 'proofOfDeliveryManage.managePods',
-            url: '/manage?requestingFacility&program&isSupervised&page&size',
+            url: '/manage?facility&program&supervised&page&size',
             controller: 'ProofOfDeliveryManageController',
             controllerAs: 'vm',
             templateUrl: 'proof-of-delivery-manage/proof-of-delivery-manage.html',
@@ -38,28 +38,6 @@
             ],
             areAllRightsRequired: true,
             resolve: {
-                facility: function(facilityFactory) {
-                    return facilityFactory.getUserHomeFacility();
-                },
-                userId: function(authorizationService) {
-                    return authorizationService.getUser().user_id;
-                },
-                supervisedPrograms: function (programService, userId) {
-                    return programService.getUserPrograms(userId, false);
-                },
-                homePrograms: function (programService, userId) {
-                    return programService.getUserPrograms(userId, true);
-                },
-                facilities: function (facilityFactory, $stateParams, authorizationService) {
-                    if ($stateParams.program) {
-                        return facilityFactory.getUserSupervisedFacilities(
-                            authorizationService.getUser().user_id,
-                            $stateParams.program,
-                            REQUISITION_RIGHTS.REQUISITION_CREATE
-                        );
-                    }
-                    return [];
-                },
                 pods: function(paginationService, orderFactory, $stateParams) {
 					return paginationService.registerUrl($stateParams, function(stateParams) {
                         if(stateParams.program) {
