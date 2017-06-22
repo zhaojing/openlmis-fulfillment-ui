@@ -3,15 +3,16 @@
 
 Bug fixes
 
-* [OLMIS-2532](https://openlmis.atlassian.net/browse/OLMIS-2532) - Fixed manage PODs view always displayed the previously facility.
+* [OLMIS-2567](https://openlmis.atlassian.net/browse/OLMIS-2567): Incorperated openlmis-facility-program-select.
+* [OLMIS-2532](https://openlmis.atlassian.net/browse/OLMIS-2532): Fixed manage PODs view always displayed the previously facility.
 
 5.0.1 / 2017-05-26
 ==================
 
 Bug fixes
 
-* [OLMIS-2445](https://openlmis.atlassian.net/browse/OLMIS-2445) - Button and title capitalization are consistent.
-* [OLMIS-2488](https://openlmis.atlassian.net/browse/OLMIS-2488) - Fixed proof of Delivery screen action button text was not translated.
+* [OLMIS-2445](https://openlmis.atlassian.net/browse/OLMIS-2445): Button and title capitalization are consistent.
+* [OLMIS-2488](https://openlmis.atlassian.net/browse/OLMIS-2488): Fixed proof of Delivery screen action button text was not translated.
 * View Orders screen will now only require either ORDERS_VIER or PODS_MANAGE right to enter(https://github.com/OpenLMIS/openlmis-fulfillment-ui/pull/1).
 
 5.0.0 / 2017-05-08
