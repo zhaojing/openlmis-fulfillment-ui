@@ -25,19 +25,23 @@
                 <td>{{lineItem.orderLineItem.orderable.dispensable.dispensingUnit}}</td>
                 <td>{{lineItem.orderLineItem.packsToShip}}</td>
                 <td>{{lineItem.quantityShipped}}</td>
-                <td class="requisition-product-grid-cell" popover="{{lineItem.$errors.quantityReceived}}" ng-class="{'is-invalid': lineItem.$errors.quantityReceived}">
-                    <input positive-integer ng-hide="vm.isSubmitted()" ng-model="lineItem.quantityReceived" ng-change="lineItem.validate()" ng-blur="lineItem.validate()"/>
-                    <div ng-hide="!vm.isSubmitted()">{{lineItem.quantityReceived}}</div>
+
+                <td ng-if="vm.isSubmitted()" openlmis-invalid="{{lineItem.$errors.quantityReceived}}">
+                    <input positive-integer ng-model="lineItem.quantityReceived" ng-change="lineItem.validate()" ng-blur="lineItem.validate()"/>
                 </td>
-                <td class="requisition-product-grid-cell">
-                    <input positive-integer ng-hide="vm.isSubmitted()" ng-model="lineItem.quantityReturned"/>
-                    <div ng-hide="!vm.isSubmitted()">{{lineItem.quantityReturned}}</div>
+                <td ng-if="!vm.isSubmitted()">{{lineItem.quantityReceived}}</td>
+                
+                <td ng-if="vm.isSubmitted()">
+                    <input positive-integer ng-model="lineItem.quantityReturned"/>
                 </td>
+                <td ng-if="!vm.isSubmitted()">{{lineItem.quantityReturned}}</td>
+
                 <td>{{lineItem.replacedProductCode}}</td>
-                <td class="requisition-product-grid-cell">
-                    <input type="text" ng-hide="vm.isSubmitted()" ng-model="lineItem.notes"/>
-                    <div ng-hide="!vm.isSubmitted()">{{lineItem.notes}}</div>
+
+                <td ng-if="vm.isSubmitted()">
+                    <input type="text" ng-model="lineItem.notes"/>
                 </td>
+                <td ng-if="!vm.isSubmitted()">{{lineItem.notes}}</td>
             </tr>
         </tbody>
     </table>
