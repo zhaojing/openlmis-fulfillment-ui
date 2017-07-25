@@ -16,8 +16,7 @@
         </thead>
         <tbody tbody-title="{{category}}"
                 ng-repeat="(category, lineItems) in vm.items | groupBy:'$program.orderableCategoryDisplayName'">
-            <tr ng-class="{'invalid-row': !vm.pod.isLineItemValid(lineItem)}"
-                ng-repeat="lineItem in lineItems | orderBy : 'orderLineItem.orderable.fullProductName'">
+            <tr ng-repeat="lineItem in lineItems | orderBy : 'orderLineItem.orderable.fullProductName'">
                 <td>
                     <i ng-class="{'icon-ok': lineItem.$program.fullSupply}"></i>
                 </td>
@@ -26,8 +25,8 @@
                 <td>{{lineItem.orderLineItem.packsToShip}}</td>
                 <td>{{lineItem.quantityShipped}}</td>
 
-                <td ng-if="vm.isSubmitted()" openlmis-invalid="{{lineItem.$errors.quantityReceived}}">
-                    <input positive-integer ng-model="lineItem.quantityReceived" ng-change="lineItem.validate()" ng-blur="lineItem.validate()"/>
+                <td ng-if="vm.isSubmitted()">
+                    <input positive-integer ng-model="lineItem.quantityReceived" openlmis-invalid="{{lineItem.$errors.quantityReceived}}" ng-change="lineItem.validate()" ng-blur="lineItem.validate()"/>
                 </td>
                 <td ng-if="!vm.isSubmitted()">{{lineItem.quantityReceived}}</td>
                 
