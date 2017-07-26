@@ -28,11 +28,11 @@
     .controller('ProofOfDeliveryViewController', controller);
 
     controller.$inject = [
-        '$scope', '$state', 'proofOfDeliveryService', 'notificationService',
+        '$scope', '$state', 'proofOfDeliveryService', 'notificationService', 'alertService'
         'confirmService', 'ORDER_STATUS', 'pod', 'lineItems'
     ];
 
-    function controller($scope, $state, proofOfDeliveryService, notificationService,
+    function controller($scope, $state, proofOfDeliveryService, notificationService, alertService
                         confirmService, ORDER_STATUS, pod, lineItems)
     {
         var vm = this;
@@ -91,10 +91,10 @@
                         notificationService.success('proofOfDeliveryView.savePod.success');
                         $state.reload();
                     }, function() {
-                        notificationService.error('proofOfDeliveryView.savePod.failure');
+                        alertService.error('proofOfDeliveryView.savePod.failure');
                     });
                 } else {
-                    notificationService.error('proofOfDeliveryView.invalidPod');
+                    alertService.error('proofOfDeliveryView.invalidPod');
                 }
             });
         }
@@ -116,13 +116,13 @@
                             notificationService.success('proofOfDeliveryView.submitPod.success');
                             $state.reload();
                         }, function() {
-                            notificationService.error('proofOfDeliveryView.submitPod.failure');
+                            alertService.error('proofOfDeliveryView.submitPod.failure');
                         });
                     }, function() {
-                        notificationService.error('proofOfDeliveryView.savePod.failure');
+                        alertService.error('proofOfDeliveryView.savePod.failure');
                     });
                 } else {
-                    notificationService.error('proofOfDeliveryView.invalidPod');
+                    alertService.error('proofOfDeliveryView.invalidPod');
                 }
             });
         }
