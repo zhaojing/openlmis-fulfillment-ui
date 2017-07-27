@@ -28,11 +28,11 @@
     .controller('ProofOfDeliveryViewController', controller);
 
     controller.$inject = [
-        '$scope', '$state', 'proofOfDeliveryService', 'notificationService',
+        '$state', 'proofOfDeliveryService', 'notificationService',
         'confirmService', 'ORDER_STATUS', 'pod', 'lineItems'
     ];
 
-    function controller($scope, $state, proofOfDeliveryService, notificationService,
+    function controller($state, proofOfDeliveryService, notificationService,
                         confirmService, ORDER_STATUS, pod, lineItems)
     {
         var vm = this;
@@ -85,7 +85,6 @@
          */
         function savePod() {
             confirmService.confirm('proofOfDeliveryView.savePod.confirm').then(function() {
-                $scope.$broadcast('openlmis-form-submit');
                 if(vm.pod.isValid()) {
                     proofOfDeliveryService.save(vm.pod).then(function() {
                         notificationService.success('proofOfDeliveryView.savePod.success');
@@ -109,7 +108,6 @@
          */
         function submitPod() {
             confirmService.confirm('proofOfDeliveryView.submitPod.confirm').then(function() {
-                $scope.$broadcast('openlmis-form-submit');
                 if(vm.pod.isValid()) {
                     proofOfDeliveryService.save(vm.pod).then(function() {
                         proofOfDeliveryService.submit(vm.pod.id).then(function() {
