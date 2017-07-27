@@ -28,11 +28,11 @@
     .controller('ProofOfDeliveryViewController', controller);
 
     controller.$inject = [
-        '$scope', '$state', 'proofOfDeliveryService', 'notificationService', 'alertService'
+        '$scope', '$state', 'proofOfDeliveryService', 'notificationService', 'alertService',
         'confirmService', 'ORDER_STATUS', 'pod', 'lineItems'
     ];
 
-    function controller($scope, $state, proofOfDeliveryService, notificationService, alertService
+    function controller($scope, $state, proofOfDeliveryService, notificationService, alertService,
                         confirmService, ORDER_STATUS, pod, lineItems)
     {
         var vm = this;

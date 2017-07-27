@@ -18,7 +18,8 @@ describe('PodViewController', function() {
     var vm, $rootScope, $state, $q, podSpy, notificationServiceMock, confirmServiceMock, confirmPromise, isValid, ORDER_STATUS, getPageMock, stateParams;
 
     beforeEach(function() {
-        notificationServiceMock = jasmine.createSpyObj('notificationService', ['success', 'error']);
+        notificationServiceMock = jasmine.createSpyObj('notificationService', ['success']);
+        alertServiceMock = jasmine.createSpyObj('alertService', ['error']);
         confirmServiceMock = jasmine.createSpyObj('confirmService', ['confirm']);
         proofOfDeliveryServiceMock = jasmine.createSpyObj('proofOfDeliveryService', ['save', 'submit']);
 
@@ -52,6 +53,10 @@ describe('PodViewController', function() {
         module('proof-of-delivery-view', function($provide) {
             $provide.service('notificationService', function() {
                 return notificationServiceMock;
+            });
+
+            $provide.service('alertService', function() {
+                return alertServiceMock;
             });
 
             $provide.service('confirmService', function() {
@@ -109,10 +114,10 @@ describe('PodViewController', function() {
             expect(proofOfDeliveryServiceMock.save).toHaveBeenCalledWith(podSpy);
         });
 
-        it('should show error notification if validation was not successful', function() {
+        it('should show error alert if validation was not successful', function() {
             callSave(false);
 
-            expect(notificationServiceMock.error).toHaveBeenCalledWith('proofOfDeliveryView.invalidPod');
+            expect(alertServiceMock.error).toHaveBeenCalledWith('proofOfDeliveryView.invalidPod');
         });
 
         it('should show success notification if save was successful', function() {
@@ -132,12 +137,12 @@ describe('PodViewController', function() {
             expect($state.reload).toHaveBeenCalled();
         });
 
-        it('should show error notification if save failed', function() {
+        it('should show error alert if save failed', function() {
             callSave(true);
             deferred.reject();
             $rootScope.$apply();
 
-            expect(notificationServiceMock.error)
+            expect(alertServiceMock.error)
                 .toHaveBeenCalledWith('proofOfDeliveryView.savePod.failure');
         });
 
@@ -187,10 +192,10 @@ describe('PodViewController', function() {
             expect(proofOfDeliveryServiceMock.submit).toHaveBeenCalledWith(podSpy.id);
         });
 
-        it('should show error notification if validation was not successful', function() {
+        it('should show error alert if validation was not successful', function() {
             callSubmit(false);
 
-            expect(notificationServiceMock.error)
+            expect(alertServiceMock.error)
                 .toHaveBeenCalledWith('proofOfDeliveryView.invalidPod');
         });
 
@@ -211,12 +216,12 @@ describe('PodViewController', function() {
             expect($state.reload).toHaveBeenCalled();
         });
 
-        it('should show error notification if save failed', function() {
+        it('should show error alert if save failed', function() {
             callSubmit(true);
             deferred.reject();
             $rootScope.$apply();
 
-            expect(notificationServiceMock.error)
+            expect(alertServiceMock.error)
                 .toHaveBeenCalledWith('proofOfDeliveryView.submitPod.failure');
         });
 
