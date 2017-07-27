@@ -70,6 +70,7 @@ describe('PodViewController', function() {
             ORDER_STATUS = _ORDER_STATUS_;
 
             vm = $controller('ProofOfDeliveryViewController', {
+                $scope: $rootScope.$new(),
                 pod: podSpy,
                 lineItems: podSpy.proofOfDeliveryLineItems
             });
