@@ -25,22 +25,20 @@
                 <td>{{lineItem.orderLineItem.packsToShip}}</td>
                 <td>{{lineItem.quantityShipped}}</td>
 
-                <td ng-if="!vm.isSubmitted()">
-                    <input positive-integer ng-model="lineItem.quantityReceived" openlmis-invalid="{{lineItem.$errors.quantityReceived}}" ng-change="lineItem.validate()" ng-blur="lineItem.validate()"/>
+                <td >
+                    <input ng-if="!vm.isSubmitted()" positive-integer ng-model="lineItem.quantityReceived" openlmis-invalid="{{lineItem.$errors.quantityReceived}}" ng-change="lineItem.validate()" ng-blur="lineItem.validate()"/>
+                    <span ng-if="vm.isSubmitted">{{lineItem.quantityReceived}}</span>
                 </td>
-                <td ng-if="vm.isSubmitted()">{{lineItem.quantityReceived}}</td>
                 
-                <td ng-if="!vm.isSubmitted()">
-                    <input positive-integer ng-model="lineItem.quantityReturned"/>
+                <td >
+                    <input ng-if="!vm.isSubmitted()" positive-integer ng-model="lineItem.quantityReturned"/>
+                    <span ng-if="vm.isSubmitted()">{{lineItem.quantityReturned}}</span>
                 </td>
-                <td ng-if="vm.isSubmitted()">{{lineItem.quantityReturned}}</td>
-
                 <td>{{lineItem.replacedProductCode}}</td>
-                
-                <td ng-if="!vm.isSubmitted()">
-                    <input type="text" ng-model="lineItem.notes"/>
+                <td >
+                    <input ng-if="!vm.isSubmitted()" type="text" ng-model="lineItem.notes"/>
+                    <span ng-if="vm.isSubmitted()">{{lineItem.notes}}</span>
                 </td>
-                <td ng-if="vm.isSubmitted()">{{lineItem.notes}}</td>
             </tr>
         </tbody>
     </table>
