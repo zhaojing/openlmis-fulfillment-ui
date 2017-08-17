@@ -41,6 +41,9 @@
                 pods: function(paginationService, orderFactory, $stateParams) {
 					return paginationService.registerUrl($stateParams, function(stateParams) {
                         if(stateParams.program) {
+                            stateParams.requestingFacility = stateParams.facility;
+                            delete stateParams.facility;
+
                             return orderFactory.searchOrdersForManagePod(stateParams);
                         }
                         return undefined;

@@ -1,6 +1,8 @@
 5.0.3 / Current Snapshot
 ========================
 
+* [OLMIS-2837](https://openlmis.atlassian.net/browse/OLMIS-2837): Fixed filtering on the manage POD page.
+
 5.0.2 / 2017-06-22
 ==================
 
