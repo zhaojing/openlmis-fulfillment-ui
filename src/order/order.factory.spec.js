@@ -28,27 +28,6 @@ describe('orderFactory', function() {
             orderFactory = $injector.get('orderFactory');
         });
 
-        requestingFacilities = [
-            createObjWithId('1'),
-            createObjWithId('2'),
-            createObjWithId('3')
-        ];
-
-        minimal = [
-            {
-                id: '1',
-                name: 'One'
-            },
-            {
-                id: '2',
-                name: 'Two'
-            },
-            {
-                id: '3',
-                name: 'Three'
-            }
-        ];
-
         deferred = $q.defer();
         orderServiceMock.getRequestingFacilities.andReturn(deferred.promise);
     });
