@@ -42,11 +42,17 @@
                 method: 'GET',
                 transformResponse: transformPOD,
                 url: fulfillmentUrlFactory('/api/orders/:id/proofOfDeliveries')
+            },
+            getRequestingFacilities: {
+                method: 'GET',
+                url: fulfillmentUrlFactory('/api/orders/requestingFacilities'),
+                isArray: true
             }
         });
 
         this.search = search;
         this.getPod = getPod;
+        this.getRequestingFacilities = getRequestingFacilities;
 
         /**
          * @ngdoc method
@@ -79,6 +85,23 @@
         function getPod(orderId) {
             return resource.getPod({
                 id: orderId
+            }).$promise;
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf order.orderService
+         * @name getRequestingFacilities
+         *
+         * @description
+         * Retrieves the distinct UUIDs of the available requesting facilities.
+         *
+         * @param  {String} supplyingFacilityId the ID of the given supplying facility
+         * @return {Promise}       the list of all requesting facilities for the given supplying facility
+         */
+        function getRequestingFacilities(supplyingFacilityId) {
+            return resource.getRequestingFacilities({
+                supplyingFacility: supplyingFacilityId
             }).$promise;
         }
 

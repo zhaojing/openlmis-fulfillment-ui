@@ -17,7 +17,7 @@ describe('OrderViewController', function() {
 
     var vm, orderFactoryMock, $rootScope, loadingModalServiceMock, notificationServiceMock,
         fulfillmentUrlFactoryMock, supplyingFacilities, requestingFacilities, programs,
-        deferred, orders, item, $controller, $stateParams, orderFactory;
+        orders, item, $controller, $stateParams, $rootScope, scope;
 
     beforeEach(function() {
         module('order-view');
@@ -26,6 +26,8 @@ describe('OrderViewController', function() {
             $controller = $injector.get('$controller');
             $stateParams = $injector.get('$stateParams');
             $state = $injector.get('$state');
+            $rootScope = $injector.get('$rootScope');
+            scope = $rootScope.$new();
         });
 
         supplyingFacilities = [
@@ -62,8 +64,11 @@ describe('OrderViewController', function() {
                 supplyingFacilities: supplyingFacilities,
                 requestingFacilities: requestingFacilities,
                 programs: programs,
-                orders: items
+                orders: items,
+                $scope: scope
             });
+
+            spyOn(scope, '$watch').andCallThrough();
         });
 
         it('should expose supplying facilities', function() {
@@ -73,12 +78,17 @@ describe('OrderViewController', function() {
 
         it('should expose requesting facilities', function() {
             vm.$onInit();
-            expect(vm.requestingFacilities).toEqual(requestingFacilities);
+            expect(vm.requestingFacilities).toEqual(undefined);
         });
 
         it('should expose programs', function() {
             vm.$onInit();
             expect(vm.programs).toEqual(programs);
+        });
+
+        it('should call watch', function() {
+            vm.$onInit();
+            expect(scope.$watch).toHaveBeenCalled();
         });
 
     });
@@ -147,7 +157,8 @@ describe('OrderViewController', function() {
                 requestingFacilities: requestingFacilities,
                 programs: programs,
                 orders: items,
-                fulfillmentUrlFactory: fulfillmentUrlFactoryMock
+                fulfillmentUrlFactory: fulfillmentUrlFactoryMock,
+                $scope: scope
             });
         });
 
@@ -170,7 +181,8 @@ describe('OrderViewController', function() {
                 requestingFacilities: requestingFacilities,
                 programs: programs,
                 orders: items,
-                fulfillmentUrlFactory: fulfillmentUrlFactoryMock
+                fulfillmentUrlFactory: fulfillmentUrlFactoryMock,
+                $scope: scope
             });
         });
 
@@ -185,7 +197,8 @@ describe('OrderViewController', function() {
             supplyingFacilities: supplyingFacilities,
             requestingFacilities: requestingFacilities,
             programs: programs,
-            orders: items
+            orders: items,
+            $scope: scope
         });
         vm.$onInit();
     }

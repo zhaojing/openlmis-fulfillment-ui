@@ -19,7 +19,7 @@ describe('orderFactory', function() {
 
     beforeEach(function() {
         module('order', function($provide) {
-            orderServiceMock = createMock($provide, 'orderService', ['search', 'getPod', 'searchOrdersForManagePod']);
+            orderServiceMock = createMock($provide, 'orderService', ['search', 'getPod', 'searchOrdersForManagePod', 'getRequestingFacilities']);
         });
 
         inject(function($injector) {
@@ -30,50 +30,70 @@ describe('orderFactory', function() {
 
     });
 
-    it('should call orderService with correct params', function() {
-        var searchParams = {
-            program: 'id-one',
-            supplyingFacility: 'id-two',
-            requestingFacility: 'id-three'
-        };
-        orderFactory.search(searchParams);
+    describe('search', function() {
+        it('should call orderService with correct params', function() {
+            var searchParams = {
+                program: 'id-one',
+                supplyingFacility: 'id-two',
+                requestingFacility: 'id-three'
+            };
+            orderFactory.search(searchParams);
 
-        expect(orderServiceMock.search).toHaveBeenCalledWith(searchParams);
+            expect(orderServiceMock.search).toHaveBeenCalledWith(searchParams);
+        });
+
+        it('should call orderService with only one param', function() {
+            var searchParam = {
+                supplyingFacility: 'id-two',
+            };
+            orderFactory.search(searchParam);
+
+            expect(orderServiceMock.search).toHaveBeenCalledWith(searchParam);
+        });
     });
 
-    it('should call orderService with only one param', function() {
-        var searchParam = {
-            supplyingFacility: 'id-two',
-        };
-        orderFactory.search(searchParam);
+    describe('getPod', function() {
+        it('should call orderService with id param', function() {
+            orderFactory.getPod('id-one');
 
-        expect(orderServiceMock.search).toHaveBeenCalledWith(searchParam);
+            expect(orderServiceMock.getPod).toHaveBeenCalledWith('id-one');
+        });
     });
 
-    it('should call orderService with id param', function() {
-        orderFactory.getPod('id-one');
+    describe('getRequestingFacilities', function() {
+        it('should call orderService without params', function() {
+            orderFactory.getRequestingFacilities();
 
-        expect(orderServiceMock.getPod).toHaveBeenCalledWith('id-one');
+            expect(orderServiceMock.getRequestingFacilities).toHaveBeenCalled();
+        });
+
+        it('should call orderService with id param', function() {
+            orderFactory.getRequestingFacilities('id-two');
+
+            expect(orderServiceMock.getRequestingFacilities).toHaveBeenCalledWith('id-two');
+        });
     });
 
-    it('should call orderService with id param', function() {
-        orderServiceMock.search.andReturn($q.when());
-        var searchParams = {
-            requestingFacility: 'id-one',
-            program: 'id-two'
-        }
-        orderFactory.searchOrdersForManagePod(searchParams);
+    describe('searchOrdersForManagePod', function() {
+        it('should call orderService with id param', function() {
+            orderServiceMock.search.andReturn($q.when());
+            var searchParams = {
+                requestingFacility: 'id-one',
+                program: 'id-two'
+            }
+            orderFactory.searchOrdersForManagePod(searchParams);
 
-        expect(orderServiceMock.search).toHaveBeenCalledWith({
-            requestingFacility: 'id-one',
-            program: 'id-two',
-            status: [
-                ORDER_STATUS.PICKED,
-                ORDER_STATUS.TRANSFER_FAILED,
-                ORDER_STATUS.READY_TO_PACK,
-                ORDER_STATUS.ORDERED,
-                ORDER_STATUS.RECEIVED
-            ]
+            expect(orderServiceMock.search).toHaveBeenCalledWith({
+                requestingFacility: 'id-one',
+                program: 'id-two',
+                status: [
+                    ORDER_STATUS.PICKED,
+                    ORDER_STATUS.TRANSFER_FAILED,
+                    ORDER_STATUS.READY_TO_PACK,
+                    ORDER_STATUS.ORDERED,
+                    ORDER_STATUS.RECEIVED
+                ]
+            });
         });
     });
 

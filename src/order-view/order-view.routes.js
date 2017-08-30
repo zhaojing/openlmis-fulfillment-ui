@@ -43,11 +43,6 @@
                         authorizationService.getUser().user_id
                     );
                 },
-                requestingFacilities: function(facilityFactory, authorizationService) {
-                    return facilityFactory.getRequestingFacilities(
-                        authorizationService.getUser().user_id
-                    );
-                },
                 programs: function(programService, authorizationService) {
                     return programService.getUserPrograms(
                         authorizationService.getUser().user_id

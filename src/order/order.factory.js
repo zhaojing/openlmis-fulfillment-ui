@@ -34,6 +34,7 @@
         var factory = {
             search: search,
             getPod: getPod,
+            getRequestingFacilities: getRequestingFacilities,
             searchOrdersForManagePod: searchOrdersForManagePod
         };
         return factory;
@@ -71,6 +72,21 @@
          */
         function getPod(orderId) {
             return orderService.getPod(orderId);
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf order.orderFactory
+         * @name getRequestingFacilities
+         *
+         * @description
+         * Gets the UUIDs of the available requesting facilities.
+         *
+         * @param  {String} supplyingFacilityId (optional) the ID of the given supplying facility
+         * @return {Promise}                    the promise resolving to requesting facilities for the given supplying facility
+         */
+        function getRequestingFacilities(supplyingFacilityId) {
+            return orderService.getRequestingFacilities(supplyingFacilityId);
         }
 
         /**
