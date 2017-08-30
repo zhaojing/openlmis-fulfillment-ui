@@ -15,7 +15,7 @@
 
 describe('orderFactory', function() {
 
-    var $q, orderFactory, orderServiceMock, ORDER_STATUS;
+    var $q, orderFactory, orderServiceMock, facilityService, ORDER_STATUS, requestingFacilities;
 
     beforeEach(function() {
         module('order', function($provide) {
@@ -28,6 +28,29 @@ describe('orderFactory', function() {
             orderFactory = $injector.get('orderFactory');
         });
 
+        requestingFacilities = [
+            createObjWithId('1'),
+            createObjWithId('2'),
+            createObjWithId('3')
+        ];
+
+        minimal = [
+            {
+                id: '1',
+                name: 'One'
+            },
+            {
+                id: '2',
+                name: 'Two'
+            },
+            {
+                id: '3',
+                name: 'Three'
+            }
+        ];
+
+        deferred = $q.defer();
+        orderServiceMock.getRequestingFacilities.andReturn(deferred.promise);
     });
 
     describe('search', function() {
@@ -74,6 +97,14 @@ describe('orderFactory', function() {
         });
     });
 
+    describe('loadRequestingFacilities', function() {
+        it('should call orderService id params', function() {
+            orderFactory.loadRequestingFacilities('id-two');
+
+            expect(orderServiceMock.getRequestingFacilities).toHaveBeenCalledWith('id-two');
+        });
+    });
+
     describe('searchOrdersForManagePod', function() {
         it('should call orderService with id param', function() {
             orderServiceMock.search.andReturn($q.when());
@@ -105,4 +136,10 @@ function createMock($provide, name, methods) {
         return mock;
     });
     return mock;
+}
+
+function createObjWithId(id) {
+    return {
+        id: id
+    };
 }

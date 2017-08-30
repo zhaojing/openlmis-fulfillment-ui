@@ -43,6 +43,14 @@
                         authorizationService.getUser().user_id
                     );
                 },
+                requestingFacilities: function(orderFactory, $stateParams) {
+                    if ($stateParams.supplyingFacility) {
+                        return orderFactory.loadRequestingFacilities($stateParams.supplyingFacility).then(function(requestingFacilities) {
+                            return requestingFacilities;
+                        });
+                    }
+                    return undefined;
+                },
                 programs: function(programService, authorizationService) {
                     return programService.getAll();
                 },

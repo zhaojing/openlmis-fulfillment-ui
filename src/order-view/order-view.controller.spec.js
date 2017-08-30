@@ -78,7 +78,7 @@ describe('OrderViewController', function() {
 
         it('should expose requesting facilities', function() {
             vm.$onInit();
-            expect(vm.requestingFacilities).toEqual(undefined);
+            expect(vm.requestingFacilities).toEqual(requestingFacilities);
         });
 
         it('should expose programs', function() {

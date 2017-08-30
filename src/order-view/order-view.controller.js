@@ -30,14 +30,14 @@
         .controller('OrderViewController', controller);
 
     controller.$inject = [
-        'supplyingFacilities', 'programs', 'orderFactory', 'loadingModalService',
+        'supplyingFacilities', 'requestingFacilities', 'programs', 'orderFactory', 'loadingModalService',
         'notificationService', 'fulfillmentUrlFactory', 'orders', '$stateParams',
-        '$filter', '$state', 'facilityService', '$scope'
+        '$filter', '$state', '$scope'
     ];
 
-    function controller(supplyingFacilities, programs, orderFactory, loadingModalService,
+    function controller(supplyingFacilities, requestingFacilities, programs, orderFactory, loadingModalService,
                         notificationService, fulfillmentUrlFactory, orders, $stateParams,
-                        $filter, $state, facilityService, $scope) {
+                        $filter, $state, $scope) {
 
         var vm = this;
 
@@ -101,6 +101,7 @@
          */
         function onInit() {
             vm.supplyingFacilities = supplyingFacilities;
+            vm.requestingFacilities = requestingFacilities;
             vm.programs = programs;
 
             vm.orders = orders;
@@ -112,7 +113,6 @@
             }
 
             if ($stateParams.requestingFacility) {
-                vm.requestingFacilities = loadRequestingFacilities($stateParams.supplyingFacility);
                 vm.requestingFacility = $filter('filter')(vm.requestingFacilities, {
                     id: $stateParams.requestingFacility
                 })[0];
@@ -128,7 +128,7 @@
                 return vm.supplyingFacility;
             }, function(oldValue, newValue) {
                 if (oldValue !== newValue) {
-                    vm.requestingFacilities = loadRequestingFacilities(vm.supplyingFacility.id);
+                    loadRequestingFacilities(vm.supplyingFacility.id);
                 }
             }, true);
         }
@@ -188,21 +188,10 @@
         }
 
         function loadRequestingFacilities(supplyingFacilityId) {
-            var requestingFacilities = [];
             loadingModalService.open();
-            orderFactory.getRequestingFacilities(supplyingFacilityId).then(function(facilities) {
-                facilities.forEach(function(facility) {
-                    facilityService.getAllMinimal().then(function(minimalFacilities) {
-                        minimalFacilities.forEach(function(minimalFacility) {
-                            if (facility == minimalFacility.id) {
-                                requestingFacilities.push(minimalFacility);
-                            }
-                        });
-                    });
-                });
+            orderFactory.loadRequestingFacilities(supplyingFacilityId).then(function(facilities) {
+                vm.requestingFacilities = facilities;
             }).finally(loadingModalService.close);
-
-            return requestingFacilities;
         }
 
     }
