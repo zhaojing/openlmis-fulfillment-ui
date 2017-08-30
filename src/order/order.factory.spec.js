@@ -116,9 +116,3 @@ function createMock($provide, name, methods) {
     });
     return mock;
 }
-
-function createObjWithId(id) {
-    return {
-        id: id
-    };
-}
