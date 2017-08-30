@@ -21,10 +21,10 @@
         .module('proof-of-delivery-manage')
         .run(declareRights);
 
-    declareRights.$inject = ['facilityProgramCacheService', 'FULFILLMENT_RIGHTS'];
+    declareRights.$inject = ['facilityProgramCacheService', 'REQUISITION_RIGHTS'];
 
-    function declareRights(facilityProgramCacheService, FULFILLMENT_RIGHTS) {
-        facilityProgramCacheService.pushRightsForModule('proof-of-delivery-manage', [FULFILLMENT_RIGHTS.PODS_MANAGE]);
+    function declareRights(facilityProgramCacheService, REQUISITION_RIGHTS) {
+        facilityProgramCacheService.pushRightsForModule('proof-of-delivery-manage', [REQUISITION_RIGHTS.REQUISITION_CREATE]);
     }
 
 })();
