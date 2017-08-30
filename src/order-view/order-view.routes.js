@@ -44,9 +44,7 @@
                     );
                 },
                 programs: function(programService, authorizationService) {
-                    return programService.getUserPrograms(
-                        authorizationService.getUser().user_id
-                    );
+                    return programService.getAll();
                 },
                 orders: function(paginationService, orderFactory, $stateParams) {
 					return paginationService.registerUrl($stateParams, function(stateParams) {

@@ -112,6 +112,7 @@
             }
 
             if ($stateParams.requestingFacility) {
+                vm.requestingFacilities = loadRequestingFacilities($stateParams.supplyingFacility);
                 vm.requestingFacility = $filter('filter')(vm.requestingFacilities, {
                     id: $stateParams.requestingFacility
                 })[0];
