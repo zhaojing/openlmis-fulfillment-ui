@@ -17,7 +17,7 @@ describe('proofOfDeliveryService', function() {
 
     var POD_ID = 'some-pod-id';
 
-    var proofOfDeliveryService, $httpBackend, fulfillmentUrlFactory, pod, url;
+    var $filter, proofOfDeliveryService, $httpBackend, fulfillmentUrlFactory, pod, url;
 
     beforeEach(function() {
         dateUtilsMock = jasmine.createSpyObj('dateUtils', ['toDate', 'toArray']);
@@ -26,11 +26,16 @@ describe('proofOfDeliveryService', function() {
             $provide.service('dateUtils', function() {
                 return dateUtilsMock;
             });
+
+            $provide.value('isoDateFilter', function() {
+                return '2017-08-30';
+            });
         });
 
         inject(function($injector) {
             proofOfDeliveryService = $injector.get('proofOfDeliveryService');
             $httpBackend = $injector.get('$httpBackend');
+            $filter = $injector.get('$filter');
             fulfillmentUrlFactory = $injector.get('fulfillmentUrlFactory');
         });
 

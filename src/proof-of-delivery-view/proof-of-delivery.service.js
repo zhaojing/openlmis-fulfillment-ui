@@ -28,9 +28,9 @@
 		.module('proof-of-delivery-view')
 	    .service('proofOfDeliveryService', service);
 
-    service.$inject = ['$resource', 'fulfillmentUrlFactory', 'dateUtils'];
+    service.$inject = ['$filter', '$resource', 'fulfillmentUrlFactory', 'dateUtils'];
 
-    function service($resource, fulfillmentUrlFactory, dateUtils) {
+    function service($filter, $resource, fulfillmentUrlFactory, dateUtils) {
 
         var resource = $resource(fulfillmentUrlFactory('/api/proofOfDeliveries/:id'), {}, {
 			get: {
@@ -118,8 +118,9 @@
         }
 
 		function transformRequest(pod) {
-			if(pod.receivedDate) pod.receivedDate = pod.receivedDate.toISOString();
-			if(pod.order.createdDate) pod.order.createdDate = pod.order.createdDate.toISOString();
+			if (pod.receivedDate) pod.receivedDate = $filter('isoDate')(pod.receivedDate);
+			if (pod.order.createdDate) pod.order.createdDate = pod.order.createdDate.toISOString();
+
             return angular.toJson(pod);
         }
     }
