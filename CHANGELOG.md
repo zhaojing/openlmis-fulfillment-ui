@@ -1,5 +1,7 @@
-5.0.3 / Current Snapshot
+5.0.3 / 2017-09-01
 ========================
+
+Bug fixes
 
 * [OLMIS-2837](https://openlmis.atlassian.net/browse/OLMIS-2837): Fixed filtering on the manage POD page.
 * [OLMIS-2724](https://openlmis.atlassian.net/browse/OLMIS-2724): Fixed broken requesting facility filter select on Order View.
