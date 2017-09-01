@@ -15,21 +15,17 @@
 
 describe('orderFactory', function() {
 
-    var $q, orderFactory, orderServiceMock, facilityService, ORDER_STATUS, requestingFacilities;
+    var orderFactory, orderServiceMock, facilityService, ORDER_STATUS;
 
     beforeEach(function() {
         module('order', function($provide) {
-            orderServiceMock = createMock($provide, 'orderService', ['search', 'getPod', 'searchOrdersForManagePod', 'getRequestingFacilities']);
+            orderServiceMock = createMock($provide, 'orderService', ['search', 'getPod', 'searchOrdersForManagePod']);
         });
 
         inject(function($injector) {
-            $q = $injector.get('$q');
             ORDER_STATUS = $injector.get('ORDER_STATUS');
             orderFactory = $injector.get('orderFactory');
         });
-
-        deferred = $q.defer();
-        orderServiceMock.getRequestingFacilities.andReturn(deferred.promise);
     });
 
     describe('search', function() {
@@ -59,28 +55,6 @@ describe('orderFactory', function() {
             orderFactory.getPod('id-one');
 
             expect(orderServiceMock.getPod).toHaveBeenCalledWith('id-one');
-        });
-    });
-
-    describe('getRequestingFacilities', function() {
-        it('should call orderService without params', function() {
-            orderFactory.getRequestingFacilities();
-
-            expect(orderServiceMock.getRequestingFacilities).toHaveBeenCalled();
-        });
-
-        it('should call orderService with id param', function() {
-            orderFactory.getRequestingFacilities('id-two');
-
-            expect(orderServiceMock.getRequestingFacilities).toHaveBeenCalledWith('id-two');
-        });
-    });
-
-    describe('loadRequestingFacilities', function() {
-        it('should call orderService id params', function() {
-            orderFactory.loadRequestingFacilities('id-two');
-
-            expect(orderServiceMock.getRequestingFacilities).toHaveBeenCalledWith('id-two');
         });
     });
 

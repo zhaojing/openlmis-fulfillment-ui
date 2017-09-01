@@ -34,9 +34,7 @@
         var factory = {
             search: search,
             getPod: getPod,
-            getRequestingFacilities: getRequestingFacilities,
-            searchOrdersForManagePod: searchOrdersForManagePod,
-            loadRequestingFacilities: loadRequestingFacilities
+            searchOrdersForManagePod: searchOrdersForManagePod
         };
         return factory;
 
@@ -78,21 +76,6 @@
         /**
          * @ngdoc method
          * @methodOf order.orderFactory
-         * @name getRequestingFacilities
-         *
-         * @description
-         * Gets the UUIDs of the available requesting facilities.
-         *
-         * @param  {String} supplyingFacilityId (optional) the ID of the given supplying facility
-         * @return {Promise}                    the promise resolving to requesting facilities for the given supplying facility
-         */
-        function getRequestingFacilities(supplyingFacilityId) {
-            return orderService.getRequestingFacilities(supplyingFacilityId);
-        }
-
-        /**
-         * @ngdoc method
-         * @methodOf order.orderFactory
          * @name searchOrdersForManagePod
          *
          * @description
@@ -114,37 +97,6 @@
                  ORDER_STATUS.RECEIVED
             ];
             return orderService.search(searchParams);
-        }
-
-        /**
-         * @ngdoc method
-         * @methodOf order.orderFactory
-         * @name loadRequestingFacilities
-         *
-         * @description
-         * Gets the UUIDs and names of the available requesting facilities from the cache.
-         *
-         * @param  {String} supplyingFacilityId (optional) the ID of the given supplying facility
-         * @return {Promise}                    the promise resolving to requesting facilities for the given supplying facility
-         */
-        function loadRequestingFacilities(supplyingFacilityId) {
-            var requestingFacilities = [],
-                deferred = $q.defer();
-
-            orderService.getRequestingFacilities(supplyingFacilityId).then(function(facilities) {
-                facilities.forEach(function(facility) {
-                    facilityService.getAllMinimal().then(function(minimalFacilities) {
-                        minimalFacilities.forEach(function(minimalFacility) {
-                            if (facility == minimalFacility.id) {
-                                requestingFacilities.push(minimalFacility);
-                            }
-                        });
-                    });
-                });
-                deferred.resolve(requestingFacilities);
-            }, deferred.reject);
-
-            return deferred.promise;
         }
     }
 

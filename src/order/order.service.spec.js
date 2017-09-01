@@ -16,7 +16,7 @@
 describe('orderService', function() {
 
     var orderService, $rootScope, $httpBackend, fulfillmentUrlFactory, orders, pod,
-        dateUtilsMock, facilities;
+        dateUtilsMock;
 
     beforeEach(function() {
         module('order', function($provide) {
@@ -60,16 +60,11 @@ describe('orderService', function() {
             receivedDate: [2017, 1, 1]
         };
 
-        facilities = ['facility-1', 'facility-2'];
-
         $httpBackend.when('GET', fulfillmentUrlFactory('/api/orders/search?supplyingFacility=some-id'))
             .respond(200, {content: orders});
 
         $httpBackend.when('GET', fulfillmentUrlFactory('/api/orders/id-one/proofOfDeliveries'))
             .respond(200, pod);
-
-        $httpBackend.when('GET', fulfillmentUrlFactory('/api/orders/requestingFacilities'))
-            .respond(200, facilities);
     });
 
     it('search should return transformed orders', function() {
@@ -107,20 +102,6 @@ describe('orderService', function() {
         expect(result.id).toEqual('id-three');
         expect(result.receivedDate).toEqual(new Date(2017, 0, 1));
 
-    });
-
-    it('getRequestingFacilities should return available requesting facilities', function() {
-        var result;
-
-        orderService.getRequestingFacilities().then(function(requestingFacilities) {
-            result = requestingFacilities;
-        });
-
-        $httpBackend.flush();
-        $rootScope.$apply();
-
-        expect(result[0]).toEqual(facilities[0]);
-        expect(result[1]).toEqual(facilities[1]);
     });
 
     afterEach(function() {

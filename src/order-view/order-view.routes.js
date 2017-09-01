@@ -43,9 +43,10 @@
                         authorizationService.getUser().user_id
                     );
                 },
-                requestingFacilities: function(orderFactory, $stateParams) {
+                requestingFacilities: function(requestingFacilityFactory, $stateParams) {
                     if ($stateParams.supplyingFacility) {
-                        return orderFactory.loadRequestingFacilities($stateParams.supplyingFacility).then(function(requestingFacilities) {
+                        return requestingFacilityFactory.loadRequestingFacilities(
+                        $stateParams.supplyingFacility).then(function(requestingFacilities) {
                             return requestingFacilities;
                         });
                     }

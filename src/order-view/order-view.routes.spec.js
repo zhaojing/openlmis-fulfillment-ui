@@ -16,7 +16,7 @@
 
 describe('openlmis.orders.view state', function() {
 
-    var $q, $state, $rootScope, orderFactory, state, minimalFacilities, FULFILLMENT_RIGHTS, $stateParams;
+    var $q, $state, $rootScope, requestingFacilityFactory, state, minimalFacilities, FULFILLMENT_RIGHTS, $stateParams;
 
     beforeEach(function() {
         loadModules();
@@ -30,13 +30,13 @@ describe('openlmis.orders.view state', function() {
 
         var result;
 
-        state.resolve.requestingFacilities(orderFactory, $stateParams).then(function(facilities){
+        state.resolve.requestingFacilities(requestingFacilityFactory, $stateParams).then(function(facilities){
             result = facilities;
         });
         $rootScope.$apply();
 
         expect(result).toEqual(minimalFacilities);
-        expect(orderFactory.loadRequestingFacilities).toHaveBeenCalledWith('supplying-facility');
+        expect(requestingFacilityFactory.loadRequestingFacilities).toHaveBeenCalledWith('supplying-facility');
     });
 
     it('should require FULFILLMENT_RIGHTS right to enter', function() {
@@ -54,7 +54,7 @@ describe('openlmis.orders.view state', function() {
             $q = $injector.get('$q');
             $state = $injector.get('$state');
             $rootScope = $injector.get('$rootScope');
-            orderFactory = $injector.get('orderFactory');
+            requestingFacilityFactory = $injector.get('requestingFacilityFactory');
             FULFILLMENT_RIGHTS = $injector.get('FULFILLMENT_RIGHTS');
         });
     }
@@ -80,6 +80,6 @@ describe('openlmis.orders.view state', function() {
     }
 
     function prepareSpies() {
-        spyOn(orderFactory, 'loadRequestingFacilities').andReturn($q.when(minimalFacilities));
+        spyOn(requestingFacilityFactory, 'loadRequestingFacilities').andReturn($q.when(minimalFacilities));
     }
 });

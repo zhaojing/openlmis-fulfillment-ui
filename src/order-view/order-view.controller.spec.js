@@ -15,9 +15,9 @@
 
 describe('OrderViewController', function() {
 
-    var vm, orderFactoryMock, $rootScope, loadingModalServiceMock, notificationServiceMock,
-        fulfillmentUrlFactoryMock, supplyingFacilities, requestingFacilities, programs,
-        orders, item, $controller, $stateParams, $rootScope, scope;
+    var vm, $rootScope, loadingModalServiceMock, fulfillmentUrlFactoryMock, supplyingFacilities,
+        requestingFacilities, programs, orders, item, $controller, $stateParams, $rootScope, scope,
+        requestingFacilityFactory;
 
     beforeEach(function() {
         module('order-view');
@@ -28,6 +28,7 @@ describe('OrderViewController', function() {
             $state = $injector.get('$state');
             $rootScope = $injector.get('$rootScope');
             scope = $rootScope.$new();
+            requestingFacilityFactory = $injector.get('requestingFacilityFactory');
         });
 
         supplyingFacilities = [
@@ -69,6 +70,15 @@ describe('OrderViewController', function() {
             });
 
             spyOn(scope, '$watch').andCallThrough();
+            spyOn(requestingFacilityFactory, 'loadRequestingFacilities').andCallFake(function(supplyingFacilityId) {
+                if (supplyingFacilityId == 'facility-one') {
+                    vm.requestingFacilities = [requestingFacilities[0], requestingFacilities[1]];
+                    return $q.when([requestingFacilities[0], requestingFacilities[1]]);
+                } else {
+                    vm.requestingFacilities = [requestingFacilities[2]];
+                    return $q.when([requestingFacilities[2]]);
+                }
+            });
         });
 
         it('should expose supplying facilities', function() {
@@ -88,7 +98,20 @@ describe('OrderViewController', function() {
 
         it('should call watch', function() {
             vm.$onInit();
+
+            vm.supplyingFacility = supplyingFacilities[0];
+            $rootScope.$apply();
+
             expect(scope.$watch).toHaveBeenCalled();
+            expect(requestingFacilityFactory.loadRequestingFacilities).toHaveBeenCalledWith(supplyingFacilities[0].id);
+            expect(vm.requestingFacilities).toEqual([requestingFacilities[0], requestingFacilities[1]]);
+
+            vm.supplyingFacility = supplyingFacilities[1];
+            $rootScope.$apply();
+
+            expect(scope.$watch).toHaveBeenCalled();
+            expect(requestingFacilityFactory.loadRequestingFacilities).toHaveBeenCalledWith(supplyingFacilities[1].id);
+            expect(vm.requestingFacilities).toEqual([requestingFacilities[2]]);
         });
 
     });
