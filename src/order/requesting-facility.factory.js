@@ -48,23 +48,26 @@
          * @return {Promise}                    the promise resolving to requesting facilities for the given supplying facility
          */
         function loadRequestingFacilities(supplyingFacilityId) {
-            var requestingFacilities = [],
+            var minRequestingFacilities = [],
                 deferred = $q.defer();
 
             $q.all([
                 facilityService.getRequestingFacilities(supplyingFacilityId),
                 facilityService.getAllMinimal()
             ]).then(function(facilities) {
-                facilities[0].forEach(function(facility) {
-                    facilities[1].forEach(function(minimalFacility) {
+                var requestingFacilities = facilities[0],
+                    minimalFacilities = facilities[1];
+
+                requestingFacilities.forEach(function(facility) {
+                    minimalFacilities.forEach(function(minimalFacility) {
                         if (facility == minimalFacility.id) {
-                            requestingFacilities.push(minimalFacility);
+                            minRequestingFacilities.push(minimalFacility);
                         }
                     });
                 });
-                deferred.resolve(requestingFacilities);
+                deferred.resolve(minRequestingFacilities);
             }).catch(function(){
-                deferred.reject();
+                deferred.reject(minRequestingFacilities);
             });
 
             return deferred.promise;

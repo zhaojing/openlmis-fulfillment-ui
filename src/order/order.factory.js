@@ -28,9 +28,9 @@
         .module('order')
         .factory('orderFactory', factory);
 
-    factory.$inject = ['orderService', '$q', 'ORDER_STATUS', 'facilityService'];
+    factory.$inject = ['orderService', '$q', 'ORDER_STATUS'];
 
-    function factory(orderService, $q, ORDER_STATUS, facilityService) {
+    function factory(orderService, $q, ORDER_STATUS) {
         var factory = {
             search: search,
             getPod: getPod,

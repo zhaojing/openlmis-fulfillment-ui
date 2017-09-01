@@ -47,4 +47,9 @@ describe('Facility service decorator', function() {
         expect(requestingFacilities[1]).toEqual(facilities[1]);
     });
 
+    afterEach(function() {
+        $httpBackend.verifyNoOutstandingExpectation();
+        $httpBackend.verifyNoOutstandingRequest();
+    });
+
 });
