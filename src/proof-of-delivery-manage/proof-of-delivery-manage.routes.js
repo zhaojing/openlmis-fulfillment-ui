@@ -45,7 +45,7 @@
                             paramsCopy.requestingFacility = stateParams.facility;
                             delete paramsCopy.facility;
 
-                            return orderFactory.searchOrdersForManagePod(stateParams);
+                            return orderFactory.searchOrdersForManagePod(paramsCopy);
                         }
                         return undefined;
 					});
