@@ -1,3 +1,8 @@
+5.0.4 / WIP
+========================
+
+* [OLMIS-3159](https://openlmis.atlassian.net/browse/OLMIS-3159): Fixed facility select loosing state no POD manage page.
+
 5.0.3 / 2017-09-01
 ========================
 

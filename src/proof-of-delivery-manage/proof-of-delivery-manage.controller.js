@@ -28,14 +28,9 @@
         .module('proof-of-delivery-manage')
         .controller('ProofOfDeliveryManageController', controller);
 
-    controller.$inject = [
-        'orderFactory', '$state', 'loadingModalService', 'notificationService', 'pods',
-        '$stateParams'
-    ];
+    controller.$inject = ['orderFactory', '$state', 'loadingModalService', 'notificationService', 'pods','$stateParams'];
 
-    function controller(
-        orderFactory, $state, loadingModalService, notificationService, pods, $stateParams
-    ) {
+    function controller(orderFactory, $state, loadingModalService, notificationService, pods, $stateParams) {
         var vm = this;
 
         vm.$onInit = onInit;
