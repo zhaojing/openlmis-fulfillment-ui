@@ -29,6 +29,7 @@
         'openlmis-i18n',
         'openlmis-pagination',
         'openlmis-table',
+        'openlmis-templates',
         'order',
         'referencedata-facility',
         'referencedata-program',

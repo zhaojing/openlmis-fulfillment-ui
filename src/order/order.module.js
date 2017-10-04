@@ -26,6 +26,7 @@
     angular.module('order', [
         'fulfillment',
         'openlmis-date',
+        'openlmis-main-state',
         'referencedata-facility',
         'referencedata-period',
         'referencedata-program',

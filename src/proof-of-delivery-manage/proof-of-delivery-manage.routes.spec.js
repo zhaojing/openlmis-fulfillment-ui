@@ -16,7 +16,7 @@
 
 describe('openlmis.orders.podManage state', function() {
 
-    var $q, $state, $rootScope, orderFactory, paginationService, state, FULFILLMENT_RIGHTS, REQUISITION_RIGHTS, $stateParams, pods;
+    var $q, $state, $rootScope, $location, $templateCache, orderFactory, paginationService, state, FULFILLMENT_RIGHTS, REQUISITION_RIGHTS, pods, authorizationService;
 
     beforeEach(function() {
         loadModules();
@@ -25,27 +25,26 @@ describe('openlmis.orders.podManage state', function() {
         prepareSpies();
     });
 
-    it('should fetch a list of pods', function() {
-        $stateParams.facility = 'facility';
-        $stateParams.program = 'program';
-        $stateParams.supervised = false;
+    it('should be available under \'orders/manage\'', function() {
+        expect($state.current.name).not.toEqual('openlmis.orders.podManages');
 
-        var result;
+        goToUrl('/orders/manage');
 
-        state.resolve.pods(paginationService, orderFactory, $stateParams).then(function(response) {
-            result = response;
-        });
-        $rootScope.$apply();
+        expect($state.current.name).toEqual('openlmis.orders.podManage');
+    });
 
-        var stateParams = {
-            requestingFacility: 'facility',
-            program: 'program',
-            supervised: false
-        };
+    it('should resolve pods', function() {
+        goToUrl('/orders/manage?page=0&size=10&program=program-id');
 
-        expect(result).toEqual(pods);
-        expect($stateParams.facility).toEqual('facility');
-        expect(orderFactory.searchOrdersForManagePod).toHaveBeenCalledWith(stateParams);
+        expect(getResolvedValue('pods')).toEqual(pods);
+    });
+
+    it('should use template', function() {
+        spyOn($templateCache, 'get').andCallThrough();
+
+        goToUrl('/orders/manage');
+
+        expect($templateCache.get).toHaveBeenCalledWith('proof-of-delivery-manage/proof-of-delivery-manage.html');
     });
 
     it('should require requisition create and pods manage rights to enter', function() {
@@ -53,8 +52,6 @@ describe('openlmis.orders.podManage state', function() {
     });
 
     function loadModules() {
-        module('openlmis-main-state');
-        module('order');
         module('proof-of-delivery-manage');
     }
 
@@ -63,7 +60,10 @@ describe('openlmis.orders.podManage state', function() {
             $q = $injector.get('$q');
             $state = $injector.get('$state');
             $rootScope = $injector.get('$rootScope');
+            $location = $injector.get('$location');
+            $templateCache = $injector.get('$templateCache');
             orderFactory = $injector.get('orderFactory');
+            authorizationService = $injector.get('authorizationService');
             paginationService = $injector.get('paginationService');
             FULFILLMENT_RIGHTS = $injector.get('FULFILLMENT_RIGHTS');
             REQUISITION_RIGHTS = $injector.get('REQUISITION_RIGHTS');
@@ -72,7 +72,6 @@ describe('openlmis.orders.podManage state', function() {
 
     function prepareTestData() {
         state = $state.get('openlmis.orders.podManage');
-        $stateParams = {};
         pods = [
             {
                 id: 'pod-1',
@@ -90,13 +89,17 @@ describe('openlmis.orders.podManage state', function() {
     }
 
     function prepareSpies() {
-        spyOn(orderFactory, 'searchOrdersForManagePod').andReturn($q.when(pods));
-        spyOn(paginationService, 'registerUrl').andCallFake(function(stateParams, method) {
-            var deferred = $q.defer();
-            method(stateParams).then(function(response) {
-                deferred.resolve(response);
-            });
-            return deferred.promise;
-        });
+        spyOn(orderFactory, 'searchOrdersForManagePod').andReturn($q.when({
+            content: pods
+        }));
+    }
+
+    function getResolvedValue(name) {
+        return $state.$current.locals.globals[name];
+    }
+
+    function goToUrl(url) {
+        $location.url(url);
+        $rootScope.$apply();
     }
 });
