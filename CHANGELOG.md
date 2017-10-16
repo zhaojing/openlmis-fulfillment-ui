@@ -2,6 +2,7 @@
 ========================
 
 * [OLMIS-3159](https://openlmis.atlassian.net/browse/OLMIS-3159): Fixed facility select loosing state no POD manage page.
+* [OLMIS-3285](https://openlmis.atlassian.net/browse/OLMIS-3285): Fixed broken pagination on Manage Proofs of Delivery page.
 
 5.0.3 / 2017-09-01
 ========================
@@ -10,7 +11,6 @@ Bug fixes
 
 * [OLMIS-2837](https://openlmis.atlassian.net/browse/OLMIS-2837): Fixed filtering on the manage POD page.
 * [OLMIS-2724](https://openlmis.atlassian.net/browse/OLMIS-2724): Fixed broken requesting facility filter select on Order View.
-* [OLMIS-3285](https://openlmis.atlassian.net/browse/OLMIS-3285): Fixed broken pagination on Manage Proofs of Delivery page.
 
 5.0.2 / 2017-06-22
 ==================
