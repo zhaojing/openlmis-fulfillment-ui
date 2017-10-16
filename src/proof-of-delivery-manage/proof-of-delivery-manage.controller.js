@@ -52,13 +52,13 @@
         /**
          * @ngdoc property
          * @propertyOf proof-of-delivery-manage.controller:ProofOfDeliveryManageController
-         * @name orders
+         * @name pods
          * @type {Array}
          *
          * @description
-         * Holds orders that will be displayed.
+         * Holds pods that will be displayed.
          */
-        vm.orders = undefined;
+        vm.pods = undefined;
 
         /**
          * @ngdoc method
