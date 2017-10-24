@@ -1,8 +1,14 @@
 5.0.4 / WIP
 ========================
 
+Bug fixes:
+
 * [OLMIS-3159](https://openlmis.atlassian.net/browse/OLMIS-3159): Fixed facility select loosing state no POD manage page.
 * [OLMIS-3285](https://openlmis.atlassian.net/browse/OLMIS-3285): Fixed broken pagination on Manage Proofs of Delivery page.
+
+Improvements:
+
+* Updated dev-ui version to 6.
 
 5.0.3 / 2017-09-01
 ========================
