@@ -96,36 +96,36 @@ describe('OrderViewController', function() {
             expect(vm.programs).toEqual(programs);
         });
 
-        it('should set startDate if start date from was passed through the URL', function() {
-            $stateParams.startDate = '2017-01-31T00:00:00.000Z';
+        it('should set periodStartDate if period start date from was passed through the URL', function() {
+            $stateParams.periodStartDate = '2017-01-31T00:00:00.000Z';
 
             vm.$onInit();
 
-            expect(vm.startDate).toEqual(new Date('2017-01-31'));
+            expect(vm.periodStartDate).toEqual(new Date('2017-01-31'));
         });
 
-        it('should not set starDate if start date from not passed through the URL', function() {
-            $stateParams.startDate = undefined;
+        it('should not set periodStartDate if period start date from not passed through the URL', function() {
+            $stateParams.periodStartDate = undefined;
 
             vm.$onInit();
 
-            expect(vm.starDate).toBeUndefined();
+            expect(vm.periodStartDate).toBeUndefined();
         });
 
-        it('should set endDate if end date to was passed through the URL', function() {
-            $stateParams.endDate = '2017-01-31T00:00:00.000Z';
+        it('should set periodEndDate if period end date to was passed through the URL', function() {
+            $stateParams.periodEndDate = '2017-01-31T00:00:00.000Z';
 
             vm.$onInit();
 
-            expect(vm.endDate).toEqual(new Date('2017-01-31'));
+            expect(vm.periodEndDate).toEqual(new Date('2017-01-31'));
         });
 
-        it('should not set endDate if end date to not passed through the URL', function() {
-            $stateParams.endDate = undefined;
+        it('should not set periodEndDate if period end date to not passed through the URL', function() {
+            $stateParams.periodEndDate = undefined;
 
             vm.$onInit();
 
-            expect(vm.endDate).toBeUndefined();
+            expect(vm.periodEndDate).toBeUndefined();
         });
 
         it('should call watch', function() {
@@ -165,8 +165,8 @@ describe('OrderViewController', function() {
                 supplyingFacility: null,
                 program: vm.program.id,
                 requestingFacility: null,
-                startDate: null,
-                endDate: null,
+                periodStartDate: null,
+                periodEndDate: null,
             }, {reload: true});
         });
 
@@ -179,8 +179,8 @@ describe('OrderViewController', function() {
                 supplyingFacility: vm.supplyingFacility.id,
                 program: null,
                 requestingFacility: null,
-                startDate: null,
-                endDate: null,
+                periodStartDate: null,
+                periodEndDate: null,
             }, {reload: true});
         });
 
@@ -193,13 +193,13 @@ describe('OrderViewController', function() {
                 supplyingFacility: null,
                 program: null,
                 requestingFacility: vm.requestingFacility.id,
-                startDate: null,
-                endDate: null,
+                periodStartDate: null,
+                periodEndDate: null,
             }, {reload: true});
         });
 
-        it('should set startDate', function() {
-            vm.startDate = new Date('2017-01-31T23:00:00.000Z');
+        it('should set periodStartDate', function() {
+            vm.periodStartDate = new Date('2017-01-31T23:00:00.000Z');
 
             vm.loadOrders();
 
@@ -207,13 +207,13 @@ describe('OrderViewController', function() {
                 supplyingFacility: null,
                 program: null,
                 requestingFacility: null,
-                startDate: '2017-01-31',
-                endDate: null
+                periodStartDate: '2017-01-31',
+                periodEndDate: null
             }, {reload: true});
         });
 
-        it('should set endDate', function() {
-            vm.endDate = new Date('2017-01-31T23:00:00.000Z');
+        it('should set periodEndDate', function() {
+            vm.periodEndDate = new Date('2017-01-31T23:00:00.000Z');
 
             vm.loadOrders();
 
@@ -221,8 +221,8 @@ describe('OrderViewController', function() {
                 supplyingFacility: null,
                 program: null,
                 requestingFacility: null,
-                startDate: null,
-                endDate: '2017-01-31'
+                periodStartDate: null,
+                periodEndDate: '2017-01-31'
             }, {reload: true});
         });
 

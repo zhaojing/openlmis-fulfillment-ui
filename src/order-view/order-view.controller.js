@@ -71,24 +71,24 @@
         /**
          * @ngdoc property
          * @propertyOf order-view.controller:OrderViewController
-         * @name startDate
+         * @name periodStartDate
          * @type {Object}
          *
          * @description
          * The beginning of the period to search for orders.
          */
-        vm.startDate = undefined;
+        vm.periodStartDate = undefined;
 
         /**
          * @ngdoc property
          * @propertyOf order-view.controller:OrderViewController
-         * @name endDate
+         * @name periodEndDate
          * @type {Object}
          *
          * @description
          * The end of the period to search for orders.
          */
-        vm.endDate = undefined;
+        vm.periodEndDate = undefined;
 
         /**
          * @ngdoc property
@@ -146,12 +146,12 @@
                 })[0];
             }
 
-            if ($stateParams.startDate) {
-                vm.startDate = new Date($stateParams.startDate);
+            if ($stateParams.periodStartDate) {
+                vm.periodStartDate = new Date($stateParams.periodStartDate);
             }
 
-            if ($stateParams.endDate) {
-                vm.endDate = new Date($stateParams.endDate);
+            if ($stateParams.periodEndDate) {
+                vm.periodEndDate = new Date($stateParams.periodEndDate);
             }
 
             $scope.$watch(function() {
@@ -183,8 +183,8 @@
             stateParams.supplyingFacility = vm.supplyingFacility ? vm.supplyingFacility.id : null;
             stateParams.requestingFacility = vm.requestingFacility ? vm.requestingFacility.id : null;
             stateParams.program = vm.program ? vm.program.id : null;
-            stateParams.startDate = vm.startDate ? $filter('isoDate')(vm.startDate) : null;
-            stateParams.endDate = vm.endDate ? $filter('isoDate')(vm.endDate) : null;
+            stateParams.periodStartDate = vm.periodStartDate ? $filter('isoDate')(vm.periodStartDate) : null;
+            stateParams.periodEndDate = vm.periodEndDate ? $filter('isoDate')(vm.periodEndDate) : null;
 
             $state.go('openlmis.orders.view', stateParams, {
                 reload: true
