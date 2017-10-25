@@ -14,13 +14,11 @@
         <select id="program"
                 ng-model="vm.program"
                 ng-options="program.name for program in vm.programs"></select>
-        <fieldset>
-            <legend>{{'orderView.period' | message}}</legend>
-            <label for=startDate>{{'orderView.from' | message}}</label>
-            <openlmis-datepicker input-id="startDate" value="vm.startDate" max-date="vm.endDate"></openlmis-datepicker>
-            <label for=endDate>{{'orderView.to' | message}}</label>
-            <openlmis-datepicker input-id="endDate" value="vm.endDate" min-date="vm.startDate"></openlmis-datepicker>
-        </fieldset>
+        <legend>{{'orderView.period' | message}}</legend>
+        <label for=periodStartDate>{{'orderView.periodStart' | message}}</label>
+        <openlmis-datepicker input-id="periodStartDate" value="vm.periodStartDate" max-date="vm.periodEndDate"></openlmis-datepicker>
+        <label for=periodEndDate>{{'orderView.periodEnd' | message}}</label>
+        <openlmis-datepicker input-id="periodEndDate" value="vm.periodEndDate" min-date="vm.periodEndDate"></openlmis-datepicker>
         <input type="submit" class="btn btn-primary" value="{{'orderView.search' | message}}"/>
     </form>
     <table>
