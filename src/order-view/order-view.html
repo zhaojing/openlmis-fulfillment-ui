@@ -14,7 +14,6 @@
         <select id="program"
                 ng-model="vm.program"
                 ng-options="program.name for program in vm.programs"></select>
-        <legend>{{'orderView.period' | message}}</legend>
         <label for=periodStartDate>{{'orderView.periodStart' | message}}</label>
         <openlmis-datepicker input-id="periodStartDate" value="vm.periodStartDate" max-date="vm.periodEndDate"></openlmis-datepicker>
         <label for=periodEndDate>{{'orderView.periodEnd' | message}}</label>
