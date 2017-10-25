@@ -1,5 +1,8 @@
-5.0.4 / WIP
+5.1.0 / WIP
 ========================
+
+New functionality added in a backwards-compatible manner:
+* [OLMIS-3222](https://openlmis.atlassian.net/browse/OLMIS-3222): Added start and end dates parameters to the order view screen
 
 Bug fixes:
 

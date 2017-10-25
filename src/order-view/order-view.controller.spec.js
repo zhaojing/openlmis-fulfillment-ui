@@ -96,6 +96,38 @@ describe('OrderViewController', function() {
             expect(vm.programs).toEqual(programs);
         });
 
+        it('should set startDate if start date from was passed through the URL', function() {
+            $stateParams.startDate = '2017-01-31T00:00:00.000Z';
+
+            vm.$onInit();
+
+            expect(vm.startDate).toEqual(new Date('2017-01-31'));
+        });
+
+        it('should not set starDate if start date from not passed through the URL', function() {
+            $stateParams.startDate = undefined;
+
+            vm.$onInit();
+
+            expect(vm.starDate).toBeUndefined();
+        });
+
+        it('should set endDate if end date to was passed through the URL', function() {
+            $stateParams.endDate = '2017-01-31T00:00:00.000Z';
+
+            vm.$onInit();
+
+            expect(vm.endDate).toEqual(new Date('2017-01-31'));
+        });
+
+        it('should not set endDate if end date to not passed through the URL', function() {
+            $stateParams.endDate = undefined;
+
+            vm.$onInit();
+
+            expect(vm.endDate).toBeUndefined();
+        });
+
         it('should call watch', function() {
             vm.$onInit();
 
@@ -132,7 +164,9 @@ describe('OrderViewController', function() {
             expect($state.go).toHaveBeenCalledWith('openlmis.orders.view', {
                 supplyingFacility: null,
                 program: vm.program.id,
-                requestingFacility: null
+                requestingFacility: null,
+                startDate: null,
+                endDate: null,
             }, {reload: true});
         });
 
@@ -144,7 +178,9 @@ describe('OrderViewController', function() {
             expect($state.go).toHaveBeenCalledWith('openlmis.orders.view', {
                 supplyingFacility: vm.supplyingFacility.id,
                 program: null,
-                requestingFacility: null
+                requestingFacility: null,
+                startDate: null,
+                endDate: null,
             }, {reload: true});
         });
 
@@ -156,7 +192,37 @@ describe('OrderViewController', function() {
             expect($state.go).toHaveBeenCalledWith('openlmis.orders.view', {
                 supplyingFacility: null,
                 program: null,
-                requestingFacility: vm.requestingFacility.id
+                requestingFacility: vm.requestingFacility.id,
+                startDate: null,
+                endDate: null,
+            }, {reload: true});
+        });
+
+        it('should set startDate', function() {
+            vm.startDate = new Date('2017-01-31T23:00:00.000Z');
+
+            vm.loadOrders();
+
+            expect($state.go).toHaveBeenCalledWith('openlmis.orders.view', {
+                supplyingFacility: null,
+                program: null,
+                requestingFacility: null,
+                startDate: '2017-01-31',
+                endDate: null
+            }, {reload: true});
+        });
+
+        it('should set endDate', function() {
+            vm.endDate = new Date('2017-01-31T23:00:00.000Z');
+
+            vm.loadOrders();
+
+            expect($state.go).toHaveBeenCalledWith('openlmis.orders.view', {
+                supplyingFacility: null,
+                program: null,
+                requestingFacility: null,
+                startDate: null,
+                endDate: '2017-01-31'
             }, {reload: true});
         });
 

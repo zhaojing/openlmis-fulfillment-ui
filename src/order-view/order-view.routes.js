@@ -31,7 +31,7 @@
             label: 'orderView.viewOrders',
             showInNavigation: true,
             templateUrl: 'order-view/order-view.html',
-            url: '/view?supplyingFacility&requestingFacility&program&page&size',
+            url: '/view?supplyingFacility&requestingFacility&program&startDate&endDate&page&size',
             accessRights: [
                 FULFILLMENT_RIGHTS.PODS_MANAGE,
                 FULFILLMENT_RIGHTS.ORDERS_VIEW

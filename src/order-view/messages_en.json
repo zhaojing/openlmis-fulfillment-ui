@@ -16,5 +16,8 @@
     "orderView.startDate": "Start date",
     "orderView.status": "Status",
     "orderView.supplyingFacility": "Supplying facility",
-    "orderView.viewOrders": "View Orders"
+    "orderView.viewOrders": "View Orders",
+    "orderView.dateInitiated": "Date initiated",
+    "orderView.from": "From",
+    "orderView.to": "To"
 }
