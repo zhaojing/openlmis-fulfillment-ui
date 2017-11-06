@@ -75,7 +75,8 @@ describe('orderFactory', function() {
                     ORDER_STATUS.TRANSFER_FAILED,
                     ORDER_STATUS.READY_TO_PACK,
                     ORDER_STATUS.ORDERED,
-                    ORDER_STATUS.RECEIVED
+                    ORDER_STATUS.RECEIVED,
+                    ORDER_STATUS.IN_ROUTE
                 ]
             });
         });
