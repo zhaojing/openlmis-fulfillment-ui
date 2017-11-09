@@ -1,21 +1,19 @@
-5.1.0 / WIP
-========================
+5.1.0 / 2017-11-09
+==================
 
 New functionality added in a backwards-compatible manner:
 * [OLMIS-3222](https://openlmis.atlassian.net/browse/OLMIS-3222): Added period start and end dates parameters to the order view screen
 
 Bug fixes:
-
 * [OLMIS-3159](https://openlmis.atlassian.net/browse/OLMIS-3159): Fixed facility select loosing state no POD manage page.
 * [OLMIS-3285](https://openlmis.atlassian.net/browse/OLMIS-3285): Fixed broken pagination on Manage Proofs of Delivery page.
 * [OLMIS-3540](https://openlmis.atlassian.net/browse/OLMIS-3540): Now Manage POD displays items with IN_ROUTE status.
 
 Improvements:
-
 * Updated dev-ui version to 6.
 
 5.0.3 / 2017-09-01
-========================
+==================
 
 Bug fixes
 
