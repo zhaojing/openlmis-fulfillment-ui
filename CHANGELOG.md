@@ -11,6 +11,7 @@ Bug fixes:
 
 Improvements:
 * Updated dev-ui version to 6.
+* [OLMIS-3448](https://openlmis.atlassian.net/browse/OLMIS-3448): Preserve the order of facilities in the dropdown on Order View.
 
 5.0.3 / 2017-09-01
 ==================

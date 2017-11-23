@@ -46,23 +46,28 @@ describe('requestingFacilityFactory', function() {
             }
         ];
 
-        spyOn(facilityService, 'getRequestingFacilities').andReturn($q.when(requestingFacilities));
         spyOn(facilityService, 'getAllMinimal').andReturn($q.when(minimalFacilities));
     });
 
     describe('getRequestingFacilities', function() {
         it('should return promise', function() {
+            spyOn(facilityService, 'getRequestingFacilities').andReturn($q.when(requestingFacilities));
+
             var result = requestingFacilityFactory.loadRequestingFacilities();
             expect(angular.isFunction(result.then)).toBe(true);
         });
 
         it('should call facilityService', function() {
+            spyOn(facilityService, 'getRequestingFacilities').andReturn($q.when(requestingFacilities));
+
             requestingFacilityFactory.loadRequestingFacilities();
             expect(facilityService.getAllMinimal).toHaveBeenCalled();
             expect(facilityService.getRequestingFacilities).toHaveBeenCalled();
         });
 
         it('should return available minimal facilities', function() {
+            spyOn(facilityService, 'getRequestingFacilities').andReturn($q.when(requestingFacilities));
+
             var result;
             requestingFacilityFactory.loadRequestingFacilities().then(function(facilities) {
                 result = facilities;
@@ -71,6 +76,22 @@ describe('requestingFacilityFactory', function() {
             $rootScope.$apply();
 
             expect(result).toEqual([minimalFacilities[0], minimalFacilities[1]]);
+        });
+
+        it('should preserve the order of minimal facilities', function() {
+            // requesting facilities in reverse order
+            requestingFacilities = ['3', '2', '1'];
+            spyOn(facilityService, 'getRequestingFacilities').andReturn($q.when(requestingFacilities));
+
+            var result;
+            requestingFacilityFactory.loadRequestingFacilities().then(function(facilities) {
+                result = facilities;
+            });
+
+            $rootScope.$apply();
+
+            expect(result).toEqual([minimalFacilities[0],
+                minimalFacilities[1], minimalFacilities[2]]);
         });
     });
 
