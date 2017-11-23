@@ -39,7 +39,7 @@
             areAllRightsRequired: false,
             resolve: {
                 order: function(orderService, $stateParams) {
-					return orderService.get($stateParams.id);
+                    return orderService.get($stateParams.id);
 				}
             }
         });
