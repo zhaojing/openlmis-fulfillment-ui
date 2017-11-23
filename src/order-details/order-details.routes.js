@@ -40,7 +40,7 @@
             resolve: {
                 order: function(orderService, $stateParams) {
                     return orderService.get($stateParams.id);
-				}
+                }
             }
         });
 
