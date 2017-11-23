@@ -35,18 +35,24 @@
         var resource = $resource(fulfillmentUrlFactory('/api/orders'), {}, {
             search: {
                 method: 'GET',
-                transformResponse: transformOrder,
+                transformResponse: transformOrders,
                 url: fulfillmentUrlFactory('/api/orders/search')
             },
             getPod: {
                 method: 'GET',
                 transformResponse: transformPOD,
                 url: fulfillmentUrlFactory('/api/orders/:id/proofOfDeliveries')
+            },
+            get: {
+                method: 'GET',
+                transformResponse: transformOrder,
+                url: fulfillmentUrlFactory('/api/orders/:id')
             }
         });
 
         this.search = search;
         this.getPod = getPod;
+        this.get = get;
 
         /**
          * @ngdoc method
@@ -82,7 +88,24 @@
             }).$promise;
         }
 
-        function transformOrder(data, headers, status) {
+        /**
+         * @ngdoc method
+         * @methodOf order.orderService
+         * @name get
+         *
+         * @description
+         * Retrieves an Order.
+         *
+         * @param  {String} orderId the ID of the given order
+         * @return {Promise}        the order
+         */
+        function get(orderId) {
+            return resource.get({
+                id: orderId
+            }).$promise;
+        }
+
+        function transformOrders(data, headers, status) {
             if (status === 200) {
                 var orders = angular.fromJson(data);
                 orders.content.forEach(function(order) {
@@ -91,6 +114,17 @@
                     order.processingPeriod.endDate = dateUtils.toDate(order.processingPeriod.endDate);
                 });
                 return orders;
+            }
+            return data;
+        }
+
+        function transformOrder(data, headers, status) {
+            if (status === 200) {
+                var order = angular.fromJson(data);
+                order.createdDate = dateUtils.toDate(order.createdDate);
+                order.processingPeriod.startDate = dateUtils.toDate(order.processingPeriod.startDate);
+                order.processingPeriod.endDate = dateUtils.toDate(order.processingPeriod.endDate);
+                return order;
             }
             return data;
         }

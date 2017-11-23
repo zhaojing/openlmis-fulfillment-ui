@@ -1,0 +1,48 @@
+<h2>{{'orderDetails.orderDetails' | message}}</h2>
+<dl>
+    <dt>{{'orderDetails.order' | message}}</dt>
+    <dd>{{vm.order.orderCode}} / <strong>{{(vm.order.emergency ? 'orderDetails.emergency' : 'orderDetails.regular') | message}}</strong></dd>
+</dl>
+<dl>
+    <dt>{{'orderDetails.status' | message}}</dt>
+    <dd>{{vm.order.status}}<dd>
+</dl>
+<dl>
+    <dt>{{'orderDetails.facility' | message}}</dt>
+    <dd>{{vm.order.requestingFacility.name}}<dd>
+</dl>
+<dl>
+    <dt>{{'orderDetails.facilityCode' | message}}</dt>
+    <dd>{{vm.order.requestingFacility.code}}<dd>
+</dl>
+<dl>
+    <dt>{{'orderDetails.program' | message}}</dt>
+    <dd>{{vm.order.program.code}}<dd>
+</dl>
+<dl>
+    <dt>{{'orderDetails.type' | message}}</dt>
+    <dd>{{vm.order.requestingFacility.type.name}}<dd>
+</dl>
+<dl>
+    <dt>{{'orderDetails.dateCreated' | message}}</dt>
+    <dd>{{vm.order.createdDate | openlmisDate}}<dd>
+</dl>
+<section class="openlmis-table-container">
+    <table>
+        <thead>
+        <tr>
+            <th>{{'orderDetails.productCode' | message}}</th>
+            <th>{{'orderDetails.product' | message}}</th>
+            <th>{{'orderDetails.orderQuantity' | message}}</th>
+            <th>{{'orderDetails.fillQuantity' | message}}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="item in vm.order.orderLineItems">
+            <td>{{item.orderable.productCode}}</td>
+            <td>{{item.orderable.fullProductName}}</td>
+            <td>{{item.orderedQuantity}}</td>
+            <td>{{item.filledQuantity}}</td>
+        </tbody>
+    </table>
+</section>

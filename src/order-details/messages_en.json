@@ -1,0 +1,16 @@
+{
+    "orderDetails.orderDetails": "Order Details",
+    "orderDetails.productCode": "Product code",
+    "orderDetails.order": "Order",
+    "orderDetails.status": "Order status",
+    "orderDetails.product": "Product",
+    "orderDetails.regular": "Regular",
+    "orderDetails.emrgency": "Emergency",
+    "orderDetails.facility": "Facility",
+    "orderDetails.facilityCode": "Facility code",
+    "orderDetails.program": "Program",
+    "orderDetails.type": "Type",
+    "orderDetails.dateCreated": "Date created",
+    "orderDetails.orderQuantity": "Order quantity",
+    "orderDetails.fillQuantity": "Fill quantity"
+}
