@@ -58,8 +58,8 @@
                 var requestingFacilities = facilities[0],
                     minimalFacilities = facilities[1];
 
-                requestingFacilities.forEach(function(facility) {
-                    minimalFacilities.forEach(function(minimalFacility) {
+                minimalFacilities.forEach(function(minimalFacility) {
+                    requestingFacilities.forEach(function(facility) {
                         if (facility == minimalFacility.id) {
                             minRequestingFacilities.push(minimalFacility);
                         }
