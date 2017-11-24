@@ -15,55 +15,17 @@
 
 describe('orderDetailsController', function() {
 
-    var vm, $controller, order;
+    var vm, $controller, order, OrderDataBuilder;
 
     beforeEach(function() {
         module('order-details');
 
         inject(function($injector) {
             $controller = $injector.get('$controller');
+            OrderDataBuilder = $injector.get('OrderDataBuilder');
         });
 
-        order = {
-            "id" : "ec49baf1-fb6c-4bbc-ad5e-54fff70115a2",
-            "emergency" : false,
-            "createdDate" : new Date(2017, 11, 10),
-            "program" : {
-                "id" : "10845cb9-d365-4aaa-badd-b4fa39c6a26a",
-                "code" : "PRG002",
-                "name" : "Essential Meds",
-                "description" : null,
-                "active" : true,
-                "periodsSkippable" : false,
-                "showNonFullSupplyTab" : null
-            },
-            "requestingFacility" : {
-                "id" : "13037147-1769-4735-90a7-b9b310d128b8",
-                "code" : "DH01",
-                "name" : "Balaka District Hospital",
-                "type" : {
-                    "id" : "663b1d34-cc17-4d60-9619-e553e45aa441",
-                    "code" : "dist_hosp",
-                    "name" : "District Hospital",
-                    "description" : null,
-                    "displayOrder" : 3,
-                    "active" : true
-                }
-            },
-            "orderCode" : "ORDER-00000000-0000-0000-0000-000000000009R",
-            "status" : "IN_ROUTE",
-            "orderLineItems": [
-                {
-                    "orderedQuantity": 10,
-                    "filledQuantity": 10,
-                    "orderable": {
-                        "productCode": "C1",
-                        "fullProductName": "Acetylsalicylic Acid"
-                    }
-
-                }
-            ]
-        };
+        order = new OrderDataBuilder().build();
 
         vm = $controller('OrderDetailsController', {
             order: order

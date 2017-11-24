@@ -30,6 +30,7 @@
         'referencedata-facility',
         'referencedata-period',
         'referencedata-program',
+        'referencedata-orderable',
         'ui.router'
     ]);
 
