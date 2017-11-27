@@ -29,9 +29,9 @@
         .module('order')
         .service('orderService', service);
 
-    service.$inject = ['$resource', 'fulfillmentUrlFactory', 'dateUtils'];
+    service.$inject = ['$resource', 'fulfillmentUrlFactory', 'dateUtils', 'OrderConstructor'];
 
-    function service($resource, fulfillmentUrlFactory, dateUtils) {
+    function service($resource, fulfillmentUrlFactory, dateUtils, OrderConstructor) {
         var resource = $resource(fulfillmentUrlFactory('/api/orders'), {}, {
             search: {
                 method: 'GET',
@@ -107,24 +107,14 @@
 
         function transformOrders(data, headers, status) {
             if (status === 200) {
-                var orders = angular.fromJson(data);
-                orders.content.forEach(function(order) {
-                    order.createdDate = dateUtils.toDate(order.createdDate);
-                    order.processingPeriod.startDate = dateUtils.toDate(order.processingPeriod.startDate);
-                    order.processingPeriod.endDate = dateUtils.toDate(order.processingPeriod.endDate);
-                });
-                return orders;
+                return OrderConstructor.fromJsonArray(data);
             }
             return data;
         }
 
         function transformOrder(data, headers, status) {
             if (status === 200) {
-                var order = angular.fromJson(data);
-                order.createdDate = dateUtils.toDate(order.createdDate);
-                order.processingPeriod.startDate = dateUtils.toDate(order.processingPeriod.startDate);
-                order.processingPeriod.endDate = dateUtils.toDate(order.processingPeriod.endDate);
-                return order;
+                return OrderConstructor.fromJson(data);
             }
             return data;
         }
