@@ -31,12 +31,14 @@
         return OrderDataBuilder;
 
         function OrderDataBuilder() {
-            this.id = 'ec49baf1-fb6c-4bbc-ad5e-54fff70115a2',
+            OrderDataBuilder.instanceNumber = (OrderDataBuilder.instanceNumber || 0) + 1;
+
+            this.id = 'order-id' + OrderDataBuilder.instanceNumber;
             this.emergency = true;
             this.createdDate = new Date(2017, 11, 10);
             this.program = new ProgramDataBuilder().build();
             this.requestingFacility = new FacilityDataBuilder().build();
-            this.orderCode = "ORDER-00000000-0000-0000-0000-000000000009R";
+            this.orderCode = "ORDER-" + OrderDataBuilder.instanceNumber;
             this.status = "IN_ROUTE";
             this.orderLineItems = [
                 {

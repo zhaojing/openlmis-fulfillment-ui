@@ -43,7 +43,7 @@
          * @type {Object}
          *
          * @description
-         * Holds order that will be displayed on screen.
+         * Holds order that will be displayed on the screen.
          */
         vm.order = undefined;
 

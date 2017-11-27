@@ -40,14 +40,14 @@
          * @description
          * Creates a new instance of the Order class.
          *
-         * @param  {String}  id                                     the UUID of the order to be created
-         * @param  {String}  emergency                              indicate of order is emergency
-         * @param  {String}  createdDate                            the createdDate of the order to be created
-         * @param  {String}  program                                the program of the order to be created
-         * @param  {String}  requestingFacility                     the requestingFacility of the order to be created
-         * @param  {String}  orderCode                              the code of the order to be created
-         * @param  {String}  status                                 the status of the order to be created
-         * @param  {String}  orderLineItems                         the orderLineItems of the order to be created
+         * @param  {String}  id                                     the UUID of the order
+         * @param  {String}  emergency                              indicates if order is emergency
+         * @param  {String}  createdDate                            the created date of the order
+         * @param  {String}  program                                the program of the order
+         * @param  {String}  requestingFacility                     the requesting facility of the order
+         * @param  {String}  orderCode                              the code of the order
+         * @param  {String}  status                                 the status of the order
+         * @param  {String}  orderLineItems                         the order line items of the order
          * @return {Object}                                         the order object
          */
         function Order(id, emergency, createdDate, program, requestingFacility, orderCode, status,
