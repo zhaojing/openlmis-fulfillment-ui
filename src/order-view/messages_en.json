@@ -18,5 +18,6 @@
     "orderView.supplyingFacility": "Supplying facility",
     "orderView.viewOrders": "View Orders",
     "orderView.periodStart": "Processing period start",
-    "orderView.periodEnd": "Processing period end"
+    "orderView.periodEnd": "Processing period end",
+    "orderView.fulfill": "Fulfill"
 }

@@ -5,7 +5,7 @@
     "orderDetails.status": "Order status",
     "orderDetails.product": "Product",
     "orderDetails.regular": "Regular",
-    "orderDetails.emrgency": "Emergency",
+    "orderDetails.emergency": "Emergency",
     "orderDetails.facility": "Facility",
     "orderDetails.facilityCode": "Facility code",
     "orderDetails.program": "Program",

@@ -1,7 +1,7 @@
 <h2>{{'orderDetails.orderDetails' | message}}</h2>
 <dl>
     <dt>{{'orderDetails.order' | message}}</dt>
-    <dd>{{vm.order.orderCode}} / <strong>{{(vm.order.emergency ? 'orderDetails.emergency' : 'orderDetails.regular') | message}}</strong></dd>
+    <dd>{{vm.order.orderCode}} / <span class="emergency">{{(vm.order.emergency ? 'orderDetails.emergency' : 'orderDetails.regular') | message}}</span></dd>
 </dl>
 <dl>
     <dt>{{'orderDetails.status' | message}}</dt>

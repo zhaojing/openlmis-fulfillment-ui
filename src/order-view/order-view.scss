@@ -1,10 +1,17 @@
 .order-view {
 
+	@mixin button-icon-inherit($icon) {
+		@include button-icon-only($icon);
+		height: inherit;
+		width: inherit;
+		line-height: inherit;
+	}
+
 	button.print {
-		@include button-icon-only('print');
+		@include button-icon-inherit('print');
 	}
 
 	button.download {
-		@include button-icon-only('download');
+		@include button-icon-inherit('download');
 	}
 }
