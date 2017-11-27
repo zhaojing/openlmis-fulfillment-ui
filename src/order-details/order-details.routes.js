@@ -31,7 +31,7 @@
             label: 'orderDetails.orderDetails',
             showInNavigation: false,
             templateUrl: 'order-details/order-details.html',
-            url: '/:id',
+            url: '/details/:id',
             accessRights: [
                 FULFILLMENT_RIGHTS.PODS_MANAGE,
                 FULFILLMENT_RIGHTS.ORDERS_VIEW

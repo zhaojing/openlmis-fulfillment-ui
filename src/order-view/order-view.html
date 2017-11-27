@@ -58,6 +58,9 @@
                         openlmis-download="{{vm.getDownloadUrl(order)}}">
                         {{'orderView.download'|message}}
                     </button>
+                    <button ui-sref="openlmis.orders.details({id: order.id})">
+                        {{'adminUserList.roles' | message}}
+                    </button>
                 </td>
             </tr>
         </tbody>
