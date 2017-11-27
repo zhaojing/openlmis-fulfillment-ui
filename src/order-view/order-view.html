@@ -33,6 +33,8 @@
                 <th>{{'orderView.endDate' | message}}</th>
                 <th>{{'orderView.status' | message}}</th>
                 <th>{{'orderView.emergency' | message}}</th>
+                <th>{{'orderView.createdDate' | message}}</th>
+                <th>{{'orderView.lastUpdated' | message}}</th>
                 <th class="col-sticky sticky-right">{{'orderView.actions' | message}}</th>
             </tr>
         </thead>
@@ -49,6 +51,8 @@
                 <td class="col-emergency">
                     <i ng-class="{'icon-ok': order.emergency}"></i>
                 </td>
+                <td>{{order.createdDate | openlmisDate}}</td>
+                <td>{{order.lastUpdatedDate | openlmisDate}}</td>
                 <td>
                     <button class="print"
                         openlmis-download="{{vm.getPrintUrl(order)}}">

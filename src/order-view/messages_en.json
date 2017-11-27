@@ -1,10 +1,12 @@
 {
     "orderView.actions": "Actions",
+    "orderView.createdDate": "Date created",
     "orderView.district": "District",
     "orderView.download": "Download",
     "orderView.emergency": "Emergency",
     "orderView.endDate": "End date",
     "orderView.facility": "Facility",
+    "orderView.lastUpdated": "Last updated",
     "orderView.noOrdersFound": "No orders found",
     "orderView.orderNumber": "Order no.",
     "orderView.period": "Period",
