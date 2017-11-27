@@ -48,10 +48,11 @@
          * @param  {String}  orderCode                              the code of the order
          * @param  {String}  status                                 the status of the order
          * @param  {String}  orderLineItems                         the order line items of the order
-         * @return {Object}                                         the order object
+         * @param  {String}  processingPeriod                       the processing period of the order
+         * @return {Order}                                          the order object
          */
         function Order(id, emergency, createdDate, program, requestingFacility, orderCode, status,
-                       orderLineItems) {
+                       orderLineItems, processingPeriod) {
             this.id = id;
             this.emergency = emergency;
             this.createdDate = createdDate;
@@ -60,6 +61,7 @@
             this.orderCode = orderCode;
             this.status = status;
             this.orderLineItems = orderLineItems;
+            this.processingPeriod = processingPeriod;
         }
 
     }

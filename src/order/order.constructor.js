@@ -53,11 +53,7 @@
          */
         function fromJson (jsonOrder) {
             var object = angular.fromJson(jsonOrder);
-            transform(object);
-
-            var order =  new Order();
-            angular.copy(object, order);
-            return order;
+            return createOrder(object);
         }
 
         /**
@@ -75,20 +71,21 @@
             var page = angular.fromJson(jsonOrders),
                 orders = [];
             page.content.forEach(function(object) {
-                transform(object);
-
-                var order =  new Order();
-                angular.copy(object, order);
+                var order = createOrder(object);
                 orders.push(order)
             });
             page.content = orders;
             return page;
         }
 
-        function transform(object) {
-            object.createdDate = dateUtils.toDate(object.createdDate);
-            object.processingPeriod.startDate = dateUtils.toDate(object.processingPeriod.startDate);
-            object.processingPeriod.endDate = dateUtils.toDate(object.processingPeriod.endDate);
+        function createOrder(object) {
+            var processingPeriod = object.processingPeriod;
+            processingPeriod.startDate = dateUtils.toDate(processingPeriod.startDate);
+            processingPeriod.endDate = dateUtils.toDate(processingPeriod.endDate);
+
+            return new Order(object.id, object.emergency, dateUtils.toDate(object.createdDate),
+                object.program, object.requestingFacility, object.orderCode, object.status,
+                object.orderLineItems, processingPeriod);
         }
 
     }

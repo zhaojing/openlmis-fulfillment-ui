@@ -38,21 +38,23 @@ describe('orderService', function() {
             fulfillmentUrlFactory = $injector.get('fulfillmentUrlFactory');
         });
 
-        orders = [{
+        var orderOne = {
             id: 'id-one',
             createdDate: [2017, 1, 1],
             processingPeriod: {
                 startDate: [2017, 1, 1],
                 endDate: [2017, 1, 31]
             }
-        }, {
+        };
+        var orderTwo = {
             id: 'id-two',
             createdDate: [2017, 2, 1],
             processingPeriod: {
                 startDate: [2017, 2, 1],
                 endDate: [2017, 2, 27]
             }
-        }];
+        };
+        orders = [orderOne, orderTwo];
 
         pod = {
             id: 'id-three',
@@ -62,6 +64,9 @@ describe('orderService', function() {
 
         $httpBackend.when('GET', fulfillmentUrlFactory('/api/orders/search?supplyingFacility=some-id'))
             .respond(200, {content: orders});
+
+        $httpBackend.when('GET', fulfillmentUrlFactory('/api/orders/some-id'))
+            .respond(200, orderOne);
 
         $httpBackend.when('GET', fulfillmentUrlFactory('/api/orders/id-one/proofOfDeliveries'))
             .respond(200, pod);
@@ -82,11 +87,28 @@ describe('orderService', function() {
         expect(result.content[0].id).toEqual('id-one');
         expect(result.content[0].processingPeriod.startDate).toEqual(new Date(2017, 0, 1));
         expect(result.content[0].processingPeriod.endDate).toEqual(new Date(2017, 0, 31));
+        expect(result.content[0].createdDate).toEqual(new Date(2017, 0, 1));
 
         expect(result.content[1].id).toEqual('id-two');
         expect(result.content[1].processingPeriod.startDate).toEqual(new Date(2017, 1, 1));
         expect(result.content[1].processingPeriod.endDate).toEqual(new Date(2017, 1, 27));
+        expect(result.content[1].createdDate).toEqual(new Date(2017, 1, 1));
+    });
 
+    it('get should return transformed orders', function() {
+        var result = undefined;
+
+        orderService.get('some-id').then(function(orders) {
+            result = orders;
+        });
+
+        $httpBackend.flush();
+        $rootScope.$apply();
+
+        expect(result.id).toEqual('id-one');
+        expect(result.processingPeriod.startDate).toEqual(new Date(2017, 0, 1));
+        expect(result.processingPeriod.endDate).toEqual(new Date(2017, 0, 31));
+        expect(result.createdDate).toEqual(new Date(2017, 0, 1));
     });
 
     it('getPod should return transformed proof of deliveries', function() {
