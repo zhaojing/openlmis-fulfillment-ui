@@ -1,3 +1,9 @@
+5.1.1 / WIP
+==================
+
+New functionality added in a backwards-compatible manner:
+* [OLMIS-3607](https://openlmis.atlassian.net/browse/OLMIS-3607): Added created date and last updated columns to the Order list view
+
 5.1.0 / 2017-11-09
 ==================
 
