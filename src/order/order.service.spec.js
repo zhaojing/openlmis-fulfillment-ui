@@ -16,7 +16,7 @@
 describe('orderService', function() {
 
     var orderService, $rootScope, $httpBackend, fulfillmentUrlFactory, orders, pod,
-        dateUtilsMock;
+        dateUtilsMock, OrderDataBuilder, PeriodDataBuilder;
 
     beforeEach(function() {
         module('order', function($provide) {
@@ -36,24 +36,34 @@ describe('orderService', function() {
             $httpBackend = $injector.get('$httpBackend');
             orderService = $injector.get('orderService');
             fulfillmentUrlFactory = $injector.get('fulfillmentUrlFactory');
+            OrderDataBuilder = $injector.get('OrderDataBuilder');
+            PeriodDataBuilder = $injector.get('PeriodDataBuilder');
         });
 
-        var orderOne = {
-            id: 'id-one',
-            createdDate: [2017, 1, 1],
-            processingPeriod: {
-                startDate: [2017, 1, 1],
-                endDate: [2017, 1, 31]
-            }
-        };
-        var orderTwo = {
-            id: 'id-two',
-            createdDate: [2017, 2, 1],
-            processingPeriod: {
-                startDate: [2017, 2, 1],
-                endDate: [2017, 2, 27]
-            }
-        };
+        var periodOne = new PeriodDataBuilder()
+                        .withStartDate([2017, 2, 1])
+                        .withEndDate([2017, 2, 27])
+                        .build();
+
+        var periodTwo = new PeriodDataBuilder()
+                        .withStartDate([2017, 1, 1])
+                        .withEndDate([2017, 1, 31])
+                        .build();
+
+        var orderOne = new OrderDataBuilder()
+                        .withId('id-one')
+                        .withProcessingPeriod(periodTwo)
+                        .withLastUpdatedDate([2017, 1, 1])
+                        .withCreatedDate([2017, 1, 1])
+                        .build();
+
+        var orderTwo = new OrderDataBuilder()
+                        .withId('id-two')
+                        .withProcessingPeriod(periodOne)
+                        .withLastUpdatedDate([2017, 11, 1])
+                        .withCreatedDate([2017, 2, 1])
+                        .build();
+
         orders = [orderOne, orderTwo];
 
         pod = {
@@ -88,11 +98,13 @@ describe('orderService', function() {
         expect(result.content[0].processingPeriod.startDate).toEqual(new Date(2017, 0, 1));
         expect(result.content[0].processingPeriod.endDate).toEqual(new Date(2017, 0, 31));
         expect(result.content[0].createdDate).toEqual(new Date(2017, 0, 1));
+        expect(result.content[0].lastUpdatedDate).toEqual(new Date(2017, 0, 1));
 
         expect(result.content[1].id).toEqual('id-two');
         expect(result.content[1].processingPeriod.startDate).toEqual(new Date(2017, 1, 1));
         expect(result.content[1].processingPeriod.endDate).toEqual(new Date(2017, 1, 27));
         expect(result.content[1].createdDate).toEqual(new Date(2017, 1, 1));
+        expect(result.content[1].lastUpdatedDate).toEqual(new Date(2017, 10, 1));
     });
 
     it('get should return transformed orders', function() {
@@ -109,6 +121,7 @@ describe('orderService', function() {
         expect(result.processingPeriod.startDate).toEqual(new Date(2017, 0, 1));
         expect(result.processingPeriod.endDate).toEqual(new Date(2017, 0, 31));
         expect(result.createdDate).toEqual(new Date(2017, 0, 1));
+        expect(result.lastUpdatedDate).toEqual(new Date(2017, 0, 1));
     });
 
     it('getPod should return transformed proof of deliveries', function() {

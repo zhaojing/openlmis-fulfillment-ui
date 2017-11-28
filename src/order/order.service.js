@@ -131,6 +131,10 @@
                     pod.order.createdDate = dateUtils.toDate(pod.order.createdDate);
                 }
 
+                if(pod.order.lastUpdatedDate) {
+                    pod.order.lastUpdatedDate = dateUtils.toDate(pod.order.lastUpdatedDate);
+                }
+
                 return pod;
             }
 

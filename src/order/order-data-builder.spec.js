@@ -22,10 +22,16 @@
         .module('order')
         .factory('OrderDataBuilder', OrderDataBuilder);
 
-    OrderDataBuilder.$inject = ['Order', 'ProgramDataBuilder', 'FacilityDataBuilder', 'OrderableDataBuilder'];
+    OrderDataBuilder.$inject = ['Order', 'ProgramDataBuilder', 'FacilityDataBuilder', 'OrderableDataBuilder',
+        'PeriodDataBuilder'];
 
-    function OrderDataBuilder(Order, ProgramDataBuilder, FacilityDataBuilder, OrderableDataBuilder) {
+    function OrderDataBuilder(Order, ProgramDataBuilder, FacilityDataBuilder, OrderableDataBuilder,
+        PeriodDataBuilder) {
 
+        OrderDataBuilder.prototype.withId = withId;
+        OrderDataBuilder.prototype.withCreatedDate = withCreatedDate;
+        OrderDataBuilder.prototype.withLastUpdatedDate = withLastUpdatedDate;
+        OrderDataBuilder.prototype.withProcessingPeriod = withProcessingPeriod;
         OrderDataBuilder.prototype.build = build;
 
         return OrderDataBuilder;
@@ -36,6 +42,8 @@
             this.id = 'order-id' + OrderDataBuilder.instanceNumber;
             this.emergency = true;
             this.createdDate = new Date(2017, 11, 10);
+            this.lastUpdatedDate = new Date(2017, 11, 10);
+            this.processingPeriod = new PeriodDataBuilder().build();
             this.program = new ProgramDataBuilder().build();
             this.requestingFacility = new FacilityDataBuilder().build();
             this.orderCode = "ORDER-" + OrderDataBuilder.instanceNumber;
@@ -49,6 +57,26 @@
             ];
         }
 
+        function withId(newId) {
+            this.id = newId;
+            return this;
+        }
+
+        function withCreatedDate(newDate) {
+            this.createdDate = newDate;
+            return this;
+        }
+
+        function withLastUpdatedDate(newDate) {
+            this.lastUpdatedDate = newDate;
+            return this;
+        }
+
+        function withProcessingPeriod(newPeriod) {
+            this.processingPeriod = newPeriod;
+            return this;
+        }
+
         function build() {
             return new Order(
                 this.id,
@@ -58,7 +86,9 @@
                 this.requestingFacility,
                 this.orderCode,
                 this.status,
-                this.orderLineItems
+                this.orderLineItems,
+                this.processingPeriod,
+                this.lastUpdatedDate
             );
         }
 
