@@ -16,7 +16,7 @@
 describe('orderService', function() {
 
     var orderService, $rootScope, $httpBackend, fulfillmentUrlFactory, orders, pod,
-        dateUtilsMock, OrderDataBuilder, PeriodDataBuilder;
+        dateUtilsMock, OrderDataBuilder, PeriodDataBuilder, orderOne;
 
     beforeEach(function() {
         module('order', function($provide) {
@@ -50,7 +50,7 @@ describe('orderService', function() {
                         .withEndDate([2017, 1, 31])
                         .build();
 
-        var orderOne = new OrderDataBuilder()
+        orderOne = new OrderDataBuilder()
                         .withId('id-one')
                         .withProcessingPeriod(periodTwo)
                         .withLastUpdatedDate([2017, 1, 1])
@@ -107,11 +107,11 @@ describe('orderService', function() {
         expect(result.content[1].lastUpdatedDate).toEqual(new Date(2017, 10, 1));
     });
 
-    it('get should return transformed orders', function() {
+    it('get should return transformed order', function() {
         var result = undefined;
 
-        orderService.get('some-id').then(function(orders) {
-            result = orders;
+        orderService.get('some-id').then(function(order) {
+            result = order;
         });
 
         $httpBackend.flush();
@@ -122,6 +122,15 @@ describe('orderService', function() {
         expect(result.processingPeriod.endDate).toEqual(new Date(2017, 0, 31));
         expect(result.createdDate).toEqual(new Date(2017, 0, 1));
         expect(result.lastUpdatedDate).toEqual(new Date(2017, 0, 1));
+        expect(result.emergency).toEqual(orderOne.emergency);
+        expect(result.program).toEqual(orderOne.program);
+        expect(result.requestingFacility).toEqual(orderOne.requestingFacility);
+        expect(result.orderCode).toEqual(orderOne.orderCode);
+        expect(result.status).toEqual(orderOne.status);
+        expect(result.orderLineItems).toEqual(orderOne.orderLineItems);
+        expect(result.facility).toEqual(orderOne.facility);
+        expect(result.receivingFacility).toEqual(orderOne.receivingFacility);
+
     });
 
     it('getPod should return transformed proof of deliveries', function() {
