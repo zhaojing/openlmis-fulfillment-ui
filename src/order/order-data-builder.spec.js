@@ -55,6 +55,10 @@
                     "orderable": new OrderableDataBuilder().build()
                 }
             ];
+            this.facility = new FacilityDataBuilder().build();
+            this.receivingFacility = new FacilityDataBuilder().build();
+            this.supplyingFacility = new FacilityDataBuilder().build();
+            this.lastUpdaterId = 'user-id' + OrderDataBuilder.instanceNumber;
         }
 
         function withId(newId) {
@@ -88,7 +92,11 @@
                 this.status,
                 this.orderLineItems,
                 this.processingPeriod,
-                this.lastUpdatedDate
+                this.lastUpdatedDate,
+                this.facility,
+                this.receivingFacility,
+                this.supplyingFacility,
+                this.lastUpdaterId
             );
         }
 

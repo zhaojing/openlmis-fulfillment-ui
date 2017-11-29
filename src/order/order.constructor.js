@@ -86,7 +86,8 @@
             return new Order(object.id, object.emergency, dateUtils.toDate(object.createdDate),
                 object.program, object.requestingFacility, object.orderCode, object.status,
                 object.orderLineItems, processingPeriod, dateUtils.toDate(object.lastUpdatedDate),
-                object.facility, object.receivingFacility);
+                object.facility, object.receivingFacility, object.supplyingFacility,
+                object.lastUpdaterId);
         }
 
     }

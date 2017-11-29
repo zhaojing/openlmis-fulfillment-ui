@@ -130,7 +130,8 @@ describe('orderService', function() {
         expect(result.orderLineItems).toEqual(orderOne.orderLineItems);
         expect(result.facility).toEqual(orderOne.facility);
         expect(result.receivingFacility).toEqual(orderOne.receivingFacility);
-
+        expect(result.supplyingFacility).toEqual(orderOne.supplyingFacility);
+        expect(result.lastUpdaterId).toEqual(orderOne.lastUpdaterId);
     });
 
     it('getPod should return transformed proof of deliveries', function() {
