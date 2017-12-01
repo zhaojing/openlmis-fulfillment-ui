@@ -87,7 +87,7 @@
                 object.program, object.requestingFacility, object.orderCode, object.status,
                 object.orderLineItems, processingPeriod, dateUtils.toDate(object.lastUpdatedDate),
                 object.facility, object.receivingFacility, object.supplyingFacility,
-                object.lastUpdaterId);
+                object.lastUpdater);
         }
 
     }

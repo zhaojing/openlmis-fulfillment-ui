@@ -12,5 +12,7 @@
     "orderDetails.type": "Type",
     "orderDetails.dateCreated": "Date created",
     "orderDetails.orderQuantity": "Order quantity",
-    "orderDetails.fillQuantity": "Fill quantity"
+    "orderDetails.fillQuantity": "Fill quantity",
+    "orderDetails.lastUpdated": "Last updated",
+    "orderDetails.lastUpdatedBy": "Last updated by"
 }

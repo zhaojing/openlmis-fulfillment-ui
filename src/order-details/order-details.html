@@ -27,6 +27,14 @@
     <dt>{{'orderDetails.dateCreated' | message}}</dt>
     <dd>{{vm.order.createdDate | openlmisDate}}<dd>
 </dl>
+<dl>
+    <dt>{{'orderDetails.lastUpdated' | message}}</dt>
+    <dd>{{vm.order.lastUpdatedDate | openlmisDate}}<dd>
+</dl>
+<dl>
+    <dt>{{'orderDetails.lastUpdatedBy' | message}}</dt>
+    <dd>{{vm.order.lastUpdater.username | openlmisDate}}<dd>
+</dl>
 <section class="openlmis-table-container">
     <table>
         <thead>

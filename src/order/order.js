@@ -50,15 +50,15 @@
          * @param  {String}  orderLineItems                         the order line items of the order
          * @param  {String}  processingPeriod                       the processing period of the order
          * @param  {String}  lastUpdatedDate                        the date of the last order update
-         * @param  {String}  facility                               the date of the last order update
-         * @param  {String}  receivingFacility                      the date of the last order update
-         * @param  {String}  supplyingFacility                      the date of the last order update
-         * @param  {String}  lastUpdaterId                          the date of the last order update
+         * @param  {String}  facility                               the facility of the order
+         * @param  {String}  receivingFacility                      the receiving facility of the order
+         * @param  {String}  supplyingFacility                      the supplying facility of the order
+         * @param  {String}  lastUpdater                            the last updater object
          * @return {Order}                                          the order object
          */
         function Order(id, emergency, createdDate, program, requestingFacility, orderCode, status,
                        orderLineItems, processingPeriod, lastUpdatedDate, facility,
-                       receivingFacility, supplyingFacility, lastUpdaterId) {
+                       receivingFacility, supplyingFacility, lastUpdater) {
             this.id = id;
             this.emergency = emergency;
             this.createdDate = createdDate;
@@ -72,7 +72,7 @@
             this.facility = facility;
             this.receivingFacility = receivingFacility;
             this.supplyingFacility = supplyingFacility;
-            this.lastUpdaterId = lastUpdaterId;
+            this.lastUpdater = lastUpdater;
         }
 
     }

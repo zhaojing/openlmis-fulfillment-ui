@@ -97,12 +97,17 @@
          * Retrieves an Order.
          *
          * @param  {String} orderId the ID of the given order
+         * @param  {Object} expand  property name to expand (may be list of strings)
          * @return {Promise}        the order
          */
-        function get(orderId) {
-            return resource.get({
+        function get(orderId, expand) {
+            var params = {
                 id: orderId
-            }).$promise;
+            };
+            if (expand !== undefined) {
+                params.expand = expand;
+            }
+            return resource.get(params).$promise;
         }
 
         function transformOrders(data, headers, status) {
