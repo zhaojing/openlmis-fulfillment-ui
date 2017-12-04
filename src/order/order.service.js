@@ -102,11 +102,9 @@
          */
         function get(orderId, expand) {
             var params = {
-                id: orderId
+                id: orderId,
+                expand: expand
             };
-            if (expand !== undefined) {
-                params.expand = expand;
-            }
             return resource.get(params).$promise;
         }
 
