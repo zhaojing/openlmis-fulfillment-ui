@@ -2,32 +2,18 @@
 <dl>
     <dt>{{'orderDetails.order' | message}}</dt>
     <dd>{{vm.order.orderCode}} / <span class="emergency">{{(vm.order.emergency ? 'orderDetails.emergency' : 'orderDetails.regular') | message}}</span></dd>
-</dl>
-<dl>
     <dt>{{'orderDetails.status' | message}}</dt>
     <dd>{{vm.order.status}}<dd>
-</dl>
-<dl>
     <dt>{{'orderDetails.facility' | message}}</dt>
     <dd>{{vm.order.requestingFacility.name}}<dd>
-</dl>
-<dl>
     <dt>{{'orderDetails.facilityCode' | message}}</dt>
     <dd>{{vm.order.requestingFacility.code}}<dd>
-</dl>
-<dl>
     <dt>{{'orderDetails.program' | message}}</dt>
     <dd>{{vm.order.program.code}}<dd>
-</dl>
-<dl>
     <dt>{{'orderDetails.type' | message}}</dt>
     <dd>{{vm.order.requestingFacility.type.name}}<dd>
-</dl>
-<dl>
     <dt>{{'orderDetails.dateCreated' | message}}</dt>
     <dd>{{vm.order.createdDate | openlmisDate}}<dd>
-</dl>
-<dl>
     <dt>{{'orderDetails.lastUpdated' | message}}</dt>
     <dd>{{vm.order.lastUpdatedDate | openlmisDate}}<dd>
 </dl>
