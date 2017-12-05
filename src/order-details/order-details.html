@@ -1,7 +1,7 @@
 <h2>{{'orderDetails.orderDetails' | message}}</h2>
 <dl>
     <dt>{{'orderDetails.order' | message}}</dt>
-    <dd>{{vm.order.orderCode}} / <span class="emergency">{{(vm.order.emergency ? 'orderDetails.emergency' : 'orderDetails.regular') | message}}</span></dd>
+    <dd>{{vm.order.orderCode}}<span class="emergency" ng-if="vm.order.emergency"> / {{'orderDetails.emergency' | message}}</span></dd>
     <dt>{{'orderDetails.status' | message}}</dt>
     <dd>{{vm.order.status}}<dd>
     <dt>{{'orderDetails.facility' | message}}</dt>
@@ -9,15 +9,13 @@
     <dt>{{'orderDetails.facilityCode' | message}}</dt>
     <dd>{{vm.order.requestingFacility.code}}<dd>
     <dt>{{'orderDetails.program' | message}}</dt>
-    <dd>{{vm.order.program.code}}<dd>
+    <dd>{{vm.order.program.name}}<dd>
     <dt>{{'orderDetails.type' | message}}</dt>
     <dd>{{vm.order.requestingFacility.type.name}}<dd>
     <dt>{{'orderDetails.dateCreated' | message}}</dt>
     <dd>{{vm.order.createdDate | openlmisDate}}<dd>
     <dt>{{'orderDetails.lastUpdated' | message}}</dt>
     <dd>{{vm.order.lastUpdatedDate | openlmisDate}}<dd>
-</dl>
-<dl>
     <dt>{{'orderDetails.lastUpdatedBy' | message}}</dt>
     <dd>{{vm.order.lastUpdater.username | openlmisDate}}<dd>
 </dl>

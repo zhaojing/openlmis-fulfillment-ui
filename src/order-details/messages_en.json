@@ -4,7 +4,6 @@
     "orderDetails.order": "Order",
     "orderDetails.status": "Order status",
     "orderDetails.product": "Product",
-    "orderDetails.regular": "Regular",
     "orderDetails.emergency": "Emergency",
     "orderDetails.facility": "Facility",
     "orderDetails.facilityCode": "Facility code",
