@@ -1,3 +1,13 @@
 span.emergency {
 	font-weight: bold;
 }
+
+.order-cce-status {
+	padding: 0.5em;
+
+	& > p {
+		&:first-of-type {
+			font-weight: bold;
+		}
+	}
+}

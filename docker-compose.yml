@@ -15,12 +15,14 @@ services:
       - stockmanagement-ui
       - ui-components
       - ui-layout
+      - cce-ui
     depends_on:
       - auth-ui
       - referencedata-ui
       - stockmanagement-ui
       - ui-components
       - ui-layout
+      - cce-ui
   auth-ui:
     image: openlmis/auth-ui:6.0.2-SNAPSHOT
     volumes:
@@ -41,6 +43,10 @@ services:
     image: openlmis/ui-layout:5.0.4-SNAPSHOT
     volumes:
       - '/openlmis-ui-layout'
+  cce-ui:
+    image: openlmis/cce-ui:1.0.0-SNAPSHOT
+    volumes:
+      - '/openlmis-cce-ui'
   image:
     build: .
     image: openlmis/fulfillment-ui

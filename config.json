@@ -6,7 +6,8 @@
     "/openlmis-ui-components",
     "/openlmis-auth-ui",
     "/openlmis-ui-layout",
-    "/openlmis-referencedata-ui"
+    "/openlmis-referencedata-ui",
+    "/openlmis-cce-ui"
 ],
 "transifexProjectName": "openlmis-fulfillment-ui",
 "defaultLanguage": "en"

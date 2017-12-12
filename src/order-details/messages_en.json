@@ -13,5 +13,6 @@
     "orderDetails.orderQuantity": "Order quantity",
     "orderDetails.fillQuantity": "Fill quantity",
     "orderDetails.lastUpdated": "Last updated",
-    "orderDetails.lastUpdatedBy": "Last updated by"
+    "orderDetails.lastUpdatedBy": "Last updated by",
+    "orderDetails.cceStatus": "CCE Status"
 }
