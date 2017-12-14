@@ -7,21 +7,21 @@
     <dt>{{'orderDetails.order' | message}}</dt>
     <dd>{{vm.order.orderCode}}<span class="emergency" ng-if="vm.order.emergency"> / {{'orderDetails.emergency' | message}}</span></dd>
     <dt>{{'orderDetails.status' | message}}</dt>
-    <dd>{{vm.order.status}}<dd>
+    <dd>{{vm.order.status}}</dd>
     <dt>{{'orderDetails.facility' | message}}</dt>
-    <dd>{{vm.order.requestingFacility.name}}<dd>
+    <dd>{{vm.order.requestingFacility.name}}</dd>
     <dt>{{'orderDetails.facilityCode' | message}}</dt>
-    <dd>{{vm.order.requestingFacility.code}}<dd>
+    <dd>{{vm.order.requestingFacility.code}}</dd>
     <dt>{{'orderDetails.program' | message}}</dt>
-    <dd>{{vm.order.program.name}}<dd>
+    <dd>{{vm.order.program.name}}</dd>
     <dt>{{'orderDetails.type' | message}}</dt>
-    <dd>{{vm.order.requestingFacility.type.name}}<dd>
+    <dd>{{vm.order.requestingFacility.type.name}}</dd>
     <dt>{{'orderDetails.dateCreated' | message}}</dt>
-    <dd>{{vm.order.createdDate | openlmisDate}}<dd>
+    <dd>{{vm.order.createdDate | openlmisDate}}</dd>
     <dt>{{'orderDetails.lastUpdated' | message}}</dt>
-    <dd>{{vm.order.lastUpdatedDate | openlmisDate}}<dd>
+    <dd>{{vm.order.lastUpdatedDate | openlmisDate}}</dd>
     <dt>{{'orderDetails.lastUpdatedBy' | message}}</dt>
-    <dd>{{vm.order.lastUpdater.username | openlmisDate}}<dd>
+    <dd>{{vm.order.lastUpdater.username | openlmisDate}}</dd>
 </dl>
 <section class="openlmis-table-container">
     <table>
@@ -29,16 +29,32 @@
         <tr>
             <th>{{'orderDetails.productCode' | message}}</th>
             <th>{{'orderDetails.product' | message}}</th>
+            <th>{{'orderDetails.lotCode' | message}}</th>
+            <th>{{'orderDetails.expiryDate' | message}}</th>
+            <th>{{'orderDetails.availableSoh' | message}}</th>
             <th>{{'orderDetails.orderQuantity' | message}}</th>
             <th>{{'orderDetails.fillQuantity' | message}}</th>
         </tr>
         </thead>
         <tbody>
-        <tr ng-repeat="item in vm.order.orderLineItems">
+        <tr ng-repeat-start="item in vm.order.orderLineItems">
             <td>{{item.orderable.productCode}}</td>
             <td>{{item.orderable.fullProductName}}</td>
+            <td></td>
+            <td></td>
+            <td></td>
             <td>{{item.orderedQuantity}}</td>
             <td>{{item.filledQuantity}}</td>
+        </tr>
+        <tr ng-repeat-end ng-repeat="summary in item.summaries">
+            <td></td>
+            <td></td>
+            <td>{{summary.lot | lotCode}}</td>
+            <td>{{summary.lot.expirationDate}}</td>
+            <td>{{summary.stockOnHand}}</td>
+            <td></td>
+            <td></td>
+        </tr>
         </tbody>
     </table>
 </section>

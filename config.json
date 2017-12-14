@@ -7,7 +7,8 @@
     "/openlmis-auth-ui",
     "/openlmis-ui-layout",
     "/openlmis-referencedata-ui",
-    "/openlmis-cce-ui"
+    "/openlmis-cce-ui",
+    "/openlmis-stockmanagement-ui"
 ],
 "transifexProjectName": "openlmis-fulfillment-ui",
 "defaultLanguage": "en"

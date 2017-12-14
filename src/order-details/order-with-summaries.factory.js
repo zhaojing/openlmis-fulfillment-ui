@@ -19,31 +19,31 @@
 
     angular
         .module('order-details')
-        .config(config);
+        .factory('orderWithSummariesFactory', orderWithSummariesFactory);
 
-    config.$inject = ['$stateProvider', 'FULFILLMENT_RIGHTS'];
+    orderWithSummariesFactory.$inject = ['orderService', 'stockCardSummariesService'];
 
-    function config($stateProvider, FULFILLMENT_RIGHTS) {
+    function orderWithSummariesFactory(orderService, stockCardSummariesService) {
+        var orderWithSummariesFactory = {
+            getOrder: getOrder
+        };
+        return orderWithSummariesFactory;
 
-        $stateProvider.state('openlmis.orders.details', {
-            controller: 'OrderDetailsController',
-            controllerAs: 'vm',
-            label: 'orderDetails.orderDetails',
-            showInNavigation: false,
-            templateUrl: 'order-details/order-details.html',
-            url: '/details/:id',
-            accessRights: [
-                FULFILLMENT_RIGHTS.PODS_MANAGE,
-                FULFILLMENT_RIGHTS.ORDERS_VIEW
-            ],
-            areAllRightsRequired: false,
-            resolve: {
-                order: function(orderWithStockSummaries, $stateParams) {
-                    return orderWithStockSummaries.getOrder($stateParams.id);
-                }
-            }
-        });
+        function getOrder(orderId) {
+            var order;
 
+            return orderService.getWithLastUpdater(orderId)
+            .then(function(response) {
+                order = response;
+                return stockCardSummariesService.getStockCardSummaries(
+                    order.program.id,
+                    order.facility.id
+                );
+            })
+            .then(function(summaries) {
+                return OrderWithStockSummaries.fromOrderAndSummaries(order, summaries);
+            });
+        }
     }
 
 })();

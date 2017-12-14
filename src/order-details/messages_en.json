@@ -14,5 +14,6 @@
     "orderDetails.fillQuantity": "Fill quantity",
     "orderDetails.lastUpdated": "Last updated",
     "orderDetails.lastUpdatedBy": "Last updated by",
-    "orderDetails.cceStatus": "CCE Status"
-}
+    "orderDetails.cceStatus": "CCE Status",
+    "orderDetails.noLotDefined": "No lot defined"
+    }
