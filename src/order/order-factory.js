@@ -49,12 +49,13 @@
         .factory('OrderFactory', OrderFactory);
 
     OrderFactory.$inject = [
-        'dateUtils', 'OrderLineItemFactory', 'Order', 'classExtender', 'AbstractFactory'
+        'dateUtils', 'OrderLineItemFactory', 'Order', 'classExtender', 'BasicOrderFactory'
     ];
 
-    function OrderFactory(dateUtils, OrderLineItemFactory, Order, classExtender, AbstractFactory) {
+    function OrderFactory(dateUtils, OrderLineItemFactory, Order, classExtender, BasicOrderFactory) {
 
-        classExtender.extend(OrderFactory, AbstractFactory);
+        classExtender.extend(OrderFactory, BasicOrderFactory);
+
         OrderFactory.prototype.buildFromResponse = buildFromResponse;
 
         return OrderFactory;
@@ -79,41 +80,17 @@
      *                                      response
          */
         function buildFromResponse (response) {
-            if (!response) {
-                return response;
-            }
+            verifyNotUndefined(response, 'orderLineItems');
 
-            verifyResponse(response);
+            var order = BasicOrderFactory.prototype.buildFromResponse.apply(this, arguments);
 
             return new Order(
-                response.id, response.emergency, dateUtils.toDate(response.createdDate),
-                response.program, response.requestingFacility, response.orderCode, response.status,
-                this.orderLineItemFactory.buildFromResponseArray(response.orderLineItems),
-                buildProcessingPeriodFromResponse(response.processingPeriod),
-                dateUtils.toDate(response.lastUpdatedDate), response.facility,
-                response.receivingFacility, response.supplyingFacility, response.lastUpdater
+                order.id, order.emergency, order.createdDate, order.program,
+                order.requestingFacility, order.orderCode, order.status, order.processingPeriod,
+                order.lastUpdatedDate, order.facility, order.receivingFacility,
+                order.supplyingFacility, order.lastUpdater,
+                this.orderLineItemFactory.buildFromResponseArray(response.orderLineItems)
             );
-        }
-
-        // TODO: This should be part of the ProcessingPeriodFactory class
-        function buildProcessingPeriodFromResponse(response) {
-            var processingPeriod = angular.copy(response);
-            processingPeriod.startDate = dateUtils.toDate(processingPeriod.startDate);
-            processingPeriod.endDate = dateUtils.toDate(processingPeriod.endDate);
-            return processingPeriod;
-        }
-
-        function verifyResponse(response) {
-            verifyNotUndefined(response, 'createdDate');
-            verifyNotUndefined(response, 'lastUpdatedDate');
-
-            verifyNotUndefined(response, 'processingPeriod');
-            verifyProcessingPeriodResponse(response.processingPeriod);
-        }
-
-        function verifyProcessingPeriodResponse(response) {
-            verifyNotUndefined(response, 'startDate');
-            verifyNotUndefined(response, 'endDate');
         }
 
         function verifyNotUndefined(response, name) {

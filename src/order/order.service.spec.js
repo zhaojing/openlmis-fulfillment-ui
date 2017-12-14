@@ -15,118 +15,100 @@
 
 describe('orderService', function() {
 
-    var orderService, $rootScope, $httpBackend, fulfillmentUrlFactory, orders, dateUtilsMock,
-        OrderDataBuilder, PeriodDataBuilder, orderOne;
+    var orderService, $rootScope, $httpBackend, fulfillmentUrlFactory, OrderResponseDataBuilder,
+        PageDataBuilder, BasicOrderResponseDataBuilder;
 
     beforeEach(function() {
-        module('order', function($provide) {
-            dateUtilsMock = jasmine.createSpyObj('dateUtils', ['toDate']);
-
-            $provide.factory('dateUtils', function() {
-                return dateUtilsMock;
-            });
-
-            dateUtilsMock.toDate.andCallFake(function(array) {
-                return new Date(array[0], array[1] - 1, array[2]);
-            });
-        });
+        module('order');
 
         inject(function($injector) {
             $rootScope = $injector.get('$rootScope');
             $httpBackend = $injector.get('$httpBackend');
             orderService = $injector.get('orderService');
             fulfillmentUrlFactory = $injector.get('fulfillmentUrlFactory');
-            OrderDataBuilder = $injector.get('OrderDataBuilder');
-            PeriodDataBuilder = $injector.get('PeriodDataBuilder');
+            OrderResponseDataBuilder = $injector.get('OrderResponseDataBuilder');
+            PageDataBuilder = $injector.get('PageDataBuilder');
+            BasicOrderResponseDataBuilder = $injector.get('BasicOrderResponseDataBuilder');
         });
-
-        var periodOne = new PeriodDataBuilder()
-                        .withStartDate([2017, 2, 1])
-                        .withEndDate([2017, 2, 27])
-                        .build();
-
-        var periodTwo = new PeriodDataBuilder()
-                        .withStartDate([2017, 1, 1])
-                        .withEndDate([2017, 1, 31])
-                        .build();
-
-        orderOne = new OrderDataBuilder()
-                        .withId('id-one')
-                        .withProcessingPeriod(periodTwo)
-                        .withLastUpdatedDate([2017, 1, 1])
-                        .withCreatedDate([2017, 1, 1])
-                        .build();
-
-        var orderTwo = new OrderDataBuilder()
-                        .withId('id-two')
-                        .withProcessingPeriod(periodOne)
-                        .withLastUpdatedDate([2017, 11, 1])
-                        .withCreatedDate([2017, 2, 1])
-                        .build();
-
-        orders = [orderOne, orderTwo];
-
-        $httpBackend.when('GET', fulfillmentUrlFactory('/api/orders/search?supplyingFacility=some-id'))
-            .respond(200, {content: orders});
-
-        $httpBackend.when('GET', fulfillmentUrlFactory('/api/orders/some-id'))
-            .respond(200, orderOne);
     });
 
-    it('search should return transformed orders', function() {
-        var result;
+    describe('get', function() {
 
-        orderService.search({
-            supplyingFacility: 'some-id'
-        }).then(function(orders) {
-            result = orders;
+        var order;
+
+        beforeEach(function() {
+            order = new OrderResponseDataBuilder().build();
+
+            $httpBackend.whenGET(fulfillmentUrlFactory('/api/orders/' + order.id))
+            .respond(200, order);
         });
 
-        $httpBackend.flush();
-        $rootScope.$apply();
+        it('should call /api/orders endpoint', function() {
+            $httpBackend.expectGET(fulfillmentUrlFactory('/api/orders/' + order.id));
 
-        expect(result.content[0].id).toEqual('id-one');
-        expect(result.content[0].processingPeriod.startDate).toEqual(new Date(2017, 0, 1));
-        expect(result.content[0].processingPeriod.endDate).toEqual(new Date(2017, 0, 31));
-        expect(result.content[0].createdDate).toEqual(new Date(2017, 0, 1));
-        expect(result.content[0].lastUpdatedDate).toEqual(new Date(2017, 0, 1));
+            orderService.get(order.id);
 
-        expect(result.content[1].id).toEqual('id-two');
-        expect(result.content[1].processingPeriod.startDate).toEqual(new Date(2017, 1, 1));
-        expect(result.content[1].processingPeriod.endDate).toEqual(new Date(2017, 1, 27));
-        expect(result.content[1].createdDate).toEqual(new Date(2017, 1, 1));
-        expect(result.content[1].lastUpdatedDate).toEqual(new Date(2017, 10, 1));
+            $httpBackend.flush();
+        });
+
+        it('should return response', function() {
+            var result;
+            orderService.get(order.id)
+            .then(function(order) {
+                result = order;
+            });
+            $httpBackend.flush();
+            $rootScope.$apply();
+
+            expect(angular.toJson(result)).toEqual(angular.toJson(order));
+        });
     });
 
-    it('get should return transformed order', function() {
-        var result;
-        orderService.get('some-id').then(function(order) {
-            result = order;
+    describe('search', function() {
+
+        var searchParams, someId, page;
+
+        beforeEach(function() {
+            someId = 'some-facility-id';
+
+            searchParams = {
+                supplyingFacility: someId
+            };
+
+            page = PageDataBuilder.buildWithContent([
+                new BasicOrderResponseDataBuilder().build(),
+                new BasicOrderResponseDataBuilder().build()
+            ]);
+
+            $httpBackend.whenGET(
+                fulfillmentUrlFactory('/api/orders/search?supplyingFacility=' + someId)
+            ).respond(200, page);
         });
 
-        $httpBackend.flush();
-        $rootScope.$apply();
+        it('should call /api/orders/search endpoint', function() {
+            $httpBackend.expectGET(
+                fulfillmentUrlFactory('/api/orders/search?supplyingFacility=' + someId)
+            );
 
-        expect(result.id).toEqual('id-one');
-        expect(result.processingPeriod.startDate).toEqual(new Date(2017, 0, 1));
-        expect(result.processingPeriod.endDate).toEqual(new Date(2017, 0, 31));
-        expect(result.createdDate).toEqual(new Date(2017, 0, 1));
-        expect(result.lastUpdatedDate).toEqual(new Date(2017, 0, 1));
-        expect(result.emergency).toEqual(orderOne.emergency);
-        expect(result.program).toEqual(orderOne.program);
-        expect(result.requestingFacility).toEqual(orderOne.requestingFacility);
-        expect(result.orderCode).toEqual(orderOne.orderCode);
-        expect(result.status).toEqual(orderOne.status);
-        expect(result.orderLineItems).toEqual(orderOne.orderLineItems);
-        expect(result.facility).toEqual(orderOne.facility);
-        expect(result.receivingFacility).toEqual(orderOne.receivingFacility);
-        expect(result.supplyingFacility).toEqual(orderOne.supplyingFacility);
-        expect(result.lastUpdaterId).toEqual(orderOne.lastUpdaterId);
+            orderService.search(searchParams);
+            $httpBackend.flush();
+        });
+
+        it('should return page', function() {
+            var result;
+            orderService.search(searchParams)
+            .then(function(page) {
+                result = page;
+            });
+            $httpBackend.flush();
+            $rootScope.$apply();
+
+            expect(angular.toJson(result)).toEqual(angular.toJson(page));
+        });
     });
 
     afterEach(function() {
         $httpBackend.verifyNoOutstandingExpectation();
         $httpBackend.verifyNoOutstandingRequest();
     });
-
 });

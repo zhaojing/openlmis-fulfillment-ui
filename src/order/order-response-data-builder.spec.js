@@ -21,21 +21,46 @@
         .module('order')
         .factory('OrderResponseDataBuilder', OrderResponseDataBuilder);
 
-    OrderResponseDataBuilder.$inject = ['OrderDataBuilder', 'classExtender'];
+    OrderResponseDataBuilder.$inject = [
+        'BasicOrderResponseDataBuilder', 'OrderLineItemDataBuilder', 'Order', 'classExtender'
+    ];
 
-    function OrderResponseDataBuilder(OrderDataBuilder, classExtender) {
+    function OrderResponseDataBuilder(BasicOrderResponseDataBuilder,  OrderLineItemDataBuilder,
+                                      Order, classExtender) {
 
-        classExtender.extend(OrderResponseDataBuilder, OrderDataBuilder);
+        classExtender.extend(OrderResponseDataBuilder, BasicOrderResponseDataBuilder);
+
+        OrderResponseDataBuilder.prototype.build = build;
 
         return OrderResponseDataBuilder;
 
         function OrderResponseDataBuilder() {
-            OrderDataBuilder.apply(this, arguments);
-            this.createdDate = '2017-11-10T17:17:17Z';
-            this.lastUpdatedDate = '2017-11-10T17:17:17Z';
-            this.processingPeriod.startDate = '2017-11-10T17:17:17Z';
-            this.processingPeriod.endDate = '2017-11-10T17:17:17Z';
+            BasicOrderResponseDataBuilder.apply(this, arguments);
+            this.orderLineItems = [
+                new OrderLineItemDataBuilder().build(),
+                new OrderLineItemDataBuilder().build()
+            ];
         }
+
+        function build() {
+            return new Order(
+                this.id,
+                this.emergency,
+                this.createdDate,
+                this.program,
+                this.requestingFacility,
+                this.orderCode,
+                this.status,
+                this.processingPeriod,
+                this.lastUpdatedDate,
+                this.facility,
+                this.receivingFacility,
+                this.supplyingFacility,
+                this.lastUpdaterId,
+                this.orderLineItems
+            );
+        }
+
 
     }
 

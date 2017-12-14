@@ -19,30 +19,26 @@
 
     /**
      * @ngdoc service
-     * @name order.Order
+     * @name order.BasicOrder
      *
      * @description
      * Represents a single order.
      */
     angular
         .module('order')
-        .factory('Order', Order);
+        .factory('BasicOrder', BasicOrder);
 
-    Order.$inject = ['BasicOrder', 'classExtender']
+    function BasicOrder() {
 
-    function Order(BasicOrder, classExtender) {
-
-        classExtender.extend(Order, BasicOrder);
-
-        return Order;
+        return BasicOrder;
 
         /**
          * @ngdoc method
-         * @methodOf order.Order
-         * @name Order
+         * @methodOf order.BasicOrder
+         * @name BasicOrder
          *
          * @description
-         * Creates a new instance of the Order class.
+         * Creates a new instance of the BasicOrder class.
          *
          * @param  {String}  id                                     the UUID of the order
          * @param  {String}  emergency                              indicates if order is emergency
@@ -51,20 +47,31 @@
          * @param  {String}  requestingFacility                     the requesting facility of the order
          * @param  {String}  orderCode                              the code of the order
          * @param  {String}  status                                 the status of the order
+         * @param  {String}  orderLineItems                         the order line items of the order
          * @param  {String}  processingPeriod                       the processing period of the order
          * @param  {String}  lastUpdatedDate                        the date of the last order update
          * @param  {String}  facility                               the facility of the order
          * @param  {String}  receivingFacility                      the receiving facility of the order
          * @param  {String}  supplyingFacility                      the supplying facility of the order
          * @param  {String}  lastUpdater                            the last updater object
-         * @param  {String}  orderLineItems                         the order line items of the order
-         * @return {Order}                                          the order object
+         * @return {BasicOrder}                                          the order object
          */
-        function Order(id, emergency, createdDate, program, requestingFacility, orderCode, status,
-                       processingPeriod, lastUpdatedDate, facility, receivingFacility,
-                       supplyingFacility, lastUpdater, orderLineItems) {
-            BasicOrder.apply(this, arguments);
-            this.orderLineItems = orderLineItems;
+        function BasicOrder(id, emergency, createdDate, program, requestingFacility, orderCode,
+                            status, processingPeriod, lastUpdatedDate, facility, receivingFacility,
+                            supplyingFacility, lastUpdater) {
+            this.id = id;
+            this.emergency = emergency;
+            this.createdDate = createdDate;
+            this.program = program;
+            this.requestingFacility = requestingFacility;
+            this.orderCode = orderCode;
+            this.status = status;
+            this.processingPeriod = processingPeriod;
+            this.lastUpdatedDate = lastUpdatedDate;
+            this.facility = facility;
+            this.receivingFacility = receivingFacility;
+            this.supplyingFacility = supplyingFacility;
+            this.lastUpdater = lastUpdater;
         }
 
     }

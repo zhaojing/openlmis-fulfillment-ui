@@ -29,6 +29,7 @@
         'openlmis-main-state',
         'openlmis-class-extender',
         'openlmis-abstract-factory',
+        'openlmis-pagination',
         'referencedata-facility',
         'referencedata-period',
         'referencedata-program',

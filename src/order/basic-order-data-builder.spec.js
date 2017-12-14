@@ -20,21 +20,24 @@
 
     angular
         .module('order')
-        .factory('OrderDataBuilder', OrderDataBuilder);
+        .factory('BasicOrderDataBuilder', BasicOrderDataBuilder);
 
-    OrderDataBuilder.$inject = [
-        'BasicOrderDataBuilder', 'OrderResponseDataBuilder', 'classExtender'
+    BasicOrderDataBuilder.$inject = [
+        'BasicOrderResponseDataBuilder', 'classExtender'
     ];
 
-    function OrderDataBuilder(BasicOrderDataBuilder, OrderResponseDataBuilder, classExtender) {
+    function BasicOrderDataBuilder(BasicOrderResponseDataBuilder, classExtender) {
 
-        classExtender.extend(OrderDataBuilder, OrderResponseDataBuilder);
+        classExtender.extend(BasicOrderDataBuilder, BasicOrderResponseDataBuilder);
 
-        return OrderDataBuilder;
+        return BasicOrderDataBuilder;
 
-        function OrderDataBuilder() {
-            OrderResponseDataBuilder.apply(this, arguments);
-            BasicOrderDataBuilder.apply(this, arguments);
+        function BasicOrderDataBuilder() {
+            BasicOrderResponseDataBuilder.apply(this, arguments);
+            this.createdDate = new Date(this.createdDate);
+            this.lastUpdatedDate = new Date(this.lastUpdatedDate);
+            this.processingPeriod.startDate = new Date(this.processingPeriod.startDate);
+            this.processingPeriod.endDate = new Date(this.processingPeriod.endDate);
         }
 
     }

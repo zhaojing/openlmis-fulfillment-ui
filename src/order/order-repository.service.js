@@ -28,12 +28,33 @@
         .module('order')
         .service('orderRepository', orderRepository);
 
-    orderRepository.$inject = ['orderService'];
+    orderRepository.$inject = ['orderService', 'orderFactory', 'basicOrderFactory'];
 
-    function orderRepository(orderService) {
+    function orderRepository(orderService, orderFactory, basicOrderFactory) {
         var orderRepository = this;
 
+        orderRepository.get = get;
         orderRepository.search = search;
+
+        /**
+         * @ngdoc method
+         * @methodOf order.orderService
+         * @name get
+         *
+         * @description
+         * Retrieves an Order.
+         *
+         * @param  {String} orderId the ID of the given order
+         * @return {Promise}        the order
+         */
+        function get(orderId) {
+            if (!orderId) {
+                throw 'Order ID must be defined';
+            }
+
+            return orderService.get(orderId)
+            .then(orderFactory.buildFromResponse);
+        }
 
         /**
          * @ngdoc method
@@ -52,7 +73,11 @@
          * @return {Promise}              the promise resolving to a list of all matching orders
          */
         function search(searchParams) {
-            return orderService.search(searchParams);
+            return orderService.search(searchParams)
+            .then(function(response) {
+                response.content = basicOrderFactory.buildFromResponseArray(response.content);
+                return response;
+            });
         }
     }
 

@@ -29,18 +29,16 @@
         .module('order')
         .service('orderService', service);
 
-    service.$inject = ['$resource', 'fulfillmentUrlFactory', 'dateUtils', 'OrderConstructor'];
+    service.$inject = ['$resource', 'fulfillmentUrlFactory'];
 
-    function service($resource, fulfillmentUrlFactory, dateUtils, OrderConstructor) {
+    function service($resource, fulfillmentUrlFactory) {
         var resource = $resource(fulfillmentUrlFactory('/api/orders'), {}, {
             search: {
                 method: 'GET',
-                transformResponse: transformOrders,
                 url: fulfillmentUrlFactory('/api/orders/search')
             },
             get: {
                 method: 'GET',
-                transformResponse: transformOrder,
                 url: fulfillmentUrlFactory('/api/orders/:id')
             }
         });
@@ -83,20 +81,6 @@
                 expand: expand
             };
             return resource.get(params).$promise;
-        }
-
-        function transformOrders(data, headers, status) {
-            if (status === 200) {
-                return OrderConstructor.fromJsonArray(data);
-            }
-            return data;
-        }
-
-        function transformOrder(data, headers, status) {
-            if (status === 200) {
-                return OrderConstructor.fromJson(data);
-            }
-            return data;
         }
     }
 
