@@ -22,11 +22,13 @@
         .module('order')
         .factory('OrderDataBuilder', OrderDataBuilder);
 
-    OrderDataBuilder.$inject = ['Order', 'ProgramDataBuilder', 'FacilityDataBuilder', 'OrderableDataBuilder',
-        'PeriodDataBuilder'];
+    OrderDataBuilder.$inject = [
+        'Order', 'ProgramDataBuilder', 'FacilityDataBuilder', 'OrderableDataBuilder',
+        'PeriodDataBuilder', 'OrderLineItemDataBuilder'
+    ];
 
     function OrderDataBuilder(Order, ProgramDataBuilder, FacilityDataBuilder, OrderableDataBuilder,
-        PeriodDataBuilder) {
+                              PeriodDataBuilder, OrderLineItemDataBuilder) {
 
         OrderDataBuilder.prototype.withId = withId;
         OrderDataBuilder.prototype.withCreatedDate = withCreatedDate;
@@ -49,11 +51,8 @@
             this.orderCode = "ORDER-" + OrderDataBuilder.instanceNumber;
             this.status = "IN_ROUTE";
             this.orderLineItems = [
-                {
-                    "orderedQuantity": 10,
-                    "filledQuantity": 10,
-                    "orderable": new OrderableDataBuilder().build()
-                }
+                new OrderLineItemDataBuilder().build(),
+                new OrderLineItemDataBuilder().build()
             ];
             this.facility = new FacilityDataBuilder().build();
             this.receivingFacility = new FacilityDataBuilder().build();
