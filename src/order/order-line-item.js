@@ -17,23 +17,24 @@
 
     'use strict';
 
-    /**
-     * @module order
-     *
-     * @description
-     * Provides base order state and service/factory for retrieving orders from the OpenLMIS server.
-     */
-    angular.module('order', [
-        'fulfillment',
-        'openlmis-date',
-        'openlmis-main-state',
-        'openlmis-class-extender',
-        'openlmis-abstract-factory',
-        'referencedata-facility',
-        'referencedata-period',
-        'referencedata-program',
-        'referencedata-orderable',
-        'ui.router'
-    ]);
+    angular
+        .module('order')
+        .factory('OrderLineItem', OrderLineItem);
+
+    OrderLineItem.$inject = [];
+
+    function OrderLineItem() {
+
+        return OrderLineItem;
+
+        function OrderLineItem(id, filledQuantity, orderable, orderedQuantity, packsToShip) {
+            this.id = id;
+            this.filledQuantity = filledQuantity;
+            this.orderable = orderable;
+            this.orderedQuantity = orderedQuantity;
+            this.packsToShip = packsToShip;
+        }
+
+    }
 
 })();
