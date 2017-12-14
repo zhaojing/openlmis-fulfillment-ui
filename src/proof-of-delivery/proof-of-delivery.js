@@ -19,13 +19,13 @@
 
     /**
      * @ngdoc service
-     * @name proof-of-delivery-view.ProofOfDelivery
+     * @name proof-of-delivery.ProofOfDelivery
      *
      * @description
      * Responsible for supplying pod with additional methods and information.
      */
     angular
-        .module('proof-of-delivery-view')
+        .module('proof-of-delivery')
         .factory('ProofOfDelivery', factory);
 
     factory.$inject = ['proofOfDeliveryService', 'messageService'];
@@ -41,7 +41,7 @@
 
         /**
          * @ngdoc method
-         * @methodOf proof-of-delivery-view.ProofOfDelivery
+         * @methodOf proof-of-delivery.ProofOfDelivery
          * @name ProofOfDelivery
          *
          * @description
@@ -71,7 +71,7 @@
 
         /**
          * @ngdoc method
-         * @methodOf proof-of-delivery-view.ProofOfDelivery
+         * @methodOf proof-of-delivery.ProofOfDelivery
          * @name isLineItemValid
          *
          * @description
@@ -99,7 +99,7 @@
 
         /**
          * @ngdoc method
-         * @methodOf proof-of-delivery-view.ProofOfDelivery
+         * @methodOf proof-of-delivery.ProofOfDelivery
          * @name isValid
          *
          * @description

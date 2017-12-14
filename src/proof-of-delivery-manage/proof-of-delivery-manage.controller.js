@@ -28,9 +28,13 @@
         .module('proof-of-delivery-manage')
         .controller('ProofOfDeliveryManageController', controller);
 
-    controller.$inject = ['orderRepository', '$state', 'loadingModalService', 'notificationService', 'pods','$stateParams'];
+    controller.$inject = [
+        'proofOfDeliveryService', '$state', 'loadingModalService', 'notificationService', 'pods',
+        '$stateParams'
+    ];
 
-    function controller(orderRepository, $state, loadingModalService, notificationService, pods, $stateParams) {
+    function controller(proofOfDeliveryService, $state, loadingModalService, notificationService,
+                        pods, $stateParams) {
         var vm = this;
 
         vm.$onInit = onInit;
@@ -107,7 +111,7 @@
          * @param {String} orderId id of order to find it's POD
          */
         function openPod(orderId) {
-            withUiBlocking(orderRepository.getPod(orderId)).then(function(pod) {
+            withUiBlocking(proofOfDeliveryService.getByOrderId(orderId)).then(function(pod) {
                 $state.go('openlmis.orders.podManage.podView', {
                     podId: pod.id
                 });

@@ -18,23 +18,17 @@
     'use strict';
 
     /**
-     * @module proof-of-delivery-manage
+     * @module proof-of-delivery
      *
      * @description
-     * Responsible for manage POD screen.
+     *
      */
-    angular.module('proof-of-delivery-manage', [
+    angular.module('proof-of-delivery', [
+        'ngResource',
+        'fulfillment',
         'openlmis-date',
-        'openlmis-facility-program-select',
         'openlmis-i18n',
-        'openlmis-pagination',
-        'openlmis-table',
-        'openlmis-templates',
-        'order',
-        'referencedata-facility',
-        'referencedata-program',
-        'ui.router',
-        'proof-of-delivery'
+        'openlmis-date'
     ]);
 
 })();

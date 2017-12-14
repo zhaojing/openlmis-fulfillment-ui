@@ -38,11 +38,6 @@
                 transformResponse: transformOrders,
                 url: fulfillmentUrlFactory('/api/orders/search')
             },
-            getPod: {
-                method: 'GET',
-                transformResponse: transformPOD,
-                url: fulfillmentUrlFactory('/api/orders/:id/proofOfDeliveries')
-            },
             get: {
                 method: 'GET',
                 transformResponse: transformOrder,
@@ -51,7 +46,6 @@
         });
 
         this.search = search;
-        this.getPod = getPod;
         this.get = get;
 
         /**
@@ -69,23 +63,6 @@
          */
         function search(params) {
             return resource.search(params).$promise;
-        }
-
-        /**
-         * @ngdoc method
-         * @methodOf order.orderService
-         * @name getPod
-         *
-         * @description
-         * Retrieves a list of Proof of Deliveries for the given Order.
-         *
-         * @param  {String} orderId the ID of the given order
-         * @return {Promise}        the list of all PODs for the given order
-         */
-        function getPod(orderId) {
-            return resource.getPod({
-                id: orderId
-            }).$promise;
         }
 
         /**
@@ -119,28 +96,6 @@
             if (status === 200) {
                 return OrderConstructor.fromJson(data);
             }
-            return data;
-        }
-
-        function transformPOD(data, headers, status) {
-            if (status === 200) {
-                var pod = angular.fromJson(data);
-
-                if(pod.receivedDate) {
-                    pod.receivedDate = dateUtils.toDate(pod.receivedDate);
-                }
-
-                if(pod.order.createdDate) {
-                    pod.order.createdDate = dateUtils.toDate(pod.order.createdDate);
-                }
-
-                if(pod.order.lastUpdatedDate) {
-                    pod.order.lastUpdatedDate = dateUtils.toDate(pod.order.lastUpdatedDate);
-                }
-
-                return pod;
-            }
-
             return data;
         }
     }

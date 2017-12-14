@@ -15,7 +15,7 @@
 
 describe('ProofOfDeliveryManageController', function() {
 
-    var vm, orderRepositoryMock, facilityFactoryMock, $rootScope, loadingModalServiceMock, programs,
+    var vm, proofOfDeliveryService, facilityFactoryMock, $rootScope, loadingModalServiceMock, programs,
         facility, deferred, pod, $state, $q, $controller,
         $stateParams, $controllerMock, facilities, facilityTwo;
 
@@ -49,12 +49,7 @@ describe('ProofOfDeliveryManageController', function() {
         };
 
         module('proof-of-delivery-manage', function($provide) {
-            orderRepositoryMock = jasmine.createSpyObj('orderRepository', ['getPod']);
             loadingModalServiceMock = jasmine.createSpyObj('loadingModalService', ['open', 'close']);
-
-            $provide.factory('orderRepository', function() {
-                return orderRepositoryMock;
-            });
 
             $provide.factory('loadingModalService', function() {
                 return loadingModalServiceMock;
@@ -68,7 +63,7 @@ describe('ProofOfDeliveryManageController', function() {
             deferred = $q.defer();
             $state = $injector.get('$state');
             $controller = $injector.get('$controller');
-            $stateParams = $injector.get('$stateParams');
+            proofOfDeliveryService = $injector.get('proofOfDeliveryService');
             vm = $controller('ProofOfDeliveryManageController', {
                 pods: [pod],
                 $stateParams: stateParams
@@ -108,7 +103,7 @@ describe('ProofOfDeliveryManageController', function() {
 
     describe('openPod', function() {
         it('should change state when user select order to view its POD', function() {
-            orderRepositoryMock.getPod.andReturn(deferred.promise);
+            spyOn(proofOfDeliveryService, 'getByOrderId').andReturn(deferred.promise);
             spyOn($state, 'go').andReturn();
 
             vm.openPod('order-one');

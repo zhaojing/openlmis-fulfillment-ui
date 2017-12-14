@@ -23,7 +23,7 @@ describe('proofOfDeliveryFactory', function() {
         proofOfDeliveryServiceMock = jasmine.createSpyObj('proofOfDeliveryService', ['get']);
         PODMock = jasmine.createSpy('POD');
 
-        module('proof-of-delivery-view', function($provide) {
+        module('proof-of-delivery', function($provide) {
             $provide.factory('orderRepository', function() {
                 return orderRepositoryMock;
             });

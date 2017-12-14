@@ -18,7 +18,7 @@ describe('POD', function() {
     var POD, sourceMock, orderMock, proofOfDelivery, pod;
 
     beforeEach(function() {
-        module('proof-of-delivery-view');
+        module('proof-of-delivery');
 
         inject(function($injector) {
             POD = $injector.get('ProofOfDelivery');

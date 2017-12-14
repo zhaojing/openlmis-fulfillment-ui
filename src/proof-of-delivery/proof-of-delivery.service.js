@@ -19,13 +19,13 @@
 
 	/**
      * @ngdoc service
-     * @name proof-of-delivery-view.proofOfDeliveryService
+     * @name proof-of-delivery.proofOfDeliveryService
      *
      * @description
      * Responsible for retrieving proofs of delivery from the server.
      */
 	angular
-		.module('proof-of-delivery-view')
+		.module('proof-of-delivery')
 	    .service('proofOfDeliveryService', service);
 
     service.$inject = ['$filter', '$resource', 'fulfillmentUrlFactory', 'dateUtils'];
@@ -44,18 +44,24 @@
 			submit: {
 				method: 'POST',
 				url: fulfillmentUrlFactory('/api/proofOfDeliveries/:id/submit')
-			}
+			},
+            getByOrderId: {
+                method: 'GET',
+                transformResponse: transformPOD,
+                url: fulfillmentUrlFactory('/api/orders/:orderId/proofOfDeliveries')
+            }
 		});
 
         return {
             get: get,
+			getByOrderId: getByOrderId,
 			save: save,
 			submit: submit
         };
 
 		/**
          * @ngdoc method
-         * @methodOf proof-of-delivery-view.proofOfDeliveryService
+         * @methodOf proof-of-delivery.proofOfDeliveryService
          * @name get
          *
          * @description
@@ -72,7 +78,7 @@
 
 		/**
          * @ngdoc method
-         * @methodOf proof-of-delivery-view.proofOfDeliveryService
+         * @methodOf proof-of-delivery.proofOfDeliveryService
          * @name save
          *
          * @description
@@ -89,7 +95,7 @@
 
 		/**
          * @ngdoc method
-         * @methodOf proof-of-delivery-view.proofOfDeliveryService
+         * @methodOf proof-of-delivery.proofOfDeliveryService
          * @name submit
          *
          * @description
@@ -102,6 +108,23 @@
             return resource.submit({
 				id: podId
 			}, {}).$promise;
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf order.orderService
+         * @name getByOrderId
+         *
+         * @description
+         * Retrieves a list of Proof of Deliveries for the given Order.
+         *
+         * @param  {String} orderId the ID of the given order
+         * @return {Promise}        the list of all PODs for the given order
+         */
+        function getByOrderId(orderId) {
+            return resource.getByOrderId({
+                orderId: orderId
+            }).$promise;
         }
 
 		function transformResponse(data, headers, status) {
@@ -122,6 +145,28 @@
 			if (pod.order.createdDate) pod.order.createdDate = pod.order.createdDate.toISOString();
 
             return angular.toJson(pod);
+        }
+
+        function transformPOD(data, headers, status) {
+            if (status === 200) {
+                var pod = angular.fromJson(data);
+
+                if(pod.receivedDate) {
+                    pod.receivedDate = dateUtils.toDate(pod.receivedDate);
+                }
+
+                if(pod.order.createdDate) {
+                    pod.order.createdDate = dateUtils.toDate(pod.order.createdDate);
+                }
+
+                if(pod.order.lastUpdatedDate) {
+                    pod.order.lastUpdatedDate = dateUtils.toDate(pod.order.lastUpdatedDate);
+                }
+
+                return pod;
+            }
+
+            return data;
         }
     }
 })();

@@ -25,6 +25,7 @@
      */
     angular.module('proof-of-delivery-view', [
         'fulfillment',
+        'proof-of-delivery',
         'openlmis-date',
         'openlmis-pagination',
         'order',

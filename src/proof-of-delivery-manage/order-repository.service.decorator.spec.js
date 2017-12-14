@@ -13,39 +13,42 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-describe('orderRepository', function() {
+describe('orderRepository decorator', function() {
 
-    var orderRepository, orderServiceMock;
+    var orderRepository, orderServiceMock, ORDER_STATUS;
 
     beforeEach(function() {
-        module('order', function($provide) {
-            orderServiceMock = createMock($provide, 'orderService', ['search', 'searchOrdersForManagePod']);
+        module('proof-of-delivery-manage', function($provide) {
+            orderServiceMock = createMock($provide, 'orderService', ['search']);
         });
 
         inject(function($injector) {
+            ORDER_STATUS = $injector.get('ORDER_STATUS');
             orderRepository = $injector.get('orderRepository');
         });
     });
 
-    describe('search', function() {
-        it('should call orderService with correct params', function() {
+    describe('searchOrdersForManagePod', function() {
+        it('should call orderService with id param', function() {
+            orderServiceMock.search.andReturn($q.when());
             var searchParams = {
-                program: 'id-one',
-                supplyingFacility: 'id-two',
-                requestingFacility: 'id-three'
+                requestingFacility: 'id-one',
+                program: 'id-two'
             };
-            orderRepository.search(searchParams);
+            orderRepository.searchOrdersForManagePod(searchParams);
 
-            expect(orderServiceMock.search).toHaveBeenCalledWith(searchParams);
-        });
-
-        it('should call orderService with only one param', function() {
-            var searchParam = {
-                supplyingFacility: 'id-two',
-            };
-            orderRepository.search(searchParam);
-
-            expect(orderServiceMock.search).toHaveBeenCalledWith(searchParam);
+            expect(orderServiceMock.search).toHaveBeenCalledWith({
+                requestingFacility: 'id-one',
+                program: 'id-two',
+                status: [
+                    ORDER_STATUS.PICKED,
+                    ORDER_STATUS.TRANSFER_FAILED,
+                    ORDER_STATUS.READY_TO_PACK,
+                    ORDER_STATUS.ORDERED,
+                    ORDER_STATUS.RECEIVED,
+                    ORDER_STATUS.IN_ROUTE
+                ]
+            });
         });
     });
 

@@ -17,25 +17,30 @@ describe('proofOfDeliveryService', function() {
 
     var POD_ID = 'some-pod-id';
 
-    var $filter, proofOfDeliveryService, $httpBackend, fulfillmentUrlFactory, pod, url;
+    var $rootScope, proofOfDeliveryService, $httpBackend, fulfillmentUrlFactory, pod, url,
+        dateUtilsMock;
 
     beforeEach(function() {
-        dateUtilsMock = jasmine.createSpyObj('dateUtils', ['toDate', 'toArray']);
+        module('proof-of-delivery', function($provide) {
+            dateUtilsMock = jasmine.createSpyObj('dateUtils', ['toDate', 'toArray']);
 
-        module('proof-of-delivery-view', function($provide) {
-            $provide.service('dateUtils', function() {
+            $provide.factory('dateUtils', function() {
                 return dateUtilsMock;
             });
 
             $provide.value('isoDateFilter', function() {
                 return '2017-08-30';
             });
+
+            dateUtilsMock.toDate.andCallFake(function(array) {
+                return new Date(array[0], array[1] - 1, array[2]);
+            });
         });
 
         inject(function($injector) {
             proofOfDeliveryService = $injector.get('proofOfDeliveryService');
             $httpBackend = $injector.get('$httpBackend');
-            $filter = $injector.get('$filter');
+            $rootScope = $injector.get('$rootScope');
             fulfillmentUrlFactory = $injector.get('fulfillmentUrlFactory');
         });
 
@@ -46,9 +51,6 @@ describe('proofOfDeliveryService', function() {
                 createdDate: new Date()
             }
         };
-
-        dateUtilsMock.toDate.andCallFake(parseDateMock);
-        dateUtilsMock.toArray.andCallFake(parseDateMock);
     });
 
     describe('get', function() {
@@ -119,13 +121,42 @@ describe('proofOfDeliveryService', function() {
         });
     });
 
+    describe('getByOrderId', function() {
+
+        var pod;
+
+        beforeEach(function() {
+            pod = {
+                id: 'id-three',
+                order: { id: 'id-one' },
+                receivedDate: [2017, 1, 1]
+            };
+
+            $httpBackend.whenGET(fulfillmentUrlFactory('/api/orders/id-one/proofOfDeliveries'))
+            .respond(200, pod);
+        });
+
+
+        it('should return transformed proof of deliveries', function() {
+            var result;
+
+            proofOfDeliveryService.getByOrderId('id-one').then(function(pod) {
+                result = pod;
+            });
+
+            $httpBackend.flush();
+            $rootScope.$apply();
+
+            expect(result.id).toEqual('id-three');
+            expect(result.receivedDate).toEqual(new Date(2017, 0, 1));
+
+        });
+
+    });
+
     afterEach(function() {
         $httpBackend.verifyNoOutstandingExpectation();
         $httpBackend.verifyNoOutstandingRequest();
     });
-
-    function parseDateMock(date) {
-        return date;
-    }
 
 });

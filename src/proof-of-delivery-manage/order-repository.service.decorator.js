@@ -19,41 +19,53 @@
 
     /**
      * @ngdoc service
-     * @name order.orderRepository
+     * @name proof-of-delivery-manage.orderRepository
      *
      * @description
-     * Manages orders and serves as an abstraction layer between orderService and controllers.
+     * Decorates the orderRepository with the ability to filter orders for Manage POD view.
      */
     angular
-        .module('order')
-        .service('orderRepository', orderRepository);
+        .module('proof-of-delivery-manage')
+        .config(config);
 
-    orderRepository.$inject = ['orderService'];
+    config.$inject = ['$provide'];
 
-    function orderRepository(orderService) {
-        var orderRepository = this;
+    function config($provide) {
+        $provide.decorator('orderRepository', decorator);
+    }
 
-        orderRepository.search = search;
+    decorator.$inject = ['$delegate', 'ORDER_STATUS', 'orderService'];
+    function decorator($delegate, ORDER_STATUS, orderService) {
+
+        $delegate.searchOrdersForManagePod = searchOrdersForManagePod;
+
+        return $delegate;
 
         /**
          * @ngdoc method
          * @methodOf order.orderRepository
-         * @name search
+         * @name searchOrdersForManagePod
          *
          * @description
-         * Gets orders from the server using orderService and prepares them to be used in controller.
+         * Gets orders from the server using orderService and filter them by status.
          *
-         * @param {Object}   searchParams parameters for searching orders, i.e.
+         * @param {Object} searchParams parameters for searching orders, i.e.
          * {
          *      program: 'programID',
-         *      supplyingFacility: 'facilityID',
          *      requestingFacility: 'facilityID'
          * }
-         * @return {Promise}              the promise resolving to a list of all matching orders
+         * @return {Promise} the promise resolving to a list of all matching orders
          */
-        function search(searchParams) {
+        function searchOrdersForManagePod(searchParams) {
+            searchParams.status = [
+                 ORDER_STATUS.PICKED,
+                 ORDER_STATUS.TRANSFER_FAILED,
+                 ORDER_STATUS.READY_TO_PACK,
+                 ORDER_STATUS.ORDERED,
+                 ORDER_STATUS.RECEIVED,
+                 ORDER_STATUS.IN_ROUTE
+            ];
             return orderService.search(searchParams);
         }
     }
-
 })();

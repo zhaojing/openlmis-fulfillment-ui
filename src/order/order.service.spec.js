@@ -15,8 +15,8 @@
 
 describe('orderService', function() {
 
-    var orderService, $rootScope, $httpBackend, fulfillmentUrlFactory, orders, pod,
-        dateUtilsMock, OrderDataBuilder, PeriodDataBuilder, orderOne;
+    var orderService, $rootScope, $httpBackend, fulfillmentUrlFactory, orders, dateUtilsMock,
+        OrderDataBuilder, PeriodDataBuilder, orderOne;
 
     beforeEach(function() {
         module('order', function($provide) {
@@ -66,20 +66,11 @@ describe('orderService', function() {
 
         orders = [orderOne, orderTwo];
 
-        pod = {
-            id: 'id-three',
-            order: { id: 'id-one' },
-            receivedDate: [2017, 1, 1]
-        };
-
         $httpBackend.when('GET', fulfillmentUrlFactory('/api/orders/search?supplyingFacility=some-id'))
             .respond(200, {content: orders});
 
         $httpBackend.when('GET', fulfillmentUrlFactory('/api/orders/some-id'))
             .respond(200, orderOne);
-
-        $httpBackend.when('GET', fulfillmentUrlFactory('/api/orders/id-one/proofOfDeliveries'))
-            .respond(200, pod);
     });
 
     it('search should return transformed orders', function() {
@@ -108,8 +99,7 @@ describe('orderService', function() {
     });
 
     it('get should return transformed order', function() {
-        var result = undefined;
-
+        var result;
         orderService.get('some-id').then(function(order) {
             result = order;
         });
@@ -132,21 +122,6 @@ describe('orderService', function() {
         expect(result.receivingFacility).toEqual(orderOne.receivingFacility);
         expect(result.supplyingFacility).toEqual(orderOne.supplyingFacility);
         expect(result.lastUpdaterId).toEqual(orderOne.lastUpdaterId);
-    });
-
-    it('getPod should return transformed proof of deliveries', function() {
-        var result;
-
-        orderService.getPod('id-one').then(function(pod) {
-            result = pod;
-        });
-
-        $httpBackend.flush();
-        $rootScope.$apply();
-
-        expect(result.id).toEqual('id-three');
-        expect(result.receivedDate).toEqual(new Date(2017, 0, 1));
-
     });
 
     afterEach(function() {

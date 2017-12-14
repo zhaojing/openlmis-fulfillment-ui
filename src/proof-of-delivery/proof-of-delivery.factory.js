@@ -19,13 +19,13 @@
 
     /**
      * @ngdoc service
-     * @name proof-of-delivery-view.proofOfDeliveryFactory
+     * @name proof-of-delivery.proofOfDeliveryFactory
      *
      * @description
      * Allows the user to retrieve proofs of deliveries.
      */
     angular
-        .module('proof-of-delivery-view')
+        .module('proof-of-delivery')
         .factory('proofOfDeliveryFactory', factory);
 
     factory.$inject = ['$q', 'ProofOfDelivery', 'proofOfDeliveryService'];
@@ -40,7 +40,7 @@
 
         /**
          * @ngdoc method
-         * @methodOf proof-of-delivery-view.proofOfDeliveryFactory
+         * @methodOf proof-of-delivery.proofOfDeliveryFactory
          * @name get
          *
          * @description
