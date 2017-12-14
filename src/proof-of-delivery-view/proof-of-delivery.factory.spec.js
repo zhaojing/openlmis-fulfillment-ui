@@ -24,8 +24,8 @@ describe('proofOfDeliveryFactory', function() {
         PODMock = jasmine.createSpy('POD');
 
         module('proof-of-delivery-view', function($provide) {
-            $provide.factory('orderFactory', function() {
-                return orderFactoryMock;
+            $provide.factory('orderRepository', function() {
+                return orderRepositoryMock;
             });
 
             $provide.factory('proofOfDeliveryService', function() {

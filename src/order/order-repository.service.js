@@ -19,28 +19,27 @@
 
     /**
      * @ngdoc service
-     * @name order.orderFactory
+     * @name order.orderRepository
      *
      * @description
      * Manages orders and serves as an abstraction layer between orderService and controllers.
      */
     angular
         .module('order')
-        .factory('orderFactory', factory);
+        .service('orderRepository', orderRepository);
 
-    factory.$inject = ['orderService', '$q', 'ORDER_STATUS'];
+    orderRepository.$inject = ['orderService', '$q', 'ORDER_STATUS'];
 
-    function factory(orderService, $q, ORDER_STATUS) {
-        var factory = {
-            search: search,
-            getPod: getPod,
-            searchOrdersForManagePod: searchOrdersForManagePod
-        };
-        return factory;
+    function orderRepository(orderService, $q, ORDER_STATUS) {
+        var orderRepository = this;
+
+        orderRepository.search = search;
+        orderRepository.getPod = getPod;
+        orderRepository.searchOrdersForManagePod = searchOrdersForManagePod;
 
         /**
          * @ngdoc method
-         * @methodOf order.orderFactory
+         * @methodOf order.orderRepository
          * @name search
          *
          * @description
@@ -60,7 +59,7 @@
 
         /**
          * @ngdoc method
-         * @methodOf order.orderFactory
+         * @methodOf order.orderRepository
          * @name getPod
          *
          * @description
@@ -75,7 +74,7 @@
 
         /**
          * @ngdoc method
-         * @methodOf order.orderFactory
+         * @methodOf order.orderRepository
          * @name searchOrdersForManagePod
          *
          * @description

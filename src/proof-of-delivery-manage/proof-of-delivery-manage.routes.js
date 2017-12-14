@@ -38,14 +38,14 @@
             ],
             areAllRightsRequired: true,
             resolve: {
-                pods: function(paginationService, orderFactory, $stateParams) {
+                pods: function(paginationService, orderRepository, $stateParams) {
 					return paginationService.registerUrl($stateParams, function(stateParams) {
                         if(stateParams.program) {
                             var paramsCopy = angular.copy(stateParams);
                             paramsCopy.requestingFacility = stateParams.facility;
                             delete paramsCopy.facility;
 
-                            return orderFactory.searchOrdersForManagePod(paramsCopy);
+                            return orderRepository.searchOrdersForManagePod(paramsCopy);
                         }
                         return undefined;
 					});

@@ -13,9 +13,9 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-describe('orderFactory', function() {
+describe('orderRepository', function() {
 
-    var orderFactory, orderServiceMock, facilityService, ORDER_STATUS;
+    var orderRepository, orderServiceMock, facilityService, ORDER_STATUS;
 
     beforeEach(function() {
         module('order', function($provide) {
@@ -24,7 +24,7 @@ describe('orderFactory', function() {
 
         inject(function($injector) {
             ORDER_STATUS = $injector.get('ORDER_STATUS');
-            orderFactory = $injector.get('orderFactory');
+            orderRepository = $injector.get('orderRepository');
         });
     });
 
@@ -35,7 +35,7 @@ describe('orderFactory', function() {
                 supplyingFacility: 'id-two',
                 requestingFacility: 'id-three'
             };
-            orderFactory.search(searchParams);
+            orderRepository.search(searchParams);
 
             expect(orderServiceMock.search).toHaveBeenCalledWith(searchParams);
         });
@@ -44,7 +44,7 @@ describe('orderFactory', function() {
             var searchParam = {
                 supplyingFacility: 'id-two',
             };
-            orderFactory.search(searchParam);
+            orderRepository.search(searchParam);
 
             expect(orderServiceMock.search).toHaveBeenCalledWith(searchParam);
         });
@@ -52,7 +52,7 @@ describe('orderFactory', function() {
 
     describe('getPod', function() {
         it('should call orderService with id param', function() {
-            orderFactory.getPod('id-one');
+            orderRepository.getPod('id-one');
 
             expect(orderServiceMock.getPod).toHaveBeenCalledWith('id-one');
         });
@@ -65,7 +65,7 @@ describe('orderFactory', function() {
                 requestingFacility: 'id-one',
                 program: 'id-two'
             }
-            orderFactory.searchOrdersForManagePod(searchParams);
+            orderRepository.searchOrdersForManagePod(searchParams);
 
             expect(orderServiceMock.search).toHaveBeenCalledWith({
                 requestingFacility: 'id-one',

@@ -16,7 +16,7 @@
 
 describe('openlmis.orders.podManage state', function() {
 
-    var $q, $state, $rootScope, $location, $templateCache, orderFactory, paginationService, state, FULFILLMENT_RIGHTS, REQUISITION_RIGHTS, pods, authorizationService;
+    var $q, $state, $rootScope, $location, $templateCache, orderRepository, paginationService, state, FULFILLMENT_RIGHTS, REQUISITION_RIGHTS, pods, authorizationService;
 
     beforeEach(function() {
         loadModules();
@@ -62,7 +62,7 @@ describe('openlmis.orders.podManage state', function() {
             $rootScope = $injector.get('$rootScope');
             $location = $injector.get('$location');
             $templateCache = $injector.get('$templateCache');
-            orderFactory = $injector.get('orderFactory');
+            orderRepository = $injector.get('orderRepository');
             authorizationService = $injector.get('authorizationService');
             paginationService = $injector.get('paginationService');
             FULFILLMENT_RIGHTS = $injector.get('FULFILLMENT_RIGHTS');
@@ -89,7 +89,7 @@ describe('openlmis.orders.podManage state', function() {
     }
 
     function prepareSpies() {
-        spyOn(orderFactory, 'searchOrdersForManagePod').andReturn($q.when({
+        spyOn(orderRepository, 'searchOrdersForManagePod').andReturn($q.when({
             content: pods
         }));
     }

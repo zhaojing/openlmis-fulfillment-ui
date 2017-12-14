@@ -55,10 +55,10 @@
                 programs: function(programService, authorizationService) {
                     return programService.getAll();
                 },
-                orders: function(paginationService, orderFactory, $stateParams) {
+                orders: function(paginationService, orderRepository, $stateParams) {
 					return paginationService.registerUrl($stateParams, function(stateParams) {
                         if (stateParams.supplyingFacility) {
-                            return orderFactory.search(stateParams);
+                            return orderRepository.search(stateParams);
                         }
                         return undefined;
 					});
