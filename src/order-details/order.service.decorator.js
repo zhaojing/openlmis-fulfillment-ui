@@ -13,22 +13,34 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-(function() {
+(function(){
 
     'use strict';
 
     /**
-     * @module order-details
+     * @ngdoc service
+     * @name order-details.orderService
      *
-     * Provides View Order Details state and controller.
+     * @description
+     * Extends program service for this module.
      */
-    angular.module('order-details', [
-        'openlmis-i18n',
-        'openlmis-table',
-        'openlmis-date',
-        'stock-card-summaries',
-        'order',
-        'ui.router'
-    ]);
+    angular
+        .module('order-details')
+        .config(function($provide) {
+            $provide.decorator('orderService', decorator);
+        });
+
+    decorator.$inject = ['$delegate'];
+
+    function decorator($delegate) {
+
+        $delegate.getWithLastUpdater = getWithLastUpdater;
+
+        return $delegate;
+
+        function getWithLastUpdater(orderId) {
+            return $delegate.get(orderId, 'lastUpdater');
+        }
+    }
 
 })();

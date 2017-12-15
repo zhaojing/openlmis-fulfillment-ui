@@ -17,18 +17,14 @@
 
     'use strict';
 
-    /**
-     * @module order-details
-     *
-     * Provides View Order Details state and controller.
-     */
-    angular.module('order-details', [
-        'openlmis-i18n',
-        'openlmis-table',
-        'openlmis-date',
-        'stock-card-summaries',
-        'order',
-        'ui.router'
-    ]);
+    angular
+        .module('order-details')
+        .factory('OrderWithSummariesFactory', factory);
+
+    factory.$inject = [];
+
+    function factory() {
+
+    }
 
 })();
