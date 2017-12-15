@@ -13,82 +13,25 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-describe('OrderFactory', function() {
+describe('orderFactory', function() {
 
-    var Order, OrderFactory, OrderLineItemFactory, OrderResponseDataBuilder,
-        OrderLineItem, OrderLineItemDataBuilder, PeriodDataBuilder;
+    var orderFactory, OrderResponseDataBuilder;
 
     beforeEach(function() {
         module('order');
 
         inject(function($injector) {
-            Order = $injector.get('Order');
-            OrderLineItem = $injector.get('OrderLineItem');
-            OrderLineItemDataBuilder = $injector.get('OrderLineItemDataBuilder');
-            PeriodDataBuilder = $injector.get('PeriodDataBuilder');
-            OrderFactory = $injector.get('OrderFactory');
-            OrderLineItemFactory = $injector.get('OrderLineItemFactory');
+            orderFactory = $injector.get('orderFactory');
             OrderResponseDataBuilder = $injector.get('OrderResponseDataBuilder');
         });
     });
 
-    describe('constructor', function() {
-
-        var orderLineItemFactory;
-
-        beforeEach(function() {
-            orderLineItemFactory = new OrderLineItemFactory();
-        });
-
-        it('should set orderLineItemFactory', function() {
-            var result = new OrderFactory(orderLineItemFactory);
-
-            expect(result.orderLineItemFactory).toBe(orderLineItemFactory);
-        });
-
-        it('should throw exception if orderLineItemFactory is not given', function() {
-            expect(function() {
-                return new OrderFactory();
-            }).toThrow('An instance of orderLineItemFactory must be provided');
-        });
-
-        it('should throw exception if given object is not an instance of OrderLineItemFactory class', function() {
-            expect(function() {
-                return new OrderFactory({});
-            }).toThrow('An instance of orderLineItemFactory must be provided');
-        });
-
-    });
-
     describe('buildFromResponse', function() {
 
-        var response, orderFactory, orderLineItemFactory;
+        var response;
 
         beforeEach(function() {
             response = new OrderResponseDataBuilder().build();
-            orderLineItemFactory = new OrderLineItemFactory();
-            orderFactory = new OrderFactory(orderLineItemFactory);
-
-            spyOn(orderLineItemFactory, 'buildFromResponseArray');
-        });
-
-        it('should return instance of the Order class', function() {
-            expect(orderFactory.buildFromResponse(response) instanceof Order).toBe(true);
-        });
-
-        it('should return instances of the OrderLineItem class as orderLineItems', function() {
-            orderLineItemFactory.buildFromResponseArray.andReturn([
-                new OrderLineItemDataBuilder().build(),
-                new OrderLineItemDataBuilder().build()
-            ]);
-
-            var result = orderFactory.buildFromResponse(response);
-
-            expect(result.orderLineItems.length).toBe(2);
-            expect(result.orderLineItems[0] instanceof OrderLineItem).toBe(true);
-            expect(result.orderLineItems[1] instanceof OrderLineItem).toBe(true);
-            expect(orderLineItemFactory.buildFromResponseArray)
-                .toHaveBeenCalledWith(response.orderLineItems);
         });
 
         it('should set id', function() {
@@ -103,28 +46,10 @@ describe('OrderFactory', function() {
             expect(result.emergency).toEqual(response.emergency);
         });
 
-        it('should throw exception if createdDate is undefined', function() {
-            response = new OrderResponseDataBuilder()
-                .withCreatedDate(undefined);
-
-            expect(function() {
-                return orderFactory.buildFromResponse(response);
-            }).toThrow('createdDate must be defined');
-        });
-
         it('should set parsed createdDate ', function() {
             var result = orderFactory.buildFromResponse(response);
 
             expect(result.createdDate).toEqual(new Date(response.createdDate));
-        });
-
-        it('should throw exception if lastUpdatedDate is undefined', function() {
-            response = new OrderResponseDataBuilder()
-                .withLastUpdatedDate(undefined);
-
-            expect(function() {
-                return orderFactory.buildFromResponse(response);
-            }).toThrow('lastUpdatedDate must be defined');
         });
 
         it('should set parsed lastUpdatedDate', function() {
@@ -152,7 +77,7 @@ describe('OrderFactory', function() {
         });
 
         it('should set status', function() {
-            var result = orderFactory.buildFromResponse(response);
+            var result = orderFactory.buildFromResponse(response)
 
             expect(result.status).toEqual(response.status);
         });
@@ -163,7 +88,7 @@ describe('OrderFactory', function() {
 
             expect(function() {
                 return orderFactory.buildFromResponse(response);
-            }).toThrow('processingPeriod must be defined');
+            }).toThrow();
         });
 
         it('should set processingPeriod', function() {
@@ -175,30 +100,6 @@ describe('OrderFactory', function() {
             var result = orderFactory.buildFromResponse(response);
 
             expect(result.processingPeriod).toEqual(processingPeriod);
-        });
-
-        it('should throw exception if processingPeriod.startDate is undefined', function() {
-            var processingPeriod = PeriodDataBuilder.buildWithoutStartDate();
-
-            response = new OrderResponseDataBuilder()
-                .withProcessingPeriod(processingPeriod)
-                .build();
-
-            expect(function() {
-                return orderFactory.buildFromResponse(response);
-            }).toThrow('startDate must be defined');
-        });
-
-        it('should throw exception if processingPeriod.end date is undefined', function() {
-            var processingPeriod = PeriodDataBuilder.buildWithoutEndDate();
-
-            response = new OrderResponseDataBuilder()
-                .withProcessingPeriod(processingPeriod)
-                .build();
-
-            expect(function() {
-                return orderFactory.buildFromResponse(response);
-            }).toThrow('endDate must be defined');
         });
 
         it('should set parsed processingPeriod.startDate', function() {

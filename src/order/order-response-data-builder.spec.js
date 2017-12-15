@@ -22,11 +22,11 @@
         .factory('OrderResponseDataBuilder', OrderResponseDataBuilder);
 
     OrderResponseDataBuilder.$inject = [
-        'BasicOrderResponseDataBuilder', 'OrderLineItemDataBuilder', 'Order', 'classExtender'
+        'BasicOrderResponseDataBuilder', 'OrderLineItemDataBuilder', 'classExtender'
     ];
 
     function OrderResponseDataBuilder(BasicOrderResponseDataBuilder,  OrderLineItemDataBuilder,
-                                      Order, classExtender) {
+                                      classExtender) {
 
         classExtender.extend(OrderResponseDataBuilder, BasicOrderResponseDataBuilder);
 
@@ -43,25 +43,10 @@
         }
 
         function build() {
-            return new Order(
-                this.id,
-                this.emergency,
-                this.createdDate,
-                this.program,
-                this.requestingFacility,
-                this.orderCode,
-                this.status,
-                this.processingPeriod,
-                this.lastUpdatedDate,
-                this.facility,
-                this.receivingFacility,
-                this.supplyingFacility,
-                this.lastUpdaterId,
-                this.orderLineItems
-            );
+            var order = BasicOrderResponseDataBuilder.prototype.build.apply(this);
+            order.orderLineItems = this.orderLineItems;
+            return order;
         }
-
-
     }
 
 })();

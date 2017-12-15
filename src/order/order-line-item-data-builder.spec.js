@@ -21,9 +21,9 @@
         .module('order')
         .factory('OrderLineItemDataBuilder', OrderLineItemDataBuilder);
 
-    OrderLineItemDataBuilder.$inject = ['OrderLineItem', 'OrderableDataBuilder'];
+    OrderLineItemDataBuilder.$inject = ['OrderableDataBuilder'];
 
-    function OrderLineItemDataBuilder(OrderLineItem, OrderableDataBuilder) {
+    function OrderLineItemDataBuilder(OrderableDataBuilder) {
 
         OrderLineItemDataBuilder.prototype.build = build;
 
@@ -40,13 +40,13 @@
         }
 
         function build() {
-            return new OrderLineItem(
-                this.id,
-                this.filledQuantity,
-                this.orderable,
-                this.orderedQuantity,
-                this.packsToShip
-            );
+            return {
+                id: this.id,
+                filledQuantity: this.filledQuantity,
+                orderable: this.orderable,
+                orderedQuantity: this.orderedQuantity,
+                packsToShip: this.packsToShip
+            };
         }
     }
 

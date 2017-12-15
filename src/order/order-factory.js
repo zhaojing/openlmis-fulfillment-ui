@@ -22,54 +22,21 @@
      * @name order.orderFactory
      *
      * @description
-     * Singleton of the OrderFactory class.
-     */
-    angular
-        .module('order')
-        .factory('orderFactory', orderFactory);
-
-    orderFactory.$inject = [
-        'OrderFactory', 'orderLineItemFactory'
-    ];
-
-    function orderFactory(OrderFactory, orderLineItemFactory) {
-        return new OrderFactory(orderLineItemFactory);
-    }
-
-    /**
-     * @ngdoc service
-     * @name order.OrderFactory
-     *
-     * @description
      * Responsible for creating objects of the Order class. This is the only place that
      * should ever create or restore objects of this class.
      */
     angular
         .module('order')
-        .factory('OrderFactory', OrderFactory);
+        .factory('orderFactory', orderFactory);
 
-    OrderFactory.$inject = [
-        'dateUtils', 'OrderLineItemFactory', 'Order', 'classExtender', 'BasicOrderFactory'
-    ];
+    orderFactory.$inject = ['dateUtils', 'basicOrderFactory', 'AbstractFactory'];
 
-    function OrderFactory(dateUtils, OrderLineItemFactory, Order, classExtender, BasicOrderFactory) {
-
-        classExtender.extend(OrderFactory, BasicOrderFactory);
-
-        OrderFactory.prototype.buildFromResponse = buildFromResponse;
-
-        return OrderFactory;
-
-        function OrderFactory(orderLineItemFactory) {
-            if (!orderLineItemFactory || !(orderLineItemFactory instanceof OrderLineItemFactory)) {
-                throw 'An instance of orderLineItemFactory must be provided';
-            }
-            this.orderLineItemFactory = orderLineItemFactory;
-        }
+    function orderFactory(dateUtils, basicOrderFactory, AbstractFactory) {
+        return new AbstractFactory(buildFromResponse);
 
         /**
          * @ngdoc method
-         * @methodOf order.OrderFactory
+         * @methodOf order.orderFactory
          * @name buildFromResponse
          *
          * @description
@@ -77,26 +44,14 @@
          *
          * @param   {Object}    response    the server response representing an order
          * @return  {Order}                 the instance of Order class built based on the server
-     *                                      response
+         *                                  response
          */
-        function buildFromResponse (response) {
-            verifyNotUndefined(response, 'orderLineItems');
+        function buildFromResponse(response) {
+            var order = basicOrderFactory.buildFromResponse(response);
 
-            var order = BasicOrderFactory.prototype.buildFromResponse.apply(this, arguments);
+            order.orderLineItems = response.orderLineItems;
 
-            return new Order(
-                order.id, order.emergency, order.createdDate, order.program,
-                order.requestingFacility, order.orderCode, order.status, order.processingPeriod,
-                order.lastUpdatedDate, order.facility, order.receivingFacility,
-                order.supplyingFacility, order.lastUpdater,
-                this.orderLineItemFactory.buildFromResponseArray(response.orderLineItems)
-            );
-        }
-
-        function verifyNotUndefined(response, name) {
-            if (!response[name]) {
-                throw name + ' must be defined';
-            }
+            return order;
         }
     }
 

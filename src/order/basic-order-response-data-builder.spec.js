@@ -22,10 +22,10 @@
         .factory('BasicOrderResponseDataBuilder', BasicOrderResponseDataBuilder);
 
     BasicOrderResponseDataBuilder.$inject = [
-        'BasicOrder', 'ProgramDataBuilder', 'FacilityDataBuilder', 'PeriodDataBuilder'
+        'ProgramDataBuilder', 'FacilityDataBuilder', 'PeriodDataBuilder'
     ];
 
-    function BasicOrderResponseDataBuilder(BasicOrder, ProgramDataBuilder, FacilityDataBuilder,
+    function BasicOrderResponseDataBuilder(ProgramDataBuilder, FacilityDataBuilder,
                                            PeriodDataBuilder) {
 
         BasicOrderResponseDataBuilder.prototype.withId = withId;
@@ -79,21 +79,21 @@
         }
 
         function build() {
-            return new BasicOrder(
-                this.id,
-                this.emergency,
-                this.createdDate,
-                this.program,
-                this.requestingFacility,
-                this.orderCode,
-                this.status,
-                this.processingPeriod,
-                this.lastUpdatedDate,
-                this.facility,
-                this.receivingFacility,
-                this.supplyingFacility,
-                this.lastUpdaterId
-            );
+            return {
+                id: this.id,
+                emergency: this.emergency,
+                createdDate: this.createdDate,
+                program: this.program,
+                requestingFacility: this.requestingFacility,
+                orderCode: this.orderCode,
+                status: this.status,
+                processingPeriod: this.processingPeriod,
+                lastUpdatedDate: this.lastUpdatedDate,
+                facility: this.facility,
+                receivingFacility: this.receivingFacility,
+                supplyingFacility: this.supplyingFacility,
+                lastUpdaterId: this.lastUpdaterId
+            };
         }
 
     }

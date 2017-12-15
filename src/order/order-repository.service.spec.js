@@ -16,24 +16,22 @@
 describe('orderRepository', function() {
 
     var orderRepository, Order, OrderResponseDataBuilder, OrderDataBuilder, orderFactory,
-        orderService, $q, $rootScope, PageDataBuilder, BasicOrder, BasicOrderResponseDataBuilder,
+        orderService, $q, $rootScope, PageDataBuilder, BasicOrderResponseDataBuilder,
         BasicOrderDataBuilder, basicOrderFactory;
 
     beforeEach(function() {
         module('order');
 
         inject(function($injector) {
-            orderRepository = $injector.get('orderRepository');
-            Order = $injector.get('Order');
-            OrderResponseDataBuilder = $injector.get('OrderResponseDataBuilder');
-            OrderDataBuilder = $injector.get('OrderDataBuilder');
             orderFactory = $injector.get('orderFactory');
             orderService = $injector.get('orderService');
+            orderRepository = $injector.get('orderRepository');
+            OrderDataBuilder = $injector.get('OrderDataBuilder');
             $q = $injector.get('$q');
             $rootScope = $injector.get('$rootScope');
             PageDataBuilder = $injector.get('PageDataBuilder');
-            BasicOrder = $injector.get('BasicOrder');
             BasicOrderDataBuilder = $injector.get('BasicOrderDataBuilder');
+            OrderResponseDataBuilder = $injector.get('OrderResponseDataBuilder');
             BasicOrderResponseDataBuilder = $injector.get('BasicOrderResponseDataBuilder');
             basicOrderFactory = $injector.get('basicOrderFactory');
         });
@@ -51,7 +49,7 @@ describe('orderRepository', function() {
             spyOn(orderService, 'get');
         });
 
-        it('should return instance of the Order class', function() {
+        it('should return order', function() {
             orderFactory.buildFromResponse.andReturn(order);
             orderService.get.andReturn($q.resolve(orderResponse));
 
@@ -62,7 +60,6 @@ describe('orderRepository', function() {
             });
             $rootScope.$apply();
 
-            expect(result instanceof Order).toBe(true);
             expect(result).toEqual(order);
             expect(orderFactory.buildFromResponse).toHaveBeenCalledWith(orderResponse);
             expect(orderService.get).toHaveBeenCalledWith(order.id);
@@ -126,7 +123,7 @@ describe('orderRepository', function() {
             spyOn(orderService, 'search');
         });
 
-        it('should return instances of the BasicOrder class', function() {
+        it('should return basic orders', function() {
             var page = PageDataBuilder.buildWithContent(basicOrderResponses);
 
             basicOrderFactory.buildFromResponseArray.andReturn(basicOrders);
@@ -140,8 +137,6 @@ describe('orderRepository', function() {
             $rootScope.$apply();
 
             expect(result.content.length).toBe(2);
-            expect(result.content[0] instanceof BasicOrder).toBe(true);
-            expect(result.content[1] instanceof BasicOrder).toBe(true);
             expect(result.content).toEqual(basicOrders);
             expect(basicOrderFactory.buildFromResponseArray).toHaveBeenCalledWith(basicOrderResponses);
             expect(orderService.search).toHaveBeenCalledWith(searchParams);
