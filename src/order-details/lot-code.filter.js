@@ -19,31 +19,17 @@
 
     angular
         .module('order-details')
-        .config(config);
+        .filter('lotCode', lotCodeFilter);
 
-    config.$inject = ['$stateProvider', 'FULFILLMENT_RIGHTS'];
+    lotCodeFilter.$inject = ['messageService'];
 
-    function config($stateProvider, FULFILLMENT_RIGHTS) {
-
-        $stateProvider.state('openlmis.orders.details', {
-            controller: 'OrderDetailsController',
-            controllerAs: 'vm',
-            label: 'orderDetails.orderDetails',
-            showInNavigation: false,
-            templateUrl: 'order-details/order-details.html',
-            url: '/details/:id',
-            accessRights: [
-                FULFILLMENT_RIGHTS.PODS_MANAGE,
-                FULFILLMENT_RIGHTS.ORDERS_VIEW
-            ],
-            areAllRightsRequired: false,
-            resolve: {
-                order: function(orderRepository, $stateParams) {
-                    return orderRepository.getOrderWithSummaries($stateParams.id);
-                }
+    function lotCodeFilter(messageService) {
+        return function(lot, includeName) {
+            if (lot) {
+                return lot.lotCode;
             }
-        });
-
+            return messageService.get('orderDetails.noLotDefined');
+        };
     }
 
 })();
