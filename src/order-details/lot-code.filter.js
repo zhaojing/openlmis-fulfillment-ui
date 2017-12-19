@@ -24,7 +24,7 @@
     lotCodeFilter.$inject = ['messageService'];
 
     function lotCodeFilter(messageService) {
-        return function(lot, includeName) {
+        return function(lot) {
             if (lot) {
                 return lot.lotCode;
             }
