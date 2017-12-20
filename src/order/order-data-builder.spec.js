@@ -36,7 +36,5 @@
             OrderResponseDataBuilder.apply(this, arguments);
             BasicOrderDataBuilder.apply(this, arguments);
         }
-
     }
-
 })();

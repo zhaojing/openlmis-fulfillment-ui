@@ -32,6 +32,7 @@
         BasicOrderResponseDataBuilder.prototype.withCreatedDate = withCreatedDate;
         BasicOrderResponseDataBuilder.prototype.withLastUpdatedDate = withLastUpdatedDate;
         BasicOrderResponseDataBuilder.prototype.withProcessingPeriod = withProcessingPeriod;
+        BasicOrderResponseDataBuilder.prototype.withOrderLineItem = withOrderLineItem;
         BasicOrderResponseDataBuilder.prototype.build = build;
 
         return BasicOrderResponseDataBuilder;
@@ -56,6 +57,7 @@
             this.receivingFacility = new FacilityDataBuilder().build();
             this.supplyingFacility = new FacilityDataBuilder().build();
             this.lastUpdaterId = 'user-id' + BasicOrderResponseDataBuilder.instanceNumber;
+            this.orderLineItems = [];
         }
 
         function withId(newId) {
@@ -78,6 +80,11 @@
             return this;
         }
 
+        function withOrderLineItem(lineItem) {
+            this.orderLineItems.push(lineItem);
+            return this;
+        }
+
         function build() {
             return {
                 id: this.id,
@@ -92,7 +99,8 @@
                 facility: this.facility,
                 receivingFacility: this.receivingFacility,
                 supplyingFacility: this.supplyingFacility,
-                lastUpdaterId: this.lastUpdaterId
+                lastUpdaterId: this.lastUpdaterId,
+                orderLineItems: this.orderLineItems
             };
         }
 

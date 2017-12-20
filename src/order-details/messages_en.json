@@ -18,6 +18,5 @@
     "orderDetails.lotCode": "Lot Code",
     "orderDetails.vvmStatus": "VVM Status",
     "orderDetails.expiryDate": "Expiry Date",
-    "orderDetails.availableSoh": "Available SOH",
-    "orderDetails.noLotDefined": "No Lot Defined"
+    "orderDetails.availableSoh": "Available SOH"
 }

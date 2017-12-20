@@ -38,8 +38,8 @@
             ],
             areAllRightsRequired: false,
             resolve: {
-                order: function(orderRepository, $stateParams) {
-                    return orderRepository.getOrderWithSummaries($stateParams.id);
+                order: function(orderWithStockCardSummariesFactory, $stateParams) {
+                    return orderWithStockCardSummariesFactory.getOrderWithSummaries($stateParams.id);
                 }
             }
         });

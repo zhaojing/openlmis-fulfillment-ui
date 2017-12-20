@@ -17,23 +17,48 @@
 
     'use strict';
 
+    /**
+     * @ngdoc service
+     * @name order-details.orderWithStockCardSummariesFactory
+     *
+     * @description
+     * Adds stock cards summaries info to order.
+     */
     angular
         .module('order-details')
-        .factory('orderWithSummariesFactory', orderWithSummariesFactory);
+        .factory('orderWithStockCardSummariesFactory', orderWithStockCardSummariesFactory);
 
-    orderWithSummariesFactory.$inject = ['basicOrderFactory'];
+    orderWithStockCardSummariesFactory.$inject = ['basicOrderFactory', 'orderService', 'stockCardSummariesService'];
 
-    function orderWithSummariesFactory(basicOrderFactory) {
+    function orderWithStockCardSummariesFactory(basicOrderFactory, orderService, stockCardSummariesService) {
         var orderWithSummariesFactory = {
-            buildOrder: buildOrder
+            getOrderWithSummaries: getOrderWithSummaries
         };
         return orderWithSummariesFactory;
 
+        /**
+         * @ngdoc method
+         * @methodOf order-details.orderWithStockCardSummariesFactory
+         * @name getOrderWithSummaries
+         *
+         * @description
+         * Adds stock cards summaries info to order.
+         *
+         * @param  {String}  orderId the UUID of an order
+         * @return {Promise}         the order with stock card summaries
+         */
+        function getOrderWithSummaries(orderId) {
+            return orderService.get(orderId, 'lastUpdater')
+            .then(function(orderResponse) {
+                return stockCardSummariesService.getStockCardSummaries(orderResponse.program.id, orderResponse.facility.id)
+                .then(function(stockCardSummariesResponse) {
+                    return buildOrder(orderResponse, stockCardSummariesResponse);
+                });
+            });
+        }
+
         function buildOrder(orderResponse, stockCardSummaries) {
-            var orderLineItemsWithSummaries = buildOrderLineItemsWithSummaries(
-                    orderResponse.orderLineItems,
-                    stockCardSummaries
-                ),
+            var orderLineItemsWithSummaries = buildOrderLineItemsWithSummaries(orderResponse.orderLineItems, stockCardSummaries),
                 order = basicOrderFactory.buildFromResponse(orderResponse);
 
             order.orderLineItems = orderLineItemsWithSummaries;
@@ -45,10 +70,7 @@
             var orderLineItemsWithSummaries = [];
 
             orderLineItems.forEach(function(orderLineItem) {
-                var orderableSummaries = filterByOrderable(
-                    stockCardSummaries,
-                    orderLineItem.orderable
-                );
+                var orderableSummaries = filterByOrderable(stockCardSummaries, orderLineItem.orderable);
 
                 orderLineItemsWithSummaries.push({
                     id: orderLineItem.id,
