@@ -50,7 +50,7 @@
         function getOrderWithSummaries(orderId) {
             return orderService.get(orderId, 'lastUpdater')
             .then(function(orderResponse) {
-                return stockCardSummariesService.getStockCardSummaries(orderResponse.program.id, orderResponse.facility.id)
+                return stockCardSummariesService.getStockCardSummaries(orderResponse.program.id, orderResponse.supplyingFacility.id)
                 .then(function(stockCardSummariesResponse) {
                     return buildOrder(orderResponse, stockCardSummariesResponse);
                 });

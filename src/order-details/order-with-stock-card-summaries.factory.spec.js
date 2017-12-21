@@ -98,7 +98,7 @@ describe('orderWithStockCardSummariesFactory', function() {
             $rootScope.$apply();
 
             expect(orderService.get).toHaveBeenCalledWith('id', 'lastUpdater');
-            expect(stockCardSummariesService.getStockCardSummaries).toHaveBeenCalledWith(order.program.id, order.facility.id);
+            expect(stockCardSummariesService.getStockCardSummaries).toHaveBeenCalledWith(order.program.id, order.supplyingFacility.id);
             expect(result.orderLineItems[0].summaries).toEqual([stockCardSummaries[0], stockCardSummaries[1]]);
             expect(result.orderLineItems[1].summaries).toEqual([]);
             expect(result.orderLineItems[2].summaries).toEqual([stockCardSummaries[2]]);
