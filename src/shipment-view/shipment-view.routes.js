@@ -18,28 +18,28 @@
     'use strict';
 
     angular
-        .module('order-details')
+        .module('shipment-view')
         .config(config);
 
     config.$inject = ['$stateProvider', 'FULFILLMENT_RIGHTS'];
 
     function config($stateProvider, FULFILLMENT_RIGHTS) {
 
-        $stateProvider.state('openlmis.orders.details', {
-            controller: 'OrderDetailsController',
+        $stateProvider.state('openlmis.orders.shipmentView', {
+            controller: 'ShipmentViewController',
             controllerAs: 'vm',
-            label: 'orderDetails.orderDetails',
+            label: 'shipmentView.viewShipment',
             showInNavigation: false,
-            templateUrl: 'order-details/order-details.html',
-            url: '/details/:id',
+            templateUrl: 'shipment-view/shipment-view.html',
+            url: '/:id/shipment',
             accessRights: [
                 FULFILLMENT_RIGHTS.PODS_MANAGE,
                 FULFILLMENT_RIGHTS.ORDERS_VIEW
             ],
             areAllRightsRequired: false,
             resolve: {
-                order: function(orderWithStockCardSummariesFactory, $stateParams) {
-                    return orderWithStockCardSummariesFactory.getOrderWithSummaries($stateParams.id);
+                shipment: function(shipmentWithStockCardSummariesFactory, $stateParams) {
+                    return shipmentWithStockCardSummariesFactory.getShipmentWithStockCardSummaries($stateParams.id);
                 }
             }
         });

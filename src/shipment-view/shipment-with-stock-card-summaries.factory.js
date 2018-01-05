@@ -19,27 +19,27 @@
 
     /**
      * @ngdoc service
-     * @name order-details.orderWithStockCardSummariesFactory
+     * @name shipment-view.shipmentWithStockCardSummariesFactory
      *
      * @description
      * Adds stock cards summaries info to order.
      */
     angular
-        .module('order-details')
-        .factory('orderWithStockCardSummariesFactory', orderWithStockCardSummariesFactory);
+        .module('shipment-view')
+        .factory('shipmentWithStockCardSummariesFactory', shipmentWithStockCardSummariesFactory);
 
-    orderWithStockCardSummariesFactory.$inject = ['basicOrderFactory', 'orderService', 'stockCardSummariesService'];
+    shipmentWithStockCardSummariesFactory.$inject = ['basicOrderFactory', 'orderService', 'stockCardSummariesService'];
 
-    function orderWithStockCardSummariesFactory(basicOrderFactory, orderService, stockCardSummariesService) {
-        var orderWithSummariesFactory = {
-            getOrderWithSummaries: getOrderWithSummaries
+    function shipmentWithStockCardSummariesFactory(basicOrderFactory, orderService, stockCardSummariesService) {
+        var shipmentWithSummariesFactory = {
+            getShipmentWithStockCardSummaries: getShipmentWithStockCardSummaries
         };
-        return orderWithSummariesFactory;
+        return shipmentWithSummariesFactory;
 
         /**
          * @ngdoc method
-         * @methodOf order-details.orderWithStockCardSummariesFactory
-         * @name getOrderWithSummaries
+         * @methodOf shipment-view.shipmentWithStockCardSummariesFactory
+         * @name getShipmentWithStockCardSummaries
          *
          * @description
          * Adds stock cards summaries info to order.
@@ -47,7 +47,7 @@
          * @param  {String}  orderId the UUID of an order
          * @return {Promise}         the order with stock card summaries
          */
-        function getOrderWithSummaries(orderId) {
+        function getShipmentWithStockCardSummaries(orderId) {
             return orderService.get(orderId, 'lastUpdater')
             .then(function(orderResponse) {
                 return stockCardSummariesService.getStockCardSummaries(orderResponse.program.id, orderResponse.supplyingFacility.id)

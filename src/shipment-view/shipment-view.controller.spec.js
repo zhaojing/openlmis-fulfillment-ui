@@ -13,31 +13,31 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-describe('orderDetailsController', function() {
+describe('ShipmentViewController', function() {
 
-    var vm, $controller, order, OrderDataBuilder;
+    var vm, $controller, shipment, OrderDataBuilder;
 
     beforeEach(function() {
-        module('order-details');
+        module('shipment-view');
 
         inject(function($injector) {
             $controller = $injector.get('$controller');
             OrderDataBuilder = $injector.get('OrderDataBuilder');
         });
 
-        order = new OrderDataBuilder().build();
+        shipment = new OrderDataBuilder().build();
 
-        vm = $controller('OrderDetailsController', {
-            order: order
+        vm = $controller('ShipmentViewController', {
+            shipment: shipment
         });
 
     });
 
     describe('onInit', function() {
 
-        it('should expose order', function() {
+        it('should expose shipment', function() {
             vm.$onInit();
-            expect(vm.order).toEqual(order);
+            expect(vm.shipment).toEqual(shipment);
         });
 
     });

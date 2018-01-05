@@ -18,11 +18,11 @@
     'use strict';
 
     /**
-     * @module order-details
+     * @module shipment-view
      *
-     * Provides View Order Details state and controller.
+     * Provides Shipment Draft view state and controller.
      */
-    angular.module('order-details', [
+    angular.module('shipment-view', [
         'openlmis-i18n',
         'openlmis-table',
         'openlmis-date',

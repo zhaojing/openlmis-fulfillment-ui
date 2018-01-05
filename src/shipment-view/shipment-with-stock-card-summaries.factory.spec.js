@@ -13,19 +13,19 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-describe('orderWithStockCardSummariesFactory', function() {
+describe('shipmentWithStockCardSummariesFactory', function() {
 
-    var $q, $rootScope, orderService, orderWithStockCardSummariesFactory, stockCardSummariesService, basicOrderFactory, OrderDataBuilder, StockCardSummaryDataBuilder, OrderLineItemDataBuilder,
+    var $q, $rootScope, orderService, shipmentWithStockCardSummariesFactory, stockCardSummariesService, basicOrderFactory, OrderDataBuilder, StockCardSummaryDataBuilder, OrderLineItemDataBuilder,
         order, stockCardSummaries;
 
     beforeEach(function() {
-        module('order-details');
+        module('shipment-view');
 
         inject(function($injector) {
             $q = $injector.get('$q');
             $rootScope = $injector.get('$rootScope');
             orderService = $injector.get('orderService');
-            orderWithStockCardSummariesFactory = $injector.get('orderWithStockCardSummariesFactory');
+            shipmentWithStockCardSummariesFactory = $injector.get('shipmentWithStockCardSummariesFactory');
             stockCardSummariesService = $injector.get('stockCardSummariesService');
             basicOrderFactory = $injector.get('basicOrderFactory');
             OrderDataBuilder = $injector.get('OrderDataBuilder');
@@ -53,10 +53,10 @@ describe('orderWithStockCardSummariesFactory', function() {
         });
     });
 
-    describe('getOrderWithSummaries', function() {
+    describe('getShipmentWithStockCardSummaries', function() {
 
         it('should return promise', function() {
-            var result = orderWithStockCardSummariesFactory.getOrderWithSummaries('id');
+            var result = shipmentWithStockCardSummariesFactory.getShipmentWithStockCardSummaries('id');
             expect(angular.isFunction(result.then)).toBe(true);
         });
 
@@ -65,7 +65,7 @@ describe('orderWithStockCardSummariesFactory', function() {
 
             orderService.get.andReturn($q.reject());
 
-            orderWithStockCardSummariesFactory.getOrderWithSummaries('id')
+            shipmentWithStockCardSummariesFactory.getShipmentWithStockCardSummaries('id')
             .catch(function() {
                 result = 'rejected';
             });
@@ -79,7 +79,7 @@ describe('orderWithStockCardSummariesFactory', function() {
 
             stockCardSummariesService.getStockCardSummaries.andReturn($q.reject());
 
-            orderWithStockCardSummariesFactory.getOrderWithSummaries('id')
+            shipmentWithStockCardSummariesFactory.getShipmentWithStockCardSummaries('id')
             .catch(function() {
                 result = 'rejected';
             });
@@ -91,7 +91,7 @@ describe('orderWithStockCardSummariesFactory', function() {
         it('should assign stock card summaries to proper order line item', function() {
             var result;
 
-            orderWithStockCardSummariesFactory.getOrderWithSummaries('id')
+            shipmentWithStockCardSummariesFactory.getShipmentWithStockCardSummaries('id')
             .then(function(response) {
                 result = response;
             });

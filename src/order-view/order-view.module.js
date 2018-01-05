@@ -28,6 +28,7 @@
         'openlmis-pagination',
         'openlmis-table',
         'order',
+        'shipment-view',
         'ui.router'
     ]);
 

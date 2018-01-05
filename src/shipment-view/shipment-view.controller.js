@@ -19,18 +19,18 @@
 
     /**
      * @ngdoc controller
-     * @name order-details.controller:orderDetailsController
+     * @name shipment-view.controller:ShipmentViewController
      *
      * @description
-     * Responsible for managing Order Details.
+     * Responsible for managing shipment.
      */
     angular
-        .module('order-details')
-        .controller('OrderDetailsController', controller);
+        .module('shipment-view')
+        .controller('ShipmentViewController', ShipmentViewController);
 
-    controller.$inject = ['order'];
+    ShipmentViewController.$inject = ['shipment'];
 
-    function controller(order) {
+    function ShipmentViewController(shipment) {
 
         var vm = this;
 
@@ -38,18 +38,18 @@
 
         /**
          * @ngdoc property
-         * @propertyOf order-details.controller:orderDetailsController
-         * @name order
+         * @propertyOf shipment-view.controller:ShipmentViewController
+         * @name shipment
          * @type {Object}
          *
          * @description
-         * Holds order that will be displayed on the screen.
+         * Holds shipment that will be displayed on the screen.
          */
-        vm.order = undefined;
+        vm.shipment = undefined;
 
         /**
          * @ngdoc method
-         * @methodOf order-details.controller:orderDetailsController
+         * @methodOf shipment-view.controller:ShipmentViewController
          * @name onInit
          *
          * @description
@@ -57,7 +57,7 @@
          * setting data to be available on the view.
          */
         function onInit() {
-            vm.order = order;
+            vm.shipment = shipment;
         }
 
     }

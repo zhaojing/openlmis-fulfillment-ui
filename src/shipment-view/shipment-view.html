@@ -1,0 +1,63 @@
+<h2>{{'shipmentView.viewShipment' | message}}</h2>
+<aside class="order-cce-status">
+    <p>{{'shipmentView.cceStatus' | message}}</p>
+    <facility-cce-status facility="vm.shipment.requestingFacility"></facility-cce-status>
+</aside>
+<dl>
+    <dt>{{'shipmentView.order' | message}}</dt>
+    <dd>{{vm.shipment.orderCode}}<span class="emergency" ng-if="vm.shipment.emergency"> / {{'shipmentView.emergency' | message}}</span></dd>
+    <dt>{{'shipmentView.status' | message}}</dt>
+    <dd>{{vm.shipment.status}}<dd>
+    <dt>{{'shipmentView.facility' | message}}</dt>
+    <dd>{{vm.shipment.requestingFacility.name}}<dd>
+    <dt>{{'shipmentView.facilityCode' | message}}</dt>
+    <dd>{{vm.shipment.requestingFacility.code}}<dd>
+    <dt>{{'shipmentView.program' | message}}</dt>
+    <dd>{{vm.shipment.program.name}}<dd>
+    <dt>{{'shipmentView.type' | message}}</dt>
+    <dd>{{vm.shipment.requestingFacility.type.name}}<dd>
+    <dt>{{'shipmentView.dateCreated' | message}}</dt>
+    <dd>{{vm.shipment.createdDate | openlmisDate}}<dd>
+    <dt>{{'shipmentView.lastUpdated' | message}}</dt>
+    <dd>{{vm.shipment.lastUpdatedDate | openlmisDate}}<dd>
+    <dt>{{'shipmentView.lastUpdatedBy' | message}}</dt>
+    <dd>{{vm.shipment.lastUpdater.username | openlmisDate}}<dd>
+</dl>
+<section class="openlmis-table-container">
+    <table>
+        <thead>
+        <tr>
+            <th>{{'shipmentView.productCode' | message}}</th>
+            <th>{{'shipmentView.product' | message}}</th>
+            <th>{{'shipmentView.lotCode' | message}}</th>
+            <th>{{'shipmentView.vvmStatus' | message}}</th>
+            <th>{{'shipmentView.expiryDate' | message}}</th>
+            <th>{{'shipmentView.availableSoh' | message}}</th>
+            <th>{{'shipmentView.orderQuantity' | message}}</th>
+            <th>{{'shipmentView.fillQuantity' | message}}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat-start="item in vm.shipment.orderLineItems">
+            <td>{{item.orderable.productCode}}</td>
+            <td>{{item.orderable.fullProductName}}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>{{item.orderedQuantity}}</td>
+            <td>{{item.filledQuantity}}</td>
+        </tr>
+        <tr ng-repeat-end ng-repeat="summary in item.summaries">
+            <td></td>
+            <td></td>
+            <td>{{summary.lot | lotCode}}</td>
+            <td>{{summary.extraData.vvmStatus}}</td>
+            <td>{{summary.lot.expirationDate | openlmisDate}}</td>
+            <td>{{summary.stockOnHand}}</td>
+            <td></td>
+            <td></td>
+        </tr>
+        </tbody>
+    </table>
+</section>
