@@ -4,7 +4,6 @@
 New functionality added in a backwards-compatible manner:
 * [OLMIS-3607](https://openlmis.atlassian.net/browse/OLMIS-3607): Added created date and last updated columns to the Order list view
 * [OLMIS-3608](https://openlmis.atlassian.net/browse/OLMIS-3608): Created basic order details view
-* [OLMIS-3614](https://openlmis.atlassian.net/browse/OLMIS-3614): Added OrderLineItem class.
 * [OLMIS-3382](https://openlmis.atlassian.net/browse/OLMIS-3382): Use CCE status component in order details view
 * [OLMIS-3614](https://openlmis.atlassian.net/browse/OLMIS-3614): Added stock columns on Order details page.
 
