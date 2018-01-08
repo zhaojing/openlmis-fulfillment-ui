@@ -22,73 +22,170 @@
      * @name shipment-view.shipmentWithStockCardSummariesFactory
      *
      * @description
-     * Adds stock cards summaries info to order.
+     * Adds stock cards summaries info to shipment line items.
      */
     angular
         .module('shipment-view')
         .factory('shipmentWithStockCardSummariesFactory', shipmentWithStockCardSummariesFactory);
 
-    shipmentWithStockCardSummariesFactory.$inject = ['basicOrderFactory', 'orderService', 'stockCardSummariesService'];
+    shipmentWithStockCardSummariesFactory.$inject = [
+        '$q', 'orderService', 'shipmentService', 'stockCardSummariesService',
+        'ShipmentLineItemWithSummary', 'OrderLineItem'
+    ];
 
-    function shipmentWithStockCardSummariesFactory(basicOrderFactory, orderService, stockCardSummariesService) {
-        var shipmentWithSummariesFactory = {
-            getShipmentWithStockCardSummaries: getShipmentWithStockCardSummaries
+    function shipmentWithStockCardSummariesFactory($q, orderService, shipmentService,
+                                                   stockCardSummariesService,
+                                                   ShipmentLineItemWithSummary,
+                                                   OrderLineItem) {
+        var factory = {
+            get: get
         };
-        return shipmentWithSummariesFactory;
+        return factory;
 
         /**
          * @ngdoc method
          * @methodOf shipment-view.shipmentWithStockCardSummariesFactory
-         * @name getShipmentWithStockCardSummaries
+         * @name get
          *
          * @description
-         * Adds stock cards summaries info to order.
+         * Build a shipment including information about stock card summaries for order with the
+         * given ID.
          *
-         * @param  {String}  orderId the UUID of an order
-         * @return {Promise}         the order with stock card summaries
+         * @param   {string}    orderId the ID of the order
+         * @return  {Object}            the shipment
          */
-        function getShipmentWithStockCardSummaries(orderId) {
-            return orderService.get(orderId, 'lastUpdater')
-            .then(function(orderResponse) {
-                return stockCardSummariesService.getStockCardSummaries(orderResponse.program.id, orderResponse.supplyingFacility.id)
-                .then(function(stockCardSummariesResponse) {
-                    return buildOrder(orderResponse, stockCardSummariesResponse);
+        function get(orderId) {
+            if (!orderId) {
+                throw 'Order ID must be defined';
+            }
+
+            return $q.all([
+                orderService.get(orderId),
+                shipmentService.search({
+                    orderId: orderId
+                })
+            ])
+            .then(function(responses) {
+                var order = responses[0];
+                return stockCardSummariesService.getStockCardSummaries(
+                    order.program.id,
+                    order.supplyingFacility.id
+                )
+                .then(function(stockCardSummaries) {
+                    var shipment = extractShipmentFromResponse(responses[1]);
+                    return buildShipmentWithStockCardSummaries(order, stockCardSummaries, shipment);
                 });
             });
         }
 
-        function buildOrder(orderResponse, stockCardSummaries) {
-            var orderLineItemsWithSummaries = buildOrderLineItemsWithSummaries(orderResponse.orderLineItems, stockCardSummaries),
-                order = basicOrderFactory.buildFromResponse(orderResponse);
+        function buildShipmentWithStockCardSummaries(order, stockCardSummaries, shipment) {
+            var shipmentLineItems;
+            if (shipment) {
+                shipmentLineItems = buildLineItemsFromSummariesAndShipment(
+                    stockCardSummaries, shipment
+                );
+            } else {
+                shipment = {};
+                shipmentLineItems = buildLineItemsFromSummariesAndOrder(
+                    stockCardSummaries, order
+                );
+            }
 
-            order.orderLineItems = orderLineItemsWithSummaries;
+            shipment.order = order;
+            shipment.lineItems = shipmentLineItems;
 
-            return order;
+            addShipmentLineItemReferencesToOrder(shipment);
+
+            return shipment;
         }
 
-        function buildOrderLineItemsWithSummaries(orderLineItems, stockCardSummaries) {
-            var orderLineItemsWithSummaries = [];
-
-            orderLineItems.forEach(function(orderLineItem) {
-                var orderableSummaries = filterByOrderable(stockCardSummaries, orderLineItem.orderable);
-
-                orderLineItemsWithSummaries.push({
-                    id: orderLineItem.id,
-                    filledQuantity: orderLineItem.filledQuantity,
-                    orderable: orderLineItem.orderable,
-                    orderedQuantity: orderLineItem.orderedQuantity,
-                    packsToShip: orderLineItem.packsToShip,
-                    summaries: orderableSummaries
-                });
+        function addShipmentLineItemReferencesToOrder(shipment) {
+            var orderLineItems = [];
+            shipment.order.orderLineItems.forEach(function(orderLineItem) {
+                orderLineItems.push(new OrderLineItem(
+                    orderLineItem,
+                    filterByOrderableId(
+                        shipment.lineItems,
+                        orderLineItem.orderable.id
+                    )
+                ));
             });
-
-            return orderLineItemsWithSummaries;
+            shipment.order.orderLineItems = orderLineItems;
         }
 
-        function filterByOrderable(summaries, orderable) {
-            return summaries.filter(function(summary) {
-                return summary.orderable.id === orderable.id;
+        function buildLineItemsFromSummariesAndShipment(stockCardSummaries, shipment) {
+            var shipmentLineItems = [];
+            shipment.lineItems.forEach(function(lineItem) {
+                var stockCardSummary = filterByOrderableAndLot(
+                    stockCardSummaries,
+                    lineItem.orderable,
+                    lineItem.lot
+                )[0];
+
+                shipmentLineItems.push(new ShipmentLineItemWithSummary(
+                    stockCardSummary,
+                    lineItem.shippedQuantity
+                ));
             });
+
+            return shipmentLineItems;
+        }
+
+        function buildLineItemsFromSummariesAndOrder(stockCardSummaries, order) {
+            var orderMatchingSummaries = filterByOrder(stockCardSummaries, order);
+
+            var shipmentLineItems = [];
+            orderMatchingSummaries.forEach(function(stockCardSummary) {
+                shipmentLineItems.push(new ShipmentLineItemWithSummary(
+                    stockCardSummary,
+                    0
+                ));
+            });
+
+            return shipmentLineItems;
+        }
+
+        function filterByOrderableAndLot(stockCardSummaries, orderable, lot) {
+            return stockCardSummaries.filter(function(summary) {
+                if (summary.orderable.id === orderable.id && areLotsEqual(summary.lot, lot)) {
+                    return true;
+                }
+                return false;
+            });
+        }
+
+        function filterByOrder(stockCardSummaries, order) {
+            return stockCardSummaries.filter(function(stockCardSummary) {
+                return filterByOrderableId(
+                    order.orderLineItems,
+                    stockCardSummary.orderable.id
+                ).length > 0;
+            });
+        }
+
+        function filterByOrderableId(orderLineItems, orderableId) {
+            return orderLineItems.filter(function(orderLineItem) {
+                if (orderLineItem.orderable.id === orderableId) {
+                    return true;
+                }
+                return false;
+            });
+        }
+
+        function extractShipmentFromResponse(response) {
+            if (response.content.length) {
+                return response.content[0];
+            }
+            return undefined;
+        }
+
+        function areLotsEqual(left, right) {
+            if (left && right && left.id === right.id) {
+                return true;
+            } else if (!left && !right)  {
+                return true;
+            }
+            return false;
         }
     }
 

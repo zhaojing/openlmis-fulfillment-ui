@@ -15,93 +15,397 @@
 
 describe('shipmentWithStockCardSummariesFactory', function() {
 
-    var $q, $rootScope, orderService, shipmentWithStockCardSummariesFactory, stockCardSummariesService, basicOrderFactory, OrderDataBuilder, StockCardSummaryDataBuilder, OrderLineItemDataBuilder,
-        order, stockCardSummaries;
+    var ORDER_ID = 'order-id';
+
+    var shipmentWithStockCardSummariesFactory, StockCardSummaryDataBuilder, OrderDataBuilder,
+        ShipmentDataBuilder, ShipmentLineItemDataBuilder, OrderableDataBuilder, LotDataBuilder,
+        ObjectReferenceDataBuilder, stockCardSummariesService, orderService, shipmentService, $q,
+        $rootScope, PageDataBuilder, order, shipment, stockCardSummaryOne, stockCardSummaryTwo,
+        stockCardSummaryThree, stockCardSummaryFour, orderableOne, orderableTwo, lotOne, lotTwo,
+        ShipmentLineItemWithSummary, OrderLineItemDataBuilder, OrderLineItem;
 
     beforeEach(function() {
+        module('referencedata-lot');
+        module('referencedata-orderable');
         module('shipment-view');
 
         inject(function($injector) {
             $q = $injector.get('$q');
             $rootScope = $injector.get('$rootScope');
             orderService = $injector.get('orderService');
-            shipmentWithStockCardSummariesFactory = $injector.get('shipmentWithStockCardSummariesFactory');
-            stockCardSummariesService = $injector.get('stockCardSummariesService');
-            basicOrderFactory = $injector.get('basicOrderFactory');
+            LotDataBuilder = $injector.get('LotDataBuilder');
+            shipmentService = $injector.get('shipmentService');
             OrderDataBuilder = $injector.get('OrderDataBuilder');
+            ShipmentDataBuilder = $injector.get('ShipmentDataBuilder');
+            OrderableDataBuilder = $injector.get('OrderableDataBuilder');
+            stockCardSummariesService = $injector.get('stockCardSummariesService');
+            ObjectReferenceDataBuilder = $injector.get('ObjectReferenceDataBuilder');
+            ShipmentLineItemDataBuilder = $injector.get('ShipmentLineItemDataBuilder');
             StockCardSummaryDataBuilder = $injector.get('StockCardSummaryDataBuilder');
             OrderLineItemDataBuilder = $injector.get('OrderLineItemDataBuilder');
+            PageDataBuilder = $injector.get('PageDataBuilder');
+            OrderLineItem = $injector.get('OrderLineItem');
+            shipmentWithStockCardSummariesFactory = $injector.get('shipmentWithStockCardSummariesFactory');
+            ShipmentLineItemWithSummary = $injector.get('ShipmentLineItemWithSummary');
         });
 
-        order = new OrderDataBuilder()
-            .withOrderLineItem(new OrderLineItemDataBuilder().build())
-            .withOrderLineItem(new OrderLineItemDataBuilder().build())
-            .withOrderLineItem(new OrderLineItemDataBuilder().build())
+        spyOn(stockCardSummariesService, 'getStockCardSummaries');
+        spyOn(orderService, 'get');
+        spyOn(shipmentService, 'search');
+
+        orderableOne = new OrderableDataBuilder().build();
+        orderableTwo = new OrderableDataBuilder().build();
+
+        lotOne = new LotDataBuilder().build();
+        lotTwo = new LotDataBuilder().build();
+
+        stockCardSummaryOne = new StockCardSummaryDataBuilder()
+            .withOrderable(orderableOne)
+            .withLot(lotOne)
             .build();
 
-        stockCardSummaries = [
-            new StockCardSummaryDataBuilder().withOrderable(order.orderLineItems[0].orderable).build(),
-            new StockCardSummaryDataBuilder().withOrderable(order.orderLineItems[0].orderable).build(),
-            new StockCardSummaryDataBuilder().withOrderable(order.orderLineItems[2].orderable).build(),
-            new StockCardSummaryDataBuilder().build()
-        ];
+        stockCardSummaryTwo = new StockCardSummaryDataBuilder()
+            .withOrderable(orderableOne)
+            .build();
 
-        spyOn(orderService, 'get').andReturn($q.resolve(order));
-        spyOn(stockCardSummariesService, 'getStockCardSummaries').andReturn($q.resolve(stockCardSummaries));
-        spyOn(basicOrderFactory, 'buildFromResponse').andCallFake(function(param) {
-            return param;
-        });
+        stockCardSummaryThree = new StockCardSummaryDataBuilder()
+            .withOrderable(orderableTwo)
+            .withLot(lotTwo)
+            .build();
+
+        stockCardSummaryFour = new StockCardSummaryDataBuilder().build();
+
+        order = new OrderDataBuilder()
+            .withId(ORDER_ID)
+            .withOrderLineItems([
+                new OrderLineItemDataBuilder()
+                    .withOrderable(orderableOne)
+                    .build(),
+                new OrderLineItemDataBuilder()
+                    .withOrderable(orderableTwo)
+                    .build()
+            ])
+            .build();
+
+        shipment = new ShipmentDataBuilder()
+            .withOrder(
+                new ObjectReferenceDataBuilder()
+                .withId(ORDER_ID)
+                .withResource('order')
+                .build()
+            )
+            .withLineItems([
+                new ShipmentLineItemDataBuilder()
+                    .withOrderable(new ObjectReferenceDataBuilder().withId(orderableOne.id))
+                    .withLot(new ObjectReferenceDataBuilder().withId(lotOne.id))
+                    .withShippedQuantity(12)
+                    .build(),
+                new ShipmentLineItemDataBuilder()
+                    .withOrderable(new ObjectReferenceDataBuilder().withId(orderableTwo.id))
+                    .withLot(new ObjectReferenceDataBuilder().withId(lotTwo.id))
+                    .withShippedQuantity(37)
+                    .build()
+            ])
+            .build();
     });
 
-    describe('getShipmentWithStockCardSummaries', function() {
+    describe('get', function() {
 
-        it('should return promise', function() {
-            var result = shipmentWithStockCardSummariesFactory.getShipmentWithStockCardSummaries('id');
-            expect(angular.isFunction(result.then)).toBe(true);
+        it('should throw exception if ID is not given', function() {
+            expect(function() {
+                shipmentWithStockCardSummariesFactory.get();
+            }).toThrow('Order ID must be defined');
         });
 
-        it('should reject promise if get order fails', function() {
-            var result;
-
+        it('should reject if orderService rejects', function() {
             orderService.get.andReturn($q.reject());
 
-            shipmentWithStockCardSummariesFactory.getShipmentWithStockCardSummaries('id')
+            var rejected;
+            shipmentWithStockCardSummariesFactory.get(ORDER_ID)
             .catch(function() {
-                result = 'rejected';
+                rejected = true;
             });
             $rootScope.$apply();
 
-            expect(result).toEqual('rejected');
+            expect(rejected).toBe(true);
+            expect(orderService.get).toHaveBeenCalledWith(ORDER_ID);
+            expect(shipmentService.search).toHaveBeenCalledWith({
+                orderId: ORDER_ID
+            });
+            expect(stockCardSummariesService.getStockCardSummaries).not.toHaveBeenCalled();
         });
 
-        it('should reject promise if get stock card summaries fails', function() {
-            var result;
+        it('should reject if shipmentService rejects', function() {
+            shipmentService.search.andReturn($q.reject());
 
+            var rejected;
+            shipmentWithStockCardSummariesFactory.get(ORDER_ID)
+            .catch(function() {
+                rejected = true;
+            });
+            $rootScope.$apply();
+
+            expect(rejected).toBe(true);
+            expect(orderService.get).toHaveBeenCalledWith(ORDER_ID);
+            expect(shipmentService.search).toHaveBeenCalledWith({
+                orderId: ORDER_ID
+            });
+            expect(stockCardSummariesService.getStockCardSummaries).not.toHaveBeenCalled();
+        });
+
+        it('should reject if creating shipment and stockCardSummariesService rejects', function() {
+            orderService.get.andReturn($q.resolve(order));
+            shipmentService.search.andReturn($q.resolve(new PageDataBuilder().build()));
             stockCardSummariesService.getStockCardSummaries.andReturn($q.reject());
 
-            shipmentWithStockCardSummariesFactory.getShipmentWithStockCardSummaries('id')
+            var rejected;
+            shipmentWithStockCardSummariesFactory.get(ORDER_ID)
             .catch(function() {
-                result = 'rejected';
+                rejected = true;
             });
             $rootScope.$apply();
 
-            expect(result).toEqual('rejected');
+            expect(rejected).toBe(true);
+            expect(orderService.get).toHaveBeenCalledWith(ORDER_ID);
+            expect(shipmentService.search).toHaveBeenCalledWith({
+                orderId: ORDER_ID
+            });
+            expect(stockCardSummariesService.getStockCardSummaries).toHaveBeenCalledWith(
+                order.program.id,
+                order.supplyingFacility.id
+            );
         });
 
-        it('should assign stock card summaries to proper order line item', function() {
-            var result;
+        it('should reject if recreating shipment and stockCardSummariesService rejects', function() {
+            orderService.get.andReturn($q.resolve(order));
+            shipmentService.search.andReturn($q.resolve(
+                new PageDataBuilder()
+                .withContent([shipment])
+                .build()
+            ));
+            stockCardSummariesService.getStockCardSummaries.andReturn($q.reject());
 
-            shipmentWithStockCardSummariesFactory.getShipmentWithStockCardSummaries('id')
+            var rejected;
+            shipmentWithStockCardSummariesFactory.get(ORDER_ID)
+            .catch(function() {
+                rejected = true;
+            });
+            $rootScope.$apply();
+
+            expect(rejected).toBe(true);
+            expect(orderService.get).toHaveBeenCalledWith(ORDER_ID);
+            expect(shipmentService.search).toHaveBeenCalledWith({
+                orderId: ORDER_ID
+            });
+            expect(stockCardSummariesService.getStockCardSummaries).toHaveBeenCalledWith(
+                order.program.id,
+                order.supplyingFacility.id
+            );
+        });
+
+        it('should resolve if recreating shipment', function() {
+            orderService.get.andReturn($q.resolve(order));
+            shipmentService.search.andReturn($q.resolve(
+                new PageDataBuilder()
+                .withContent([shipment])
+                .build()
+            ));
+            stockCardSummariesService.getStockCardSummaries.andReturn($q.resolve([
+                stockCardSummaryOne,
+                stockCardSummaryTwo,
+                stockCardSummaryThree,
+                stockCardSummaryFour
+            ]));
+
+            var resolved;
+            shipmentWithStockCardSummariesFactory.get(ORDER_ID)
+            .then(function() {
+                resolved = true;
+            });
+            $rootScope.$apply();
+
+            expect(resolved).toBe(true);
+            expect(orderService.get).toHaveBeenCalledWith(ORDER_ID);
+            expect(shipmentService.search).toHaveBeenCalledWith({
+                orderId: ORDER_ID
+            });
+            expect(stockCardSummariesService.getStockCardSummaries).toHaveBeenCalledWith(
+                order.program.id,
+                order.supplyingFacility.id
+            );
+        });
+
+        it('should resolve if creating new shipment', function() {
+            orderService.get.andReturn($q.resolve(order));
+            shipmentService.search.andReturn($q.resolve(new PageDataBuilder().build()));
+            stockCardSummariesService.getStockCardSummaries.andReturn($q.resolve([
+                stockCardSummaryOne,
+                stockCardSummaryTwo,
+                stockCardSummaryThree,
+                stockCardSummaryFour
+            ]));
+
+            var resolved;
+            shipmentWithStockCardSummariesFactory.get(ORDER_ID)
+            .then(function() {
+                resolved = true;
+            });
+            $rootScope.$apply();
+
+            expect(resolved).toBe(true);
+            expect(orderService.get).toHaveBeenCalledWith(ORDER_ID);
+            expect(shipmentService.search).toHaveBeenCalledWith({
+                orderId: ORDER_ID
+            });
+            expect(stockCardSummariesService.getStockCardSummaries).toHaveBeenCalledWith(
+                order.program.id,
+                order.supplyingFacility.id
+            );
+        });
+
+    });
+
+    describe('get method result when recreating shipment', function() {
+
+        var result;
+
+        beforeEach(function() {
+            orderService.get.andReturn($q.resolve(order));
+            shipmentService.search.andReturn($q.resolve(
+                new PageDataBuilder()
+                .withContent([shipment])
+                .build()
+            ));
+            stockCardSummariesService.getStockCardSummaries.andReturn($q.resolve([
+                stockCardSummaryOne,
+                stockCardSummaryTwo,
+                stockCardSummaryThree,
+                stockCardSummaryFour
+            ]));
+
+            shipmentWithStockCardSummariesFactory.get(ORDER_ID)
             .then(function(response) {
                 result = response;
             });
             $rootScope.$apply();
-
-            expect(orderService.get).toHaveBeenCalledWith('id', 'lastUpdater');
-            expect(stockCardSummariesService.getStockCardSummaries).toHaveBeenCalledWith(order.program.id, order.supplyingFacility.id);
-            expect(result.orderLineItems[0].summaries).toEqual([stockCardSummaries[0], stockCardSummaries[1]]);
-            expect(result.orderLineItems[1].summaries).toEqual([]);
-            expect(result.orderLineItems[2].summaries).toEqual([stockCardSummaries[2]]);
         });
+
+        it('should have order', function() {
+            expect(result.order).toEqual(order);
+        });
+
+        it('should have notes', function() {
+            expect(result.notes).toEqual(shipment.notes);
+        });
+
+        it('should not have extra summaries', function() {
+            expect(result.lineItems.length).toBe(2);
+
+            expect(result.lineItems[0].shippedQuantity).toBe(12);
+            expect(result.lineItems[0].orderable).toEqual(orderableOne);
+            expect(result.lineItems[0].lot).toEqual(lotOne);
+            expect(result.lineItems[0].summary).toEqual(stockCardSummaryOne);
+
+            expect(result.lineItems[1].shippedQuantity).toBe(37);
+            expect(result.lineItems[1].orderable).toEqual(orderableTwo);
+            expect(result.lineItems[1].lot).toEqual(lotTwo);
+            expect(result.lineItems[1].summary).toEqual(stockCardSummaryThree);
+        });
+
+        it('should return instances of ShipmentLineItem as lineItems', function() {
+            expect(result.lineItems.length).toBe(2);
+            expect(result.lineItems[0] instanceof ShipmentLineItemWithSummary).toBe(true);
+            expect(result.lineItems[1] instanceof ShipmentLineItemWithSummary).toBe(true);
+        });
+
+        it('should return instance of OrderLineItem as order line items', function() {
+            expect(result.order.orderLineItems.length).toBe(2);
+            expect(result.order.orderLineItems[0] instanceof OrderLineItem).toBe(true);
+            expect(result.order.orderLineItems[1] instanceof OrderLineItem).toBe(true);
+        });
+
+        it('should set references to shipment line items for every order line item', function() {
+            expect(result.order.orderLineItems[0].shipmentLineItems).toEqual([
+                result.lineItems[0]
+            ]);
+            expect(result.order.orderLineItems[1].shipmentLineItems).toEqual([
+                result.lineItems[1]
+            ]);
+        });
+
     });
+
+    describe('get method result when creating new shipment', function() {
+
+        var result;
+
+        beforeEach(function() {
+            orderService.get.andReturn($q.resolve(order));
+            shipmentService.search.andReturn($q.resolve(new PageDataBuilder().build()));
+            stockCardSummariesService.getStockCardSummaries.andReturn($q.resolve([
+                stockCardSummaryOne,
+                stockCardSummaryTwo,
+                stockCardSummaryThree,
+                stockCardSummaryFour
+            ]));
+
+            shipmentWithStockCardSummariesFactory.get(ORDER_ID)
+            .then(function(response) {
+                result = response;
+            });
+            $rootScope.$apply();
+        });
+
+        it('should have order', function() {
+            expect(result.order).toEqual(order);
+        });
+
+        it('should not have notes', function() {
+            expect(result.notes).toBeUndefined();
+        });
+
+        it('should ignore summaries that does not match order orderables', function() {
+            expect(result.lineItems.length).toBe(3);
+
+            expect(result.lineItems[0].shippedQuantity).toBe(0);
+            expect(result.lineItems[0].orderable).toEqual(orderableOne);
+            expect(result.lineItems[0].lot).toEqual(lotOne);
+            expect(result.lineItems[0].summary).toEqual(stockCardSummaryOne);
+
+            expect(result.lineItems[1].shippedQuantity).toBe(0);
+            expect(result.lineItems[1].orderable).toEqual(orderableOne);
+            expect(result.lineItems[1].lot).toBe(null);
+            expect(result.lineItems[1].summary).toEqual(stockCardSummaryTwo);
+
+            expect(result.lineItems[2].shippedQuantity).toBe(0);
+            expect(result.lineItems[2].orderable).toEqual(orderableTwo);
+            expect(result.lineItems[2].lot).toEqual(lotTwo);
+            expect(result.lineItems[2].summary).toEqual(stockCardSummaryThree);
+        });
+
+        it('should return instances of ShipmentLineItem as lineItems', function() {
+            expect(result.lineItems.length).toBe(3);
+            expect(result.lineItems[0] instanceof ShipmentLineItemWithSummary).toBe(true);
+            expect(result.lineItems[1] instanceof ShipmentLineItemWithSummary).toBe(true);
+            expect(result.lineItems[2] instanceof ShipmentLineItemWithSummary).toBe(true);
+        });
+
+        it('should return instance of OrderLineItem as order line items', function() {
+            expect(result.order.orderLineItems.length).toBe(2);
+            expect(result.order.orderLineItems[0] instanceof OrderLineItem).toBe(true);
+            expect(result.order.orderLineItems[1] instanceof OrderLineItem).toBe(true);
+        });
+
+        it('should set references to shipment line items for every order line item', function() {
+            expect(result.order.orderLineItems[0].shipmentLineItems).toEqual([
+                result.lineItems[0],
+                result.lineItems[1]
+            ]);
+            expect(result.order.orderLineItems[1].shipmentLineItems).toEqual([
+                result.lineItems[2]
+            ]);
+        });
+
+    });
+
 });

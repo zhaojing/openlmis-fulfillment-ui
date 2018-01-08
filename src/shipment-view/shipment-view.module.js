@@ -27,6 +27,7 @@
         'openlmis-table',
         'openlmis-date',
         'stock-card-summaries',
+        'shipment',
         'order',
         'ui.router'
     ]);

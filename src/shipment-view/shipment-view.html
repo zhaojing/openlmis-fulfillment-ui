@@ -1,27 +1,27 @@
 <h2>{{'shipmentView.viewShipment' | message}}</h2>
 <aside class="order-cce-status">
     <p>{{'shipmentView.cceStatus' | message}}</p>
-    <facility-cce-status facility="vm.shipment.requestingFacility"></facility-cce-status>
+    <facility-cce-status facility="vm.shipment.order.requestingFacility"></facility-cce-status>
 </aside>
 <dl>
     <dt>{{'shipmentView.order' | message}}</dt>
-    <dd>{{vm.shipment.orderCode}}<span class="emergency" ng-if="vm.shipment.emergency"> / {{'shipmentView.emergency' | message}}</span></dd>
+    <dd>{{vm.shipment.order.orderCode}}<span class="emergency" ng-if="vm.shipment.order.emergency"> / {{'shipmentView.emergency' | message}}</span></dd>
     <dt>{{'shipmentView.status' | message}}</dt>
-    <dd>{{vm.shipment.status}}<dd>
+    <dd>{{vm.shipment.order.status}}<dd>
     <dt>{{'shipmentView.facility' | message}}</dt>
-    <dd>{{vm.shipment.requestingFacility.name}}<dd>
+    <dd>{{vm.shipment.order.requestingFacility.name}}<dd>
     <dt>{{'shipmentView.facilityCode' | message}}</dt>
-    <dd>{{vm.shipment.requestingFacility.code}}<dd>
+    <dd>{{vm.shipment.order.requestingFacility.code}}<dd>
     <dt>{{'shipmentView.program' | message}}</dt>
-    <dd>{{vm.shipment.program.name}}<dd>
+    <dd>{{vm.shipment.order.program.name}}<dd>
     <dt>{{'shipmentView.type' | message}}</dt>
-    <dd>{{vm.shipment.requestingFacility.type.name}}<dd>
+    <dd>{{vm.shipment.order.requestingFacility.type.name}}<dd>
     <dt>{{'shipmentView.dateCreated' | message}}</dt>
-    <dd>{{vm.shipment.createdDate | openlmisDate}}<dd>
+    <dd>{{vm.shipment.order.createdDate | openlmisDate}}<dd>
     <dt>{{'shipmentView.lastUpdated' | message}}</dt>
-    <dd>{{vm.shipment.lastUpdatedDate | openlmisDate}}<dd>
+    <dd>{{vm.shipment.order.lastUpdatedDate | openlmisDate}}<dd>
     <dt>{{'shipmentView.lastUpdatedBy' | message}}</dt>
-    <dd>{{vm.shipment.lastUpdater.username | openlmisDate}}<dd>
+    <dd>{{vm.shipment.order.lastUpdater.username | openlmisDate}}<dd>
 </dl>
 <section class="openlmis-table-container">
     <table>
@@ -38,7 +38,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr ng-repeat-start="item in vm.shipment.orderLineItems">
+        <tr ng-repeat-start="item in vm.shipment.order.orderLineItems">
             <td>{{item.orderable.productCode}}</td>
             <td>{{item.orderable.fullProductName}}</td>
             <td></td>
@@ -46,17 +46,21 @@
             <td></td>
             <td></td>
             <td>{{item.orderedQuantity}}</td>
-            <td>{{item.filledQuantity}}</td>
+            <td>{{item.calculateFillQuantity()}}</td>
         </tr>
-        <tr ng-repeat-end ng-repeat="summary in item.summaries">
+        <tr ng-repeat-end ng-repeat="shipmentLineItem in item.shipmentLineItems">
             <td></td>
             <td></td>
-            <td>{{summary.lot | lotCode}}</td>
-            <td>{{summary.extraData.vvmStatus}}</td>
-            <td>{{summary.lot.expirationDate | openlmisDate}}</td>
-            <td>{{summary.stockOnHand}}</td>
+            <td>{{shipmentLineItem.lot | lotCode}}</td>
+            <td>{{shipmentLineItem.summary.extraData.vvmStatus}}</td>
+            <td>{{shipmentLineItem.lot.expirationDate | openlmisDate}}</td>
+            <td>{{shipmentLineItem.summary.stockOnHand}}</td>
             <td></td>
-            <td></td>
+            <td>
+                <input ng-model="shipmentLineItem.shippedQuantity"
+                    ng-change="shipmentLineItem.validate()"
+                    openlmis-invalid="{{shipmentLineItem.errors.shippedQuantity | message}}"/>
+            </td>
         </tr>
         </tbody>
     </table>

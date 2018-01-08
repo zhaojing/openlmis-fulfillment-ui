@@ -30,6 +30,7 @@
 
         classExtender.extend(OrderResponseDataBuilder, BasicOrderResponseDataBuilder);
 
+        OrderResponseDataBuilder.prototype.withOrderLineItems = withOrderLineItems;
         OrderResponseDataBuilder.prototype.build = build;
 
         return OrderResponseDataBuilder;
@@ -40,6 +41,11 @@
                 new OrderLineItemDataBuilder().build(),
                 new OrderLineItemDataBuilder().build()
             ];
+        }
+
+        function withOrderLineItems(orderLineItems) {
+            this.orderLineItems = orderLineItems;
+            return this;
         }
 
         function build() {

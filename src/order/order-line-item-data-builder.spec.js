@@ -25,6 +25,7 @@
 
     function OrderLineItemDataBuilder(OrderableDataBuilder) {
 
+        OrderLineItemDataBuilder.prototype.withOrderable = withOrderable;
         OrderLineItemDataBuilder.prototype.build = build;
 
         return OrderLineItemDataBuilder;
@@ -37,6 +38,11 @@
             this.orderable = new OrderableDataBuilder().build();
             this.orderedQuantity = 30 + OrderLineItemDataBuilder.instanceNumber;
             this.packsToShip = 10 + OrderLineItemDataBuilder.instanceNumber;
+        }
+
+        function withOrderable(orderable) {
+            this.orderable = orderable;
+            return this;
         }
 
         function build() {

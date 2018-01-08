@@ -39,7 +39,7 @@
             areAllRightsRequired: false,
             resolve: {
                 shipment: function(shipmentWithStockCardSummariesFactory, $stateParams) {
-                    return shipmentWithStockCardSummariesFactory.getShipmentWithStockCardSummaries($stateParams.id);
+                    return shipmentWithStockCardSummariesFactory.get($stateParams.id);
                 }
             }
         });
