@@ -52,7 +52,7 @@
          * given ID.
          *
          * @param   {string}    orderId the ID of the order
-         * @return  {Object}            the shipment
+         * @return  {Promise}           the promise resolving to shipment
          */
         function get(orderId) {
             if (!orderId) {
