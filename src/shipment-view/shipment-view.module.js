@@ -29,7 +29,8 @@
         'stock-card-summaries',
         'shipment',
         'order',
-        'ui.router'
+        'ui.router',
+        'openlmis-state-tracker'
     ]);
 
 })();

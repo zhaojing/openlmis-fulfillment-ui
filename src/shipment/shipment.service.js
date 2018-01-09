@@ -35,6 +35,7 @@
             resource = $resource(fulfillmentUrlFactory('/api/shipmentDrafts/:id'));
 
         shipmentService.search = search;
+        shipmentService.save = save;
         shipmentService.remove = remove;
 
         /**
@@ -50,6 +51,25 @@
          */
         function search(params) {
             return resource.get(params).$promise;
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf shipment.shipmentService
+         * @name save
+         *
+         * @description
+         * Saves the given shipment on the server.
+         *
+         * @param   {Object}    shipment    the shipment to be saved
+         * @return  {Promise}               the promise resolving to saved shipment
+         */
+        function save(shipment) {
+            if (!shipment) {
+                throw 'Shipment must be defined';
+            }
+
+            return resource.save(shipment).$promise;
         }
 
         /**
@@ -73,8 +93,6 @@
                 id: id
             }).$promise;
         }
-
-
     }
 
 })();

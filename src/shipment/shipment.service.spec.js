@@ -17,7 +17,8 @@ describe('shipmentService', function() {
 
     var SHIPMENT_ENDPOINT = '/api/shipmentDrafts';
 
-    var shipmentService, $httpBackend, PageDataBuilder, fulfillmentUrlFactory, $rootScope;
+    var shipmentService, $httpBackend, PageDataBuilder, fulfillmentUrlFactory, $rootScope,
+        ShipmentDataBuilder, response;
 
     beforeEach(function() {
         module('openlmis-pagination');
@@ -29,34 +30,31 @@ describe('shipmentService', function() {
             $httpBackend = $injector.get('$httpBackend');
             fulfillmentUrlFactory = $injector.get('fulfillmentUrlFactory');
             $rootScope = $injector.get('$rootScope');
+            ShipmentDataBuilder = $injector.get('ShipmentDataBuilder');
         });
+
+        response = PageDataBuilder.buildWithContent([{
+            id: 'shipment-id',
+            notes: 'Some notes about shipment',
+            order: {
+                id: 'order-id',
+                href: 'https://test.test/api/orders/order-id'
+            },
+            lineItems: [{
+                orderable: {
+                    id: 'orderable-id',
+                    href: 'https://test.test/api/orderables/orderable-id'
+                },
+                lot: {
+                    id: 'lot-id',
+                    href: 'https://test.test/api/lots/lot-id'
+                },
+                quantityShipped: 100
+            }]
+        }]);
     });
 
     describe('search', function() {
-
-        var response;
-
-        beforeEach(function() {
-            response = PageDataBuilder.buildWithContent([{
-                id: 'shipment-id',
-                notes: 'Some notes about shipment',
-                order: {
-                    id: 'order-id',
-                    href: 'https://test.test/api/orders/order-id'
-                },
-                lineItems: [{
-                    orderable: {
-                        id: 'orderable-id',
-                        href: 'https://test.test/api/orderables/orderable-id'
-                    },
-                    lot: {
-                        id: 'lot-id',
-                        href: 'https://test.test/api/lots/lot-id'
-                    },
-                    quantityShipped: 100
-                }]
-            }]);
-        });
 
         it('should resolve to returned page', function() {
             $httpBackend
@@ -174,6 +172,54 @@ describe('shipmentService', function() {
             expect(function() {
                 shipmentService.remove();
             }).toThrow('Shipment ID must be defined');
+        });
+
+    });
+
+    describe('save', function() {
+
+        var shipment;
+
+        beforeEach(function() {
+            shipment = new ShipmentDataBuilder().build();
+        });
+
+        it('should resolve if successfully saved', function() {
+            $httpBackend
+            .expectPOST(fulfillmentUrlFactory(SHIPMENT_ENDPOINT), shipment)
+            .respond(200, response);
+
+            var result;
+            shipmentService.save(shipment)
+            .then(function(response) {
+                result = response;
+            });
+            $rootScope.$apply();
+            $httpBackend.flush();
+
+            expect(angular.toJson(result)).toEqual(angular.toJson(response));
+        });
+
+        it('should reject if failed to save shipment', function() {
+            $httpBackend
+            .expectPOST(fulfillmentUrlFactory(SHIPMENT_ENDPOINT), shipment)
+            .respond(404);
+
+            var rejected;
+            shipmentService.save(shipment)
+            .catch(function() {
+                rejected = true;
+            });
+            $rootScope.$apply();
+            $httpBackend.flush();
+
+            expect(rejected).toBe(true);
+        });
+
+        it('should throw exception if shipment is not given', function() {
+            expect(function() {
+                shipmentService.save();
+            }).toThrow('Shipment must be defined');
         });
 
     });

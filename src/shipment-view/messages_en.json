@@ -18,5 +18,12 @@
     "shipmentView.lotCode": "Lot Code",
     "shipmentView.vvmStatus": "VVM Status",
     "shipmentView.expiryDate": "Expiry Date",
-    "shipmentView.availableSoh": "Available SOH"
+    "shipmentView.availableSoh": "Available SOH",
+    "shipmentView.shipmentHasBeenSaved": "Shipment has been saved!",
+    "shipmentView.failedToSaveShipment": "Failed to save shipment!",
+    "shipmentView.confirmDelete.message": "Are you sure you want to delete the shipment?",
+    "shipmentView.delete": "Delete",
+    "shipmentView.save": "Save",
+    "shipmentView.shipmentHasBeenDeleted": "Shipment has been deleted!",
+    "shipmentView.failedToDeleteShipment": "Failed to delete shipment!"
 }

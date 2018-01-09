@@ -28,13 +28,19 @@
         .module('shipment-view')
         .controller('ShipmentViewController', ShipmentViewController);
 
-    ShipmentViewController.$inject = ['shipment'];
+    ShipmentViewController.$inject = [
+        'shipment', 'shipmentService', 'loadingModalService', '$state', 'confirmService',
+        'notificationService', 'stateTrackerService'
+    ];
 
-    function ShipmentViewController(shipment) {
+    function ShipmentViewController(shipment, shipmentService, loadingModalService, $state,
+                                    confirmService, notificationService, stateTrackerService) {
 
         var vm = this;
 
         vm.$onInit = onInit;
+        vm.saveShipment = saveShipment;
+        vm.deleteShipment = deleteShipment;
 
         /**
          * @ngdoc property
@@ -58,6 +64,71 @@
          */
         function onInit() {
             vm.shipment = shipment;
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf shipment-view.controller:ShipmentViewController
+         * @name saveShipment
+         *
+         * @description
+         * Saves the shipment on the server. Will show a notification informing whether the action
+         * was successful or not. Will reload the state on success.
+         */
+        function saveShipment() {
+            var loadingPromise = loadingModalService.open();
+
+            shipmentService.save(vm.shipment)
+            .then(function() {
+                loadingPromise
+                .then(function() {
+                    notificationService.success('shipmentView.shipmentHasBeenSaved');
+                });
+                $state.reload();
+            })
+            .catch(function() {
+                loadingPromise
+                .then(function() {
+                    notificationService.error('shipmentView.failedToSaveShipment');
+                });
+                loadingModalService.close();
+            });
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf shipment-view.controller:ShipmentViewController
+         * @name saveShipment
+         *
+         * @description
+         * Deletes the shipment on the server. Will show a notification informing whether the action
+         * was successful or not. Will take user to the previous page on success.
+         */
+        function deleteShipment() {
+            var loadingPromise = loadingModalService.open();
+
+            confirmService.confirm(
+                'shipmentView.deleteShipmentConfirmation',
+                'shipmentView.delete'
+            )
+            .then(function() {
+                return shipmentService.remove(vm.shipment.id)
+                .then(function() {
+                    loadingPromise
+                    .then(function() {
+                        notificationService.success('shipmentView.shipmentHasBeenDeleted');
+                    });
+                    stateTrackerService.goToPreviousState('openlmis.orders.view');
+                })
+                .catch(function() {
+                    loadingPromise
+                    .then(function() {
+                        notificationService.error('shipmentView.failedToDeleteShipment');
+                    });
+                    loadingModalService.close();
+                });
+            })
+            .catch(loadingModalService.close);
         }
 
     }

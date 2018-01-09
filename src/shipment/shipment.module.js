@@ -26,7 +26,8 @@
     angular.module('shipment', [
         'fulfillment',
         'ngResource',
-        'ui.router'
+        'ui.router',
+        'referencedata'
     ]);
 
 })();
