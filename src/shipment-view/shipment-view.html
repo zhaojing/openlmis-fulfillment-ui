@@ -24,6 +24,7 @@
     <dd>{{vm.order.lastUpdater.username | openlmisDate}}<dd>
 </dl>
 <section class="openlmis-table-container">
+    <button ng-click="vm.saveAndPrint()" class="primary">{{'shipmentView.generatePickPackList' | message}}</button>
     <table>
         <thead>
         <tr>

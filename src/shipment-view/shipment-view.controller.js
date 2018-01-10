@@ -29,18 +29,19 @@
         .controller('ShipmentViewController', ShipmentViewController);
 
     ShipmentViewController.$inject = [
-        'shipment', 'shipmentService', 'loadingModalService', '$state', 'confirmService',
-        'notificationService', 'stateTrackerService'
+        'shipment', 'shipmentService', 'loadingModalService', '$state', '$window', 'fulfillmentUrlFactory',
+        'confirmService', 'notificationService', 'stateTrackerService', 'accessTokenFactory'
     ];
 
-    function ShipmentViewController(shipment, shipmentService, loadingModalService, $state,
-                                    confirmService, notificationService, stateTrackerService) {
+    function ShipmentViewController(shipment, shipmentService, loadingModalService, $state, $window, fulfillmentUrlFactory,
+                                    confirmService, notificationService, stateTrackerService, accessTokenFactory) {
 
         var vm = this;
 
         vm.$onInit = onInit;
         vm.saveShipment = saveShipment;
         vm.deleteShipment = deleteShipment;
+        vm.saveAndPrint = saveAndPrint;
 
         /**
          * @ngdoc property
@@ -131,6 +132,27 @@
             .catch(loadingModalService.close);
         }
 
-    }
+        /**
+         * @ngdoc method
+         * @methodOf shipment-view.controller:ShipmentViewController
+         * @name saveAndPrint
+         *
+         * @description
+         * Saves the shipment on the server and prints the report.
+         */
+        function saveAndPrint() {
+            loadingModalService.open();
+            shipmentService.save(vm.shipment)
+            .then(function(response) {
+                notificationService.success('shipmentView.shipmentHasBeenSaved');
+                $window.open(accessTokenFactory.addAccessToken(getPrintUrl(response.id)), '_blank');
+            })
+            .catch(notificationService.error('shipmentView.failedToSaveShipment'))
+            .finally(loadingModalService.close);
+        }
 
+        function getPrintUrl(shipmentId) {
+            return fulfillmentUrlFactory('/api/reports/templates/common/583ccc35-88b7-48a8-9193-6c4857d3ff60/pdf?shipmentDraftId=' + shipmentId);
+        }
+    }
 })();

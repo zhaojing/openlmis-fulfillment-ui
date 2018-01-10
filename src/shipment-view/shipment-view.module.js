@@ -23,6 +23,8 @@
      * Provides Shipment Draft view state and controller.
      */
     angular.module('shipment-view', [
+        'fulfillment',
+        'openlmis-auth',
         'openlmis-i18n',
         'openlmis-table',
         'openlmis-date',
