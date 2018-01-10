@@ -51,9 +51,9 @@ describe('ShipmentViewController', function() {
 
     describe('onInit', function() {
 
-        it('should expose shipment', function() {
+        it('should expose order', function() {
             vm.$onInit();
-            expect(vm.shipment).toEqual(shipment);
+            expect(vm.order).toEqual(shipment.order);
         });
 
     });
@@ -123,7 +123,7 @@ describe('ShipmentViewController', function() {
             $rootScope.$apply();
 
             expect(notificationService.success)
-            .toHaveBeenCalledWith('shipmentView.shipmentHasBeenSaved');
+            .toHaveBeenCalledWith('shipmentView.draftHasBeenSaved');
         });
 
         it('should close loading modal after shipment failed to save', function() {
@@ -156,7 +156,7 @@ describe('ShipmentViewController', function() {
             $rootScope.$apply();
 
             expect(notificationService.error)
-            .toHaveBeenCalledWith('shipmentView.failedToSaveShipment');
+            .toHaveBeenCalledWith('shipmentView.failedToSaveDraft');
             expect($state.reload).not.toHaveBeenCalled();
         });
 
@@ -191,8 +191,8 @@ describe('ShipmentViewController', function() {
             vm.deleteShipment();
 
             expect(confirmService.confirm).toHaveBeenCalledWith(
-                'shipmentView.deleteShipmentConfirmation',
-                'shipmentView.delete'
+                'shipmentView.deleteDraftConfirmation',
+                'shipmentView.deleteDraft'
             );
 
             $rootScope.$apply();
@@ -208,8 +208,8 @@ describe('ShipmentViewController', function() {
             vm.deleteShipment();
 
             expect(confirmService.confirm).toHaveBeenCalledWith(
-                'shipmentView.deleteShipmentConfirmation',
-                'shipmentView.delete'
+                'shipmentView.deleteDraftConfirmation',
+                'shipmentView.deleteDraft'
             );
 
             $rootScope.$apply();
@@ -231,8 +231,8 @@ describe('ShipmentViewController', function() {
             vm.deleteShipment();
 
             expect(confirmService.confirm).toHaveBeenCalledWith(
-                'shipmentView.deleteShipmentConfirmation',
-                'shipmentView.delete'
+                'shipmentView.deleteDraftConfirmation',
+                'shipmentView.deleteDraft'
             );
 
             $rootScope.$apply();
@@ -253,8 +253,8 @@ describe('ShipmentViewController', function() {
             vm.deleteShipment();
 
             expect(confirmService.confirm).toHaveBeenCalledWith(
-                'shipmentView.deleteShipmentConfirmation',
-                'shipmentView.delete'
+                'shipmentView.deleteDraftConfirmation',
+                'shipmentView.deleteDraft'
             );
 
             $rootScope.$apply();
@@ -279,8 +279,8 @@ describe('ShipmentViewController', function() {
             vm.deleteShipment();
 
             expect(confirmService.confirm).toHaveBeenCalledWith(
-                'shipmentView.deleteShipmentConfirmation',
-                'shipmentView.delete'
+                'shipmentView.deleteDraftConfirmation',
+                'shipmentView.deleteDraft'
             );
 
             $rootScope.$apply();
@@ -301,7 +301,7 @@ describe('ShipmentViewController', function() {
             $rootScope.$apply();
 
             expect(notificationService.error)
-            .toHaveBeenCalledWith('shipmentView.failedToDeleteShipment');
+            .toHaveBeenCalledWith('shipmentView.failedToDeleteDraft');
             expect(notificationService.success).not.toHaveBeenCalled();
             expect(stateTrackerService.goToPreviousState).not.toHaveBeenCalled();
         });
@@ -310,8 +310,8 @@ describe('ShipmentViewController', function() {
             vm.deleteShipment();
 
             expect(confirmService.confirm).toHaveBeenCalledWith(
-                'shipmentView.deleteShipmentConfirmation',
-                'shipmentView.delete'
+                'shipmentView.deleteDraftConfirmation',
+                'shipmentView.deleteDraft'
             );
 
             $rootScope.$apply();
@@ -338,8 +338,8 @@ describe('ShipmentViewController', function() {
             vm.deleteShipment();
 
             expect(confirmService.confirm).toHaveBeenCalledWith(
-                'shipmentView.deleteShipmentConfirmation',
-                'shipmentView.delete'
+                'shipmentView.deleteDraftConfirmation',
+                'shipmentView.deleteDraft'
             );
 
             $rootScope.$apply();
@@ -363,7 +363,7 @@ describe('ShipmentViewController', function() {
             $rootScope.$apply();
 
             expect(notificationService.success)
-            .toHaveBeenCalledWith('shipmentView.shipmentHasBeenDeleted');
+            .toHaveBeenCalledWith('shipmentView.draftHasBeenDeleted');
             expect(loadingModalService.close).not.toHaveBeenCalled();
             expect(notificationService.error).not.toHaveBeenCalled();
         });

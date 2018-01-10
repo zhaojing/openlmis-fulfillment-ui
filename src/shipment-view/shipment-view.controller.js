@@ -49,9 +49,9 @@
          * @type {Object}
          *
          * @description
-         * Holds shipment that will be displayed on the screen.
+         * Holds order that will be displayed on the screen.
          */
-        vm.shipment = undefined;
+        vm.order = undefined;
 
         /**
          * @ngdoc method
@@ -63,7 +63,7 @@
          * setting data to be available on the view.
          */
         function onInit() {
-            vm.shipment = shipment;
+            vm.order = shipment.order;
         }
 
         /**
@@ -78,18 +78,18 @@
         function saveShipment() {
             var loadingPromise = loadingModalService.open();
 
-            shipmentService.save(vm.shipment)
+            shipmentService.save(shipment)
             .then(function() {
                 loadingPromise
                 .then(function() {
-                    notificationService.success('shipmentView.shipmentHasBeenSaved');
+                    notificationService.success('shipmentView.draftHasBeenSaved');
                 });
                 $state.reload();
             })
             .catch(function() {
                 loadingPromise
                 .then(function() {
-                    notificationService.error('shipmentView.failedToSaveShipment');
+                    notificationService.error('shipmentView.failedToSaveDraft');
                 });
                 loadingModalService.close();
             });
@@ -108,22 +108,22 @@
             var loadingPromise = loadingModalService.open();
 
             confirmService.confirm(
-                'shipmentView.deleteShipmentConfirmation',
-                'shipmentView.delete'
+                'shipmentView.deleteDraftConfirmation',
+                'shipmentView.deleteDraft'
             )
             .then(function() {
-                return shipmentService.remove(vm.shipment.id)
+                return shipmentService.remove(shipment.id)
                 .then(function() {
                     loadingPromise
                     .then(function() {
-                        notificationService.success('shipmentView.shipmentHasBeenDeleted');
+                        notificationService.success('shipmentView.draftHasBeenDeleted');
                     });
                     stateTrackerService.goToPreviousState('openlmis.orders.view');
                 })
                 .catch(function() {
                     loadingPromise
                     .then(function() {
-                        notificationService.error('shipmentView.failedToDeleteShipment');
+                        notificationService.error('shipmentView.failedToDeleteDraft');
                     });
                     loadingModalService.close();
                 });

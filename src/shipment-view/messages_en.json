@@ -19,11 +19,12 @@
     "shipmentView.vvmStatus": "VVM Status",
     "shipmentView.expiryDate": "Expiry Date",
     "shipmentView.availableSoh": "Available SOH",
-    "shipmentView.shipmentHasBeenSaved": "Shipment has been saved!",
-    "shipmentView.failedToSaveShipment": "Failed to save shipment!",
-    "shipmentView.confirmDelete.message": "Are you sure you want to delete the shipment?",
-    "shipmentView.delete": "Delete",
-    "shipmentView.save": "Save",
-    "shipmentView.shipmentHasBeenDeleted": "Shipment has been deleted!",
-    "shipmentView.failedToDeleteShipment": "Failed to delete shipment!"
+    "shipmentView.draftHasBeenSaved": "Draft has been saved",
+    "shipmentView.failedToSaveDraft": "Failed to save draft",
+    "shipmentView.deleteDraftConfirmation": "Are you sure you want to delete the draft?",
+    "shipmentView.deleteDraft": "Delete",
+    "shipmentView.saveDelete": "Save",
+    "shipmentView.draftHasBeenDeleted": "Draft has been deleted",
+    "shipmentView.failedToDeleteDraft": "Failed to delete draft",
+    "shipmentView.fillQuantityCannotExceedStockOnHand": "Can't exceed available stock on hand"
 }
