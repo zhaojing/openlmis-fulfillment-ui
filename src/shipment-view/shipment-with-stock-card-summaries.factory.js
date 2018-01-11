@@ -91,6 +91,8 @@
                 );
             }
 
+            shipmentLineItems.sort(compareLineItems);
+
             shipment.order = order;
             shipment.lineItems = shipmentLineItems;
 
@@ -188,6 +190,71 @@
                 return true;
             }
             return false;
+        }
+
+        function compareLineItems(left, right) {
+            return compareVvmStatuses(getVvmStatus(left), getVvmStatus(right)) ||
+                compareExpirationDates(getExpirationDate(left), getExpirationDate(right)) ||
+                compareStocksOnHands(left.summary.stockOnHand, right.summary.stockOnHand);
+        }
+
+        function compareVvmStatuses(left, right) {
+            if (left === right) {
+                return 0;
+            }
+
+            if (left && right) {
+                if (left > right) {
+                    return -1;
+                }
+                return 1;
+            }
+
+            if (!left) {
+                return 1;
+            }
+            return -1;
+        }
+
+        function compareStocksOnHands(left, right) {
+            if (left === right) {
+                return 0;
+            }
+
+            if (left > right) {
+                return 1;
+            }
+            return -1;
+        }
+
+        function compareExpirationDates(left, right) {
+            if (left === right) {
+                return 0;
+            }
+
+            if (left && right) {
+                if (left > right) {
+                    return 1;
+                }
+                return -1;
+            }
+
+            if (!left) {
+                return -1;
+            }
+            return 1;
+        }
+
+        function getVvmStatus(lineItem) {
+            if (lineItem.summary.extraData && lineItem.summary.extraData.vvmStatus) {
+                return lineItem.summary.extraData.vvmStatus;
+            }
+        }
+
+        function getExpirationDate(lineItem) {
+            if (lineItem.lot && lineItem.lot.expirationDate) {
+                return new Date(lineItem.lot.expirationDate).getTime();
+            }
         }
     }
 

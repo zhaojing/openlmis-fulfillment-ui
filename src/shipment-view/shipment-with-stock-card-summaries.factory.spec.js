@@ -369,13 +369,13 @@ describe('shipmentWithStockCardSummariesFactory', function() {
 
             expect(result.lineItems[0].quantityShipped).toBe(0);
             expect(result.lineItems[0].orderable).toEqual(orderableOne);
-            expect(result.lineItems[0].lot).toEqual(lotOne);
-            expect(result.lineItems[0].summary).toEqual(stockCardSummaryOne);
+            expect(result.lineItems[0].lot).toBe(null);
+            expect(result.lineItems[0].summary).toEqual(stockCardSummaryTwo);
 
             expect(result.lineItems[1].quantityShipped).toBe(0);
             expect(result.lineItems[1].orderable).toEqual(orderableOne);
-            expect(result.lineItems[1].lot).toBe(null);
-            expect(result.lineItems[1].summary).toEqual(stockCardSummaryTwo);
+            expect(result.lineItems[1].lot).toEqual(lotOne);
+            expect(result.lineItems[1].summary).toEqual(stockCardSummaryOne);
 
             expect(result.lineItems[2].quantityShipped).toBe(0);
             expect(result.lineItems[2].orderable).toEqual(orderableTwo);
