@@ -29,14 +29,15 @@ describe('ShipmentLineItemWithSummary', function() {
     describe('constructor', function() {
 
         it('should set fields', function() {
-            var stockCardSummary = new StockCardSummaryDataBuilder().build();
+            var stockCardSummary = new StockCardSummaryDataBuilder().build(),
+                someId = 'some-id',
+                result = new ShipmentLineItemWithSummary(someId, stockCardSummary, 0);
 
-            var result = new ShipmentLineItemWithSummary(stockCardSummary, 0);
-
+            expect(result.id).toEqual(someId);
             expect(result.orderable).toEqual(stockCardSummary.orderable);
             expect(result.lot).toEqual(stockCardSummary.lot);
             expect(result.summary).toEqual(stockCardSummary);
-            expect(result.shippedQuantity).toEqual(0);
+            expect(result.quantityShipped).toEqual(0);
         });
 
     });
@@ -47,6 +48,7 @@ describe('ShipmentLineItemWithSummary', function() {
 
         beforeEach(function() {
             shipmentLineItem = new ShipmentLineItemWithSummary(
+                undefined,
                 new StockCardSummaryDataBuilder().build(),
                 0
             );
@@ -58,29 +60,29 @@ describe('ShipmentLineItemWithSummary', function() {
             expect(shipmentLineItem.errors).toEqual({});
         });
 
-        it('should return error if shippedQuantity is greater than available SOH', function() {
+        it('should return error if quantityShipped is greater than available SOH', function() {
             shipmentLineItem.summary.stockOnHand = 10;
-            shipmentLineItem.shippedQuantity = 11;
+            shipmentLineItem.quantityShipped = 11;
 
             shipmentLineItem.validate();
 
             expect(shipmentLineItem.errors).toEqual({
-                shippedQuantity: 'shipmentView.fillQuantityCannotExceedStockOnHand'
+                quantityShipped: 'shipmentView.fillQuantityCannotExceedStockOnHand'
             });
         });
 
-        it('should not return error if shippedQuantity is equal to available SOH', function() {
+        it('should not return error if quantityShipped is equal to available SOH', function() {
             shipmentLineItem.summary.stockOnHand = 10;
-            shipmentLineItem.shippedQuantity = 10;
+            shipmentLineItem.quantityShipped = 10;
 
             shipmentLineItem.validate();
 
             expect(shipmentLineItem.errors).toEqual({});
         });
 
-        it('should not return error if shippedQuantity is lower than available SOH', function() {
+        it('should not return error if quantityShipped is lower than available SOH', function() {
             shipmentLineItem.summary.stockOnHand = 10;
-            shipmentLineItem.shippedQuantity = 9;
+            shipmentLineItem.quantityShipped = 9;
 
             shipmentLineItem.validate();
 

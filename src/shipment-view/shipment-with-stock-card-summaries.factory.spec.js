@@ -98,12 +98,12 @@ describe('shipmentWithStockCardSummariesFactory', function() {
                 new ShipmentLineItemDataBuilder()
                     .withOrderable(new ObjectReferenceDataBuilder().withId(orderableOne.id))
                     .withLot(new ObjectReferenceDataBuilder().withId(lotOne.id))
-                    .withShippedQuantity(12)
+                    .withQuantityShipped(12)
                     .build(),
                 new ShipmentLineItemDataBuilder()
                     .withOrderable(new ObjectReferenceDataBuilder().withId(orderableTwo.id))
                     .withLot(new ObjectReferenceDataBuilder().withId(lotTwo.id))
-                    .withShippedQuantity(37)
+                    .withQuantityShipped(37)
                     .build()
             ])
             .build();
@@ -301,12 +301,12 @@ describe('shipmentWithStockCardSummariesFactory', function() {
         it('should not have extra summaries', function() {
             expect(result.lineItems.length).toBe(2);
 
-            expect(result.lineItems[0].shippedQuantity).toBe(12);
+            expect(result.lineItems[0].quantityShipped).toBe(12);
             expect(result.lineItems[0].orderable).toEqual(orderableOne);
             expect(result.lineItems[0].lot).toEqual(lotOne);
             expect(result.lineItems[0].summary).toEqual(stockCardSummaryOne);
 
-            expect(result.lineItems[1].shippedQuantity).toBe(37);
+            expect(result.lineItems[1].quantityShipped).toBe(37);
             expect(result.lineItems[1].orderable).toEqual(orderableTwo);
             expect(result.lineItems[1].lot).toEqual(lotTwo);
             expect(result.lineItems[1].summary).toEqual(stockCardSummaryThree);
@@ -367,17 +367,17 @@ describe('shipmentWithStockCardSummariesFactory', function() {
         it('should ignore summaries that does not match order orderables', function() {
             expect(result.lineItems.length).toBe(3);
 
-            expect(result.lineItems[0].shippedQuantity).toBe(0);
+            expect(result.lineItems[0].quantityShipped).toBe(0);
             expect(result.lineItems[0].orderable).toEqual(orderableOne);
             expect(result.lineItems[0].lot).toEqual(lotOne);
             expect(result.lineItems[0].summary).toEqual(stockCardSummaryOne);
 
-            expect(result.lineItems[1].shippedQuantity).toBe(0);
+            expect(result.lineItems[1].quantityShipped).toBe(0);
             expect(result.lineItems[1].orderable).toEqual(orderableOne);
             expect(result.lineItems[1].lot).toBe(null);
             expect(result.lineItems[1].summary).toEqual(stockCardSummaryTwo);
 
-            expect(result.lineItems[2].shippedQuantity).toBe(0);
+            expect(result.lineItems[2].quantityShipped).toBe(0);
             expect(result.lineItems[2].orderable).toEqual(orderableTwo);
             expect(result.lineItems[2].lot).toEqual(lotTwo);
             expect(result.lineItems[2].summary).toEqual(stockCardSummaryThree);

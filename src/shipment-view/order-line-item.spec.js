@@ -69,10 +69,10 @@ describe('OrderLineItem', function() {
         it('should calculate fill quantity', function() {
             orderLineItem.shipmentLineItems = [
                 new ShipmentLineItemWithSummaryDataBuilder()
-                    .withShippedQuantity(20)
+                    .withQuantityShipped(20)
                     .build(),
                 new ShipmentLineItemWithSummaryDataBuilder()
-                    .withShippedQuantity(7)
+                    .withQuantityShipped(7)
                     .build()
             ];
 
@@ -84,10 +84,10 @@ describe('OrderLineItem', function() {
         it('should parse string to integers', function() {
             orderLineItem.shipmentLineItems = [
                 new ShipmentLineItemWithSummaryDataBuilder()
-                    .withShippedQuantity('20')
+                    .withQuantityShipped('20')
                     .build(),
                 new ShipmentLineItemWithSummaryDataBuilder()
-                    .withShippedQuantity('7')
+                    .withQuantityShipped('7')
                     .build()
             ];
 
@@ -99,10 +99,10 @@ describe('OrderLineItem', function() {
         it('should use 0 if shipped quantity is undefined', function() {
             orderLineItem.shipmentLineItems = [
                 new ShipmentLineItemWithSummaryDataBuilder()
-                    .withShippedQuantity(20)
+                    .withQuantityShipped(20)
                     .build(),
                 new ShipmentLineItemWithSummaryDataBuilder()
-                    .withShippedQuantity(null)
+                    .withQuantityShipped(null)
                     .build()
             ];
 

@@ -27,12 +27,16 @@
 
         ShipmentLineItemDataBuilder.prototype.withOrderable = withOrderable;
         ShipmentLineItemDataBuilder.prototype.withLot = withLot;
-        ShipmentLineItemDataBuilder.prototype.withShippedQuantity = withShippedQuantity;
+        ShipmentLineItemDataBuilder.prototype.withQuantityShipped = withQuantityShipped;
         ShipmentLineItemDataBuilder.prototype.build = build;
 
         return ShipmentLineItemDataBuilder;
 
         function ShipmentLineItemDataBuilder() {
+            ShipmentLineItemDataBuilder.instanceNumber =
+                (ShipmentLineItemDataBuilder.instanceNumber || 0) + 1;
+
+            this.id = 'shipment-line-item-' + ShipmentLineItemDataBuilder.instanceNumber;
             this.orderable = new ObjectReferenceDataBuilder()
                 .withResource('orderable')
                 .build();
@@ -41,14 +45,15 @@
                 .withResource('lot')
                 .build();
 
-            this.shippedQuantity = 0;
+            this.quantityShipped = 0;
         }
 
         function build() {
             return {
+                id: this.id,
                 orderable: this.orderable,
                 lot: this.lot,
-                shippedQuantity: this.shippedQuantity
+                quantityShipped: this.quantityShipped
             };
         }
 
@@ -62,8 +67,8 @@
             return this;
         }
 
-        function withShippedQuantity(shippedQuantity) {
-            this.shippedQuantity = shippedQuantity;
+        function withQuantityShipped(quantityShipped) {
+            this.quantityShipped = quantityShipped;
             return this;
         }
 

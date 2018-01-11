@@ -53,7 +53,7 @@
         function calculateFillQuantity() {
             var fillQuantity = 0;
             this.shipmentLineItems.forEach(function(shipmentLineItem) {
-                fillQuantity += getNumber(shipmentLineItem.shippedQuantity);
+                fillQuantity += getNumber(shipmentLineItem.quantityShipped);
             });
             return fillQuantity;
         }

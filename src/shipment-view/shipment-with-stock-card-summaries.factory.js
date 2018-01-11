@@ -123,8 +123,9 @@
                 )[0];
 
                 shipmentLineItems.push(new ShipmentLineItemWithSummary(
+                    lineItem.id,
                     stockCardSummary,
-                    lineItem.shippedQuantity
+                    lineItem.quantityShipped
                 ));
             });
 
@@ -137,6 +138,7 @@
             var shipmentLineItems = [];
             orderMatchingSummaries.forEach(function(stockCardSummary) {
                 shipmentLineItems.push(new ShipmentLineItemWithSummary(
+                    undefined,
                     stockCardSummary,
                     0
                 ));

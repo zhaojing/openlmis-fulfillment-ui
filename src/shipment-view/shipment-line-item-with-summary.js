@@ -45,14 +45,16 @@
          * @description
          * Creates instance of the ShipmentLineItemWithSummary class.
          *
+         * @param       {string}    id              the ID of the line item
          * @param       {Object}    summary         the stock card summary matching orderable and lot
-         * @param       {number}    shippedQuantity the shipped quantity
+         * @param       {number}    quantityShipped the shipped quantity
          */
-        function ShipmentLineItemWithSummary(summary, shippedQuantity) {
+        function ShipmentLineItemWithSummary(id, summary, quantityShipped) {
+            this.id = id;
             this.summary = summary;
             this.orderable = summary.orderable;
             this.lot = summary.lot;
-            this.shippedQuantity = shippedQuantity;
+            this.quantityShipped = quantityShipped;
         }
 
         /**
@@ -67,8 +69,8 @@
         function validate() {
             this.errors = {};
 
-            if (this.shippedQuantity > this.summary.stockOnHand) {
-                this.errors.shippedQuantity = 'shipmentView.fillQuantityCannotExceedStockOnHand';
+            if (this.quantityShipped > this.summary.stockOnHand) {
+                this.errors.quantityShipped = 'shipmentView.fillQuantityCannotExceedStockOnHand';
             }
         }
     }

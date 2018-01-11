@@ -28,25 +28,30 @@
     function ShipmentLineItemWithSummaryDataBuilder(StockCardSummaryDataBuilder,
                                                     ShipmentLineItemWithSummary) {
 
-        ShipmentLineItemWithSummaryDataBuilder.prototype.withShippedQuantity = withShippedQuantity;
+        ShipmentLineItemWithSummaryDataBuilder.prototype.withQuantityShipped = withQuantityShipped;
         ShipmentLineItemWithSummaryDataBuilder.prototype.build = build;
 
         return ShipmentLineItemWithSummaryDataBuilder;
 
         function ShipmentLineItemWithSummaryDataBuilder() {
+            ShipmentLineItemWithSummaryDataBuilder.instanceNumber =
+                (ShipmentLineItemWithSummaryDataBuilder.instanceNumber || 0) + 1;
+
+            this.id = 'shipment-line-item-' + ShipmentLineItemWithSummaryDataBuilder.instanceNumber;
             this.summary = new StockCardSummaryDataBuilder().build();
-            this.shippedQuantity = 0;
+            this.quantityShipped = 0;
         }
 
-        function withShippedQuantity(shippedQuantity) {
-            this.shippedQuantity = shippedQuantity;
+        function withQuantityShipped(quantityShipped) {
+            this.quantityShipped = quantityShipped;
             return this;
         }
 
         function build() {
             return new ShipmentLineItemWithSummary(
+                this.id,
                 this.summary,
-                this.shippedQuantity
+                this.quantityShipped
             );
         }
     }
