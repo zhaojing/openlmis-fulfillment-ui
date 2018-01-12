@@ -46,7 +46,7 @@ describe('ShipmentViewController', function() {
         spyOn(loadingModalService, 'close');
         spyOn(notificationService, 'success');
         spyOn(notificationService, 'error');
-        spyOn($window, 'open').andReturn(true);
+        spyOn($window, 'open').andCallThrough();
 
         spyOn(loadingModalService, 'open').andReturn(loadingDeferred.promise);
     });

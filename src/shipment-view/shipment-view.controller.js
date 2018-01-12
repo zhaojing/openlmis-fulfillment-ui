@@ -29,11 +29,11 @@
         .controller('ShipmentViewController', ShipmentViewController);
 
     ShipmentViewController.$inject = [
-        'shipment', 'shipmentService', 'loadingModalService', '$state', '$window', 'fulfillmentUrlFactory',
+        'shipment', 'shipmentService', 'loadingModalService', '$state', '$window', 'fulfillmentUrlFactory', 'messageService',
         'confirmService', 'notificationService', 'stateTrackerService', 'accessTokenFactory'
     ];
 
-    function ShipmentViewController(shipment, shipmentService, loadingModalService, $state, $window, fulfillmentUrlFactory,
+    function ShipmentViewController(shipment, shipmentService, loadingModalService, $state, $window, fulfillmentUrlFactory, messageService,
                                     confirmService, notificationService, stateTrackerService, accessTokenFactory) {
 
         var vm = this;
@@ -141,14 +141,17 @@
          * Saves the shipment on the server and prints the report.
          */
         function saveAndPrint() {
+            var popup = $window.open('', '_blank');
+            popup.document.write(messageService.get('shipmentView.saveDraftPending'));
+
             var loadingPromise = loadingModalService.open();
             shipmentService.save(shipment)
             .then(function(response) {
-                $window.open(accessTokenFactory.addAccessToken(getPrintUrl(response.id)), '_blank');
                 loadingPromise
                 .then(function() {
                     notificationService.success('shipmentView.draftHasBeenSaved');
                 });
+                popup.location.href = accessTokenFactory.addAccessToken(getPrintUrl(response.id));
                 $state.reload();
             })
             .catch(function() {

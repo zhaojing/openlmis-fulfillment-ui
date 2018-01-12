@@ -27,5 +27,6 @@
     "shipmentView.draftHasBeenDeleted": "Draft has been deleted",
     "shipmentView.failedToDeleteDraft": "Failed to delete draft",
     "shipmentView.fillQuantityCannotExceedStockOnHand": "Can't exceed available stock on hand",
-    "shipmentView.generatePickPackList": "Generate Pick Pack list"
+    "shipmentView.generatePickPackList": "Generate Pick Pack list",
+    "shipmentView.saveDraftPending": "Syncing shipment with the server..."
 }
