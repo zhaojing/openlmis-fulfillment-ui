@@ -141,14 +141,20 @@
          * Saves the shipment on the server and prints the report.
          */
         function saveAndPrint() {
-            loadingModalService.open();
-            shipmentService.save(vm.shipment)
+            var loadingPromise = loadingModalService.open();
+            shipmentService.save(shipment)
             .then(function(response) {
-                notificationService.success('shipmentView.shipmentHasBeenSaved');
                 $window.open(accessTokenFactory.addAccessToken(getPrintUrl(response.id)), '_blank');
+                loadingPromise
+                .then(function() {
+                    notificationService.success('shipmentView.draftHasBeenSaved');
+                });
+                $state.reload();
             })
-            .catch(notificationService.error('shipmentView.failedToSaveShipment'))
-            .finally(loadingModalService.close);
+            .catch(function() {
+                notificationService.error('shipmentView.failedToSaveDraft');
+                loadingModalService.close();
+            });
         }
 
         function getPrintUrl(shipmentId) {

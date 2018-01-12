@@ -15,7 +15,7 @@
 
 describe('ShipmentViewController', function() {
 
-    var vm, $q, $controller, $rootScope, $state, shipment, OrderDataBuilder, loadingModalService,
+    var vm, $q, $controller, $rootScope, $state, $window, shipment, OrderDataBuilder, loadingModalService,
         confirmService, shipmentService, notificationService, loadingDeferred, stateTrackerService;
 
     beforeEach(function() {
@@ -26,6 +26,7 @@ describe('ShipmentViewController', function() {
             $state = $injector.get('$state');
             $rootScope = $injector.get('$rootScope');
             $controller = $injector.get('$controller');
+            $window = $injector.get('$window');
             OrderDataBuilder = $injector.get('OrderDataBuilder');
             shipmentService = $injector.get('shipmentService');
             confirmService = $injector.get('confirmService');
@@ -45,6 +46,7 @@ describe('ShipmentViewController', function() {
         spyOn(loadingModalService, 'close');
         spyOn(notificationService, 'success');
         spyOn(notificationService, 'error');
+        spyOn($window, 'open').andReturn(true);
 
         spyOn(loadingModalService, 'open').andReturn(loadingDeferred.promise);
     });
@@ -370,4 +372,107 @@ describe('ShipmentViewController', function() {
 
     });
 
+    describe('saveAndPrint', function() {
+
+        var saveDeferred;
+
+        beforeEach(function() {
+            vm.$onInit();
+
+            saveDeferred = $q.defer();
+
+            spyOn($state, 'reload');
+            spyOn(shipmentService, 'save').andReturn(saveDeferred.promise);
+        });
+
+        it('should open loading modal', function() {
+            vm.saveAndPrint();
+            $rootScope.$apply();
+
+            expect(loadingModalService.open).toHaveBeenCalled();
+            expect(loadingModalService.close).not.toHaveBeenCalled();
+        });
+
+        it('should attempt to save shipment', function() {
+            vm.saveAndPrint();
+            $rootScope.$apply();
+
+            expect(loadingModalService.open).toHaveBeenCalled();
+            expect(shipmentService.save).toHaveBeenCalledWith(shipment);
+            expect(loadingModalService.close).not.toHaveBeenCalled();
+            expect($state.reload).not.toHaveBeenCalled();
+        });
+
+        it('should reload page and open report window after shipment was successfully saved ', function() {
+            vm.saveAndPrint();
+
+            expect(loadingModalService.open).toHaveBeenCalled();
+            expect(shipmentService.save).toHaveBeenCalledWith(shipment);
+            expect($state.reload).not.toHaveBeenCalled();
+
+            saveDeferred.resolve(shipment);
+            $rootScope.$apply();
+
+            expect($state.reload).toHaveBeenCalled();
+            expect($window.open).toHaveBeenCalled();
+            expect(notificationService.error).not.toHaveBeenCalled();
+            expect(notificationService.success).not.toHaveBeenCalled();
+            expect(loadingModalService.close).not.toHaveBeenCalled();
+        });
+
+        it('should show notification after shipment was successfully saved and loading modal was closed', function() {
+            vm.saveAndPrint();
+
+            expect(loadingModalService.open).toHaveBeenCalled();
+            expect(shipmentService.save).toHaveBeenCalledWith(shipment);
+            expect(loadingModalService.close).not.toHaveBeenCalled();
+            expect($state.reload).not.toHaveBeenCalled();
+
+            saveDeferred.resolve(shipment);
+            $rootScope.$apply();
+
+            expect($state.reload).toHaveBeenCalled();
+            expect(notificationService.success).not.toHaveBeenCalled();
+
+            loadingDeferred.resolve();
+            $rootScope.$apply();
+
+            expect(notificationService.success)
+            .toHaveBeenCalledWith('shipmentView.draftHasBeenSaved');
+        });
+
+        it('should close loading modal after shipment failed to save', function() {
+            vm.saveAndPrint();
+
+            expect(loadingModalService.open).toHaveBeenCalled();
+            expect(shipmentService.save).toHaveBeenCalledWith(shipment);
+            expect(loadingModalService.close).not.toHaveBeenCalled();
+
+            saveDeferred.reject();
+            $rootScope.$apply();
+
+            expect(loadingModalService.close).toHaveBeenCalled();
+            expect($state.reload).not.toHaveBeenCalled();
+        });
+
+        it('should show notification after shipment failed to save and loading modal was closed', function() {
+            vm.saveAndPrint();
+
+            expect(loadingModalService.open).toHaveBeenCalled();
+            expect(shipmentService.save).toHaveBeenCalledWith(shipment);
+            expect(loadingModalService.close).not.toHaveBeenCalled();
+
+            saveDeferred.reject();
+            $rootScope.$apply();
+
+            expect(notificationService.success).not.toHaveBeenCalled();
+
+            loadingDeferred.resolve();
+            $rootScope.$apply();
+
+            expect(notificationService.error)
+            .toHaveBeenCalledWith('shipmentView.failedToSaveDraft');
+            expect($state.reload).not.toHaveBeenCalled();
+        });
+    });
 });
