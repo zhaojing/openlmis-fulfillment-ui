@@ -29,7 +29,10 @@
 
         ShipmentDataBuilder.prototype.withOrder = withOrder;
         ShipmentDataBuilder.prototype.withLineItems = withLineItems;
+        ShipmentDataBuilder.prototype.withoutId = withoutId;
+        ShipmentDataBuilder.prototype.withId = withId;
         ShipmentDataBuilder.prototype.build = build;
+        ShipmentDataBuilder.prototype.buildWithoutId = buildWithoutId;
 
         return ShipmentDataBuilder;
 
@@ -56,6 +59,10 @@
             };
         }
 
+        function buildWithoutId() {
+            return this.withoutId().build();
+        }
+
         function withOrder(order) {
             this.order = order;
             return this;
@@ -66,6 +73,13 @@
             return this;
         }
 
-    }
+        function withId(id) {
+            this.id = id;
+            return this;
+        }
 
+        function withoutId() {
+            return this.withId(null);
+        }
+    }
 })();

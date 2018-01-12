@@ -184,7 +184,8 @@ describe('shipmentService', function() {
             shipment = new ShipmentDataBuilder().build();
         });
 
-        it('should resolve if successfully saved', function() {
+        it('should resolve if successfully created', function() {
+            shipment = new ShipmentDataBuilder().buildWithoutId();
             $httpBackend
             .expectPOST(fulfillmentUrlFactory(SHIPMENT_ENDPOINT), shipment)
             .respond(200, response);
@@ -200,9 +201,25 @@ describe('shipmentService', function() {
             expect(angular.toJson(result)).toEqual(angular.toJson(response));
         });
 
+        it('should resolve if successfully updated', function() {
+            $httpBackend
+            .expectPUT(fulfillmentUrlFactory(SHIPMENT_ENDPOINT + '/' + shipment.id), shipment)
+            .respond(200, response);
+
+            var result;
+            shipmentService.save(shipment)
+            .then(function(response) {
+                result = response;
+            });
+            $rootScope.$apply();
+            $httpBackend.flush();
+
+            expect(angular.toJson(result)).toEqual(angular.toJson(response));
+        });
+
         it('should reject if failed to save shipment', function() {
             $httpBackend
-            .expectPOST(fulfillmentUrlFactory(SHIPMENT_ENDPOINT), shipment)
+            .expectPUT(fulfillmentUrlFactory(SHIPMENT_ENDPOINT + '/' + shipment.id), shipment)
             .respond(404);
 
             var rejected;
@@ -221,7 +238,6 @@ describe('shipmentService', function() {
                 shipmentService.save();
             }).toThrow('Shipment must be defined');
         });
-
     });
 
     afterEach(function() {

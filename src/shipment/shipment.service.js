@@ -32,7 +32,11 @@
 
     function shipmentService($resource, fulfillmentUrlFactory) {
         var shipmentService = this,
-            resource = $resource(fulfillmentUrlFactory('/api/shipmentDrafts/:id'));
+            resource = $resource(fulfillmentUrlFactory('/api/shipmentDrafts/:id'), {}, {
+                update: {
+                    method: 'PUT'
+                }
+            });
 
         shipmentService.search = search;
         shipmentService.save = save;
@@ -61,15 +65,20 @@
          * @description
          * Saves the given shipment on the server.
          *
-         * @param   {Object}    shipment    the shipment to be saved
-         * @return  {Promise}               the promise resolving to saved shipment
+         * @param  {Object}  shipment the shipment to be saved
+         * @return {Promise}          the promise resolving to saved shipment
          */
         function save(shipment) {
             if (!shipment) {
                 throw 'Shipment must be defined';
             }
 
-            return resource.save(shipment).$promise;
+            if (shipment.id) {
+                return resource.update({
+                    id: shipment.id
+                }, shipment).$promise;
+            }
+            return resource.save(null, shipment).$promise;
         }
 
         /**
