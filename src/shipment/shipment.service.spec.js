@@ -17,7 +17,8 @@ describe('shipmentService', function() {
 
     var SHIPMENT_ENDPOINT = '/api/shipments';
 
-    var shipmentService, $httpBackend, fulfillmentUrlFactory, $rootScope, ShipmentDataBuilder;
+    var shipmentService, $httpBackend, fulfillmentUrlFactory, $rootScope, ShipmentDataBuilder,
+        PageDataBuilder;
 
     beforeEach(function() {
         module('openlmis-pagination');
@@ -29,6 +30,7 @@ describe('shipmentService', function() {
             fulfillmentUrlFactory = $injector.get('fulfillmentUrlFactory');
             $rootScope = $injector.get('$rootScope');
             ShipmentDataBuilder = $injector.get('ShipmentDataBuilder');
+            PageDataBuilder = $injector.get('PageDataBuilder');
         });
     });
 
@@ -95,6 +97,106 @@ describe('shipmentService', function() {
             }).toThrow('Shipment must be defined');
         });
     });
+
+    describe('search', function() {
+
+        var response;
+
+        beforeEach(function() {
+            response = PageDataBuilder.buildWithContent([{
+                id: 'shipment-id',
+                notes: 'Some notes about shipment',
+                order: {
+                    id: 'order-id',
+                    href: 'https://test.test/api/orders/order-id'
+                },
+                lineItems: [{
+                    orderable: {
+                        id: 'orderable-id',
+                        href: 'https://test.test/api/orderables/orderable-id'
+                    },
+                    lot: {
+                        id: 'lot-id',
+                        href: 'https://test.test/api/lots/lot-id'
+                    },
+                    quantityShipped: 100
+                }]
+            }]);
+        });
+
+        it('should resolve to returned page', function() {
+            $httpBackend
+                .expectGET(fulfillmentUrlFactory(SHIPMENT_ENDPOINT))
+                .respond(200, response);
+
+            var result;
+            shipmentService.search()
+                .then(function(page) {
+                    result = page;
+                });
+            $rootScope.$apply();
+            $httpBackend.flush();
+
+            expect(angular.toJson(result)).toEqual(angular.toJson(response));
+        });
+
+        it('should reject if communication with the server fails', function() {
+            $httpBackend
+                .expectGET(fulfillmentUrlFactory(SHIPMENT_ENDPOINT))
+                .respond(500);
+
+            var rejected;
+            shipmentService.search()
+                .catch(function() {
+                    rejected = true;
+                });
+            $rootScope.$apply();
+            $httpBackend.flush();
+
+            expect(rejected).toEqual(true);
+        });
+
+        it('should resolve to empty response', function() {
+            response = new PageDataBuilder().build();
+
+            $httpBackend
+                .expectGET(fulfillmentUrlFactory(SHIPMENT_ENDPOINT))
+                .respond(200, response);
+
+            var result;
+            shipmentService.search()
+                .then(function(page) {
+                    result = page;
+                });
+            $rootScope.$apply();
+            $httpBackend.flush();
+
+            expect(angular.toJson(result)).toEqual(angular.toJson(response));
+        });
+
+        it('should pass parameters', function() {
+            var orderId = 'order-id';
+
+            $httpBackend
+                .expectGET(fulfillmentUrlFactory(SHIPMENT_ENDPOINT + '?orderId=' + orderId))
+                .respond(200, response);
+
+            var result;
+            shipmentService.search({
+                orderId: orderId
+            })
+            .then(function(page) {
+                result = page;
+            });
+            $rootScope.$apply();
+            $httpBackend.flush();
+
+            expect(angular.toJson(result)).toEqual(angular.toJson(response));
+        });
+
+    });
+
+
 
     afterEach(function() {
         $httpBackend.verifyNoOutstandingExpectation();

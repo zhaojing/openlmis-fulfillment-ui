@@ -35,6 +35,7 @@
             resource = $resource(fulfillmentUrlFactory('/api/shipments/:id'));
 
         shipmentService.create = create;
+        shipmentService.search = search;
 
         /**
          * @ngdoc method
@@ -53,5 +54,22 @@
             }
             return resource.save(null, shipment).$promise;
         }
+
+        /**
+         * @ngdoc method
+         * @methodOf shipment.shipmentService
+         * @name search
+         *
+         * @description
+         * Retrieves a list of shipments matching the given parameters.
+         *
+         * @param   {Object}    params  the list of parameters to send to the server
+         * @return  {Promise}           the promise resolving to a page of shipments
+         */
+        function search(params) {
+            return resource.get(params).$promise;
+        }
+
+
     }
 })();

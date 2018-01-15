@@ -30,13 +30,13 @@
 
     shipmentWithStockCardSummariesFactory.$inject = [
         '$q', 'orderService', 'shipmentDraftService', 'stockCardSummariesService',
-        'ShipmentLineItemWithSummary', 'OrderLineItem'
+        'ShipmentLineItemWithSummary', 'OrderLineItem', 'ORDER_STATUS', 'shipmentService'
     ];
 
     function shipmentWithStockCardSummariesFactory($q, orderService, shipmentDraftService,
                                                    stockCardSummariesService,
                                                    ShipmentLineItemWithSummary,
-                                                   OrderLineItem) {
+                                                   OrderLineItem, ORDER_STATUS, shipmentService) {
         var factory = {
             get: get
         };
@@ -59,23 +59,30 @@
                 throw 'Order ID must be defined';
             }
 
-            return $q.all([
-                orderService.get(orderId),
-                shipmentDraftService.search({
-                    orderId: orderId
+            var service;
+            var order;
+            return orderService.get(orderId)
+                .then(function (response) {
+                    order = response;
+                    if (order.status === ORDER_STATUS.SHIPPED) {
+                        service = shipmentService;
+                    } else {
+                        service = shipmentDraftService;
+                    }
+                    return service.search({
+                        orderId: orderId
+                    })
                 })
-            ])
-            .then(function(responses) {
-                var order = responses[0];
-                return stockCardSummariesService.getStockCardSummaries(
-                    order.program.id,
-                    order.supplyingFacility.id
-                )
-                .then(function(stockCardSummaries) {
-                    var shipment = extractShipmentFromResponse(responses[1]);
-                    return buildShipmentWithStockCardSummaries(order, stockCardSummaries, shipment);
+                .then(function(response) {
+                    return stockCardSummariesService.getStockCardSummaries(
+                        order.program.id,
+                        order.supplyingFacility.id
+                    )
+                    .then(function(stockCardSummaries) {
+                        var shipment = extractShipmentFromResponse(response);
+                        return buildShipmentWithStockCardSummaries(order, stockCardSummaries, shipment);
+                    });
                 });
-            });
         }
 
         function buildShipmentWithStockCardSummaries(order, stockCardSummaries, shipment) {
