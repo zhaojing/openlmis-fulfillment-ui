@@ -8,6 +8,7 @@ New functionality added in a backwards-compatible manner:
 * [OLMIS-3382](https://openlmis.atlassian.net/browse/OLMIS-3382): Use CCE status component in order details view
 * [OLMIS-3614](https://openlmis.atlassian.net/browse/OLMIS-3614): Added stock columns on Order details page.
 * [OLMIS-239](https://openlmis.atlassian.net/browse/OLMIS-239): Added print button to shipment page.
+* [OLMIS-1611](https://openlmis.atlassian.net/browse/OLMIS-1611): Added confirm shipment button.
 
 5.1.0 / 2017-11-09
 ==================

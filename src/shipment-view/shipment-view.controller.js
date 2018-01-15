@@ -29,11 +29,11 @@
         .controller('ShipmentViewController', ShipmentViewController);
 
     ShipmentViewController.$inject = [
-        'shipment', 'shipmentService', 'loadingModalService', '$state', '$window', 'fulfillmentUrlFactory', 'messageService',
+        'shipment', 'shipmentDraftService', 'shipmentService', 'loadingModalService', '$state', '$window', 'fulfillmentUrlFactory', 'messageService',
         'confirmService', 'notificationService', 'stateTrackerService', 'accessTokenFactory'
     ];
 
-    function ShipmentViewController(shipment, shipmentService, loadingModalService, $state, $window, fulfillmentUrlFactory, messageService,
+    function ShipmentViewController(shipment, shipmentDraftService, shipmentService, loadingModalService, $state, $window, fulfillmentUrlFactory, messageService,
                                     confirmService, notificationService, stateTrackerService, accessTokenFactory) {
 
         var vm = this;
@@ -42,6 +42,7 @@
         vm.saveShipment = saveShipment;
         vm.deleteShipment = deleteShipment;
         vm.saveAndPrint = saveAndPrint;
+        vm.confirmShipment = confirmShipment;
 
         /**
          * @ngdoc property
@@ -79,7 +80,7 @@
         function saveShipment() {
             var loadingPromise = loadingModalService.open();
 
-            shipmentService.save(shipment)
+            shipmentDraftService.save(shipment)
             .then(function() {
                 loadingPromise
                 .then(function() {
@@ -93,6 +94,32 @@
                     notificationService.error('shipmentView.failedToSaveDraft');
                 });
                 loadingModalService.close();
+            });
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf shipment-view.controller:ShipmentViewController
+         * @name confirmShipment
+         *
+         * @description
+         * Finalizes the shipment on the server. Will show a notification informing whether the action
+         * was successful or not and reload the state on success.
+         */
+        function confirmShipment() {
+            var loadingPromise = loadingModalService.open();
+
+            shipmentService.create(shipment)
+            .then(function() {
+                loadingPromise
+                .then(function() {
+                    notificationService.success('shipmentView.shipmentHasBeenConfirmed');
+                });
+                $state.reload();
+            })
+            .catch(function() {
+                loadingModalService.close();
+                notificationService.error('shipmentView.failedToConfirmShipment');
             });
         }
 
@@ -113,7 +140,7 @@
                 'shipmentView.deleteDraft'
             )
             .then(function() {
-                return shipmentService.remove(shipment.id)
+                return shipmentDraftService.remove(shipment.id)
                 .then(function() {
                     loadingPromise
                     .then(function() {
@@ -145,7 +172,7 @@
             popup.document.write(messageService.get('shipmentView.saveDraftPending'));
 
             var loadingPromise = loadingModalService.open();
-            shipmentService.save(shipment)
+            shipmentDraftService.save(shipment)
             .then(function(response) {
                 loadingPromise
                 .then(function() {

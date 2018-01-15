@@ -19,7 +19,7 @@ describe('shipmentWithStockCardSummariesFactory', function() {
 
     var shipmentWithStockCardSummariesFactory, StockCardSummaryDataBuilder, OrderDataBuilder,
         ShipmentDataBuilder, ShipmentLineItemDataBuilder, OrderableDataBuilder, LotDataBuilder,
-        ObjectReferenceDataBuilder, stockCardSummariesService, orderService, shipmentService, $q,
+        ObjectReferenceDataBuilder, stockCardSummariesService, orderService, shipmentDraftService, $q,
         $rootScope, PageDataBuilder, order, shipment, stockCardSummaryOne, stockCardSummaryTwo,
         stockCardSummaryThree, stockCardSummaryFour, orderableOne, orderableTwo, lotOne, lotTwo,
         ShipmentLineItemWithSummary, OrderLineItemDataBuilder, OrderLineItem;
@@ -34,7 +34,7 @@ describe('shipmentWithStockCardSummariesFactory', function() {
             $rootScope = $injector.get('$rootScope');
             orderService = $injector.get('orderService');
             LotDataBuilder = $injector.get('LotDataBuilder');
-            shipmentService = $injector.get('shipmentService');
+            shipmentDraftService = $injector.get('shipmentDraftService');
             OrderDataBuilder = $injector.get('OrderDataBuilder');
             ShipmentDataBuilder = $injector.get('ShipmentDataBuilder');
             OrderableDataBuilder = $injector.get('OrderableDataBuilder');
@@ -51,7 +51,7 @@ describe('shipmentWithStockCardSummariesFactory', function() {
 
         spyOn(stockCardSummariesService, 'getStockCardSummaries');
         spyOn(orderService, 'get');
-        spyOn(shipmentService, 'search');
+        spyOn(shipmentDraftService, 'search');
 
         orderableOne = new OrderableDataBuilder().build();
         orderableTwo = new OrderableDataBuilder().build();
@@ -129,14 +129,14 @@ describe('shipmentWithStockCardSummariesFactory', function() {
 
             expect(rejected).toBe(true);
             expect(orderService.get).toHaveBeenCalledWith(ORDER_ID);
-            expect(shipmentService.search).toHaveBeenCalledWith({
+            expect(shipmentDraftService.search).toHaveBeenCalledWith({
                 orderId: ORDER_ID
             });
             expect(stockCardSummariesService.getStockCardSummaries).not.toHaveBeenCalled();
         });
 
-        it('should reject if shipmentService rejects', function() {
-            shipmentService.search.andReturn($q.reject());
+        it('should reject if shipmentDraftService rejects', function() {
+            shipmentDraftService.search.andReturn($q.reject());
 
             var rejected;
             shipmentWithStockCardSummariesFactory.get(ORDER_ID)
@@ -147,7 +147,7 @@ describe('shipmentWithStockCardSummariesFactory', function() {
 
             expect(rejected).toBe(true);
             expect(orderService.get).toHaveBeenCalledWith(ORDER_ID);
-            expect(shipmentService.search).toHaveBeenCalledWith({
+            expect(shipmentDraftService.search).toHaveBeenCalledWith({
                 orderId: ORDER_ID
             });
             expect(stockCardSummariesService.getStockCardSummaries).not.toHaveBeenCalled();
@@ -155,7 +155,7 @@ describe('shipmentWithStockCardSummariesFactory', function() {
 
         it('should reject if creating shipment and stockCardSummariesService rejects', function() {
             orderService.get.andReturn($q.resolve(order));
-            shipmentService.search.andReturn($q.resolve(new PageDataBuilder().build()));
+            shipmentDraftService.search.andReturn($q.resolve(new PageDataBuilder().build()));
             stockCardSummariesService.getStockCardSummaries.andReturn($q.reject());
 
             var rejected;
@@ -167,7 +167,7 @@ describe('shipmentWithStockCardSummariesFactory', function() {
 
             expect(rejected).toBe(true);
             expect(orderService.get).toHaveBeenCalledWith(ORDER_ID);
-            expect(shipmentService.search).toHaveBeenCalledWith({
+            expect(shipmentDraftService.search).toHaveBeenCalledWith({
                 orderId: ORDER_ID
             });
             expect(stockCardSummariesService.getStockCardSummaries).toHaveBeenCalledWith(
@@ -178,7 +178,7 @@ describe('shipmentWithStockCardSummariesFactory', function() {
 
         it('should reject if recreating shipment and stockCardSummariesService rejects', function() {
             orderService.get.andReturn($q.resolve(order));
-            shipmentService.search.andReturn($q.resolve(
+            shipmentDraftService.search.andReturn($q.resolve(
                 new PageDataBuilder()
                 .withContent([shipment])
                 .build()
@@ -194,7 +194,7 @@ describe('shipmentWithStockCardSummariesFactory', function() {
 
             expect(rejected).toBe(true);
             expect(orderService.get).toHaveBeenCalledWith(ORDER_ID);
-            expect(shipmentService.search).toHaveBeenCalledWith({
+            expect(shipmentDraftService.search).toHaveBeenCalledWith({
                 orderId: ORDER_ID
             });
             expect(stockCardSummariesService.getStockCardSummaries).toHaveBeenCalledWith(
@@ -205,7 +205,7 @@ describe('shipmentWithStockCardSummariesFactory', function() {
 
         it('should resolve if recreating shipment', function() {
             orderService.get.andReturn($q.resolve(order));
-            shipmentService.search.andReturn($q.resolve(
+            shipmentDraftService.search.andReturn($q.resolve(
                 new PageDataBuilder()
                 .withContent([shipment])
                 .build()
@@ -226,7 +226,7 @@ describe('shipmentWithStockCardSummariesFactory', function() {
 
             expect(resolved).toBe(true);
             expect(orderService.get).toHaveBeenCalledWith(ORDER_ID);
-            expect(shipmentService.search).toHaveBeenCalledWith({
+            expect(shipmentDraftService.search).toHaveBeenCalledWith({
                 orderId: ORDER_ID
             });
             expect(stockCardSummariesService.getStockCardSummaries).toHaveBeenCalledWith(
@@ -237,7 +237,7 @@ describe('shipmentWithStockCardSummariesFactory', function() {
 
         it('should resolve if creating new shipment', function() {
             orderService.get.andReturn($q.resolve(order));
-            shipmentService.search.andReturn($q.resolve(new PageDataBuilder().build()));
+            shipmentDraftService.search.andReturn($q.resolve(new PageDataBuilder().build()));
             stockCardSummariesService.getStockCardSummaries.andReturn($q.resolve([
                 stockCardSummaryOne,
                 stockCardSummaryTwo,
@@ -254,7 +254,7 @@ describe('shipmentWithStockCardSummariesFactory', function() {
 
             expect(resolved).toBe(true);
             expect(orderService.get).toHaveBeenCalledWith(ORDER_ID);
-            expect(shipmentService.search).toHaveBeenCalledWith({
+            expect(shipmentDraftService.search).toHaveBeenCalledWith({
                 orderId: ORDER_ID
             });
             expect(stockCardSummariesService.getStockCardSummaries).toHaveBeenCalledWith(
@@ -271,7 +271,7 @@ describe('shipmentWithStockCardSummariesFactory', function() {
 
         beforeEach(function() {
             orderService.get.andReturn($q.resolve(order));
-            shipmentService.search.andReturn($q.resolve(
+            shipmentDraftService.search.andReturn($q.resolve(
                 new PageDataBuilder()
                 .withContent([shipment])
                 .build()
@@ -341,7 +341,7 @@ describe('shipmentWithStockCardSummariesFactory', function() {
 
         beforeEach(function() {
             orderService.get.andReturn($q.resolve(order));
-            shipmentService.search.andReturn($q.resolve(new PageDataBuilder().build()));
+            shipmentDraftService.search.andReturn($q.resolve(new PageDataBuilder().build()));
             stockCardSummariesService.getStockCardSummaries.andReturn($q.resolve([
                 stockCardSummaryOne,
                 stockCardSummaryTwo,

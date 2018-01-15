@@ -15,10 +15,9 @@
 
 describe('shipmentService', function() {
 
-    var SHIPMENT_ENDPOINT = '/api/shipmentDrafts';
+    var SHIPMENT_ENDPOINT = '/api/shipments';
 
-    var shipmentService, $httpBackend, PageDataBuilder, fulfillmentUrlFactory, $rootScope,
-        ShipmentDataBuilder, response;
+    var shipmentService, $httpBackend, fulfillmentUrlFactory, $rootScope, ShipmentDataBuilder;
 
     beforeEach(function() {
         module('openlmis-pagination');
@@ -26,157 +25,14 @@ describe('shipmentService', function() {
 
         inject(function($injector) {
             shipmentService = $injector.get('shipmentService');
-            PageDataBuilder = $injector.get('PageDataBuilder');
             $httpBackend = $injector.get('$httpBackend');
             fulfillmentUrlFactory = $injector.get('fulfillmentUrlFactory');
             $rootScope = $injector.get('$rootScope');
             ShipmentDataBuilder = $injector.get('ShipmentDataBuilder');
         });
-
-        response = PageDataBuilder.buildWithContent([{
-            id: 'shipment-id',
-            notes: 'Some notes about shipment',
-            order: {
-                id: 'order-id',
-                href: 'https://test.test/api/orders/order-id'
-            },
-            lineItems: [{
-                orderable: {
-                    id: 'orderable-id',
-                    href: 'https://test.test/api/orderables/orderable-id'
-                },
-                lot: {
-                    id: 'lot-id',
-                    href: 'https://test.test/api/lots/lot-id'
-                },
-                quantityShipped: 100
-            }]
-        }]);
     });
 
-    describe('search', function() {
-
-        it('should resolve to returned page', function() {
-            $httpBackend
-            .expectGET(fulfillmentUrlFactory(SHIPMENT_ENDPOINT))
-            .respond(200, response);
-
-            var result;
-            shipmentService.search()
-            .then(function(page) {
-                result = page;
-            });
-            $rootScope.$apply();
-            $httpBackend.flush();
-
-            expect(angular.toJson(result)).toEqual(angular.toJson(response));
-        });
-
-        it('should reject if communication with the server fails', function() {
-            $httpBackend
-            .expectGET(fulfillmentUrlFactory(SHIPMENT_ENDPOINT))
-            .respond(500);
-
-            var rejected;
-            shipmentService.search()
-            .catch(function() {
-                rejected = true;
-            });
-            $rootScope.$apply();
-            $httpBackend.flush();
-
-            expect(rejected).toEqual(true);
-        });
-
-        it('should resolve to empty response', function() {
-            response = new PageDataBuilder().build();
-
-            $httpBackend
-            .expectGET(fulfillmentUrlFactory(SHIPMENT_ENDPOINT))
-            .respond(200, response);
-
-            var result;
-            shipmentService.search()
-            .then(function(page) {
-                result = page;
-            });
-            $rootScope.$apply();
-            $httpBackend.flush();
-
-            expect(angular.toJson(result)).toEqual(angular.toJson(response));
-        });
-
-        it('should pass parameters', function() {
-            var orderId = 'order-id';
-
-            $httpBackend
-            .expectGET(fulfillmentUrlFactory(SHIPMENT_ENDPOINT + '?orderId=' + orderId))
-            .respond(200, response);
-
-            var result;
-            shipmentService.search({
-                orderId: orderId
-            })
-            .then(function(page) {
-                result = page;
-            });
-            $rootScope.$apply();
-            $httpBackend.flush();
-
-            expect(angular.toJson(result)).toEqual(angular.toJson(response));
-        });
-
-    });
-
-    describe('remove', function() {
-
-        var shipmentId;
-
-        beforeEach(function() {
-            shipmentId = 'shipment-id';
-        });
-
-        it('should resolve if successfully removed', function() {
-            $httpBackend
-            .expectDELETE(fulfillmentUrlFactory(SHIPMENT_ENDPOINT + '/' + shipmentId))
-            .respond(200);
-
-            var success;
-            shipmentService.remove(shipmentId)
-            .then(function() {
-                success = true;
-            });
-            $rootScope.$apply();
-            $httpBackend.flush();
-
-            expect(success).toBe(true);
-        });
-
-        it('should reject if failed to remove shipment', function() {
-            $httpBackend
-            .expectDELETE(fulfillmentUrlFactory(SHIPMENT_ENDPOINT + '/' + shipmentId))
-            .respond(404);
-
-            var rejected;
-            shipmentService.remove(shipmentId)
-            .catch(function() {
-                rejected = true;
-            });
-            $rootScope.$apply();
-            $httpBackend.flush();
-
-            expect(rejected).toBe(true);
-        });
-
-        it('should throw exception if ID is not given', function() {
-            expect(function() {
-                shipmentService.remove();
-            }).toThrow('Shipment ID must be defined');
-        });
-
-    });
-
-    describe('save', function() {
+    describe('create', function() {
 
         var shipment;
 
@@ -188,42 +44,42 @@ describe('shipmentService', function() {
             shipment = new ShipmentDataBuilder().buildWithoutId();
             $httpBackend
             .expectPOST(fulfillmentUrlFactory(SHIPMENT_ENDPOINT), shipment)
-            .respond(200, response);
+            .respond(200, shipment);
 
             var result;
-            shipmentService.save(shipment)
+            shipmentService.create(shipment)
             .then(function(response) {
                 result = response;
             });
             $rootScope.$apply();
             $httpBackend.flush();
 
-            expect(angular.toJson(result)).toEqual(angular.toJson(response));
+            expect(angular.toJson(result)).toEqual(angular.toJson(shipment));
         });
 
         it('should resolve if successfully updated', function() {
             $httpBackend
-            .expectPUT(fulfillmentUrlFactory(SHIPMENT_ENDPOINT + '/' + shipment.id), shipment)
-            .respond(200, response);
+            .expectPOST(fulfillmentUrlFactory(SHIPMENT_ENDPOINT), shipment)
+            .respond(200, shipment);
 
             var result;
-            shipmentService.save(shipment)
+            shipmentService.create(shipment)
             .then(function(response) {
                 result = response;
             });
             $rootScope.$apply();
             $httpBackend.flush();
 
-            expect(angular.toJson(result)).toEqual(angular.toJson(response));
+            expect(angular.toJson(result)).toEqual(angular.toJson(shipment));
         });
 
         it('should reject if failed to save shipment', function() {
             $httpBackend
-            .expectPUT(fulfillmentUrlFactory(SHIPMENT_ENDPOINT + '/' + shipment.id), shipment)
+            .expectPOST(fulfillmentUrlFactory(SHIPMENT_ENDPOINT), shipment)
             .respond(404);
 
             var rejected;
-            shipmentService.save(shipment)
+            shipmentService.create(shipment)
             .catch(function() {
                 rejected = true;
             });
@@ -235,7 +91,7 @@ describe('shipmentService', function() {
 
         it('should throw exception if shipment is not given', function() {
             expect(function() {
-                shipmentService.save();
+                shipmentService.create();
             }).toThrow('Shipment must be defined');
         });
     });

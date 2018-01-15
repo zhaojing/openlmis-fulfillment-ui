@@ -32,76 +32,26 @@
 
     function shipmentService($resource, fulfillmentUrlFactory) {
         var shipmentService = this,
-            resource = $resource(fulfillmentUrlFactory('/api/shipmentDrafts/:id'), {}, {
-                update: {
-                    method: 'PUT'
-                }
-            });
+            resource = $resource(fulfillmentUrlFactory('/api/shipments/:id'));
 
-        shipmentService.search = search;
-        shipmentService.save = save;
-        shipmentService.remove = remove;
+        shipmentService.create = create;
 
         /**
          * @ngdoc method
          * @methodOf shipment.shipmentService
-         * @name search
+         * @name create
          *
          * @description
-         * Retrieves a list of shipments matching the given parameters.
+         * Saves the given Shipment on the server.
          *
-         * @param   {Object}    params  the list of parameters to send to the server
-         * @return  {Promise}           the promise resolving to a page of shipment drafts
+         * @param  {Object}  shipment the Shipment to be saved
+         * @return {Promise}          the promise resolving to saved Shipment
          */
-        function search(params) {
-            return resource.get(params).$promise;
-        }
-
-        /**
-         * @ngdoc method
-         * @methodOf shipment.shipmentService
-         * @name save
-         *
-         * @description
-         * Saves the given shipment on the server.
-         *
-         * @param  {Object}  shipment the shipment to be saved
-         * @return {Promise}          the promise resolving to saved shipment
-         */
-        function save(shipment) {
+        function create(shipment) {
             if (!shipment) {
                 throw 'Shipment must be defined';
             }
-
-            if (shipment.id) {
-                return resource.update({
-                    id: shipment.id
-                }, shipment).$promise;
-            }
             return resource.save(null, shipment).$promise;
         }
-
-        /**
-         * @ngdoc method
-         * @methodOf shipment.shipmentService
-         * @name remove
-         *
-         * @description
-         * Removes the shipment draft with the given id.
-         *
-         * @param   {string}    id  the ID of the shipment
-         * @return  {Promise}       the promise resolved when shipment was successfully removed or
-         *                          rejected otherwise
-         */
-        function remove(id) {
-            if (!id) {
-                throw 'Shipment ID must be defined';
-            }
-
-            return resource.delete({
-                id: id
-            }).$promise;
-        }
     }
-
 })();

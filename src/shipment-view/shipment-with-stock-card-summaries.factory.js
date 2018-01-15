@@ -29,11 +29,11 @@
         .factory('shipmentWithStockCardSummariesFactory', shipmentWithStockCardSummariesFactory);
 
     shipmentWithStockCardSummariesFactory.$inject = [
-        '$q', 'orderService', 'shipmentService', 'stockCardSummariesService',
+        '$q', 'orderService', 'shipmentDraftService', 'stockCardSummariesService',
         'ShipmentLineItemWithSummary', 'OrderLineItem'
     ];
 
-    function shipmentWithStockCardSummariesFactory($q, orderService, shipmentService,
+    function shipmentWithStockCardSummariesFactory($q, orderService, shipmentDraftService,
                                                    stockCardSummariesService,
                                                    ShipmentLineItemWithSummary,
                                                    OrderLineItem) {
@@ -61,7 +61,7 @@
 
             return $q.all([
                 orderService.get(orderId),
-                shipmentService.search({
+                shipmentDraftService.search({
                     orderId: orderId
                 })
             ])

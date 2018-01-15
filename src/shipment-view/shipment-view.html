@@ -58,7 +58,8 @@
             <td>{{shipmentLineItem.summary.stockOnHand}}</td>
             <td></td>
             <td>
-                <input ng-model="shipmentLineItem.quantityShipped"
+                <input type="number"
+                    ng-model="shipmentLineItem.quantityShipped"
                     ng-change="shipmentLineItem.validate()"
                     openlmis-invalid="{{shipmentLineItem.errors.quantityShipped | message}}"/>
             </td>

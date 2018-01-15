@@ -15,8 +15,8 @@
 
 describe('ShipmentViewController', function() {
 
-    var vm, $q, $controller, $rootScope, $state, $window, shipment, OrderDataBuilder, loadingModalService,
-        confirmService, shipmentService, notificationService, loadingDeferred, stateTrackerService;
+    var vm, $q, $controller, $rootScope, $state, $window, shipment, OrderDataBuilder, loadingModalService, shipmentService,
+        confirmService, shipmentDraftService, notificationService, loadingDeferred, stateTrackerService;
 
     beforeEach(function() {
         module('shipment-view');
@@ -28,6 +28,7 @@ describe('ShipmentViewController', function() {
             $controller = $injector.get('$controller');
             $window = $injector.get('$window');
             OrderDataBuilder = $injector.get('OrderDataBuilder');
+            shipmentDraftService = $injector.get('shipmentDraftService');
             shipmentService = $injector.get('shipmentService');
             confirmService = $injector.get('confirmService');
             loadingModalService = $injector.get('loadingModalService');
@@ -70,7 +71,7 @@ describe('ShipmentViewController', function() {
             saveDeferred = $q.defer();
 
             spyOn($state, 'reload');
-            spyOn(shipmentService, 'save').andReturn(saveDeferred.promise);
+            spyOn(shipmentDraftService, 'save').andReturn(saveDeferred.promise);
         });
 
         it('should open loading modal', function() {
@@ -86,7 +87,7 @@ describe('ShipmentViewController', function() {
             $rootScope.$apply();
 
             expect(loadingModalService.open).toHaveBeenCalled();
-            expect(shipmentService.save).toHaveBeenCalledWith(shipment);
+            expect(shipmentDraftService.save).toHaveBeenCalledWith(shipment);
             expect(loadingModalService.close).not.toHaveBeenCalled();
             expect($state.reload).not.toHaveBeenCalled();
         });
@@ -95,7 +96,7 @@ describe('ShipmentViewController', function() {
             vm.saveShipment();
 
             expect(loadingModalService.open).toHaveBeenCalled();
-            expect(shipmentService.save).toHaveBeenCalledWith(shipment);
+            expect(shipmentDraftService.save).toHaveBeenCalledWith(shipment);
             expect($state.reload).not.toHaveBeenCalled();
 
             saveDeferred.resolve();
@@ -111,7 +112,7 @@ describe('ShipmentViewController', function() {
             vm.saveShipment();
 
             expect(loadingModalService.open).toHaveBeenCalled();
-            expect(shipmentService.save).toHaveBeenCalledWith(shipment);
+            expect(shipmentDraftService.save).toHaveBeenCalledWith(shipment);
             expect(loadingModalService.close).not.toHaveBeenCalled();
             expect($state.reload).not.toHaveBeenCalled();
 
@@ -132,7 +133,7 @@ describe('ShipmentViewController', function() {
             vm.saveShipment();
 
             expect(loadingModalService.open).toHaveBeenCalled();
-            expect(shipmentService.save).toHaveBeenCalledWith(shipment);
+            expect(shipmentDraftService.save).toHaveBeenCalledWith(shipment);
             expect(loadingModalService.close).not.toHaveBeenCalled();
 
             saveDeferred.reject();
@@ -146,7 +147,7 @@ describe('ShipmentViewController', function() {
             vm.saveShipment();
 
             expect(loadingModalService.open).toHaveBeenCalled();
-            expect(shipmentService.save).toHaveBeenCalledWith(shipment);
+            expect(shipmentDraftService.save).toHaveBeenCalledWith(shipment);
             expect(loadingModalService.close).not.toHaveBeenCalled();
 
             saveDeferred.reject();
@@ -164,6 +165,109 @@ describe('ShipmentViewController', function() {
 
     });
 
+    describe('confirmShipment', function() {
+
+        var saveDeferred;
+
+        beforeEach(function() {
+            vm.$onInit();
+
+            saveDeferred = $q.defer();
+
+            spyOn($state, 'reload');
+            spyOn(shipmentService, 'create').andReturn(saveDeferred.promise);
+        });
+
+        it('should open loading modal', function() {
+            vm.confirmShipment();
+            $rootScope.$apply();
+
+            expect(loadingModalService.open).toHaveBeenCalled();
+            expect(loadingModalService.close).not.toHaveBeenCalled();
+        });
+
+        it('should attempt to create shipment', function() {
+            vm.confirmShipment();
+            $rootScope.$apply();
+
+            expect(loadingModalService.open).toHaveBeenCalled();
+            expect(shipmentService.create).toHaveBeenCalledWith(shipment);
+            expect(loadingModalService.close).not.toHaveBeenCalled();
+            expect($state.reload).not.toHaveBeenCalled();
+        });
+
+        it('should reload page and let the state change close loading modal after shipment was successfully created ', function() {
+            vm.confirmShipment();
+
+            expect(loadingModalService.open).toHaveBeenCalled();
+            expect(shipmentService.create).toHaveBeenCalledWith(shipment);
+            expect($state.reload).not.toHaveBeenCalled();
+
+            saveDeferred.resolve();
+            $rootScope.$apply();
+
+            expect($state.reload).toHaveBeenCalled();
+            expect(notificationService.error).not.toHaveBeenCalled();
+            expect(notificationService.success).not.toHaveBeenCalled();
+            expect(loadingModalService.close).not.toHaveBeenCalled();
+        });
+
+        it('should show notification after shipment was successfully created and loading modal was closed', function() {
+            vm.confirmShipment();
+
+            expect(loadingModalService.open).toHaveBeenCalled();
+            expect(shipmentService.create).toHaveBeenCalledWith(shipment);
+            expect(loadingModalService.close).not.toHaveBeenCalled();
+            expect($state.reload).not.toHaveBeenCalled();
+
+            saveDeferred.resolve();
+            $rootScope.$apply();
+
+            expect($state.reload).toHaveBeenCalled();
+            expect(notificationService.success).not.toHaveBeenCalled();
+
+            loadingDeferred.resolve();
+            $rootScope.$apply();
+
+            expect(notificationService.success)
+            .toHaveBeenCalledWith('shipmentView.shipmentHasBeenConfirmed');
+        });
+
+        it('should close loading modal after shipment creation failed', function() {
+            vm.confirmShipment();
+
+            expect(loadingModalService.open).toHaveBeenCalled();
+            expect(shipmentService.create).toHaveBeenCalledWith(shipment);
+            expect(loadingModalService.close).not.toHaveBeenCalled();
+
+            saveDeferred.reject();
+            $rootScope.$apply();
+
+            expect(loadingModalService.close).toHaveBeenCalled();
+            expect($state.reload).not.toHaveBeenCalled();
+        });
+
+        it('should show notification after shipment creation failed and loading modal was closed', function() {
+            vm.confirmShipment();
+
+            expect(loadingModalService.open).toHaveBeenCalled();
+            expect(shipmentService.create).toHaveBeenCalledWith(shipment);
+            expect(loadingModalService.close).not.toHaveBeenCalled();
+
+            saveDeferred.reject();
+            $rootScope.$apply();
+
+            expect(notificationService.success).not.toHaveBeenCalled();
+
+            loadingDeferred.resolve();
+            $rootScope.$apply();
+
+            expect(notificationService.error)
+            .toHaveBeenCalledWith('shipmentView.failedToConfirmShipment');
+            expect($state.reload).not.toHaveBeenCalled();
+        });
+    });
+
     describe('deleteShipment', function() {
 
         var confirmDeferred, deleteDeferred;
@@ -175,7 +279,7 @@ describe('ShipmentViewController', function() {
             deleteDeferred = $q.defer();
 
             spyOn(confirmService, 'confirm').andReturn(confirmDeferred.promise);
-            spyOn(shipmentService, 'remove').andReturn(deleteDeferred.promise);
+            spyOn(shipmentDraftService, 'remove').andReturn(deleteDeferred.promise);
             spyOn(stateTrackerService, 'goToPreviousState');
         });
 
@@ -199,7 +303,7 @@ describe('ShipmentViewController', function() {
 
             $rootScope.$apply();
 
-            expect(shipmentService.remove).not.toHaveBeenCalled();
+            expect(shipmentDraftService.remove).not.toHaveBeenCalled();
             expect(notificationService.success).not.toHaveBeenCalled();
             expect(notificationService.error).not.toHaveBeenCalled();
             expect(loadingModalService.close).not.toHaveBeenCalled();
@@ -222,7 +326,7 @@ describe('ShipmentViewController', function() {
             loadingDeferred.resolve();
             $rootScope.$apply();
 
-            expect(shipmentService.remove).not.toHaveBeenCalled();
+            expect(shipmentDraftService.remove).not.toHaveBeenCalled();
             expect(notificationService.success).not.toHaveBeenCalled();
             expect(notificationService.error).not.toHaveBeenCalled();
             expect(loadingModalService.close).toHaveBeenCalled();
@@ -239,12 +343,12 @@ describe('ShipmentViewController', function() {
 
             $rootScope.$apply();
 
-            expect(shipmentService.remove).not.toHaveBeenCalled();
+            expect(shipmentDraftService.remove).not.toHaveBeenCalled();
 
             confirmDeferred.resolve();
             $rootScope.$apply();
 
-            expect(shipmentService.remove).toHaveBeenCalledWith(shipment.id);
+            expect(shipmentDraftService.remove).toHaveBeenCalledWith(shipment.id);
             expect(notificationService.success).not.toHaveBeenCalled();
             expect(notificationService.error).not.toHaveBeenCalled();
             expect(loadingModalService.close).not.toHaveBeenCalled();
@@ -261,12 +365,12 @@ describe('ShipmentViewController', function() {
 
             $rootScope.$apply();
 
-            expect(shipmentService.remove).not.toHaveBeenCalled();
+            expect(shipmentDraftService.remove).not.toHaveBeenCalled();
 
             confirmDeferred.resolve();
             $rootScope.$apply();
 
-            expect(shipmentService.remove).toHaveBeenCalledWith(shipment.id);
+            expect(shipmentDraftService.remove).toHaveBeenCalledWith(shipment.id);
 
             deleteDeferred.reject();
             $rootScope.$apply();
@@ -287,12 +391,12 @@ describe('ShipmentViewController', function() {
 
             $rootScope.$apply();
 
-            expect(shipmentService.remove).not.toHaveBeenCalled();
+            expect(shipmentDraftService.remove).not.toHaveBeenCalled();
 
             confirmDeferred.resolve();
             $rootScope.$apply();
 
-            expect(shipmentService.remove).toHaveBeenCalledWith(shipment.id);
+            expect(shipmentDraftService.remove).toHaveBeenCalledWith(shipment.id);
 
             deleteDeferred.reject();
             $rootScope.$apply();
@@ -318,12 +422,12 @@ describe('ShipmentViewController', function() {
 
             $rootScope.$apply();
 
-            expect(shipmentService.remove).not.toHaveBeenCalled();
+            expect(shipmentDraftService.remove).not.toHaveBeenCalled();
 
             confirmDeferred.resolve();
             $rootScope.$apply();
 
-            expect(shipmentService.remove).toHaveBeenCalledWith(shipment.id);
+            expect(shipmentDraftService.remove).toHaveBeenCalledWith(shipment.id);
 
             deleteDeferred.resolve();
             $rootScope.$apply();
@@ -346,12 +450,12 @@ describe('ShipmentViewController', function() {
 
             $rootScope.$apply();
 
-            expect(shipmentService.remove).not.toHaveBeenCalled();
+            expect(shipmentDraftService.remove).not.toHaveBeenCalled();
 
             confirmDeferred.resolve();
             $rootScope.$apply();
 
-            expect(shipmentService.remove).toHaveBeenCalledWith(shipment.id);
+            expect(shipmentDraftService.remove).toHaveBeenCalledWith(shipment.id);
             expect(stateTrackerService.goToPreviousState).not.toHaveBeenCalled();
 
             deleteDeferred.resolve();
@@ -382,7 +486,7 @@ describe('ShipmentViewController', function() {
             saveDeferred = $q.defer();
 
             spyOn($state, 'reload');
-            spyOn(shipmentService, 'save').andReturn(saveDeferred.promise);
+            spyOn(shipmentDraftService, 'save').andReturn(saveDeferred.promise);
         });
 
         it('should open loading modal', function() {
@@ -398,7 +502,7 @@ describe('ShipmentViewController', function() {
             $rootScope.$apply();
 
             expect(loadingModalService.open).toHaveBeenCalled();
-            expect(shipmentService.save).toHaveBeenCalledWith(shipment);
+            expect(shipmentDraftService.save).toHaveBeenCalledWith(shipment);
             expect(loadingModalService.close).not.toHaveBeenCalled();
             expect($state.reload).not.toHaveBeenCalled();
         });
@@ -407,7 +511,7 @@ describe('ShipmentViewController', function() {
             vm.saveAndPrint();
 
             expect(loadingModalService.open).toHaveBeenCalled();
-            expect(shipmentService.save).toHaveBeenCalledWith(shipment);
+            expect(shipmentDraftService.save).toHaveBeenCalledWith(shipment);
             expect($state.reload).not.toHaveBeenCalled();
 
             saveDeferred.resolve(shipment);
@@ -424,7 +528,7 @@ describe('ShipmentViewController', function() {
             vm.saveAndPrint();
 
             expect(loadingModalService.open).toHaveBeenCalled();
-            expect(shipmentService.save).toHaveBeenCalledWith(shipment);
+            expect(shipmentDraftService.save).toHaveBeenCalledWith(shipment);
             expect(loadingModalService.close).not.toHaveBeenCalled();
             expect($state.reload).not.toHaveBeenCalled();
 
@@ -445,7 +549,7 @@ describe('ShipmentViewController', function() {
             vm.saveAndPrint();
 
             expect(loadingModalService.open).toHaveBeenCalled();
-            expect(shipmentService.save).toHaveBeenCalledWith(shipment);
+            expect(shipmentDraftService.save).toHaveBeenCalledWith(shipment);
             expect(loadingModalService.close).not.toHaveBeenCalled();
 
             saveDeferred.reject();
@@ -459,7 +563,7 @@ describe('ShipmentViewController', function() {
             vm.saveAndPrint();
 
             expect(loadingModalService.open).toHaveBeenCalled();
-            expect(shipmentService.save).toHaveBeenCalledWith(shipment);
+            expect(shipmentDraftService.save).toHaveBeenCalledWith(shipment);
             expect(loadingModalService.close).not.toHaveBeenCalled();
 
             saveDeferred.reject();
@@ -475,4 +579,6 @@ describe('ShipmentViewController', function() {
             expect($state.reload).not.toHaveBeenCalled();
         });
     });
+
+
 });
