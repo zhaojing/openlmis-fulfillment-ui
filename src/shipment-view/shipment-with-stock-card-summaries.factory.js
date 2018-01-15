@@ -194,20 +194,12 @@
 
         function compareLineItems(left, right) {
             return compareVvmStatuses(getVvmStatus(left), getVvmStatus(right)) ||
-                compareExpirationDates(getExpirationDate(left), getExpirationDate(right)) ||
-                compareStocksOnHands(left.summary.stockOnHand, right.summary.stockOnHand);
+                compare(getExpirationDate(left), getExpirationDate(right)) ||
+                compare(left.summary.stockOnHand, right.summary.stockOnHand);
         }
 
         function compareVvmStatuses(left, right) {
             return compare(left, right) * -1;
-        }
-
-        function compareStocksOnHands(left, right) {
-            return compare(left, right);
-        }
-
-        function compareExpirationDates(left, right) {
-            return compare(left, right);
         }
 
         function compare(left, right) {
