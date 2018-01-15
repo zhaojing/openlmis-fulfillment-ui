@@ -30,11 +30,11 @@
 
     ShipmentViewController.$inject = [
         'shipment', 'shipmentDraftService', 'shipmentService', 'loadingModalService', '$state', '$window', 'fulfillmentUrlFactory', 'messageService',
-        'confirmService', 'notificationService', 'stateTrackerService', 'accessTokenFactory'
+        'confirmService', 'notificationService', 'stateTrackerService', 'accessTokenFactory', 'ORDER_STATUS'
     ];
 
     function ShipmentViewController(shipment, shipmentDraftService, shipmentService, loadingModalService, $state, $window, fulfillmentUrlFactory, messageService,
-                                    confirmService, notificationService, stateTrackerService, accessTokenFactory) {
+                                    confirmService, notificationService, stateTrackerService, accessTokenFactory, ORDER_STATUS) {
 
         var vm = this;
 
@@ -43,6 +43,7 @@
         vm.deleteShipment = deleteShipment;
         vm.saveAndPrint = saveAndPrint;
         vm.confirmShipment = confirmShipment;
+        vm.isEditable = isEditable;
 
         /**
          * @ngdoc property
@@ -66,6 +67,20 @@
          */
         function onInit() {
             vm.order = shipment.order;
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf shipment-view.controller:ShipmentViewController
+         * @name isEditable
+         *
+         * @description
+         * Checks Order status which indicates if shipment can be edited.
+         *
+         * @return {boolean} is Shipment editable
+         */
+        function isEditable() {
+            return ORDER_STATUS.SHIPPED !== vm.order.status;
         }
 
         /**

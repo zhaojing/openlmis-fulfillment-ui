@@ -15,8 +15,8 @@
 
 describe('ShipmentViewController', function() {
 
-    var vm, $q, $controller, $rootScope, $state, $window, shipment, OrderDataBuilder, loadingModalService, shipmentService,
-        confirmService, shipmentDraftService, notificationService, loadingDeferred, stateTrackerService;
+    var vm, $q, $controller, $rootScope, $state, $window, shipment, OrderDataBuilder, loadingModalService, shipmentService, ORDER_STATUS,
+        confirmService, shipmentDraftService, notificationService, loadingDeferred, stateTrackerService, order, ShipmentDataBuilder;
 
     beforeEach(function() {
         module('shipment-view');
@@ -28,15 +28,18 @@ describe('ShipmentViewController', function() {
             $controller = $injector.get('$controller');
             $window = $injector.get('$window');
             OrderDataBuilder = $injector.get('OrderDataBuilder');
+            ShipmentDataBuilder = $injector.get('ShipmentDataBuilder');
             shipmentDraftService = $injector.get('shipmentDraftService');
             shipmentService = $injector.get('shipmentService');
             confirmService = $injector.get('confirmService');
             loadingModalService = $injector.get('loadingModalService');
             notificationService = $injector.get('notificationService');
-            stateTrackerService = $injector.get('stateTrackerService');
+            stateTrackerService =  $injector.get('stateTrackerService');
+            ORDER_STATUS = $injector.get('ORDER_STATUS');
         });
 
-        shipment = new OrderDataBuilder().build();
+        order = new OrderDataBuilder().build();
+        shipment = new ShipmentDataBuilder().withOrder(order);
 
         vm = $controller('ShipmentViewController', {
             shipment: shipment
@@ -580,5 +583,16 @@ describe('ShipmentViewController', function() {
         });
     });
 
+    describe('isEditable', function() {
 
+        it('should check if shipment is editable', function() {
+            vm.$onInit();
+
+            vm.order.status = ORDER_STATUS.SHIPPED;
+            expect(vm.isEditable()).toBe(false);
+
+            vm.order.status = ORDER_STATUS.ORDERED;
+            expect(vm.isEditable()).toBe(true);
+        });
+    });
 });
