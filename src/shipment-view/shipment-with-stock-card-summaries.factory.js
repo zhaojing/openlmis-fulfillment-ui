@@ -199,50 +199,19 @@
         }
 
         function compareVvmStatuses(left, right) {
-            if (left === right) {
-                return 0;
-            }
-
-            if (left && right) {
-                if (left > right) {
-                    return -1;
-                }
-                return 1;
-            }
-
-            if (!left) {
-                return 1;
-            }
-            return -1;
+            return compare(left, right) * -1;
         }
 
         function compareStocksOnHands(left, right) {
-            if (left === right) {
-                return 0;
-            }
-
-            if (left > right) {
-                return 1;
-            }
-            return -1;
+            return compare(left, right);
         }
 
         function compareExpirationDates(left, right) {
-            if (left === right) {
-                return 0;
-            }
+            return compare(left, right);
+        }
 
-            if (left && right) {
-                if (left > right) {
-                    return 1;
-                }
-                return -1;
-            }
-
-            if (!left) {
-                return -1;
-            }
-            return 1;
+        function compare(left, right) {
+            return left === right ? 0 : (left && right ? (left > right ? 1 : -1) : (left ? 1 : -1));
         }
 
         function getVvmStatus(lineItem) {
