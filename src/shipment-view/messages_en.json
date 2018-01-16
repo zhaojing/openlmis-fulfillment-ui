@@ -30,6 +30,6 @@
     "shipmentView.generatePickPackList": "Generate Pick Pack list",
     "shipmentView.saveDraftPending": "Syncing shipment with the server...",
     "shipmentView.confirmShipment": "Confirm Shipment",
-    "shipmentView.draftHasBeenSaved": "Shipment has been confirmed",
-    "shipmentView.failedToSaveDraft": "Failed to confirm shipment"
+    "shipmentView.shipmentHasBeenConfirmed": "Shipment has been confirmed",
+    "shipmentView.failedToConfirmShipment": "Failed to confirm shipment"
 }
