@@ -260,7 +260,6 @@ describe('ShipmentViewController', function() {
 
             expect(loadingModalService.open).toHaveBeenCalled();
             expect(shipmentService.create).toHaveBeenCalledWith(shipment);
-            expect(loadingModalService.close).not.toHaveBeenCalled();
             expect(stateTrackerService.goToPreviousState).not.toHaveBeenCalled();
 
             saveDeferred.resolve();
@@ -274,6 +273,8 @@ describe('ShipmentViewController', function() {
 
             expect(notificationService.success)
             .toHaveBeenCalledWith('shipmentView.shipmentHasBeenConfirmed');
+            expect(notificationService.error).not.toHaveBeenCalled();
+            expect(loadingModalService.close).not.toHaveBeenCalled();
         });
 
         it('should close loading modal after shipment creation failed', function() {
@@ -305,14 +306,15 @@ describe('ShipmentViewController', function() {
             $rootScope.$apply();
 
             expect(notificationService.error).not.toHaveBeenCalled();
+            expect(loadingModalService.close).toHaveBeenCalled();
 
             loadingDeferred.resolve();
             $rootScope.$apply();
 
             expect(notificationService.error)
             .toHaveBeenCalledWith('shipmentView.failedToConfirmShipment');
-            expect(stateTrackerService.goToPreviousState).not.toHaveBeenCalled();
             expect(notificationService.success).not.toHaveBeenCalled();
+            expect(stateTrackerService.goToPreviousState).not.toHaveBeenCalled();
         });
     });
 
