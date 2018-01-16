@@ -38,8 +38,25 @@
             ],
             areAllRightsRequired: false,
             resolve: {
-                shipment: function(shipmentWithStockCardSummariesFactory, $stateParams) {
-                    return shipmentWithStockCardSummariesFactory.get($stateParams.id);
+                order: function(orderService, $stateParams) {
+                    return orderService.get($stateParams.id);
+                },
+                stockCardSummaries: function(stockCardSummaries, order) {
+                    return stockCardSummariesService.getStockCardSummaries(
+                        order.program.id,
+                        order.supplyingFacility.id
+                    );
+                },
+                shipmentDraft: function(shipmentDraftFactory, order, stockCardSummaries) {
+                    return shipmentDraftFactory.getForOrder(order, stockCardSummaries);
+                },
+                orderFulfillmentLineItems: function(orderFulfillmentLineItemFactory, order,
+                                                    stockCardSummaries, shipmentDraft) {
+                    return orderFulfillmentLineItemFactory.get(
+                        order,
+                        shipmentDraft,
+                        stockCardSummaries
+                    );
                 }
             }
         });
