@@ -172,19 +172,52 @@ describe('ShipmentViewController', function() {
 
     describe('confirmShipment', function() {
 
-        var saveDeferred;
+        var saveDeferred, confirmDeferred;
 
         beforeEach(function() {
             vm.$onInit();
 
             saveDeferred = $q.defer();
+            confirmDeferred = $q.defer();
 
             spyOn($state, 'reload');
             spyOn(shipmentService, 'create').andReturn(saveDeferred.promise);
+            spyOn(confirmService, 'confirm').andReturn(confirmDeferred.promise);
+        });
+
+        it('should open confirm modal', function() {
+            vm.confirmShipment();
+            $rootScope.$apply();
+
+            expect(confirmService.confirm).toHaveBeenCalled();
+            expect(shipmentService.create).not.toHaveBeenCalled();
+            expect(loadingModalService.open).not.toHaveBeenCalled();
+        });
+
+        it('should not call shipmentService if confirmation failed', function() {
+            vm.confirmShipment();
+            confirmDeferred.reject();
+            $rootScope.$apply();
+
+            expect(confirmService.confirm).toHaveBeenCalled();
+            expect(shipmentService.create).not.toHaveBeenCalled();
+            expect(loadingModalService.open).not.toHaveBeenCalled();
+        });
+
+        //TODO enable test
+        xit('should not call shipmentService if shipment is not valid', function() {
+            vm.confirmShipment();
+            confirmDeferred.resolve();
+            $rootScope.$apply();
+
+            expect(confirmService.confirm).toHaveBeenCalled();
+            expect(shipmentService.create).not.toHaveBeenCalled();
+            expect(loadingModalService.open).not.toHaveBeenCalled();
         });
 
         it('should open loading modal', function() {
             vm.confirmShipment();
+            confirmDeferred.resolve();
             $rootScope.$apply();
 
             expect(loadingModalService.open).toHaveBeenCalled();
@@ -193,6 +226,7 @@ describe('ShipmentViewController', function() {
 
         it('should attempt to create shipment', function() {
             vm.confirmShipment();
+            confirmDeferred.resolve();
             $rootScope.$apply();
 
             expect(loadingModalService.open).toHaveBeenCalled();
@@ -203,6 +237,8 @@ describe('ShipmentViewController', function() {
 
         it('should reload page and let the state change close loading modal after shipment was successfully created ', function() {
             vm.confirmShipment();
+            confirmDeferred.resolve();
+            $rootScope.$apply();
 
             expect(loadingModalService.open).toHaveBeenCalled();
             expect(shipmentService.create).toHaveBeenCalledWith(shipment);
@@ -219,6 +255,8 @@ describe('ShipmentViewController', function() {
 
         it('should show notification after shipment was successfully created and loading modal was closed', function() {
             vm.confirmShipment();
+            confirmDeferred.resolve();
+            $rootScope.$apply();
 
             expect(loadingModalService.open).toHaveBeenCalled();
             expect(shipmentService.create).toHaveBeenCalledWith(shipment);
@@ -240,6 +278,8 @@ describe('ShipmentViewController', function() {
 
         it('should close loading modal after shipment creation failed', function() {
             vm.confirmShipment();
+            confirmDeferred.resolve();
+            $rootScope.$apply();
 
             expect(loadingModalService.open).toHaveBeenCalled();
             expect(shipmentService.create).toHaveBeenCalledWith(shipment);
@@ -254,6 +294,8 @@ describe('ShipmentViewController', function() {
 
         it('should show notification after shipment creation failed and loading modal was closed', function() {
             vm.confirmShipment();
+            confirmDeferred.resolve();
+            $rootScope.$apply();
 
             expect(loadingModalService.open).toHaveBeenCalled();
             expect(shipmentService.create).toHaveBeenCalledWith(shipment);

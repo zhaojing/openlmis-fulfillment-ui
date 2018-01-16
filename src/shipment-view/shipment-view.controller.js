@@ -136,19 +136,29 @@
          * was successful or not and reload the state on success.
          */
         function confirmShipment() {
-            var loadingPromise = loadingModalService.open();
-
-            shipmentService.create(shipment)
+            confirmService.confirm(
+                'shipmentView.confirmShipment.question',
+                'shipmentView.confirmShipment'
+            )
             .then(function() {
-                loadingPromise
-                .then(function() {
-                    notificationService.success('shipmentView.shipmentHasBeenConfirmed');
-                });
-                $state.reload();
-            })
-            .catch(function() {
-                loadingModalService.close();
-                notificationService.error('shipmentView.failedToConfirmShipment');
+                if (isShipmentValid()) {
+                    var loadingPromise = loadingModalService.open();
+                    shipmentService.create(shipment)
+                    .then(function() {
+                        loadingPromise
+                        .then(function() {
+                            notificationService.success('shipmentView.shipmentHasBeenConfirmed');
+                        });
+                        $state.reload();
+                    })
+                    .catch(function() {
+                        loadingModalService.close();
+                        notificationService.error('shipmentView.failedToConfirmShipment');
+                    });
+                }
+                else {
+                    notificationService.error('shipmentView.shipmentHasErrors');
+                }
             });
         }
 
@@ -214,6 +224,14 @@
                 notificationService.error('shipmentView.failedToSaveDraft');
                 loadingModalService.close();
             });
+        }
+
+        function isShipmentValid() {
+            var isValid = true;
+            shipment.lineItems.forEach(function(lineItem) {
+                isValid = isValid && !(lineItem.errors && lineItem.errors.length > 0);
+            });
+            return isValid;
         }
 
         function getPrintUrl(shipmentId) {

@@ -31,5 +31,7 @@
     "shipmentView.saveDraftPending": "Syncing shipment with the server...",
     "shipmentView.confirmShipment": "Confirm Shipment",
     "shipmentView.shipmentHasBeenConfirmed": "Shipment has been confirmed",
-    "shipmentView.failedToConfirmShipment": "Failed to confirm shipment"
+    "shipmentView.failedToConfirmShipment": "Failed to confirm shipment",
+    "shipmentView.confirmShipment.question": "Are you sure you want to confirm shipment?",
+    "shipmentView.shipmentHasErrors": "Shipment has errors"
 }
