@@ -39,7 +39,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr ng-repeat-start="item in vm.order.orderLineItems">
+        <tr ng-repeat-start="item in vm.orderFulfillmentLineItems">
             <td>{{item.orderable.productCode}}</td>
             <td>{{item.orderable.fullProductName}}</td>
             <td></td>
@@ -59,7 +59,7 @@
             <td></td>
             <td>
                 <input ng-show="vm.isEditable()"
-                    type="number"
+                    positive-integer
                     ng-model="shipmentLineItem.quantityShipped"
                     ng-change="shipmentLineItem.validate()"
                     openlmis-invalid="{{shipmentLineItem.errors.quantityShipped | message}}"/>

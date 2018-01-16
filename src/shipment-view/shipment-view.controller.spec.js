@@ -42,7 +42,9 @@ describe('ShipmentViewController', function() {
         shipment = new ShipmentDataBuilder().withOrder(order);
 
         vm = $controller('ShipmentViewController', {
-            shipment: shipment
+            shipment: shipment,
+            order: order,
+            orderFulfillmentLineItems: order.lineItems
         });
 
         loadingDeferred = $q.defer();

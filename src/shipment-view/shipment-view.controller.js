@@ -29,11 +29,13 @@
         .controller('ShipmentViewController', ShipmentViewController);
 
     ShipmentViewController.$inject = [
-        'shipment', 'shipmentDraftService', 'shipmentService', 'loadingModalService', '$state', '$window', 'fulfillmentUrlFactory', 'messageService',
+        'order', 'shipment', 'orderFulfillmentLineItems', 'shipmentDraftService', 'shipmentService',
+        'loadingModalService', '$state', '$window', 'fulfillmentUrlFactory', 'messageService',
         'confirmService', 'notificationService', 'stateTrackerService', 'accessTokenFactory', 'ORDER_STATUS'
     ];
 
-    function ShipmentViewController(shipment, shipmentDraftService, shipmentService, loadingModalService, $state, $window, fulfillmentUrlFactory, messageService,
+    function ShipmentViewController(order, shipment, orderFulfillmentLineItems, shipmentDraftService, shipmentService,
+                                    loadingModalService, $state, $window, fulfillmentUrlFactory, messageService,
                                     confirmService, notificationService, stateTrackerService, accessTokenFactory, ORDER_STATUS) {
 
         var vm = this;
@@ -48,13 +50,24 @@
         /**
          * @ngdoc property
          * @propertyOf shipment-view.controller:ShipmentViewController
-         * @name shipment
+         * @name order
          * @type {Object}
          *
          * @description
          * Holds order that will be displayed on the screen.
          */
         vm.order = undefined;
+
+        /**
+         * @ngdoc property
+         * @propertyOf shipment-view.controller:ShipmentViewController
+         * @name orderFulfillmentLineItems
+         * @type {Array}
+         *
+         * @description
+         * Holds order line items that will be displayed on the screen.
+         */
+        vm.orderFulfillmentLineItems = undefined;
 
         /**
          * @ngdoc method
@@ -66,7 +79,8 @@
          * setting data to be available on the view.
          */
         function onInit() {
-            vm.order = shipment.order;
+            vm.order = order;
+            vm.orderFulfillmentLineItems = orderFulfillmentLineItems;
         }
 
         /**
