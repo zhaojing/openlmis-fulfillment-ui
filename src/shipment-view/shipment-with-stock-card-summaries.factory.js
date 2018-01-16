@@ -59,7 +59,6 @@
                 throw 'Order ID must be defined';
             }
 
-            var service;
             var order;
             return orderService.get(orderId)
                 .then(function (response) {
