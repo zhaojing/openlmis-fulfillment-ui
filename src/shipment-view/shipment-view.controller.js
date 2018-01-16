@@ -149,11 +149,14 @@
                         .then(function() {
                             notificationService.success('shipmentView.shipmentHasBeenConfirmed');
                         });
-                        $state.reload();
+                        stateTrackerService.goToPreviousState('openlmis.orders.view');
                     })
                     .catch(function() {
+                        loadingPromise
+                        .then(function() {
+                            notificationService.error('shipmentView.failedToConfirmShipment');
+                        });
                         loadingModalService.close();
-                        notificationService.error('shipmentView.failedToConfirmShipment');
                     });
                 }
                 else {
