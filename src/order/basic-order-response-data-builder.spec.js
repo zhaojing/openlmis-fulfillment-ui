@@ -33,6 +33,7 @@
         BasicOrderResponseDataBuilder.prototype.withLastUpdatedDate = withLastUpdatedDate;
         BasicOrderResponseDataBuilder.prototype.withProcessingPeriod = withProcessingPeriod;
         BasicOrderResponseDataBuilder.prototype.withOrderLineItem = withOrderLineItem;
+        BasicOrderResponseDataBuilder.prototype.withStatus = withStatus;
         BasicOrderResponseDataBuilder.prototype.build = build;
 
         return BasicOrderResponseDataBuilder;
@@ -82,6 +83,11 @@
 
         function withOrderLineItem(lineItem) {
             this.orderLineItems.push(lineItem);
+            return this;
+        }
+
+        function withStatus(status) {
+            this.status = status;
             return this;
         }
 

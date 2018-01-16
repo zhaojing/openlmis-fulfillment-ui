@@ -13,7 +13,7 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-xdescribe('shipmentWithStockCardSummariesFactory', function() {
+describe('shipmentWithStockCardSummariesFactory', function() {
 
     var ORDER_ID = 'order-id';
 
@@ -22,7 +22,8 @@ xdescribe('shipmentWithStockCardSummariesFactory', function() {
         ObjectReferenceDataBuilder, stockCardSummariesService, orderService, shipmentDraftService, $q,
         $rootScope, PageDataBuilder, order, shipment, stockCardSummaryOne, stockCardSummaryTwo,
         stockCardSummaryThree, stockCardSummaryFour, orderableOne, orderableTwo, lotOne, lotTwo,
-        ShipmentLineItemWithSummary, OrderLineItemDataBuilder, OrderLineItem;
+        ShipmentLineItemWithSummary, OrderLineItemDataBuilder, OrderLineItem, shipmentService,
+        shippedOrder;
 
     beforeEach(function() {
         module('referencedata-lot');
@@ -39,6 +40,7 @@ xdescribe('shipmentWithStockCardSummariesFactory', function() {
             ShipmentDataBuilder = $injector.get('ShipmentDataBuilder');
             OrderableDataBuilder = $injector.get('OrderableDataBuilder');
             stockCardSummariesService = $injector.get('stockCardSummariesService');
+            shipmentService = $injector.get('shipmentService');
             ObjectReferenceDataBuilder = $injector.get('ObjectReferenceDataBuilder');
             ShipmentLineItemDataBuilder = $injector.get('ShipmentLineItemDataBuilder');
             StockCardSummaryDataBuilder = $injector.get('StockCardSummaryDataBuilder');
@@ -52,6 +54,7 @@ xdescribe('shipmentWithStockCardSummariesFactory', function() {
         spyOn(stockCardSummariesService, 'getStockCardSummaries');
         spyOn(orderService, 'get');
         spyOn(shipmentDraftService, 'search');
+        spyOn(shipmentService, 'search');
 
         orderableOne = new OrderableDataBuilder().build();
         orderableTwo = new OrderableDataBuilder().build();
@@ -77,6 +80,19 @@ xdescribe('shipmentWithStockCardSummariesFactory', function() {
 
         order = new OrderDataBuilder()
             .withId(ORDER_ID)
+            .withOrderLineItems([
+                new OrderLineItemDataBuilder()
+                    .withOrderable(orderableOne)
+                    .build(),
+                new OrderLineItemDataBuilder()
+                    .withOrderable(orderableTwo)
+                    .build()
+            ])
+            .build();
+
+        shippedOrder = new OrderDataBuilder()
+            .withId(ORDER_ID)
+            .withStatus('SHIPPED')
             .withOrderLineItems([
                 new OrderLineItemDataBuilder()
                     .withOrderable(orderableOne)
@@ -129,13 +145,12 @@ xdescribe('shipmentWithStockCardSummariesFactory', function() {
 
             expect(rejected).toBe(true);
             expect(orderService.get).toHaveBeenCalledWith(ORDER_ID);
-            expect(shipmentDraftService.search).toHaveBeenCalledWith({
-                orderId: ORDER_ID
-            });
+            expect(shipmentDraftService.search).not.toHaveBeenCalled();
             expect(stockCardSummariesService.getStockCardSummaries).not.toHaveBeenCalled();
         });
 
         it('should reject if shipmentDraftService rejects', function() {
+            orderService.get.andReturn($q.resolve(order));
             shipmentDraftService.search.andReturn($q.reject());
 
             var rejected;
@@ -150,6 +165,27 @@ xdescribe('shipmentWithStockCardSummariesFactory', function() {
             expect(shipmentDraftService.search).toHaveBeenCalledWith({
                 orderId: ORDER_ID
             });
+            expect(shipmentService.search).not.toHaveBeenCalled();
+            expect(stockCardSummariesService.getStockCardSummaries).not.toHaveBeenCalled();
+        });
+
+        it('should reject if shipmentService rejects when order is shipped', function() {
+            orderService.get.andReturn($q.resolve(shippedOrder));
+            shipmentService.search.andReturn($q.reject());
+
+            var rejected;
+            shipmentWithStockCardSummariesFactory.get(ORDER_ID)
+            .catch(function() {
+                rejected = true;
+            });
+            $rootScope.$apply();
+
+            expect(rejected).toBe(true);
+            expect(orderService.get).toHaveBeenCalledWith(ORDER_ID);
+            expect(shipmentService.search).toHaveBeenCalledWith({
+                orderId: ORDER_ID
+            });
+            expect(shipmentDraftService.search).not.toHaveBeenCalled();
             expect(stockCardSummariesService.getStockCardSummaries).not.toHaveBeenCalled();
         });
 
@@ -170,6 +206,7 @@ xdescribe('shipmentWithStockCardSummariesFactory', function() {
             expect(shipmentDraftService.search).toHaveBeenCalledWith({
                 orderId: ORDER_ID
             });
+            expect(shipmentService.search).not.toHaveBeenCalled();
             expect(stockCardSummariesService.getStockCardSummaries).toHaveBeenCalledWith(
                 order.program.id,
                 order.supplyingFacility.id
@@ -197,13 +234,14 @@ xdescribe('shipmentWithStockCardSummariesFactory', function() {
             expect(shipmentDraftService.search).toHaveBeenCalledWith({
                 orderId: ORDER_ID
             });
+            expect(shipmentService.search).not.toHaveBeenCalled();
             expect(stockCardSummariesService.getStockCardSummaries).toHaveBeenCalledWith(
                 order.program.id,
                 order.supplyingFacility.id
             );
         });
 
-        it('should resolve if recreating shipment', function() {
+        it('should resolve if recreating shipment draft', function() {
             orderService.get.andReturn($q.resolve(order));
             shipmentDraftService.search.andReturn($q.resolve(
                 new PageDataBuilder()
@@ -229,9 +267,44 @@ xdescribe('shipmentWithStockCardSummariesFactory', function() {
             expect(shipmentDraftService.search).toHaveBeenCalledWith({
                 orderId: ORDER_ID
             });
+            expect(shipmentService.search).not.toHaveBeenCalled();
             expect(stockCardSummariesService.getStockCardSummaries).toHaveBeenCalledWith(
                 order.program.id,
                 order.supplyingFacility.id
+            );
+        });
+
+
+        it('should resolve when order is shipped', function() {
+            orderService.get.andReturn($q.resolve(shippedOrder));
+            shipmentService.search.andReturn($q.resolve(
+                new PageDataBuilder()
+                .withContent([shipment])
+                .build()
+            ));
+            stockCardSummariesService.getStockCardSummaries.andReturn($q.resolve([
+                stockCardSummaryOne,
+                stockCardSummaryTwo,
+                stockCardSummaryThree,
+                stockCardSummaryFour
+            ]));
+
+            var resolved;
+            shipmentWithStockCardSummariesFactory.get(ORDER_ID)
+            .then(function() {
+                resolved = true;
+            });
+            $rootScope.$apply();
+
+            expect(resolved).toBe(true);
+            expect(orderService.get).toHaveBeenCalledWith(ORDER_ID);
+            expect(shipmentService.search).toHaveBeenCalledWith({
+                orderId: ORDER_ID
+            });
+            expect(shipmentDraftService.search).not.toHaveBeenCalled();
+            expect(stockCardSummariesService.getStockCardSummaries).toHaveBeenCalledWith(
+                shippedOrder.program.id,
+                shippedOrder.supplyingFacility.id
             );
         });
 
@@ -257,6 +330,7 @@ xdescribe('shipmentWithStockCardSummariesFactory', function() {
             expect(shipmentDraftService.search).toHaveBeenCalledWith({
                 orderId: ORDER_ID
             });
+            expect(shipmentService.search).not.toHaveBeenCalled();
             expect(stockCardSummariesService.getStockCardSummaries).toHaveBeenCalledWith(
                 order.program.id,
                 order.supplyingFacility.id

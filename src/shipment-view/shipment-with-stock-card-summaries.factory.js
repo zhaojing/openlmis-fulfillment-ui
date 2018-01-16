@@ -64,14 +64,14 @@
             return orderService.get(orderId)
                 .then(function (response) {
                     order = response;
-                    if (order.status === ORDER_STATUS.SHIPPED) {
-                        service = shipmentService;
-                    } else {
-                        service = shipmentDraftService;
-                    }
-                    return service.search({
+                    var params = {
                         orderId: orderId
-                    })
+                    }
+                    if (order.status === ORDER_STATUS.SHIPPED) {
+                        return shipmentService.search(params);
+                    } else {
+                        return shipmentDraftService.search(params);
+                    }
                 })
                 .then(function(response) {
                     return stockCardSummariesService.getStockCardSummaries(
