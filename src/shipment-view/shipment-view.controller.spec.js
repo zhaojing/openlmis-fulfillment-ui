@@ -16,7 +16,8 @@
 describe('ShipmentViewController', function() {
 
     var vm, $q, $controller, $rootScope, $state, $window, shipment, OrderDataBuilder, loadingModalService, shipmentService, ORDER_STATUS,
-        confirmService, shipmentDraftService, notificationService, loadingDeferred, stateTrackerService, order, ShipmentDataBuilder;
+        confirmService, shipmentDraftService, notificationService, loadingDeferred, stateTrackerService, order, ShipmentDataBuilder,
+        lineItem, ShipmentLineItemWithSummaryDataBuilder, shipmentLineItem;
 
     beforeEach(function() {
         module('shipment-view');
@@ -36,15 +37,24 @@ describe('ShipmentViewController', function() {
             notificationService = $injector.get('notificationService');
             stateTrackerService =  $injector.get('stateTrackerService');
             ORDER_STATUS = $injector.get('ORDER_STATUS');
+            ShipmentLineItemWithSummaryDataBuilder = $injector.get('ShipmentLineItemWithSummaryDataBuilder');
         });
 
+        shipmentLineItem = new ShipmentLineItemWithSummaryDataBuilder()
+            .withQuantityShipped(10)
+            .build();
+        lineItem = {
+            shipmentLineItems: [
+                shipmentLineItem
+            ]
+        };
         order = new OrderDataBuilder().build();
         shipment = new ShipmentDataBuilder().withOrder(order);
 
         vm = $controller('ShipmentViewController', {
             shipment: shipment,
             order: order,
-            orderFulfillmentLineItems: order.lineItems
+            orderFulfillmentLineItems: [lineItem]
         });
 
         loadingDeferred = $q.defer();
@@ -204,8 +214,19 @@ describe('ShipmentViewController', function() {
             expect(loadingModalService.open).not.toHaveBeenCalled();
         });
 
-        //TODO enable test
-        xit('should not call shipmentService if shipment is not valid', function() {
+        it('should not call shipmentService if shipment is not valid', function() {
+            lineItem.shipmentLineItems.push(new ShipmentLineItemWithSummaryDataBuilder()
+                .withQuantityShipped(20)
+                .build());
+
+            vm = $controller('ShipmentViewController', {
+                shipment: shipment,
+                order: order,
+                orderFulfillmentLineItems: [lineItem]
+            });
+            console.log(lineItem);
+            vm.$onInit();
+
             vm.confirmShipment();
             confirmDeferred.resolve();
             $rootScope.$apply();
@@ -235,7 +256,7 @@ describe('ShipmentViewController', function() {
             expect(stateTrackerService.goToPreviousState).not.toHaveBeenCalled();
         });
 
-        it('should reload page and let the state change close loading modal after shipment was successfully created ', function() {
+        it('should reload page and let the state change close loading modal after shipment was successfully created', function() {
             vm.confirmShipment();
             confirmDeferred.resolve();
             $rootScope.$apply();

@@ -65,13 +65,18 @@
          * @description
          * Validates the shipment line items and places any errors in an object under 'errors'
          * property.
+         *
+         * @returns {boolean} true if line item is valid, false otherwise.
          */
         function validate() {
             this.errors = {};
 
             if (this.quantityShipped > this.summary.stockOnHand) {
                 this.errors.quantityShipped = 'shipmentView.fillQuantityCannotExceedStockOnHand';
+                return false;
             }
+
+            return true;
         }
     }
 })();

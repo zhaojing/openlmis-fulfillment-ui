@@ -231,8 +231,10 @@
 
         function isShipmentValid() {
             var isValid = true;
-            shipment.lineItems.forEach(function(lineItem) {
-                isValid = isValid && !(lineItem.errors && lineItem.errors.length > 0);
+            vm.orderFulfillmentLineItems.forEach(function(orderLineItem) {
+                orderLineItem.shipmentLineItems.forEach(function(lineItem) {
+                    isValid = isValid && lineItem.validate();
+                });
             });
             return isValid;
         }
