@@ -21,7 +21,7 @@
     <dt>{{'shipmentView.lastUpdated' | message}}</dt>
     <dd>{{vm.order.lastUpdatedDate | openlmisDate}}<dd>
     <dt>{{'shipmentView.lastUpdatedBy' | message}}</dt>
-    <dd>{{vm.order.lastUpdater.username | openlmisDate}}<dd>
+    <dd>{{vm.order.lastUpdater.username}}<dd>
 </dl>
 <section class="openlmis-table-container">
     <button ng-show="vm.isEditable()" ng-click="vm.saveAndPrint()" class="primary">{{'shipmentView.generatePickPackList' | message}}</button>
