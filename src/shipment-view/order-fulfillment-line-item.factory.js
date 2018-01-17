@@ -112,12 +112,17 @@
 
         function compareLineItems(left, right) {
             return compareVvmStatuses(getVvmStatus(left), getVvmStatus(right)) ||
-                compare(getExpirationDate(left), getExpirationDate(right)) ||
+                compareExpirationDate(getExpirationDate(left), getExpirationDate(right)) ||
                 compare(left.summary.stockOnHand, right.summary.stockOnHand);
         }
 
         function compareVvmStatuses(left, right) {
             return compare(left, right) * -1;
+        }
+
+        function compareExpirationDate(left, right) {
+            return (left === undefined || left === null) && (right !== undefined || right != null) ? 1 :
+                    (right === undefined || right === null ? -1 : compare(left, right));
         }
 
         function compare(left, right) {
