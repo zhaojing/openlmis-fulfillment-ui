@@ -176,13 +176,12 @@
          * was successful or not. Will take user to the previous page on success.
          */
         function deleteShipment() {
-            var loadingPromise = loadingModalService.open();
-
             confirmService.confirm(
                 'shipmentView.deleteDraftConfirmation',
                 'shipmentView.deleteDraft'
             )
             .then(function() {
+                var loadingPromise = loadingModalService.open();
                 return shipmentDraftService.remove(shipment.id)
                 .then(function() {
                     loadingPromise
@@ -198,8 +197,7 @@
                     });
                     loadingModalService.close();
                 });
-            })
-            .catch(loadingModalService.close);
+            });
         }
 
         /**

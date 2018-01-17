@@ -363,10 +363,12 @@ describe('ShipmentViewController', function() {
         it('should open loading modal', function() {
             vm.deleteShipment();
 
-            expect(loadingModalService.open).toHaveBeenCalled();
+            expect(loadingModalService.open).not.toHaveBeenCalled();
 
+            confirmDeferred.resolve();
             $rootScope.$apply();
 
+            expect(loadingModalService.open).toHaveBeenCalled();
             expect(loadingModalService.close).not.toHaveBeenCalled();
         });
 
@@ -387,7 +389,7 @@ describe('ShipmentViewController', function() {
             expect(stateTrackerService.goToPreviousState).not.toHaveBeenCalled();
         });
 
-        it('should do nothing but close loading modal if confirmation was dismissed', function() {
+        it('should do nothing if confirmation was dismissed', function() {
             vm.deleteShipment();
 
             expect(confirmService.confirm).toHaveBeenCalledWith(
@@ -397,16 +399,14 @@ describe('ShipmentViewController', function() {
 
             $rootScope.$apply();
 
-            expect(loadingModalService.close).not.toHaveBeenCalled();
-
             confirmDeferred.reject();
-            loadingDeferred.resolve();
             $rootScope.$apply();
 
             expect(shipmentDraftService.remove).not.toHaveBeenCalled();
             expect(notificationService.success).not.toHaveBeenCalled();
             expect(notificationService.error).not.toHaveBeenCalled();
-            expect(loadingModalService.close).toHaveBeenCalled();
+            expect(loadingModalService.open).not.toHaveBeenCalled();
+            expect(loadingModalService.close).not.toHaveBeenCalled();
             expect(stateTrackerService.goToPreviousState).not.toHaveBeenCalled();
         });
 
