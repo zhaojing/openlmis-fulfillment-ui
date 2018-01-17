@@ -70,11 +70,17 @@ describe('ShipmentViewController', function() {
 
     describe('onInit', function() {
 
-        it('should expose order', function() {
+        beforeEach(function() {
             vm.$onInit();
+        });
+
+        it('should expose order', function() {
             expect(vm.order).toEqual(shipment.order);
         });
 
+        it('should expose order', function() {
+            expect(vm.shipment).toEqual(shipment);
+        });
     });
 
     describe('saveShipment', function() {
@@ -332,12 +338,7 @@ describe('ShipmentViewController', function() {
             saveDeferred.reject();
             $rootScope.$apply();
 
-            expect(notificationService.error).not.toHaveBeenCalled();
             expect(loadingModalService.close).toHaveBeenCalled();
-
-            loadingDeferred.resolve();
-            $rootScope.$apply();
-
             expect(notificationService.error)
             .toHaveBeenCalledWith('shipmentView.failedToConfirmShipment');
             expect(notificationService.success).not.toHaveBeenCalled();
@@ -454,7 +455,7 @@ describe('ShipmentViewController', function() {
 
             expect(loadingModalService.close).toHaveBeenCalled();
             expect(notificationService.success).not.toHaveBeenCalled();
-            expect(notificationService.error).not.toHaveBeenCalled();
+            expect(notificationService.error).toHaveBeenCalledWith('shipmentView.failedToDeleteDraft');
             expect(stateTrackerService.goToPreviousState).not.toHaveBeenCalled();
         });
 

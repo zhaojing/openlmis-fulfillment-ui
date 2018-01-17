@@ -1,6 +1,6 @@
 {
     "shipmentView.viewShipment": "View Shipment",
-    "shipmentView.productCode": "Product code",
+    "shipmentView.productCode": "Product Code",
     "shipmentView.order": "Order",
     "shipmentView.status": "Order status",
     "shipmentView.product": "Product",
@@ -10,8 +10,8 @@
     "shipmentView.program": "Program",
     "shipmentView.type": "Type",
     "shipmentView.dateCreated": "Date created",
-    "shipmentView.orderQuantity": "Order quantity",
-    "shipmentView.fillQuantity": "Fill quantity",
+    "shipmentView.orderQuantity": "Order Quantity",
+    "shipmentView.fillQuantity": "Fill Quantity",
     "shipmentView.lastUpdated": "Last updated",
     "shipmentView.lastUpdatedBy": "Last updated by",
     "shipmentView.cceStatus": "CCE Status",

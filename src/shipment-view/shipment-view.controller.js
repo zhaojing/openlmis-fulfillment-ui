@@ -61,6 +61,17 @@
         /**
          * @ngdoc property
          * @propertyOf shipment-view.controller:ShipmentViewController
+         * @name shipment
+         * @type {Object}
+         *
+         * @description
+         * Holds shipment that will be displayed on the screen.
+         */
+        vm.shipment = undefined;
+
+        /**
+         * @ngdoc property
+         * @propertyOf shipment-view.controller:ShipmentViewController
          * @name orderFulfillmentLineItems
          * @type {Array}
          *
@@ -81,6 +92,7 @@
         function onInit() {
             vm.order = order;
             vm.orderFulfillmentLineItems = orderFulfillmentLineItems;
+            vm.shipment = shipment;
         }
 
         /**
@@ -118,11 +130,8 @@
                 $state.reload();
             })
             .catch(function() {
-                loadingPromise
-                .then(function() {
-                    notificationService.error('shipmentView.failedToSaveDraft');
-                });
                 loadingModalService.close();
+                notificationService.error('shipmentView.failedToSaveDraft');
             });
         }
 
@@ -152,11 +161,8 @@
                         stateTrackerService.goToPreviousState('openlmis.orders.view');
                     })
                     .catch(function() {
-                        loadingPromise
-                        .then(function() {
-                            notificationService.error('shipmentView.failedToConfirmShipment');
-                        });
                         loadingModalService.close();
+                        notificationService.error('shipmentView.failedToConfirmShipment');
                     });
                 }
                 else {
@@ -191,11 +197,8 @@
                     stateTrackerService.goToPreviousState('openlmis.orders.view');
                 })
                 .catch(function() {
-                    loadingPromise
-                    .then(function() {
-                        notificationService.error('shipmentView.failedToDeleteDraft');
-                    });
                     loadingModalService.close();
+                    notificationService.error('shipmentView.failedToDeleteDraft');
                 });
             });
         }

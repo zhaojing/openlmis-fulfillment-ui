@@ -2,7 +2,8 @@
 ==================
 
 New functionality added in a backwards-compatible manner:
-* [OLMIS-3108:](https://openlmis.atlassian.net/browse/OLMIS-3108) Updated to use dev-ui v7 transifex build process
+* [OLMIS-3610](https://openlmis.atlassian.net/browse/OLMIS-3610): Added saving for shipment draft.
+* [OLMIS-3108](https://openlmis.atlassian.net/browse/OLMIS-3108): Updated to use dev-ui v7 transifex build process
 * [OLMIS-3607](https://openlmis.atlassian.net/browse/OLMIS-3607): Added created date and last updated columns to the Order list view
 * [OLMIS-3608](https://openlmis.atlassian.net/browse/OLMIS-3608): Created basic order details view
 * [OLMIS-3382](https://openlmis.atlassian.net/browse/OLMIS-3382): Use CCE status component in order details view
