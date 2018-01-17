@@ -29,12 +29,12 @@
         .controller('ShipmentViewController', ShipmentViewController);
 
     ShipmentViewController.$inject = [
-        'order', 'shipment', 'orderFulfillmentLineItems', 'shipmentDraftService', 'shipmentService',
+        '$scope', 'order', 'shipment', 'orderFulfillmentLineItems', 'shipmentDraftService', 'shipmentService',
         'loadingModalService', '$state', '$window', 'fulfillmentUrlFactory', 'messageService',
         'confirmService', 'notificationService', 'stateTrackerService', 'accessTokenFactory', 'ORDER_STATUS'
     ];
 
-    function ShipmentViewController(order, shipment, orderFulfillmentLineItems, shipmentDraftService, shipmentService,
+    function ShipmentViewController($scope, order, shipment, orderFulfillmentLineItems, shipmentDraftService, shipmentService,
                                     loadingModalService, $state, $window, fulfillmentUrlFactory, messageService,
                                     confirmService, notificationService, stateTrackerService, accessTokenFactory, ORDER_STATUS) {
 
@@ -160,6 +160,7 @@
                     });
                 }
                 else {
+                    $scope.$broadcast('openlmis-form-submit');
                     notificationService.error('shipmentView.shipmentHasErrors');
                 }
             });

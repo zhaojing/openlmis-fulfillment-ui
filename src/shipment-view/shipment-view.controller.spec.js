@@ -52,6 +52,7 @@ describe('ShipmentViewController', function() {
         shipment = new ShipmentDataBuilder().withOrder(order);
 
         vm = $controller('ShipmentViewController', {
+            $scope: $rootScope.$new(),
             shipment: shipment,
             order: order,
             orderFulfillmentLineItems: [lineItem]
@@ -219,7 +220,11 @@ describe('ShipmentViewController', function() {
                 .withQuantityShipped(20)
                 .build());
 
+            var scope = $rootScope.$new();
+            spyOn(scope, '$broadcast').andReturn();
+
             vm = $controller('ShipmentViewController', {
+                $scope: scope,
                 shipment: shipment,
                 order: order,
                 orderFulfillmentLineItems: [lineItem]
@@ -231,6 +236,7 @@ describe('ShipmentViewController', function() {
             confirmDeferred.resolve();
             $rootScope.$apply();
 
+            expect(scope.$broadcast).toHaveBeenCalledWith('openlmis-form-submit');
             expect(confirmService.confirm).toHaveBeenCalled();
             expect(shipmentService.create).not.toHaveBeenCalled();
             expect(loadingModalService.open).not.toHaveBeenCalled();
