@@ -21,7 +21,7 @@ describe('orderFulfillmentLineItemFactory', function() {
 
     var firstOrderLineItem, secondOrderLineItem, thirdOrderLineItem, fourthOrderLineItem,
         fifthOrderLineItem, order, shipment, ORDER_ID, orderableOne,
-        lotOne, lotTwo, lotThree, lotFour, lotFive, stockCardSummaries;
+        lotOne, lotTwo, lotThree, lotFour, lotFive, lotSix, stockCardSummaries;
 
     beforeEach(function() {
         module('shipment-view');
@@ -51,6 +51,7 @@ describe('orderFulfillmentLineItemFactory', function() {
         lotThree = new LotDataBuilder().withExpirationDate('2017-04-04T05:59:51.993Z').build();
         lotFour = new LotDataBuilder().withExpirationDate('2017-03-03T05:59:51.993Z').build();
         lotFive = new LotDataBuilder().withExpirationDate(null).build();
+        lotSix = new LotDataBuilder().withExpirationDate('2017-04-04T05:59:51.993Z').build();
 
         firstOrderLineItem = new OrderLineItemDataBuilder().withOrderable(orderableOne).build();
         secondOrderLineItem = new OrderLineItemDataBuilder().withOrderable(orderableOne).build();
@@ -67,11 +68,18 @@ describe('orderFulfillmentLineItemFactory', function() {
         ]);
 
         stockCardSummaries = [
-            new StockCardSummaryDataBuilder().withOrderable(orderableOne).withLot(lotOne).withExtraData({ vvmStatus: 'STAGE_1'}).build(),
-            new StockCardSummaryDataBuilder().withOrderable(orderableOne).withLot(lotTwo).withExtraData({ vvmStatus: 'STAGE_2'}).build(),
-            new StockCardSummaryDataBuilder().withOrderable(orderableOne).withLot(lotThree).withExtraData({ vvmStatus: 'STAGE_2'}).build(),
-            new StockCardSummaryDataBuilder().withOrderable(orderableOne).withLot(lotFour).withExtraData({ vvmStatus: 'STAGE_2'}).build(),
-            new StockCardSummaryDataBuilder().withOrderable(orderableOne).withLot(lotFive).withExtraData({ vvmStatus: 'STAGE_1'}).build(),
+            new StockCardSummaryDataBuilder().withOrderable(orderableOne).withLot(lotOne)
+                .withExtraData({ vvmStatus: 'STAGE_1'}).build(),
+            new StockCardSummaryDataBuilder().withOrderable(orderableOne).withLot(lotTwo)
+                .withExtraData({ vvmStatus: 'STAGE_2'}).build(),
+            new StockCardSummaryDataBuilder().withOrderable(orderableOne).withLot(lotThree)
+                .withExtraData({ vvmStatus: 'STAGE_2'}).build(),
+            new StockCardSummaryDataBuilder().withOrderable(orderableOne).withLot(lotFour)
+                .withStockOnHand(5).withExtraData({ vvmStatus: 'STAGE_2'}).build(),
+            new StockCardSummaryDataBuilder().withOrderable(orderableOne).withLot(lotFive)
+                .withExtraData({ vvmStatus: 'STAGE_1'}).build(),
+            new StockCardSummaryDataBuilder().withOrderable(orderableOne).withLot(lotSix)
+                .withStockOnHand(3).withExtraData({ vvmStatus: 'STAGE_2'}).build(),
             new StockCardSummaryDataBuilder().build()
         ];
 
@@ -107,7 +115,13 @@ describe('orderFulfillmentLineItemFactory', function() {
                     .withOrderable(new ObjectReferenceDataBuilder().withId(orderableOne.id))
                     .withLot(new ObjectReferenceDataBuilder().withId(lotFive.id))
                     .withQuantityShipped(9)
+                    .build(),
+                new ShipmentLineItemDataBuilder()
+                    .withOrderable(new ObjectReferenceDataBuilder().withId(orderableOne.id))
+                    .withLot(new ObjectReferenceDataBuilder().withId(lotSix.id))
+                    .withQuantityShipped(90)
                     .build()
+
             ])
             .build();
     });
@@ -121,20 +135,18 @@ describe('orderFulfillmentLineItemFactory', function() {
         });
 
         it('should not return extra summaries', function() {
-            expect(result.length).toBe(5);
+            expect(result[0].shipmentLineItems.length).toBe(6);
 
-            expect(result[0].shipmentLineItems.length).toBe(5);
             expect(result[0].shipmentLineItems[0].summary).toEqual(stockCardSummaries[1]);
             expect(result[0].shipmentLineItems[1].summary).toEqual(stockCardSummaries[3]);
-            expect(result[0].shipmentLineItems[2].summary).toEqual(stockCardSummaries[2]);
-            expect(result[0].shipmentLineItems[3].summary).toEqual(stockCardSummaries[0]);
-            expect(result[0].shipmentLineItems[4].summary).toEqual(stockCardSummaries[4]);
+            expect(result[0].shipmentLineItems[2].summary).toEqual(stockCardSummaries[5]);
+            expect(result[0].shipmentLineItems[3].summary).toEqual(stockCardSummaries[2]);
+            expect(result[0].shipmentLineItems[4].summary).toEqual(stockCardSummaries[0]);
+            expect(result[0].shipmentLineItems[5].summary).toEqual(stockCardSummaries[4]);
         });
 
         it('should sort line items', function() {
-            expect(result.length).toBe(5);
-
-            expect(result[0].shipmentLineItems.length).toBe(5);
+            expect(result[0].shipmentLineItems.length).toBe(6);
             expect(result[0].orderable).toEqual(orderableOne);
 
             expect(result[0].shipmentLineItems[0].quantityShipped).toBe(37);
@@ -143,18 +155,20 @@ describe('orderFulfillmentLineItemFactory', function() {
             expect(result[0].shipmentLineItems[1].quantityShipped).toBe(10);
             expect(result[0].shipmentLineItems[1].lot).toEqual(lotFour);
 
-            expect(result[0].shipmentLineItems[2].quantityShipped).toBe(15);
-            expect(result[0].shipmentLineItems[2].lot).toEqual(lotThree);
+            expect(result[0].shipmentLineItems[2].quantityShipped).toBe(90);
+            expect(result[0].shipmentLineItems[2].lot).toEqual(lotSix);
 
-            expect(result[0].shipmentLineItems[3].quantityShipped).toBe(12);
-            expect(result[0].shipmentLineItems[3].lot).toEqual(lotOne);
+            expect(result[0].shipmentLineItems[3].quantityShipped).toBe(15);
+            expect(result[0].shipmentLineItems[3].lot).toEqual(lotThree);
 
-            expect(result[0].shipmentLineItems[4].quantityShipped).toBe(9);
-            expect(result[0].shipmentLineItems[4].lot).toEqual(lotFive);
+            expect(result[0].shipmentLineItems[4].quantityShipped).toBe(12);
+            expect(result[0].shipmentLineItems[4].lot).toEqual(lotOne);
+
+            expect(result[0].shipmentLineItems[5].quantityShipped).toBe(9);
+            expect(result[0].shipmentLineItems[5].lot).toEqual(lotFive);
         });
 
         it('should return instances of ShipmentLineItem as shipmentLineItems', function() {
-            expect(result.length).toBe(5);
             expect(result[0].shipmentLineItems[0] instanceof ShipmentLineItemWithSummary).toBe(true);
         });
 
