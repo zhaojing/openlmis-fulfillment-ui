@@ -28,9 +28,9 @@
         .module('shipment-view')
         .factory('orderFulfillmentLineItemFactory', orderFulfillmentLineItemFactory);
 
-    orderFulfillmentLineItemFactory.$inject = ['ShipmentLineItemWithSummary', 'OrderLineItem'];
+    orderFulfillmentLineItemFactory.$inject = ['ShipmentLineItemWithSummary', 'OrderLineItem', 'VVM_STATUS'];
 
-    function orderFulfillmentLineItemFactory(ShipmentLineItemWithSummary, OrderLineItem) {
+    function orderFulfillmentLineItemFactory(ShipmentLineItemWithSummary, OrderLineItem, VVM_STATUS) {
         var factory = {
             get: get
         };
@@ -117,7 +117,7 @@
         }
 
         function compareVvmStatuses(left, right) {
-            return compare(left, right) * -1;
+            return left === right ? 0 : left === VVM_STATUS.STAGE_2 ? -1 : right === VVM_STATUS.STAGE_2 ? 1 : 0;
         }
 
         function compareExpirationDate(left, right) {
