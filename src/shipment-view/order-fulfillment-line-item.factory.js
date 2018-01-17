@@ -121,8 +121,7 @@
         }
 
         function compareExpirationDate(left, right) {
-            return (left === undefined || left === null) && (right !== undefined || right != null) ? 1 :
-                    (right === undefined || right === null ? -1 : compare(left, right));
+            return !left && right ? 1 : !right ? -1 : compare(left, right);
         }
 
         function compare(left, right) {
