@@ -233,7 +233,7 @@
             var isValid = true;
             vm.orderFulfillmentLineItems.forEach(function(orderLineItem) {
                 orderLineItem.shipmentLineItems.forEach(function(lineItem) {
-                    isValid = isValid && lineItem.validate();
+                    isValid = lineItem.validate() && isValid;
                 });
             });
             return isValid;
