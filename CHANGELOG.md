@@ -12,6 +12,9 @@ New functionality added in a backwards-compatible manner:
 * [OLMIS-1611](https://openlmis.atlassian.net/browse/OLMIS-1611): Added confirm shipment button.
 * [OLMIS-529](https://openlmis.atlassian.net/browse/OLMIS-529): Show lots in recommended sort order on fulfill view.
 
+Improvements:
+* [OLMIS-3955](https://openlmis.atlassian.net/browse/OLMIS-3955): Renamed PICKING order status to FULFILLING. Removed PICKED and IN_TRANSIT.
+
 5.1.0 / 2017-11-09
 ==================
 

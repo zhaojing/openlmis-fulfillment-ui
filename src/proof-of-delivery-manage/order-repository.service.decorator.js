@@ -58,7 +58,6 @@
          */
         function searchOrdersForManagePod(searchParams) {
             searchParams.status = [
-                 ORDER_STATUS.PICKED,
                  ORDER_STATUS.TRANSFER_FAILED,
                  ORDER_STATUS.READY_TO_PACK,
                  ORDER_STATUS.ORDERED,

@@ -32,9 +32,7 @@
 
         return {
             ORDERED: 'ORDERED',
-            IN_TRANSIT: 'IN_TRANSIT',
-            PICKING: 'PICKING',
-            PICKED: 'PICKED',
+            FULFILLING: 'FULFILLING',
             SHIPPED: 'SHIPPED',
             RECEIVED: 'RECEIVED',
             TRANSFER_FAILED: 'TRANSFER_FAILED',

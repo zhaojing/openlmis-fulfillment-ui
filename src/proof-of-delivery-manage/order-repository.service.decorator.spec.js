@@ -41,7 +41,6 @@ describe('orderRepository decorator', function() {
                 requestingFacility: 'id-one',
                 program: 'id-two',
                 status: [
-                    ORDER_STATUS.PICKED,
                     ORDER_STATUS.TRANSFER_FAILED,
                     ORDER_STATUS.READY_TO_PACK,
                     ORDER_STATUS.ORDERED,

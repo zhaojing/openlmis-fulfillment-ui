@@ -15,7 +15,8 @@
 
 describe('PodViewController', function() {
 
-    var vm, $rootScope, $state, $q, podSpy, notificationServiceMock, confirmServiceMock, confirmPromise, isValid, ORDER_STATUS, getPageMock, stateParams;
+    var vm, $rootScope, $state, $q, podSpy, notificationServiceMock, confirmServiceMock,
+        confirmPromise, ORDER_STATUS, alertServiceMock, proofOfDeliveryServiceMock;
 
     beforeEach(function() {
         notificationServiceMock = jasmine.createSpyObj('notificationService', ['success']);
@@ -45,10 +46,6 @@ describe('PodViewController', function() {
                 }
             }
         ];
-        stateParams = {
-            page: 0,
-            pageSize: 1
-        };
 
         module('proof-of-delivery-view', function($provide) {
             $provide.service('notificationService', function() {
@@ -247,7 +244,7 @@ describe('PodViewController', function() {
         });
 
         it('should return false if order status is oder than RECEIVED', function() {
-            podSpy.order.status = ORDER_STATUS.IN_TRANSIT;
+            podSpy.order.status = ORDER_STATUS.FULFILLING;
             expect(vm.isSubmitted()).toBe(false);
         });
 
