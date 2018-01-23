@@ -15,12 +15,14 @@
 
 describe('OrderViewController', function() {
 
-    var vm, $rootScope, loadingModalServiceMock, fulfillmentUrlFactoryMock, supplyingFacilities,
-        requestingFacilities, programs, orders, item, $controller, $stateParams, $rootScope, scope,
-        requestingFacilityFactory;
+    var vm, $rootScope, fulfillmentUrlFactoryMock, supplyingFacilities, requestingFacilities,
+        programs, orders, $controller, $stateParams, scope, requestingFacilityFactory, $state,
+        BasicOrderResponseDataBuilder, ORDER_STATUS, ProgramDataBuilder, FacilityDataBuilder;
 
     beforeEach(function() {
         module('order-view');
+        module('referencedata-facility');
+        module('referencedata-program');
 
         inject(function($injector) {
             $controller = $injector.get('$controller');
@@ -29,43 +31,47 @@ describe('OrderViewController', function() {
             $rootScope = $injector.get('$rootScope');
             scope = $rootScope.$new();
             requestingFacilityFactory = $injector.get('requestingFacilityFactory');
+            BasicOrderResponseDataBuilder = $injector.get('BasicOrderResponseDataBuilder');
+            ProgramDataBuilder = $injector.get('ProgramDataBuilder');
+            FacilityDataBuilder = $injector.get('FacilityDataBuilder');
+            ORDER_STATUS = $injector.get('ORDER_STATUS');
         });
 
         supplyingFacilities = [
-            createObjWithId('facility-one'),
-            createObjWithId('facility-two')
+            new FacilityDataBuilder().withId('facility-one').build(),
+            new FacilityDataBuilder().withId('facility-two').build()
         ];
 
         requestingFacilities = [
-            createObjWithId('facility-three'),
-            createObjWithId('facility-four'),
-            createObjWithId('facility-five')
+            new FacilityDataBuilder().withId('facility-three').build(),
+            new FacilityDataBuilder().withId('facility-four').build(),
+            new FacilityDataBuilder().withId('facility-five').build()
         ];
 
         programs = [
-            createObjWithId('program-one')
+            new ProgramDataBuilder().withId('program-one').build()
         ];
 
         orders = [
-            createObjWithId('order-one'),
-            createObjWithId('order-two')
-        ];
-
-        items = [
-            'itemOne', 'itemTwo'
+            new BasicOrderResponseDataBuilder()
+                .withStatus(ORDER_STATUS.ORDERED)
+                .withId('order-one')
+                .build(),
+            new BasicOrderResponseDataBuilder()
+            .withStatus(ORDER_STATUS.FULFILLING)
+            .withId('order-two')
+            .build()
         ];
     });
 
     describe('initialization', function() {
-
-        var $controllerMock;
 
         beforeEach(function() {
             vm = $controller('OrderViewController', {
                 supplyingFacilities: supplyingFacilities,
                 requestingFacilities: requestingFacilities,
                 programs: programs,
-                orders: items,
+                orders: orders,
                 $scope: scope
             });
 
@@ -245,7 +251,7 @@ describe('OrderViewController', function() {
                 supplyingFacilities: supplyingFacilities,
                 requestingFacilities: requestingFacilities,
                 programs: programs,
-                orders: items,
+                orders: orders,
                 fulfillmentUrlFactory: fulfillmentUrlFactoryMock,
                 $scope: scope
             });
@@ -269,7 +275,7 @@ describe('OrderViewController', function() {
                 supplyingFacilities: supplyingFacilities,
                 requestingFacilities: requestingFacilities,
                 programs: programs,
-                orders: items,
+                orders: orders,
                 fulfillmentUrlFactory: fulfillmentUrlFactoryMock,
                 $scope: scope
             });
@@ -281,12 +287,34 @@ describe('OrderViewController', function() {
         });
     });
 
+    describe('hasPermissionToFulfill', function() {
+
+        it('should return true if status is FULFILLING', function () {
+            expect(vm.hasPermissionToFulfill(orders[1]))
+                .toEqual(true);
+        });
+
+        it('should return true if status is ORDERED', function () {
+            expect(vm.hasPermissionToFulfill(orders[0]))
+                .toEqual(true);
+        });
+
+        it('should return true if status is ORDERED', function () {
+            var order = new BasicOrderResponseDataBuilder()
+                .withStatus(ORDER_STATUS.IN_ROUTE)
+                .build();
+
+            expect(vm.hasPermissionToFulfill(order))
+                .toEqual(false);
+        });
+    });
+
     function initController() {
         vm = $controller('OrderViewController', {
             supplyingFacilities: supplyingFacilities,
             requestingFacilities: requestingFacilities,
             programs: programs,
-            orders: items,
+            orders: orders,
             $scope: scope
         });
         vm.$onInit();

@@ -85,10 +85,7 @@
                 });
             });
 
-            return {
-                order: order,
-                lineItems: shipmentLineItems
-            };
+            return shipmentDraftService.save({order: order, lineItems: shipmentLineItems});
         }
 
         function filterByOrder(stockCardSummaries, order) {

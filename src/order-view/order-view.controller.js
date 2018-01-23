@@ -30,14 +30,14 @@
         .controller('OrderViewController', controller);
 
     controller.$inject = [
-        'supplyingFacilities', 'requestingFacilities', 'programs', 'requestingFacilityFactory', 'loadingModalService',
-        'notificationService', 'fulfillmentUrlFactory', 'orders', '$stateParams',
-        '$filter', '$state', '$scope'
+        'supplyingFacilities', 'requestingFacilities', 'programs', 'requestingFacilityFactory',
+        'loadingModalService', 'notificationService', 'fulfillmentUrlFactory', 'orders',
+        '$stateParams', '$filter', '$state', '$scope', 'ORDER_STATUS'
     ];
 
-    function controller(supplyingFacilities, requestingFacilities, programs, requestingFacilityFactory, loadingModalService,
-                        notificationService, fulfillmentUrlFactory, orders, $stateParams,
-                        $filter, $state, $scope) {
+    function controller(supplyingFacilities, requestingFacilities, programs, requestingFacilityFactory,
+        loadingModalService, notificationService, fulfillmentUrlFactory, orders, $stateParams, $filter,
+        $state, $scope, ORDER_STATUS) {
 
         var vm = this;
 
@@ -45,6 +45,7 @@
         vm.loadOrders = loadOrders;
         vm.getPrintUrl = getPrintUrl;
         vm.getDownloadUrl = getDownloadUrl;
+        vm.hasPermissionToFulfill = hasPermissionToFulfill;
 
         /**
          * @ngdoc property
@@ -219,6 +220,21 @@
          */
         function getDownloadUrl(order) {
             return fulfillmentUrlFactory('/api/orders/' + order.id + '/export?type=csv');
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf order-view.controller:OrderViewController
+         * @name hasPermissionToFulfill
+         *
+         * @description
+         * Checks status of the given order.
+         *
+         * @param  {Object} order   the order to check status
+         * @return {Boolean}        true if status is ORDERED or FULFILLING
+         */
+        function hasPermissionToFulfill(order) {
+            return order.status == ORDER_STATUS.ORDERED || order.status == ORDER_STATUS.FULFILLING;
         }
 
         function loadRequestingFacilities(supplyingFacilityId) {

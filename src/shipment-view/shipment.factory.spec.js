@@ -16,8 +16,10 @@
 describe('shipmentFactory', function() {
 
     var shipmentFactory, shipmentService, shipmentDraftService, ORDER_STATUS, $rootScope, $q,
-        ShipmentDataBuilder, PageDataBuilder, OrderDataBuilder, StockCardSummaryDataBuilder, OrderableDataBuilder, LotDataBuilder, OrderLineItemDataBuilder,
-        order, shipment, stockCardSummaries, orderableOne, orderableTwo, lotOne, lotTwo, searchPromise;
+        ShipmentDataBuilder, PageDataBuilder, OrderDataBuilder, StockCardSummaryDataBuilder,
+        OrderableDataBuilder, LotDataBuilder, OrderLineItemDataBuilder, order, shipment,
+        stockCardSummaries, orderableOne, orderableTwo, lotOne, lotTwo, searchPromise,
+        shipmentLineItems, ShipmentLineItemDataBuilder;
 
     beforeEach(function() {
         module('referencedata-lot');
@@ -38,6 +40,7 @@ describe('shipmentFactory', function() {
             OrderableDataBuilder = $injector.get('OrderableDataBuilder');
             LotDataBuilder = $injector.get('LotDataBuilder');
             OrderLineItemDataBuilder = $injector.get('OrderLineItemDataBuilder');
+            ShipmentLineItemDataBuilder = $injector.get('ShipmentLineItemDataBuilder');
         });
 
         orderableOne = new OrderableDataBuilder().build();
@@ -73,12 +76,34 @@ describe('shipmentFactory', function() {
             ])
             .build();
 
-        shipment = new ShipmentDataBuilder().build();
+        shipmentLineItems = [
+            new ShipmentLineItemDataBuilder()
+                    .withOrderable(stockCardSummaries[0].orderable)
+                    .withLot(stockCardSummaries[0].lot)
+                    .withQuantityShipped(0)
+                    .build(),
+                new ShipmentLineItemDataBuilder()
+                    .withOrderable(stockCardSummaries[1].orderable)
+                    .withLot(stockCardSummaries[1].lot)
+                    .withQuantityShipped(0)
+                    .build(),
+                new ShipmentLineItemDataBuilder()
+                    .withOrderable(stockCardSummaries[2].orderable)
+                    .withLot(stockCardSummaries[2].lot)
+                    .withQuantityShipped(0)
+                    .build(),
+        ]
+
+        shipment = new ShipmentDataBuilder()
+            .withOrder(order)
+            .withLineItems(shipmentLineItems)
+            .buildWithoutId();
 
         searchPromise = $q.defer();
 
         spyOn(shipmentService, 'search').andReturn(searchPromise.promise);
         spyOn(shipmentDraftService, 'search').andReturn(searchPromise.promise);
+        spyOn(shipmentDraftService, 'save').andReturn($q.when(shipment));
     });
 
     describe('getForOrder', function() {
@@ -142,7 +167,6 @@ describe('shipmentFactory', function() {
             $rootScope.$apply();
 
             expect(result.order).toEqual(order);
-            expect(result.notes).toBeUndefined();
             expect(result.lineItems.length).toBe(3);
 
             expect(result.lineItems[0].orderable).toEqual(stockCardSummaries[0].orderable);
