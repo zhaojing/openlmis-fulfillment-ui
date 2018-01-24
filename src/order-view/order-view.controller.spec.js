@@ -287,15 +287,15 @@ describe('OrderViewController', function() {
         });
     });
 
-    describe('hasPermissionToFulfill', function() {
+    describe('canBeFulfilled', function() {
 
         it('should return true if status is FULFILLING', function () {
-            expect(vm.hasPermissionToFulfill(orders[1]))
+            expect(vm.canBeFulfilled(orders[1].status))
                 .toEqual(true);
         });
 
         it('should return true if status is ORDERED', function () {
-            expect(vm.hasPermissionToFulfill(orders[0]))
+            expect(vm.canBeFulfilled(orders[0].status))
                 .toEqual(true);
         });
 
@@ -304,7 +304,7 @@ describe('OrderViewController', function() {
                 .withStatus(ORDER_STATUS.IN_ROUTE)
                 .build();
 
-            expect(vm.hasPermissionToFulfill(order))
+            expect(vm.canBeFulfilled(order.status))
                 .toEqual(false);
         });
     });
@@ -320,9 +320,3 @@ describe('OrderViewController', function() {
         vm.$onInit();
     }
 });
-
-function createObjWithId(id) {
-    return {
-        id: id
-    };
-}

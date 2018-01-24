@@ -45,7 +45,7 @@
         vm.loadOrders = loadOrders;
         vm.getPrintUrl = getPrintUrl;
         vm.getDownloadUrl = getDownloadUrl;
-        vm.hasPermissionToFulfill = hasPermissionToFulfill;
+        vm.canBeFulfilled = canBeFulfilled;
 
         /**
          * @ngdoc property
@@ -225,16 +225,16 @@
         /**
          * @ngdoc method
          * @methodOf order-view.controller:OrderViewController
-         * @name hasPermissionToFulfill
+         * @name canBeFulfilled
          *
          * @description
-         * Checks status of the given order.
+         * Checks whether an order can be fulfilled.
          *
-         * @param  {Object} order   the order to check status
+         * @param  {Object} order   the order status
          * @return {Boolean}        true if status is ORDERED or FULFILLING
          */
-        function hasPermissionToFulfill(order) {
-            return order.status == ORDER_STATUS.ORDERED || order.status == ORDER_STATUS.FULFILLING;
+        function canBeFulfilled(orderStatus) {
+            return orderStatus == ORDER_STATUS.ORDERED || orderStatus == ORDER_STATUS.FULFILLING;
         }
 
         function loadRequestingFacilities(supplyingFacilityId) {
