@@ -28,9 +28,9 @@
         .module('order')
         .factory('Order', Order);
 
-    Order.$inject = [];
+    Order.$inject = ['ORDER_STATUS'];
 
-    function Order() {
+    function Order(ORDER_STATUS) {
         Order.prototype.canBeFulfilled = canBeFulfilled;
 
         return Order;

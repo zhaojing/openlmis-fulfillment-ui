@@ -32,12 +32,12 @@
     controller.$inject = [
         'supplyingFacilities', 'requestingFacilities', 'programs', 'requestingFacilityFactory',
         'loadingModalService', 'notificationService', 'fulfillmentUrlFactory', 'orders',
-        '$stateParams', '$filter', '$state', '$scope', 'ORDER_STATUS'
+        '$stateParams', '$filter', '$state', '$scope'
     ];
 
     function controller(supplyingFacilities, requestingFacilities, programs, requestingFacilityFactory,
         loadingModalService, notificationService, fulfillmentUrlFactory, orders, $stateParams, $filter,
-        $state, $scope, ORDER_STATUS) {
+        $state, $scope) {
 
         var vm = this;
 
