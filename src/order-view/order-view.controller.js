@@ -45,7 +45,6 @@
         vm.loadOrders = loadOrders;
         vm.getPrintUrl = getPrintUrl;
         vm.getDownloadUrl = getDownloadUrl;
-        vm.canBeFulfilled = canBeFulfilled;
 
         /**
          * @ngdoc property
@@ -220,21 +219,6 @@
          */
         function getDownloadUrl(order) {
             return fulfillmentUrlFactory('/api/orders/' + order.id + '/export?type=csv');
-        }
-
-        /**
-         * @ngdoc method
-         * @methodOf order-view.controller:OrderViewController
-         * @name canBeFulfilled
-         *
-         * @description
-         * Checks whether an order can be fulfilled.
-         *
-         * @param  {Object} order   the order status
-         * @return {Boolean}        true if status is ORDERED or FULFILLING
-         */
-        function canBeFulfilled(orderStatus) {
-            return orderStatus == ORDER_STATUS.ORDERED || orderStatus == ORDER_STATUS.FULFILLING;
         }
 
         function loadRequestingFacilities(supplyingFacilityId) {

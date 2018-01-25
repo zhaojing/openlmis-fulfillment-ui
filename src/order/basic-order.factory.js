@@ -28,9 +28,9 @@
         .module('order')
         .factory('basicOrderFactory', basicOrderFactory);
 
-    basicOrderFactory.$inject = ['AbstractFactory', 'dateUtils'];
+    basicOrderFactory.$inject = ['AbstractFactory', 'dateUtils', 'Order'];
 
-    function basicOrderFactory(AbstractFactory, dateUtils) {
+    function basicOrderFactory(AbstractFactory, dateUtils, Order) {
         return new AbstractFactory(buildFromResponse);
 
         /**
@@ -51,21 +51,11 @@
 
                 processingPeriod = buildProcessingPeriodFromResponse(response.processingPeriod);
 
-            return {
-                id: response.id,
-                emergency: response.emergency,
-                createdDate: createdDate,
-                program: response.program,
-                requestingFacility: response.requestingFacility,
-                orderCode: response.orderCode,
-                status: response.status,
-                processingPeriod: processingPeriod,
-                lastUpdatedDate: lastUpdatedDate,
-                facility: response.facility,
-                receivingFacility: response.receivingFacility,
-                supplyingFacility: response.supplyingFacility,
-                lastUpdater: response.lastUpdater
-            };
+                response.createdDate = createdDate;
+                response.lastUpdatedDate = lastUpdatedDate;
+                response.processingPeriod = processingPeriod;
+
+            return new Order(response);
         }
 
         // TODO: This should be part of the ProcessingPeriodFactory class

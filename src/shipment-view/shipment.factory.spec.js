@@ -182,6 +182,21 @@ describe('shipmentFactory', function() {
             expect(result.lineItems[2].quantityShipped).toBe(0);
         });
 
+        it('should save draft based on the summaries if it does not yet exist', function() {
+            searchPromise.resolve(new PageDataBuilder().build());
+
+            var result;
+            shipmentFactory.getForOrder(order, stockCardSummaries)
+            .then(function(shipmentDraft) {
+                result = shipmentDraft;
+            });
+            $rootScope.$apply();
+
+            expect(shipmentDraftService.save).toHaveBeenCalled();
+            expect(result.order).toEqual(order);
+            expect(result.lineItems.length).toBe(3);
+        });
+
         it('should reject if shipmentService rejects', function() {
             searchPromise.reject();
 

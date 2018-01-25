@@ -287,28 +287,6 @@ describe('OrderViewController', function() {
         });
     });
 
-    describe('canBeFulfilled', function() {
-
-        it('should return true if status is FULFILLING', function () {
-            expect(vm.canBeFulfilled(orders[1].status))
-                .toEqual(true);
-        });
-
-        it('should return true if status is ORDERED', function () {
-            expect(vm.canBeFulfilled(orders[0].status))
-                .toEqual(true);
-        });
-
-        it('should return true if status is ORDERED', function () {
-            var order = new BasicOrderResponseDataBuilder()
-                .withStatus(ORDER_STATUS.IN_ROUTE)
-                .build();
-
-            expect(vm.canBeFulfilled(order.status))
-                .toEqual(false);
-        });
-    });
-
     function initController() {
         vm = $controller('OrderViewController', {
             supplyingFacilities: supplyingFacilities,
