@@ -54,7 +54,6 @@ describe('ShipmentViewController', function() {
         vm = $controller('ShipmentViewController', {
             $scope: $rootScope.$new(),
             shipment: shipment,
-            order: order,
             orderFulfillmentLineItems: [lineItem],
             updatedOrder: order
         });
@@ -233,7 +232,6 @@ describe('ShipmentViewController', function() {
             vm = $controller('ShipmentViewController', {
                 $scope: scope,
                 shipment: shipment,
-                order: order,
                 orderFulfillmentLineItems: [lineItem],
                 updatedOrder: order
             });

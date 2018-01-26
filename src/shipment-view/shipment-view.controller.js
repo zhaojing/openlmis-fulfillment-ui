@@ -29,12 +29,12 @@
         .controller('ShipmentViewController', ShipmentViewController);
 
     ShipmentViewController.$inject = [
-        '$scope', 'order', 'shipment', 'orderFulfillmentLineItems', 'shipmentDraftService', 'shipmentService',
+        '$scope', 'shipment', 'orderFulfillmentLineItems', 'shipmentDraftService', 'shipmentService',
         'loadingModalService', '$state', '$window', 'fulfillmentUrlFactory', 'messageService',
         'confirmService', 'notificationService', 'stateTrackerService', 'accessTokenFactory', 'ORDER_STATUS', 'updatedOrder'
     ];
 
-    function ShipmentViewController($scope, order, shipment, orderFulfillmentLineItems, shipmentDraftService, shipmentService,
+    function ShipmentViewController($scope, shipment, orderFulfillmentLineItems, shipmentDraftService, shipmentService,
                                     loadingModalService, $state, $window, fulfillmentUrlFactory, messageService,
                                     confirmService, notificationService, stateTrackerService, accessTokenFactory, ORDER_STATUS,
                                     updatedOrder) {
