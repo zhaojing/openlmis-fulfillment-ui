@@ -31,12 +31,13 @@
     ShipmentViewController.$inject = [
         '$scope', 'order', 'shipment', 'orderFulfillmentLineItems', 'shipmentDraftService', 'shipmentService',
         'loadingModalService', '$state', '$window', 'fulfillmentUrlFactory', 'messageService',
-        'confirmService', 'notificationService', 'stateTrackerService', 'accessTokenFactory', 'ORDER_STATUS'
+        'confirmService', 'notificationService', 'stateTrackerService', 'accessTokenFactory', 'ORDER_STATUS', 'updatedOrder'
     ];
 
     function ShipmentViewController($scope, order, shipment, orderFulfillmentLineItems, shipmentDraftService, shipmentService,
                                     loadingModalService, $state, $window, fulfillmentUrlFactory, messageService,
-                                    confirmService, notificationService, stateTrackerService, accessTokenFactory, ORDER_STATUS) {
+                                    confirmService, notificationService, stateTrackerService, accessTokenFactory, ORDER_STATUS,
+                                    updatedOrder) {
 
         var vm = this;
 
@@ -90,7 +91,7 @@
          * setting data to be available on the view.
          */
         function onInit() {
-            vm.order = order;
+            vm.order = updatedOrder;
             vm.orderFulfillmentLineItems = orderFulfillmentLineItems;
             vm.shipment = shipment;
         }

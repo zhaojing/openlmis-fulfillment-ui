@@ -55,7 +55,8 @@ describe('ShipmentViewController', function() {
             $scope: $rootScope.$new(),
             shipment: shipment,
             order: order,
-            orderFulfillmentLineItems: [lineItem]
+            orderFulfillmentLineItems: [lineItem],
+            updatedOrder: order
         });
 
         loadingDeferred = $q.defer();
@@ -233,7 +234,8 @@ describe('ShipmentViewController', function() {
                 $scope: scope,
                 shipment: shipment,
                 order: order,
-                orderFulfillmentLineItems: [lineItem]
+                orderFulfillmentLineItems: [lineItem],
+                updatedOrder: order
             });
             console.log(lineItem);
             vm.$onInit();

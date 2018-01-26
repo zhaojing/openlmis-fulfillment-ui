@@ -47,11 +47,8 @@
                         order.supplyingFacility.id
                     );
                 },
-                shipment: function(shipmentFactory, order, stockCardSummaries, orderService) {
-                    return shipmentFactory.getForOrder(order, stockCardSummaries).then(function(response) {
-                        order = orderService.get(order.id, 'lastUpdater');
-                        return response;
-                    });
+                shipment: function(shipmentFactory, order, stockCardSummaries) {
+                    return shipmentFactory.getForOrder(order, stockCardSummaries);
                 },
                 orderFulfillmentLineItems: function(orderFulfillmentLineItemFactory, order, stockCardSummaries, shipment) {
                     return orderFulfillmentLineItemFactory.get(
@@ -59,7 +56,10 @@
                         shipment,
                         stockCardSummaries
                     );
-                }
+                },
+                updatedOrder: function(orderService, shipment) {
+                    return orderService.get(shipment.order.id, 'lastUpdater');
+                },
             }
         });
     }
