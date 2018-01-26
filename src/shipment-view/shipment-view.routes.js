@@ -59,7 +59,7 @@
                 },
                 updatedOrder: function(orderService, shipment) {
                     return orderService.get(shipment.order.id, 'lastUpdater');
-                },
+                }
             }
         });
     }
