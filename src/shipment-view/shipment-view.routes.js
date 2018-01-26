@@ -39,7 +39,7 @@
             areAllRightsRequired: false,
             resolve: {
                 order: function(orderService, $stateParams) {
-                    return orderService.get($stateParams.id, 'lastUpdater');
+                    return orderService.get($stateParams.id);
                 },
                 stockCardSummaries: function(stockCardSummariesService, order) {
                     return stockCardSummariesService.getStockCardSummaries(
@@ -47,8 +47,11 @@
                         order.supplyingFacility.id
                     );
                 },
-                shipment: function(shipmentFactory, order, stockCardSummaries) {
-                    return shipmentFactory.getForOrder(order, stockCardSummaries);
+                shipment: function(shipmentFactory, order, stockCardSummaries, orderService) {
+                    return shipmentFactory.getForOrder(order, stockCardSummaries).then(function(response) {
+                        order = orderService.get(order.id, 'lastUpdater');
+                        return response;
+                    });
                 },
                 orderFulfillmentLineItems: function(orderFulfillmentLineItemFactory, order, stockCardSummaries, shipment) {
                     return orderFulfillmentLineItemFactory.get(
