@@ -28,13 +28,11 @@
         .module('proof-of-delivery')
         .factory('ProofOfDelivery', factory);
 
-    factory.$inject = ['proofOfDeliveryService', 'messageService'];
+    factory.$inject = ['ProofOfDeliveryLineItem', 'dateUtils'];
 
-    function factory(proofOfDeliveryService, messageService){
+    function factory(ProofOfDeliveryLineItem, dateUtils) {
 
-        ProofOfDelivery.prototype.isValid = isValid;
-        ProofOfDelivery.prototype.validateRequiredField = validateRequiredField;
-        ProofOfDelivery.prototype.isLineItemValid = isLineItemValid;
+        ProofOfDelivery.prototype.validate = validate;
 
         return ProofOfDelivery;
 
@@ -51,50 +49,17 @@
          * @param  {Resource}        order  Order with additional info
          * @return {ProofOfDelivery}        Proof Of Delivery object
          */
-        function ProofOfDelivery(source) {
-            var pod = this;
+        function ProofOfDelivery(json) {
+            angular.copy(json, this);
 
-            angular.copy(source, this);
+            this.receivedDate = dateUtils.toDate(json.receivedDate);
 
-            this.$errors = {};
-
-            angular.forEach(this.proofOfDeliveryLineItems, function(lineItem) {
-
-                lineItem.$errors = {};
-                lineItem.validate = validateLineItem;
-
-                angular.forEach(lineItem.orderLineItem.orderable.programs, function(program) {
-                    if(program.programId === pod.order.program.id) lineItem.$program = program;
-                });
-            });
-        }
-
-        /**
-         * @ngdoc method
-         * @methodOf proof-of-delivery.ProofOfDelivery
-         * @name isLineItemValid
-         *
-         * @description
-         * Checks if POD line item is valid.
-         *
-         * @param  {Object}  lineItem POD line item
-         * @return {Boolean}          true if line item is valid
-         */
-        function isLineItemValid(lineItem) {
-            var valid = true;
-
-            angular.forEach(lineItem.$errors, function(error) {
-                valid = valid && !error;
+            var proofOfDeliveryLineItems = [];
+            json.proofOfDeliveryLineItems.forEach(function(lineItem) {
+                proofOfDeliveryLineItems.push(new ProofOfDeliveryLineItem(lineItem));
             });
 
-            return valid;
-        }
-
-        function validateLineItem() {
-            var lineItem = this;
-
-            if(lineItem.quantityReceived === undefined || lineItem.quantityReceived === null) lineItem.$errors.quantityReceived = messageService.get('proofOfDeliveryView.required');
-            else delete lineItem.$errors.quantityReceived;
+            this.proofOfDeliveryLineItems = proofOfDeliveryLineItems;
         }
 
         /**
@@ -107,28 +72,33 @@
          *
          * @return {Boolean} true if POD is valid, false otherwise
          */
-        function isValid() {
-            var isValid = true;
+        function validate() {
+            var errors = {};
 
-            angular.forEach(this.proofOfDeliveryLineItems, function(lineItem) {
-                lineItem.validate();
-                if(!isLineItemValid(lineItem)) isValid = false;
+            verifyNotEmpty(errors, this.receivedBy, 'receivedBy');
+            verifyNotEmpty(errors, this.deliveredBy, 'deliveredBy');
+            verifyNotEmpty(errors, this.receivedDate, 'receivedDate');
+
+            var proofOfDeliveryLineItemsErrors = [];
+            this.proofOfDeliveryLineItems.forEach(function(lineItem) {
+                var lineItemErrors = lineItem.validate();
+
+                if (lineItemErrors) {
+                    proofOfDeliveryLineItemsErrors.push(lineItemErrors);
+                }
             });
 
-            this.validateRequiredField('receivedBy');
-            this.validateRequiredField('deliveredBy');
-            this.validateRequiredField('receivedDate');
+            if (proofOfDeliveryLineItemsErrors.length) {
+                errors.proofOfDeliveryLineItems = proofOfDeliveryLineItemsErrors;
+            }
 
-            angular.forEach(this.$errors, function(error) {
-                isValid = isValid && !error;
-            });
-
-            return isValid;
+            return angular.equals(errors, {}) ? undefined : errors;
         }
 
-        function validateRequiredField(fieldName) {
-            if(!this[fieldName] || this[fieldName] === '') this.$errors[fieldName] = messageService.get('proofOfDeliveryView.required');
-            else delete this.$errors[fieldName];
+        function verifyNotEmpty(errors, value, fieldName) {
+            if (!value || value === '') {
+                errors[fieldName] = 'proofOfDeliveryView.required';
+            }
         }
     }
 

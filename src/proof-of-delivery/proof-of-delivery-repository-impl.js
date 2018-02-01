@@ -17,19 +17,24 @@
 
     'use strict';
 
-    /**
-     * @module proof-of-delivery
-     *
-     * @description
-     *
-     */
-    angular.module('proof-of-delivery', [
-        'ngResource',
-        'fulfillment',
-        'order',
-        'openlmis-date',
-        'openlmis-i18n',
-        'openlmis-date'
-    ]);
+    angular
+        .module('proof-of-delivery')
+        .factory('ProofOfDeliveryRepositoryImpl', ProofOfDeliveryRepositoryImpl);
+
+    ProofOfDeliveryRepositoryImpl.$inject = ['$resource', 'fulfillmentUrlFactory'];
+
+    function ProofOfDeliveryRepositoryImpl($resource, fulfillmentUrlFactory) {
+
+        ProofOfDeliveryRepositoryImpl.prototype.get = get;
+
+        function ProofOfDeliveryRepositoryImpl() {
+            this.resource = $resource(fulfillmentUrlFactory('/api/proofOfDeliveries/:id'))
+        }
+
+        function get(id) {
+            return this.resource.get(id).promise;
+        }
+
+    }
 
 })();

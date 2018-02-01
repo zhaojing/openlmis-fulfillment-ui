@@ -13,99 +13,114 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-describe('POD', function() {
+ddescribe('ProofOfDelivery', function() {
 
-    var POD, sourceMock, orderMock, proofOfDelivery, pod;
+    var ProofOfDelivery, ProofOfDeliveryLineItem, ProofOfDeliveryDataBuilder, json;
 
     beforeEach(function() {
         module('proof-of-delivery');
 
         inject(function($injector) {
-            POD = $injector.get('ProofOfDelivery');
+            ProofOfDelivery = $injector.get('ProofOfDelivery');
+            ProofOfDeliveryLineItem = $injector.get('ProofOfDeliveryLineItem');
+            ProofOfDeliveryDataBuilder = $injector.get('ProofOfDeliveryDataBuilder');
         });
 
-        sourceMock = jasmine.createSpy('source');
-
-        pod = {
-            proofOfDeliveryLineItems: [
-                {
-                    quantityReceived: 10,
-                    orderLineItem: {
-                        orderable: {
-                            programs: [
-                                {
-                                    programId: '1'
-                                }
-                            ]
-                        }
-                    }
-                },
-                {
-                    quantityReceived: 20,
-                    orderLineItem: {
-                        orderable: {
-                            programs: [
-                                {
-                                    programId: '1'
-                                }
-                            ]
-                        }
-                    }
-                }
-            ],
-            order: {
-                program: {
-                    id: '1'
-                }
-            },
-            receivedBy: 'someone',
-            deliveredBy: 'someone',
-            receivedDate: [2017,1,1]
-        };
+        json = new ProofOfDeliveryDataBuilder().buildJson();
     });
 
     describe('constructor', function() {
 
-        it('should copy source object', function() {
-            spyOn(angular, 'copy').andCallThrough();
+        it('should copy properties from JSON', function() {
+            var result = new ProofOfDelivery(json);
 
-            var ProofOfDelivery = new POD(sourceMock);
+            expect(result.id).toEqual(json.id);
+            expect(result.order).toEqual(json.order);
+            expect(result.deliveredBy).toEqual(json.deliveredBy);
+            expect(result.receivedBy).toEqual(json.receivedBy);
+        });
 
-            expect(angular.copy).toHaveBeenCalledWith(sourceMock, ProofOfDelivery);
+        it('should create line items', function() {
+            var result = new ProofOfDelivery(json);
+
+            expect(result.proofOfDeliveryLineItems[0] instanceof ProofOfDeliveryLineItem).toBe(true);
+            expect(result.proofOfDeliveryLineItems[1] instanceof ProofOfDeliveryLineItem).toBe(true);
+            expect(result.proofOfDeliveryLineItems).toEqual([
+                new ProofOfDeliveryLineItem(json.proofOfDeliveryLineItems[0]),
+                new ProofOfDeliveryLineItem(json.proofOfDeliveryLineItems[1])
+            ]);
+        });
+
+        it('should parse receivedDate', function() {
+            var result = new ProofOfDelivery(json);
+
+            expect(result.receivedDate).toEqual(new Date(json.receivedDate));
         });
     });
 
-    describe('isLineItemValid', function() {
+    describe('validate', function() {
+
+        var proofOfDelivery;
 
         beforeEach(function() {
-            proofOfDelivery = new POD(pod);
+            proofOfDelivery = new ProofOfDelivery(json);
         });
 
-        it('should return true when line item is valid', function() {
-            proofOfDelivery.proofOfDeliveryLineItems[0].validate();
-            expect(proofOfDelivery.isLineItemValid(proofOfDelivery.proofOfDeliveryLineItems[0])).toBe(true);
+        it('should return true if Proof of Delivery is valid', function() {
+            expect(proofOfDelivery.validate()).toBeUndefined();
         });
 
-        it('should return false when line item is not valid', function() {
-            proofOfDelivery.proofOfDeliveryLineItems[0].quantityReceived = undefined;
-            proofOfDelivery.proofOfDeliveryLineItems[0].validate();
-            expect(proofOfDelivery.isLineItemValid(proofOfDelivery.proofOfDeliveryLineItems[0])).toBe(false);
-        });
-    });
+        it('should return error if receivedBy is empty', function() {
+            proofOfDelivery.receivedBy = undefined;
 
-    describe('isValid', function() {
-
-        beforeEach(function() {
-            proofOfDelivery = new POD(pod);
+            expect(proofOfDelivery.validate()).toEqual({
+                receivedBy: 'proofOfDeliveryView.required'
+            });
         });
 
-        it('should return true when pod is valid', function() {
-            expect(proofOfDelivery.isValid()).toBe(true);
+        it('should return error if deliveredBy is empty', function() {
+            proofOfDelivery.deliveredBy = undefined;
+
+            expect(proofOfDelivery.validate()).toEqual({
+                deliveredBy: 'proofOfDeliveryView.required'
+            });
         });
 
-        it('should return false when pod is not valid', function() {
-            proofOfDelivery.proofOfDeliveryLineItems[0].quantityReceived = undefined;
-            expect(proofOfDelivery.isValid()).toBe(false);
+        it('should return error if receivedDate is empty', function() {
+            proofOfDelivery.receivedDate = undefined;
+
+            expect(proofOfDelivery.validate()).toEqual({
+                receivedDate: 'proofOfDeliveryView.required'
+            });
         });
+
+        it('should return error if at least one of line items is invalid', function() {
+            proofOfDelivery.proofOfDeliveryLineItems[0].quantityReceived = null;
+
+            expect(proofOfDelivery.validate()).toEqual({
+                proofOfDeliveryLineItems: [{
+                    quantityReceived: 'proofOfDeliveryView.required'
+                }]
+            });
+
+            proofOfDelivery.proofOfDeliveryLineItems[1].quantityReceived = null;
+
+            expect(proofOfDelivery.validate()).toEqual({
+                proofOfDeliveryLineItems: [{
+                    quantityReceived: 'proofOfDeliveryView.required'
+                }, {
+                    quantityReceived: 'proofOfDeliveryView.required'
+                }]
+            });
+
+            proofOfDelivery.proofOfDeliveryLineItems[1].quantityReceived = 50;
+
+            expect(proofOfDelivery.validate()).toEqual({
+                proofOfDeliveryLineItems: [{
+                    quantityReceived: 'proofOfDeliveryView.required'
+                }]
+            });
+        });
+
     });
 });

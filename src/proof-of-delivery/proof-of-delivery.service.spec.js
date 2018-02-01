@@ -13,7 +13,7 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-describe('proofOfDeliveryService', function() {
+ddescribe('proofOfDeliveryService', function() {
 
     var POD_ID = 'some-pod-id';
 

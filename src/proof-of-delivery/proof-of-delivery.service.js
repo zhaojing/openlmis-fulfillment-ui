@@ -28,14 +28,13 @@
 		.module('proof-of-delivery')
 	    .service('proofOfDeliveryService', service);
 
-    service.$inject = ['$filter', '$resource', 'fulfillmentUrlFactory', 'dateUtils'];
+    service.$inject = ['$filter', '$resource', 'fulfillmentUrlFactory', 'ProofOfDelivery'];
 
-    function service($filter, $resource, fulfillmentUrlFactory, dateUtils) {
+    function service($filter, $resource, fulfillmentUrlFactory, ProofOfDelivery) {
 
         var resource = $resource(fulfillmentUrlFactory('/api/proofOfDeliveries/:id'), {}, {
 			get: {
 				method: 'GET',
-				transformResponse: transformResponse
 			},
 			save: {
 				method: 'PUT',
@@ -47,7 +46,6 @@
 			},
             getByOrderId: {
                 method: 'GET',
-                transformResponse: transformPOD,
                 url: fulfillmentUrlFactory('/api/orders/:orderId/proofOfDeliveries')
             }
 		});
@@ -127,46 +125,11 @@
             }).$promise;
         }
 
-		function transformResponse(data, headers, status) {
-			var pod = data;
-
-            if (status === 200) {
-                pod = angular.fromJson(data);
-
-				if(pod.receivedDate) pod.receivedDate = dateUtils.toDate(pod.receivedDate);
-				if(pod.order.createdDate) pod.order.createdDate = dateUtils.toDate(pod.order.createdDate);
-            }
-
-            return pod;
-        }
-
 		function transformRequest(pod) {
 			if (pod.receivedDate) pod.receivedDate = $filter('isoDate')(pod.receivedDate);
 			if (pod.order.createdDate) pod.order.createdDate = pod.order.createdDate.toISOString();
 
             return angular.toJson(pod);
-        }
-
-        function transformPOD(data, headers, status) {
-            if (status === 200) {
-                var pod = angular.fromJson(data);
-
-                if(pod.receivedDate) {
-                    pod.receivedDate = dateUtils.toDate(pod.receivedDate);
-                }
-
-                if(pod.order.createdDate) {
-                    pod.order.createdDate = dateUtils.toDate(pod.order.createdDate);
-                }
-
-                if(pod.order.lastUpdatedDate) {
-                    pod.order.lastUpdatedDate = dateUtils.toDate(pod.order.lastUpdatedDate);
-                }
-
-                return pod;
-            }
-
-            return data;
         }
     }
 })();
