@@ -26,7 +26,7 @@
     function routes($stateProvider) {
 
         $stateProvider.state('openlmis.orders.podManage.podView', {
-            label: 'proofOfDeliveryView.viewPod',
+            label: 'proofOfDeliveryView.viewProofOfDelivery',
             url: '^/pod/:podId?page&size',
             views: {
                 '@openlmis': {
@@ -34,13 +34,8 @@
                     controller: 'ProofOfDeliveryViewController',
                     controllerAs: 'vm',
                     resolve: {
-                        pod: function($stateParams, proofOfDeliveryFactory) {
-                            return proofOfDeliveryFactory.get($stateParams.podId);
-                        },
-                        lineItems: function(paginationService, pod, $stateParams) {
-                            return paginationService.registerList(pod.isLineItemValid, $stateParams, function() {
-                                return pod.proofOfDeliveryLineItems;
-                            });
+                        proofOfDelivery: function($stateParams, proofOfDeliveryService) {
+                            return proofOfDeliveryService.get($stateParams.podId);
                         }
                     }
                 }

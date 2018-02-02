@@ -26,6 +26,7 @@
     angular.module('proof-of-delivery', [
         'ngResource',
         'fulfillment',
+        'order',
         'openlmis-date',
         'openlmis-i18n',
         'openlmis-date'

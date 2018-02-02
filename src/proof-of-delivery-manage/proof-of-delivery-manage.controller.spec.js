@@ -15,28 +15,10 @@
 
 describe('ProofOfDeliveryManageController', function() {
 
-    var vm, proofOfDeliveryService, facilityFactoryMock, $rootScope, loadingModalServiceMock, programs,
-        facility, deferred, pod, $state, $q, $controller,
-        $stateParams, $controllerMock, facilities, facilityTwo;
+    var vm, proofOfDeliveryLegacyService, $rootScope, loadingModalServiceMock,
+        deferred, pod, $state, $q, $controller, stateParams;
 
     beforeEach(function() {
-
-        facility = {
-            'id': 'facility-one',
-            'supportedPrograms': programs
-        };
-
-        facilityTwo = {
-            'id': 'facility-two',
-            'supportedPrograms': programs
-        };
-
-        facilities = [facility, facilityTwo];
-
-        programs = [
-            createObjWithId('program-one'),
-            createObjWithId('program-two')
-        ];
 
         pod = {
             id: 'pod-one',
@@ -63,7 +45,7 @@ describe('ProofOfDeliveryManageController', function() {
             deferred = $q.defer();
             $state = $injector.get('$state');
             $controller = $injector.get('$controller');
-            proofOfDeliveryService = $injector.get('proofOfDeliveryService');
+            proofOfDeliveryLegacyService = $injector.get('proofOfDeliveryLegacyService');
             vm = $controller('ProofOfDeliveryManageController', {
                 pods: [pod],
                 $stateParams: stateParams
@@ -103,7 +85,7 @@ describe('ProofOfDeliveryManageController', function() {
 
     describe('openPod', function() {
         it('should change state when user select order to view its POD', function() {
-            spyOn(proofOfDeliveryService, 'getByOrderId').andReturn(deferred.promise);
+            spyOn(proofOfDeliveryLegacyService, 'getByOrderId').andReturn(deferred.promise);
             spyOn($state, 'go').andReturn();
 
             vm.openPod('order-one');

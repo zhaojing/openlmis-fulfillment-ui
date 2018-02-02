@@ -15,51 +15,44 @@
 
 (function() {
 
-    'use strict';
+	'use strict';
 
-    /**
+	/**
      * @ngdoc service
-     * @name proof-of-delivery.proofOfDeliveryFactory
+     * @name proof-of-delivery.proofOfDeliveryLegacyService
      *
      * @description
-     * Allows the user to retrieve proofs of deliveries.
+     * Responsible for retrieving proofs of delivery from the server.
      */
-    angular
-        .module('proof-of-delivery')
-        .factory('proofOfDeliveryFactory', factory);
+	angular
+		.module('proof-of-delivery')
+	    .service('proofOfDeliveryLegacyService', service);
 
-    factory.$inject = ['$q', 'ProofOfDelivery', 'proofOfDeliveryService'];
+    service.$inject = ['$resource', 'fulfillmentUrlFactory'];
 
-    function factory($q, ProofOfDelivery, proofOfDeliveryService){
+    function service($resource, fulfillmentUrlFactory) {
 
-        var factory = {
-            get: get
+        var resource = $resource(fulfillmentUrlFactory('/api/orders/:orderId/proofOfDeliveries'));
+
+        return {
+			getByOrderId: getByOrderId
         };
-
-        return factory;
 
         /**
          * @ngdoc method
-         * @methodOf proof-of-delivery.proofOfDeliveryFactory
-         * @name get
+         * @methodOf order.orderService
+         * @name getByOrderId
          *
          * @description
-         * Retrieves proof of delivery by given UUID.
+         * Retrieves a list of Proof of Deliveries for the given Order.
          *
-         * @param  {String}  podId Proof of Delivery UUID
-         * @return {Promise}       ProofOfDelivery
+         * @param  {String} orderId the ID of the given order
+         * @return {Promise}        the list of all PODs for the given order
          */
-        function get(podId) {
-            var deferred = $q.defer();
-
-            proofOfDeliveryService.get(podId).then(function(pod) {
-                deferred.resolve(new ProofOfDelivery(pod));
-            }, function() {
-                deferred.reject();
-            });
-
-            return deferred.promise;
+        function getByOrderId(orderId) {
+            return resource.get({
+                orderId: orderId
+            }).$promise;
         }
     }
-
 })();

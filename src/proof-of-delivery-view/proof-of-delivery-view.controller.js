@@ -24,45 +24,16 @@
      * @description
      * Controller that drives the POD view screen.
      */
-    angular.module('proof-of-delivery-view')
-    .controller('ProofOfDeliveryViewController', controller);
+    angular
+    .module('proof-of-delivery-view')
+    .controller('ProofOfDeliveryViewController', ProofOfDeliveryViewController);
 
-    controller.$inject = [
-        '$scope', '$state', 'proofOfDeliveryService', 'notificationService', 'alertService',
-        'confirmService', 'ORDER_STATUS', 'pod', 'lineItems'
-    ];
+    ProofOfDeliveryViewController.$inject = ['proofOfDelivery'];
 
-    function controller($scope, $state, proofOfDeliveryService, notificationService, alertService,
-                        confirmService, ORDER_STATUS, pod, lineItems)
-    {
+    function ProofOfDeliveryViewController(proofOfDelivery) {
         var vm = this;
 
-        vm.savePod = savePod;
-        vm.submitPod = submitPod;
-        vm.isSubmitted = isSubmitted;
-        vm.typeMessage = typeMessage;
-
-        /**
-         * @ngdoc property
-         * @propertyOf proof-of-delivery-view.controller:PodViewController
-         * @name lineItems
-         * @type {Array}
-         *
-         * @description
-         * Holds all line items.
-         */
-        vm.lineItems = lineItems;
-
-        /**
-         * @ngdoc property
-         * @propertyOf proof-of-delivery-view.controller:PodViewController
-         * @name items
-         * @type {Array}
-         *
-         * @description
-         * Holds line items that will be displayed.
-         */
-        vm.items = undefined;
+        vm.$onInit = onInit;
 
         /**
          * @ngdoc property
@@ -73,86 +44,11 @@
          * @description
          * Holds Proof of Delivery.
          */
-        vm.pod = pod;
+        vm.proofOfDelivery = undefined;
 
-        /**
-         * @ngdoc method
-         * @methodOf proof-of-delivery-view.controller:PodViewController
-         * @name savePod
-         *
-         * @description
-         * Saves current POD after confirming it.
-         */
-        function savePod() {
-            confirmService.confirm('proofOfDeliveryView.savePod.confirm').then(function() {
-                $scope.$broadcast('openlmis-form-submit');
-                if(vm.pod.isValid()) {
-                    proofOfDeliveryService.save(vm.pod).then(function() {
-                        notificationService.success('proofOfDeliveryView.savePod.success');
-                        $state.reload();
-                    }, function() {
-                        alertService.error('proofOfDeliveryView.savePod.failure');
-                    });
-                } else {
-                    alertService.error('proofOfDeliveryView.invalidPod');
-                }
-            });
-        }
-
-        /**
-         * @ngdoc method
-         * @methodOf proof-of-delivery-view.controller:PodViewController
-         * @name submitPod
-         *
-         * @description
-         * Submits current POD after confirming it.
-         */
-        function submitPod() {
-            confirmService.confirm('proofOfDeliveryView.submitPod.confirm').then(function() {
-                $scope.$broadcast('openlmis-form-submit');
-                if(vm.pod.isValid()) {
-                    proofOfDeliveryService.save(vm.pod).then(function() {
-                        proofOfDeliveryService.submit(vm.pod.id).then(function() {
-                            notificationService.success('proofOfDeliveryView.submitPod.success');
-                            $state.reload();
-                        }, function() {
-                            alertService.error('proofOfDeliveryView.submitPod.failure');
-                        });
-                    }, function() {
-                        alertService.error('proofOfDeliveryView.savePod.failure');
-                    });
-                } else {
-                    alertService.error('proofOfDeliveryView.invalidPod');
-                }
-            });
-        }
-
-        /**
-         * @ngdoc method
-         * @methodOf proof-of-delivery-view.controller:PodViewController
-         * @name isSubmitted
-         *
-         * @description
-         * Checks if POD is submitted.
-         *
-         * @return {Boolean} true if status is RECEIVED, false otherwise
-         */
-        function isSubmitted() {
-            return vm.pod.order.status === ORDER_STATUS.RECEIVED;
-        }
-
-        /**
-         * @ngdoc method
-         * @methodOf proof-of-delivery-view.controller:PodViewController
-         * @name typeMessage
-         *
-         * @description
-         * Provides display messages for order types.
-         *
-         * @return {String} Order type message
-         */
-        function typeMessage() {
-            return 'proofOfDeliveryView.' + (vm.pod.order.emergency ? 'emergency' : 'regular');
+        function onInit() {
+            vm.proofOfDelivery = proofOfDelivery;
         }
     }
+
 }());

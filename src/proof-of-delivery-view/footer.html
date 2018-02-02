@@ -3,28 +3,27 @@
         <dt>{{'proofOfDeliveryView.deliveredBy' | message}}</dt>
         <dd>
             <div ng-if="!vm.isSubmitted()">
-                <input type="text" ng-model="vm.pod.deliveredBy" ng-change="vm.pod.validateRequiredField('deliveredBy')" ng-blur="vm.pod.validateRequiredField('deliveredBy')"/>
-                <div ng-if="vm.pod.$errors.deliveredBy" class="cell-error-message">{{vm.pod.$errors.deliveredBy}}</div>
+                <input type="text" ng-model="vm.proofOfDelivery.deliveredBy"
+                    openlmis-invalid="{{vm.proofOfDelivery.validate().deliveredBy | message}}"/>
             </div>
-            <div ng-if="vm.isSubmitted()">{{vm.pod.deliveredBy}}</div>
+            <div ng-if="vm.isSubmitted()">{{vm.proofOfDelivery.deliveredBy}}</div>
         </dd>
         <dt>{{'proofOfDeliveryView.receivedBy' | message}}</dt>
         <dd>
             <div ng-if="!vm.isSubmitted()">
-                <input type="text" ng-model="vm.pod.receivedBy" ng-change="vm.pod.validateRequiredField('receivedBy')" ng-blur="vm.pod.validateRequiredField('receivedBy')"/>
-                <div ng-if="vm.pod.$errors.receivedBy" class="cell-error-message">{{vm.pod.$errors.receivedBy}}</div>
+                <input type="text" ng-model="vm.proofOfDelivery.receivedBy"
+                    openlmis-invalid="{{vm.proofOfDelivery.validate().receivedBy | message}}"/>
             </div>
-            <div ng-if="vm.isSubmitted()">{{vm.pod.receivedBy}}</div>
+            <div ng-if="vm.isSubmitted()">{{vm.proofOfDelivery.receivedBy}}</div>
         </dd>
         <dt>{{'proofOfDeliveryView.receivedDate' | message}}</dt>
         <dd>
             <div ng-if="!vm.isSubmitted()">
-                <openlmis-datepicker input-id="receivedDate" value="vm.pod.receivedDate"
-                    change-method="vm.pod.validateRequiredField('receivedDate')">
+                <openlmis-datepicker input-id="receivedDate" value="vm.proofOfDelivery.receivedDate"
+                    openlmis-invalid="{{vm.proofOfDelivery.validate().receivedDate | message}}">
                 </openlmis-datepicker>
-                <div ng-if="vm.pod.$errors.receivedDate" class="cell-error-message">{{vm.pod.$errors.receivedDate}}</div>
             </div>
-            <div ng-if="vm.isSubmitted()">{{vm.pod.receivedDate | openlmisDate}}</div>
+            <div ng-if="vm.isSubmitted()">{{vm.proofOfDelivery.receivedDate | openlmisDate}}</div>
         </dd>
     </dl>
 </aside>

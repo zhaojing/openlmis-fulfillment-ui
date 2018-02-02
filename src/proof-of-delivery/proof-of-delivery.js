@@ -22,22 +22,20 @@
      * @name proof-of-delivery.ProofOfDelivery
      *
      * @description
-     * Responsible for supplying pod with additional methods and information.
+     * Represents a single Proof of Delivery in the OpenLMIS system.
      */
     angular
         .module('proof-of-delivery')
         .factory('ProofOfDelivery', factory);
 
-    factory.$inject = ['proofOfDeliveryService', 'messageService'];
+    factory.$inject = ['ProofOfDeliveryLineItem'];
 
-    function factory(proofOfDeliveryService, messageService){
+    function factory(ProofOfDeliveryLineItem) {
 
-        ProofOfDelivery.prototype.isValid = isValid;
-        ProofOfDelivery.prototype.validateRequiredField = validateRequiredField;
-        ProofOfDelivery.prototype.isLineItemValid = isLineItemValid;
+        ProofOfDelivery.prototype.validate = validate;
+        ProofOfDelivery.prototype.save = save;
 
         return ProofOfDelivery;
-
 
         /**
          * @ngdoc method
@@ -45,90 +43,84 @@
          * @name ProofOfDelivery
          *
          * @description
-         * Adds all needed methods and information to given ProofOfDelivery.
+         * Creates an instance of the ProofOfDelivery class.
          *
-         * @param  {Resource}        source ProofOfDelivery object
-         * @param  {Resource}        order  Order with additional info
-         * @return {ProofOfDelivery}        Proof Of Delivery object
+         * @param  {Object}                     json        the JSON representation of the Proof of
+         *                                                  Delivery
+         * @param  {ProofOfDeliveryRepository}  respository the instance of the
+         *                                                  ProofOfDeliveryRepository class
          */
-        function ProofOfDelivery(source) {
-            var pod = this;
-
-            angular.copy(source, this);
-
-            this.$errors = {};
-
-            angular.forEach(this.proofOfDeliveryLineItems, function(lineItem) {
-
-                lineItem.$errors = {};
-                lineItem.validate = validateLineItem;
-
-                angular.forEach(lineItem.orderLineItem.orderable.programs, function(program) {
-                    if(program.programId === pod.order.program.id) lineItem.$program = program;
-                });
-            });
+        function ProofOfDelivery(json, repository) {
+            angular.copy(json, this);
+            this.repository = repository;
+            this.proofOfDeliveryLineItems = createLineItems(json.proofOfDeliveryLineItems);
         }
 
         /**
          * @ngdoc method
          * @methodOf proof-of-delivery.ProofOfDelivery
-         * @name isLineItemValid
+         * @name saved
          *
          * @description
-         * Checks if POD line item is valid.
+         * Updates the Proof of Delivery in the repository.
          *
-         * @param  {Object}  lineItem POD line item
-         * @return {Boolean}          true if line item is valid
+         * @return {Promise}    the promise resolved when save was successful or rejected if it was
+         *                      not
          */
-        function isLineItemValid(lineItem) {
-            var valid = true;
-
-            angular.forEach(lineItem.$errors, function(error) {
-                valid = valid && !error;
-            });
-
-            return valid;
-        }
-
-        function validateLineItem() {
-            var lineItem = this;
-
-            if(lineItem.quantityReceived === undefined || lineItem.quantityReceived === null) lineItem.$errors.quantityReceived = messageService.get('proofOfDeliveryView.required');
-            else delete lineItem.$errors.quantityReceived;
+        function save() {
+            return this.repository.update(this);
         }
 
         /**
          * @ngdoc method
          * @methodOf proof-of-delivery.ProofOfDelivery
-         * @name isValid
+         * @name validate
          *
          * @description
-         * Checks if POD is valid.
+         * Validates the Proof of Delivery and returns a map of errors if it is invalid.
          *
-         * @return {Boolean} true if POD is valid, false otherwise
+         * @return {Object} the map of errors if the Proof of Delivery is invalid, undefined
+         *                  otherwise
          */
-        function isValid() {
-            var isValid = true;
+        function validate() {
+            var errors = {};
 
-            angular.forEach(this.proofOfDeliveryLineItems, function(lineItem) {
-                lineItem.validate();
-                if(!isLineItemValid(lineItem)) isValid = false;
-            });
+            verifyNotEmpty(errors, this.receivedBy, 'receivedBy');
+            verifyNotEmpty(errors, this.deliveredBy, 'deliveredBy');
+            verifyNotEmpty(errors, this.receivedDate, 'receivedDate');
 
-            this.validateRequiredField('receivedBy');
-            this.validateRequiredField('deliveredBy');
-            this.validateRequiredField('receivedDate');
+            validateLineItems(errors, this);
 
-            angular.forEach(this.$errors, function(error) {
-                isValid = isValid && !error;
-            });
-
-            return isValid;
+            return angular.equals(errors, {}) ? undefined : errors;
         }
 
-        function validateRequiredField(fieldName) {
-            if(!this[fieldName] || this[fieldName] === '') this.$errors[fieldName] = messageService.get('proofOfDeliveryView.required');
-            else delete this.$errors[fieldName];
+        function createLineItems(lineItems) {
+            var proofOfDeliveryLineItems = [];
+            lineItems.forEach(function(lineItem) {
+                proofOfDeliveryLineItems.push(new ProofOfDeliveryLineItem(lineItem));
+            });
+            return proofOfDeliveryLineItems;
+        }
+
+        function validateLineItems(errors, proofOfDeliver) {
+            var proofOfDeliveryLineItemsErrors = [];
+            proofOfDeliver.proofOfDeliveryLineItems.forEach(function(lineItem) {
+                var lineItemErrors = lineItem.validate();
+
+                if (lineItemErrors) {
+                    proofOfDeliveryLineItemsErrors.push(lineItemErrors);
+                }
+            });
+
+            if (proofOfDeliveryLineItemsErrors.length) {
+                errors.proofOfDeliveryLineItems = proofOfDeliveryLineItemsErrors;
+            }
+        }
+
+        function verifyNotEmpty(errors, value, fieldName) {
+            if (!value || value === '') {
+                errors[fieldName] = 'proofOfDeliveryView.required';
+            }
         }
     }
 

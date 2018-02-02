@@ -3,51 +3,31 @@
     <table class="openlmis-table">
         <thead>
             <tr>
-                <th>{{'proofOfDeliveryView.fullSupply' | message}}</th>
                 <th>{{'proofOfDeliveryView.productName' | message}}</th>
                 <th>{{'proofOfDeliveryView.productUnit' | message}}</th>
-                <th>{{'proofOfDeliveryView.packsToShip' | message}}</th>
+                <th>{{'proofOfDeliveryView.quantityOrdered' | message}}</th>
+                <th>{{'proofOfDeliveryView.lotCode' | message}}</th>
                 <th>{{'proofOfDeliveryView.quantityShipped' | message}}</th>
-                <th>{{'proofOfDeliveryView.quantityReceived' | message}}</th>
+                <th>{{'proofOfDeliveryView.quantityAccepted' | message}}</th>
                 <th>{{'proofOfDeliveryView.quantityReturned' | message}}</th>
-                <th>{{'proofOfDeliveryView.replacedProductCode' | message}}</th>
                 <th>{{'proofOfDeliveryView.notes' | message}}</th>
             </tr>
         </thead>
-        <tbody tbody-title="{{category}}"
-                ng-repeat="(category, lineItems) in vm.items | groupBy:'$program.orderableCategoryDisplayName'">
-            <tr ng-repeat="lineItem in lineItems | orderBy : 'orderLineItem.orderable.fullProductName'">
-                <td>
-                    <i ng-class="{'icon-ok': lineItem.$program.fullSupply}"></i>
-                </td>
+        <tbody tbody-title="{{category}}">
+            <tr ng-repeat="lineItem in vm.proofOfDelivery.proofOfDeliveryLineItems | orderBy : 'orderLineItem.orderable.fullProductName'">
                 <td>{{lineItem.orderLineItem.orderable.fullProductName}}</td>
                 <td>{{lineItem.orderLineItem.orderable.dispensable.dispensingUnit}}</td>
                 <td>{{lineItem.orderLineItem.packsToShip}}</td>
+                <td>{{lineItem.lot.lotCode}}</td>
                 <td>{{lineItem.quantityShipped}}</td>
-
-                <td ng-if="!vm.isSubmitted()">
-                    <input positive-integer ng-model="lineItem.quantityReceived" openlmis-invalid="{{lineItem.$errors.quantityReceived}}" ng-change="lineItem.validate()" ng-blur="lineItem.validate()"/>
-                </td>
-                <td ng-if="vm.isSubmitted()">{{lineItem.quantityReceived}}</td>
-                
-                <td ng-if="!vm.isSubmitted()">
-                    <input positive-integer ng-model="lineItem.quantityReturned"/>
-                </td>
-                <td ng-if="vm.isSubmitted()">{{lineItem.quantityReturned}}</td>
-
-                <td>{{lineItem.replacedProductCode}}</td>
-                
-                <td ng-if="!vm.isSubmitted()">
-                    <input type="text" ng-model="lineItem.notes"/>
-                </td>
-                <td ng-if="vm.isSubmitted()">{{lineItem.notes}}</td>
+                <td>{{lineItem.quantityReceived}}</td>
+                <td><input positive-integer ng-model="lineItem.quantityReturned"
+                    ng-change="lineItem.updateQuantityAccepted()"
+                    openlmis-invalid="{{lineItem.validate().quantityReturned | message}}"/></td>
+                <td><input type="text" ng-model="lineItem.notes"/></td>
             </tr>
         </tbody>
     </table>
-    <openlmis-pagination
-        list="vm.lineItems"
-        paged-list="vm.items">
-    <openlmis-pagination/>
 </div>
 <ng-include src="'proof-of-delivery-view/footer.html'"></ng-include>
 <ng-include src="'proof-of-delivery-view/toolbar.html'"></ng-include>

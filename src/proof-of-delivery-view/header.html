@@ -1,37 +1,33 @@
-<h2>{{'proofOfDeliveryView.podFor' | message}} {{vm.pod.order.program.name}}</h2>
+<h2>{{'proofOfDeliveryView.podFor' | message}} {{vm.proofOfDelivery.order.program.name}}</h2>
 <aside class="pod-info">
-    <div ng-class="{'pod-emergency': vm.pod.order.emergency, 'pod-regular': !vm.pod.order.emergency}">
+    <div ng-class="{'pod-emergency': vm.proofOfDelivery.order.emergency, 'pod-regular': !vm.proofOfDelivery.order.emergency}">
         <span>{{vm.typeMessage() | message}}</span>
     </div>
 
     <ul>
         <li>
             <strong>{{'proofOfDeliveryView.orderNumber' | message}}</strong>
-            {{vm.pod.order.orderCode}}
+            {{vm.proofOfDelivery.order.orderCode}}
         </li>
         <li>
-            <strong>{{'proofOfDeliveryView.facility' | message}}</strong>
-            {{vm.pod.order.facility.code}} - {{vm.pod.order.facility.name}}
+            <strong>{{'proofOfDeliveryView.orderStatus' | message}}</strong>
+            {{vm.proofOfDelivery.order.status}}
+        </li>
+        <li>
+            <strong>{{'proofOfDeliveryView.orderingFacility' | message}}</strong>
+            {{vm.proofOfDelivery.order.facility.code}} - {{vm.proofOfDelivery.order.facility.name}}
         </li>
         <li>
             <strong>{{'proofOfDeliveryView.orderDate' | message}}</strong>
-            {{vm.pod.order.createdDate | openlmisDatetime}}
+            {{vm.proofOfDelivery.order.createdDate | openlmisDatetime}}
         </li>
         <li>
             <strong>{{'proofOfDeliveryView.reportingPeriod' | message}}</strong>
-            {{vm.pod.order.processingPeriod | period}}
+            {{vm.proofOfDelivery.order.processingPeriod | period}}
         </li>
         <li>
-            <strong>{{'proofOfDeliveryView.supplyingDepot' | message}}</strong>
-            {{vm.pod.order.supplyingFacility.name}}
-        </li>
-        <li ng-if="vm.pod.order.facility.geographicZone.parent.name">
-            <strong>{{'proofOfDeliveryView.district' | message}}</strong>
-            {{vm.pod.order.facility.geographicZone.parent.name}}
-        </li>
-        <li>
-            <strong>{{'proofOfDeliveryView.region' | message}}</strong>
-            {{vm.pod.order.facility.geographicZone.name}}
+            <strong>{{'proofOfDeliveryView.supplyingFacility' | message}}</strong>
+            {{vm.proofOfDelivery.order.supplyingFacility.name}}
         </li>
     </ul>
 </aside>
