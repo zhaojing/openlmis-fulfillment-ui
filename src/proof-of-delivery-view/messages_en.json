@@ -19,7 +19,6 @@
     "proofOfDeliveryView.region": "Region",
     "proofOfDeliveryView.regular": "Regular",
     "proofOfDeliveryView.reportingPeriod": "Reporting Period",
-    "proofOfDeliveryView.required": "This field is required",
     "proofOfDeliveryView.failedTosaveProofOfDelivery": "Failed to save Proof of Delivery",
     "proofOfDeliveryView.proofOfDeliveryHasBeenSaved": "Proof of Delivery has been saved",
     "proofOfDeliveryView.save": "Save",
@@ -30,7 +29,5 @@
     "proofOfDeliveryView.supplyingFacility": "Supplying Facility",
     "proofOfDeliveryView.viewProofOfDelivery": "View Proof of Delivery",
     "proofOfDeliveryView.lotCode": "Lot Code",
-    "proofOfDeliveryView.orderStatus": "Order Status",
-    "proofOfDeliveryView.positive": "This field must be a non-negative number",
-    "proofOfDeliveryView.canNotReturnMoreThanShipped": "You can't return more stock than was shipped"
+    "proofOfDeliveryView.orderStatus": "Order Status"
 }

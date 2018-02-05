@@ -119,7 +119,7 @@
 
         function verifyNotEmpty(errors, value, fieldName) {
             if (!value || value === '') {
-                errors[fieldName] = 'proofOfDeliveryView.required';
+                errors[fieldName] = 'proofOfDelivery.required';
             }
         }
     }

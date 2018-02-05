@@ -107,7 +107,7 @@ describe('ProofOfDelivery', function() {
             proofOfDelivery.receivedBy = undefined;
 
             expect(proofOfDelivery.validate()).toEqual({
-                receivedBy: 'proofOfDeliveryView.required'
+                receivedBy: 'proofOfDelivery.required'
             });
         });
 
@@ -115,7 +115,7 @@ describe('ProofOfDelivery', function() {
             proofOfDelivery.deliveredBy = undefined;
 
             expect(proofOfDelivery.validate()).toEqual({
-                deliveredBy: 'proofOfDeliveryView.required'
+                deliveredBy: 'proofOfDelivery.required'
             });
         });
 
@@ -123,34 +123,34 @@ describe('ProofOfDelivery', function() {
             proofOfDelivery.receivedDate = undefined;
 
             expect(proofOfDelivery.validate()).toEqual({
-                receivedDate: 'proofOfDeliveryView.required'
+                receivedDate: 'proofOfDelivery.required'
             });
         });
 
         it('should return error if at least one of line items is invalid', function() {
-            proofOfDelivery.proofOfDeliveryLineItems[0].quantityReturned = null;
+            proofOfDelivery.proofOfDeliveryLineItems[0].quantityReceived = null;
 
             expect(proofOfDelivery.validate()).toEqual({
                 proofOfDeliveryLineItems: [{
-                    quantityReturned: 'proofOfDeliveryView.required'
+                    quantityReceived: 'proofOfDelivery.required'
                 }]
             });
 
-            proofOfDelivery.proofOfDeliveryLineItems[1].quantityReturned = null;
+            proofOfDelivery.proofOfDeliveryLineItems[1].quantityReceived = null;
 
             expect(proofOfDelivery.validate()).toEqual({
                 proofOfDeliveryLineItems: [{
-                    quantityReturned: 'proofOfDeliveryView.required'
+                    quantityReceived: 'proofOfDelivery.required'
                 }, {
-                    quantityReturned: 'proofOfDeliveryView.required'
+                    quantityReceived: 'proofOfDelivery.required'
                 }]
             });
 
-            proofOfDelivery.proofOfDeliveryLineItems[1].quantityReturned = 50;
+            proofOfDelivery.proofOfDeliveryLineItems[1].quantityReceived = 50;
 
             expect(proofOfDelivery.validate()).toEqual({
                 proofOfDeliveryLineItems: [{
-                    quantityReturned: 'proofOfDeliveryView.required'
+                    quantityReceived: 'proofOfDelivery.required'
                 }]
             });
         });

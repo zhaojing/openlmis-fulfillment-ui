@@ -35,14 +35,14 @@ describe('ProofOfDeliveryLineItem', function() {
 
             expect(result.id).toEqual(json.id);
             expect(result.quantityShipped).toEqual(json.quantityShipped);
-            expect(result.quantityReceived).toEqual(json.quantityReceived);
             expect(result.quantityReturned).toEqual(json.quantityReturned);
+            expect(result.quantityReceived).toEqual(json.quantityReceived);
             expect(result.notes).toEqual(json.notes);
         });
 
     });
 
-    describe('updateQuantityAccepted', function() {
+    describe('updateQuantityReturned', function() {
 
         beforeEach(function() {
             proofOfDeliveryLineItem = new ProofOfDeliveryLineItem(
@@ -50,64 +50,64 @@ describe('ProofOfDeliveryLineItem', function() {
             );
         });
 
-        it('should set quantity accepted to 0 if quantity returned is bigger than shipped', function() {
+        it('should set quantity returned to 0 if quantity accepted is bigger than shipped', function() {
             proofOfDeliveryLineItem.quantityShipped = 100;
-            proofOfDeliveryLineItem.quantityReturned = 101;
-            proofOfDeliveryLineItem.quantityReceived = 10;
+            proofOfDeliveryLineItem.quantityReceived = 101;
+            proofOfDeliveryLineItem.quantityReturned = 10;
 
-            proofOfDeliveryLineItem.updateQuantityAccepted();
+            proofOfDeliveryLineItem.updateQuantityReturned();
 
-            expect(proofOfDeliveryLineItem.quantityReceived).toBe(0);
+            expect(proofOfDeliveryLineItem.quantityReturned).toBe(0);
         });
 
-        it('should set quantity accepted to 0 if quantity returned matches quantity shipped', function() {
+        it('should set quantity returned to 0 if quantity accepted matches quantity shipped', function() {
             proofOfDeliveryLineItem.quantityShipped = 100;
-            proofOfDeliveryLineItem.quantityReturned = 100;
-            proofOfDeliveryLineItem.quantityReceived = 10;
+            proofOfDeliveryLineItem.quantityReceived = 100;
+            proofOfDeliveryLineItem.quantityReturned = 10;
 
-            proofOfDeliveryLineItem.updateQuantityAccepted();
+            proofOfDeliveryLineItem.updateQuantityReturned();
 
-            expect(proofOfDeliveryLineItem.quantityReceived).toBe(0);
+            expect(proofOfDeliveryLineItem.quantityReturned).toBe(0);
         });
 
-        it('should set quantity accepted to quantity shipped if quantity returned is 0', function() {
+        it('should set quantity returned to quantity shipped if quantity accepted is 0', function() {
             proofOfDeliveryLineItem.quantityShipped = 100;
-            proofOfDeliveryLineItem.quantityReturned = 0;
-            proofOfDeliveryLineItem.quantityReceived = 10;
+            proofOfDeliveryLineItem.quantityReceived = 0;
+            proofOfDeliveryLineItem.quantityReturned = 10;
 
-            proofOfDeliveryLineItem.updateQuantityAccepted();
+            proofOfDeliveryLineItem.updateQuantityReturned();
 
-            expect(proofOfDeliveryLineItem.quantityReceived).toBe(100);
+            expect(proofOfDeliveryLineItem.quantityReturned).toBe(100);
         });
 
-        it('should set quantity accepted to quantity shipped if quantity returned is undefined', function() {
+        it('should unset quantity returned if quantity accepted is undefined', function() {
             proofOfDeliveryLineItem.quantityShipped = 100;
-            proofOfDeliveryLineItem.quantityReturned = undefined;
-            proofOfDeliveryLineItem.quantityReceived = 10;
+            proofOfDeliveryLineItem.quantityReceived = undefined;
+            proofOfDeliveryLineItem.quantityReturned = 10;
 
-            proofOfDeliveryLineItem.updateQuantityAccepted();
+            proofOfDeliveryLineItem.updateQuantityReturned();
 
-            expect(proofOfDeliveryLineItem.quantityReceived).toBe(100);
+            expect(proofOfDeliveryLineItem.quantityReturned).toBeUndefined();
         });
 
-        it('should set quantity accepted to quantity shipped if quantity returned is negative', function() {
+        it('should set quantity returned to quantity shipped if quantity accepted is negative', function() {
             proofOfDeliveryLineItem.quantityShipped = 100;
-            proofOfDeliveryLineItem.quantityReturned = -20;
-            proofOfDeliveryLineItem.quantityReceived = 10;
+            proofOfDeliveryLineItem.quantityReceived = -20;
+            proofOfDeliveryLineItem.quantityReturned = 10;
 
-            proofOfDeliveryLineItem.updateQuantityAccepted();
+            proofOfDeliveryLineItem.updateQuantityReturned();
 
-            expect(proofOfDeliveryLineItem.quantityReceived).toBe(100);
+            expect(proofOfDeliveryLineItem.quantityReturned).toBe(100);
         });
 
-        it('should calculate the quantity accepted', function() {
+        it('should calculate the quantity returned', function() {
             proofOfDeliveryLineItem.quantityShipped = 100;
-            proofOfDeliveryLineItem.quantityReturned = 60;
-            proofOfDeliveryLineItem.quantityReceived = 10;
+            proofOfDeliveryLineItem.quantityReceived = 60;
+            proofOfDeliveryLineItem.quantityReturned = 10;
 
-            proofOfDeliveryLineItem.updateQuantityAccepted();
+            proofOfDeliveryLineItem.updateQuantityReturned();
 
-            expect(proofOfDeliveryLineItem.quantityReceived).toBe(40);
+            expect(proofOfDeliveryLineItem.quantityReturned).toBe(40);
         });
 
     });
@@ -124,28 +124,28 @@ describe('ProofOfDeliveryLineItem', function() {
             expect(proofOfDeliveryLineItem.validate()).toBeUndefined();
         });
 
-        it('should return error if quantityReturned is empty', function() {
-            proofOfDeliveryLineItem.quantityReturned = undefined;
+        it('should return error if quantityReceived is empty', function() {
+            proofOfDeliveryLineItem.quantityReceived = undefined;
 
             expect(proofOfDeliveryLineItem.validate()).toEqual({
-                quantityReturned: 'proofOfDeliveryView.required'
+                quantityReceived: 'proofOfDelivery.required'
             });
         });
 
-        it('should return error if quantityReturned is negative', function() {
-            proofOfDeliveryLineItem.quantityReturned = -1;
+        it('should return error if quantityReceived is negative', function() {
+            proofOfDeliveryLineItem.quantityReceived = -1;
 
             expect(proofOfDeliveryLineItem.validate()).toEqual({
-                quantityReturned: 'proofOfDeliveryView.positive'
+                quantityReceived: 'proofOfDelivery.positive'
             });
         });
 
-        it('should return if trying to return more than was shipped', function() {
-            proofOfDeliveryLineItem.quantityReturned = 100;
+        it('should return if trying to accept more than was shipped', function() {
+            proofOfDeliveryLineItem.quantityReceived = 100;
             proofOfDeliveryLineItem.quantityShipped = 90;
 
             expect(proofOfDeliveryLineItem.validate()).toEqual({
-                quantityReturned: 'proofOfDeliveryView.canNotReturnMoreThanShipped'
+                quantityReceived: 'proofOfDelivery.canNotAcceptMoreThanShipped'
             });
         });
 

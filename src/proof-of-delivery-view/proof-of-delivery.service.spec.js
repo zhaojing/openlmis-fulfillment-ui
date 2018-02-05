@@ -99,7 +99,7 @@ describe('proofOfDeliveryService', function() {
 
     });
 
-    ddescribe('decorated save', function() {
+    describe('decorated save', function() {
 
         var proofOfDeliveryMock, proofOfDelivery, saveSpy;
 
@@ -169,7 +169,7 @@ describe('proofOfDeliveryService', function() {
             expect(loadingModalService.close).toHaveBeenCalled();
         });
 
-        iit('should show error only after save has failed', function() {
+        it('should show error only after save has failed', function() {
             saveSpy.andReturn($q.reject());
 
             var saved;

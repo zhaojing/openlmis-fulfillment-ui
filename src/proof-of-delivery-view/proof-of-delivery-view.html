@@ -20,10 +20,10 @@
                 <td>{{lineItem.orderLineItem.packsToShip}}</td>
                 <td>{{lineItem.lot.lotCode}}</td>
                 <td>{{lineItem.quantityShipped}}</td>
-                <td>{{lineItem.quantityReceived}}</td>
-                <td><input positive-integer ng-model="lineItem.quantityReturned"
-                    ng-change="lineItem.updateQuantityAccepted()"
-                    openlmis-invalid="{{lineItem.validate().quantityReturned | message}}"/></td>
+                <td><input positive-integer ng-model="lineItem.quantityReceived"
+                    ng-change="lineItem.updateQuantityReturned()"
+                    openlmis-invalid="{{lineItem.validate().quantityReceived | message}}"/></td>
+                <td>{{lineItem.quantityReturned}}</td>
                 <td><input type="text" ng-model="lineItem.notes"/></td>
             </tr>
         </tbody>

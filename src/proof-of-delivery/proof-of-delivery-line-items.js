@@ -31,7 +31,7 @@
     function ProofOfDeliveryLineItem() {
 
         ProofOfDeliveryLineItem.prototype.validate = validate;
-        ProofOfDeliveryLineItem.prototype.updateQuantityAccepted = updateQuantityAccepted;
+        ProofOfDeliveryLineItem.prototype.updateQuantityReturned = updateQuantityReturned;
 
         return ProofOfDeliveryLineItem;
 
@@ -53,20 +53,24 @@
         /**
          * @ngdoc method
          * @methodOf proof-of-delivery.ProofOfDeliveryLineItem
-         * @name updateQuantityAccepted
+         * @name updateQuantityReturned
          *
          * @description
-         * Updates the quantity accepted based on the set quantity returned.
+         * Updates the quantity returned based on the set quantity received.
          */
-        function updateQuantityAccepted() {
-            if (this.quantityShipped <= this.quantityReturned) {
-                this.quantityReceived = 0;
-            } else if (!this.quantityReturned && this.quantityReturned != 0) {
-                this.quantityReceived = this.quantityShipped;
-            } else if (this.quantityReturned < 0) {
-                this.quantityReceived = this.quantityShipped;
+        function updateQuantityReturned() {
+            if (!this.quantityReceived && this.quantityReceived !== 0) {
+                this.quantityReturned = undefined;
             } else {
-                this.quantityReceived = this.quantityShipped - this.quantityReturned;
+                var quantityReturned = this.quantityShipped - this.quantityReceived;
+
+                if (quantityReturned < 0) {
+                    this.quantityReturned = 0;
+                } else if (quantityReturned > this.quantityShipped) {
+                    this.quantityReturned = this.quantityShipped
+                } else {
+                    this.quantityReturned = quantityReturned;
+                }
             }
         }
 
@@ -83,16 +87,16 @@
         function validate() {
             var errors = {};
 
-            if(this.quantityReturned === undefined || this.quantityReturned === null) {
-                errors.quantityReturned = 'proofOfDeliveryView.required';
+            if(this.quantityReceived === undefined || this.quantityReceived === null) {
+                errors.quantityReceived = 'proofOfDelivery.required';
             }
 
-            if (this.quantityReturned < 0) {
-                errors.quantityReturned = 'proofOfDeliveryView.positive';
+            if (this.quantityReceived < 0) {
+                errors.quantityReceived = 'proofOfDelivery.positive';
             }
 
-            if (this.quantityShipped < this.quantityReturned) {
-                errors.quantityReturned = 'proofOfDeliveryView.canNotReturnMoreThanShipped';
+            if (this.quantityShipped < this.quantityReceived) {
+                errors.quantityReceived = 'proofOfDelivery.canNotAcceptMoreThanShipped';
             }
 
             return angular.equals(errors, {}) ? undefined : errors;
