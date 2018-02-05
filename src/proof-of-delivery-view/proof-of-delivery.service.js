@@ -30,11 +30,11 @@
 
     proofOfDeliveryService.$inject = [
         '$q', 'ProofOfDeliveryRepository', 'ProofOfDeliveryRepositoryImpl', 'notificationService',
-		'loadingModalService'
+        'loadingModalService'
     ];
 
     function proofOfDeliveryService($q, ProofOfDeliveryRepository, ProofOfDeliveryRepositoryImpl,
-									notificationService, loadingModalService) {
+                                    notificationService, loadingModalService) {
         var proofOfDeliveryService = this,
             repository = new ProofOfDeliveryRepository(
                 new ProofOfDeliveryRepositoryImpl()
@@ -56,29 +56,29 @@
         function get(id) {
             if (id) {
                 return repository.get(id)
-				.then(decorate);
+                .then(decorate);
             }
             return $q.reject();
         }
 
-		function decorate(proofOfDelivery) {
-			var save = proofOfDelivery.save;
+        function decorate(proofOfDelivery) {
+            var save = proofOfDelivery.save;
 
-			proofOfDelivery.save = function() {
-				loadingModalService.open();
-				return save.apply(this, arguments)
+            proofOfDelivery.save = function() {
+                loadingModalService.open();
+                return save.apply(this, arguments)
                 .then(function() {
-					notificationService.success('proofOfDeliveryView.proofOfDeliveryHasBeenSaved');
-				})
-				.catch(function() {
-					notificationService.error('proofOfDeliveryView.failedTosaveProofOfDelivery');
+                    notificationService.success('proofOfDeliveryView.proofOfDeliveryHasBeenSaved');
+                })
+                .catch(function() {
+                    notificationService.error('proofOfDeliveryView.failedToSaveProofOfDelivery');
                     return $q.reject();
-				})
-				.finally(loadingModalService.close);
-			};
+                })
+                .finally(loadingModalService.close);
+            };
 
             return proofOfDelivery;
-		}
+        }
     }
 
 })();

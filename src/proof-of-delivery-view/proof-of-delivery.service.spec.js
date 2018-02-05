@@ -186,7 +186,7 @@ describe('proofOfDeliveryService', function() {
             expect(saved).toBe(false);
             expect(notificationService.success).not.toHaveBeenCalled();
             expect(notificationService.error)
-                .toHaveBeenCalledWith('proofOfDeliveryView.failedTosaveProofOfDelivery');
+                .toHaveBeenCalledWith('proofOfDeliveryView.failedToSaveProofOfDelivery');
         });
 
         it('should close loading modal on failure', function() {

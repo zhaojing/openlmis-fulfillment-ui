@@ -19,7 +19,7 @@
     "proofOfDeliveryView.region": "Region",
     "proofOfDeliveryView.regular": "Regular",
     "proofOfDeliveryView.reportingPeriod": "Reporting Period",
-    "proofOfDeliveryView.failedTosaveProofOfDelivery": "Failed to save Proof of Delivery",
+    "proofOfDeliveryView.failedToSaveProofOfDelivery": "Failed to save Proof of Delivery",
     "proofOfDeliveryView.proofOfDeliveryHasBeenSaved": "Proof of Delivery has been saved",
     "proofOfDeliveryView.save": "Save",
     "proofOfDeliveryView.submitPod.confirm": "Are you sure you want to submit this Proof of Delivery?",

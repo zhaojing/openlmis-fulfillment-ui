@@ -99,7 +99,7 @@ describe('ProofOfDelivery', function() {
             proofOfDelivery = new ProofOfDelivery(json);
         });
 
-        it('should return true if Proof of Delivery is valid', function() {
+        it('should return undefined if Proof of Delivery is valid', function() {
             expect(proofOfDelivery.validate()).toBeUndefined();
         });
 
