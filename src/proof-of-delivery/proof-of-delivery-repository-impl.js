@@ -47,7 +47,8 @@
          * @description
          * Creates an instance of the ProofOfDeliveryRepositoryImpl class.
          */
-        function ProofOfDeliveryRepositoryImpl() {
+        function ProofOfDeliveryRepositoryImpl(shipmentRepositoryImpl) {
+            this.shipmentRepositoryImpl = shipmentRepositoryImpl;
             this.resource = $resource(fulfillmentUrlFactory('/api/proofOfDeliveries/:id'), {}, {
                 update: {
                     method: 'PUT'
@@ -68,9 +69,17 @@
          * @return  {Promise}       the promise resolving to server response
          */
         function get(id) {
+            var shipmentRepositoryImpl = this.shipmentRepositoryImpl;
             return this.resource.get({
                 id: id
-            }).$promise;
+            }).$promise
+            .then(function(proofOfDeliveryJson) {
+                return shipmentRepositoryImpl.get(proofOfDeliveryJson.shipment.id)
+                .then(function(shipmentJson) {
+                    proofOfDeliveryJson.shipment = shipmentJson;
+                    return proofOfDeliveryJson;
+                });
+            });
         }
 
         /**

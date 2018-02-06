@@ -53,7 +53,7 @@
         function ProofOfDelivery(json, repository) {
             angular.copy(json, this);
             this.repository = repository;
-            this.proofOfDeliveryLineItems = createLineItems(json.proofOfDeliveryLineItems);
+            this.lineItems = createLineItems(json.lineItems, json.shipment.lineItems);
         }
 
         /**
@@ -94,26 +94,30 @@
             return angular.equals(errors, {}) ? undefined : errors;
         }
 
-        function createLineItems(lineItems) {
-            var proofOfDeliveryLineItems = [];
-            lineItems.forEach(function(lineItem) {
-                proofOfDeliveryLineItems.push(new ProofOfDeliveryLineItem(lineItem));
+        function createLineItems(jsonLineItems, shipmentLineItems) {
+            var lineItems = [];
+            jsonLineItems.forEach(function(lineItem) {
+                var quantityShipped = shipmentLineItems.filter(function(shipmentLineItem) {
+                    return shipmentLineItem.orderable.id === lineItem.orderable.id &&
+                        shipmentLineItem.lot.id === lineItem.lot.id;
+                })[0].quantityShipped;
+                lineItems.push(new ProofOfDeliveryLineItem(lineItem, quantityShipped));
             });
-            return proofOfDeliveryLineItems;
+            return lineItems;
         }
 
-        function validateLineItems(errors, proofOfDeliver) {
-            var proofOfDeliveryLineItemsErrors = [];
-            proofOfDeliver.proofOfDeliveryLineItems.forEach(function(lineItem) {
+        function validateLineItems(errors, proofOfDelivery) {
+            var lineItemsErrors = [];
+            proofOfDelivery.lineItems.forEach(function(lineItem) {
                 var lineItemErrors = lineItem.validate();
 
                 if (lineItemErrors) {
-                    proofOfDeliveryLineItemsErrors.push(lineItemErrors);
+                    lineItemsErrors.push(lineItemErrors);
                 }
             });
 
-            if (proofOfDeliveryLineItemsErrors.length) {
-                errors.proofOfDeliveryLineItems = proofOfDeliveryLineItemsErrors;
+            if (lineItemsErrors.length) {
+                errors.lineItems = lineItemsErrors;
             }
         }
 

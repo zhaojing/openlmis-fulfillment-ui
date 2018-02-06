@@ -31,7 +31,7 @@
     function ProofOfDeliveryLineItem() {
 
         ProofOfDeliveryLineItem.prototype.validate = validate;
-        ProofOfDeliveryLineItem.prototype.updateQuantityReturned = updateQuantityReturned;
+        ProofOfDeliveryLineItem.prototype.updateQuantityRejected = updateQuantityRejected;
 
         return ProofOfDeliveryLineItem;
 
@@ -46,30 +46,31 @@
          *
          * @param   {Object}    json    the JSON to build the instance
          */
-        function ProofOfDeliveryLineItem(json) {
-            angular.copy(json, this);
+        function ProofOfDeliveryLineItem(json, quantityShipped) {
+            angular.copy(json, this)
+            this.quantityShipped = quantityShipped
         }
 
         /**
          * @ngdoc method
          * @methodOf proof-of-delivery.ProofOfDeliveryLineItem
-         * @name updateQuantityReturned
+         * @name updateQuantityRejected
          *
          * @description
          * Updates the quantity returned based on the set quantity received.
          */
-        function updateQuantityReturned() {
-            if (!this.quantityReceived && this.quantityReceived !== 0) {
-                this.quantityReturned = undefined;
+        function updateQuantityRejected() {
+            if (!this.quantityAccepted && this.quantityAccepted !== 0) {
+                this.quantityRejected = undefined;
             } else {
-                var quantityReturned = this.quantityShipped - this.quantityReceived;
+                var quantityRejected = this.quantityShipped - this.quantityAccepted;
 
-                if (quantityReturned < 0) {
-                    this.quantityReturned = 0;
-                } else if (quantityReturned > this.quantityShipped) {
-                    this.quantityReturned = this.quantityShipped
+                if (quantityRejected < 0) {
+                    this.quantityRejected = 0;
+                } else if (quantityRejected > this.quantityShipped) {
+                    this.quantityRejected = this.quantityShipped
                 } else {
-                    this.quantityReturned = quantityReturned;
+                    this.quantityRejected = quantityRejected;
                 }
             }
         }
@@ -87,16 +88,16 @@
         function validate() {
             var errors = {};
 
-            if(this.quantityReceived === undefined || this.quantityReceived === null) {
-                errors.quantityReceived = 'proofOfDelivery.required';
+            if(this.quantityAccepted === undefined || this.quantityAccepted === null) {
+                errors.quantityAccepted = 'proofOfDelivery.required';
             }
 
-            if (this.quantityReceived < 0) {
-                errors.quantityReceived = 'proofOfDelivery.positive';
+            if (this.quantityAccepted < 0) {
+                errors.quantityAccepted = 'proofOfDelivery.positive';
             }
 
-            if (this.quantityShipped < this.quantityReceived) {
-                errors.quantityReceived = 'proofOfDelivery.canNotAcceptMoreThanShipped';
+            if (this.quantityShipped < this.quantityAccepted) {
+                errors.quantityAccepted = 'proofOfDelivery.canNotAcceptMoreThanShipped';
             }
 
             return angular.equals(errors, {}) ? undefined : errors;

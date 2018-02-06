@@ -21,12 +21,15 @@
         .module('proof-of-delivery')
         .factory('ProofOfDeliveryLineItemDataBuilder', ProofOfDeliveryLineItemDataBuilder);
 
-    ProofOfDeliveryLineItemDataBuilder.$inject = ['ProofOfDeliveryLineItem'];
+    ProofOfDeliveryLineItemDataBuilder.$inject = ['ProofOfDeliveryLineItem', 'ObjectReferenceDataBuilder'];
 
-    function ProofOfDeliveryLineItemDataBuilder(ProofOfDeliveryLineItem) {
+    function ProofOfDeliveryLineItemDataBuilder(ProofOfDeliveryLineItem, ObjectReferenceDataBuilder) {
 
         ProofOfDeliveryLineItemDataBuilder.prototype.build = build;
         ProofOfDeliveryLineItemDataBuilder.prototype.buildJson = buildJson;
+        ProofOfDeliveryLineItemDataBuilder.prototype.withQuantityAccepted = withQuantityAccepted;
+        ProofOfDeliveryLineItemDataBuilder.prototype.withQuantityRejected = withQuantityRejected;
+        ProofOfDeliveryLineItemDataBuilder.prototype.withQuantityShipped = withQuantityShipped;
 
         return ProofOfDeliveryLineItemDataBuilder;
 
@@ -36,18 +39,42 @@
 
             var instanceNumber = ProofOfDeliveryLineItemDataBuilder.instanceNumber;
             this.id = 'proof-of-delivery-line-item-id-' + instanceNumber;
-            this.quantityShipped = 50 + instanceNumber;
-            this.quantityReceived = this.quantityShipped - instanceNumber;
-            this.quantityReturned = this.quantityShipped - this.quantityReceived;
-            this.notes = 'Proof of Delivery ' + instanceNumber + ' notes.';
+            this.orderable = new ObjectReferenceDataBuilder().build();
+            this.lot = new ObjectReferenceDataBuilder().build();
+            this.quantityAccepted = 50 + instanceNumber;
+            this.quantityRejected = 50;
+            this.notes = 'Proof of Delivery line item' + instanceNumber + ' notes.';
+            this.quantityShipped = this.quantityAccepted + this.quantityRejected;
         }
 
         function build() {
-            return new ProofOfDeliveryLineItem(this);
+            return new ProofOfDeliveryLineItem(this.buildJson(), this.quantityShipped);
         }
 
         function buildJson() {
-            return angular.copy(this);
+            return {
+                id: this.id,
+                orderable: this.orderable,
+                lot: this.lot,
+                quantityAccepted: this.quantityAccepted,
+                quantityRejected: this.quantityRejected,
+                notes: this.notes,
+            }
+        }
+
+        function withQuantityAccepted(quantityAccepted) {
+            this.quantityAccepted = quantityAccepted;
+            return this;
+        }
+
+        function withQuantityRejected(quantityRejected) {
+            this.quantityRejected = quantityRejected;
+            return this;
+        }
+
+        function withQuantityShipped(quantityShipped) {
+            this.quantityShipped = quantityShipped;
+            return this;
         }
 
     }

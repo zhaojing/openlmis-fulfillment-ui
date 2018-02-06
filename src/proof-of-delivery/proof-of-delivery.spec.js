@@ -15,7 +15,8 @@
 
 describe('ProofOfDelivery', function() {
 
-    var ProofOfDelivery, ProofOfDeliveryLineItem, ProofOfDeliveryDataBuilder, $q, $rootScope, json;
+    var ProofOfDelivery, ProofOfDeliveryLineItem, ProofOfDeliveryDataBuilder, $q, $rootScope, json,
+        shipment;
 
     beforeEach(function() {
         module('proof-of-delivery');
@@ -45,11 +46,11 @@ describe('ProofOfDelivery', function() {
         it('should create line items', function() {
             var result = new ProofOfDelivery(json);
 
-            expect(result.proofOfDeliveryLineItems[0] instanceof ProofOfDeliveryLineItem).toBe(true);
-            expect(result.proofOfDeliveryLineItems[1] instanceof ProofOfDeliveryLineItem).toBe(true);
-            expect(result.proofOfDeliveryLineItems).toEqual([
-                new ProofOfDeliveryLineItem(json.proofOfDeliveryLineItems[0]),
-                new ProofOfDeliveryLineItem(json.proofOfDeliveryLineItems[1])
+            expect(result.lineItems[0] instanceof ProofOfDeliveryLineItem).toBe(true);
+            expect(result.lineItems[1] instanceof ProofOfDeliveryLineItem).toBe(true);
+            expect(result.lineItems).toEqual([
+                new ProofOfDeliveryLineItem(json.lineItems[0], json.shipment.lineItems[0].quantityShipped),
+                new ProofOfDeliveryLineItem(json.lineItems[1], json.shipment.lineItems[1].quantityShipped)
             ]);
         });
     });
@@ -73,7 +74,7 @@ describe('ProofOfDelivery', function() {
             });
             $rootScope.$apply();
 
-            expect(saved).toBe(true)
+            expect(saved).toBe(true);
         });
 
         it('should reject if save failed', function() {
@@ -128,29 +129,29 @@ describe('ProofOfDelivery', function() {
         });
 
         it('should return error if at least one of line items is invalid', function() {
-            proofOfDelivery.proofOfDeliveryLineItems[0].quantityReceived = null;
+            proofOfDelivery.lineItems[0].quantityAccepted = null;
 
             expect(proofOfDelivery.validate()).toEqual({
-                proofOfDeliveryLineItems: [{
-                    quantityReceived: 'proofOfDelivery.required'
+                lineItems: [{
+                    quantityAccepted: 'proofOfDelivery.required'
                 }]
             });
 
-            proofOfDelivery.proofOfDeliveryLineItems[1].quantityReceived = null;
+            proofOfDelivery.lineItems[1].quantityAccepted = null;
 
             expect(proofOfDelivery.validate()).toEqual({
-                proofOfDeliveryLineItems: [{
-                    quantityReceived: 'proofOfDelivery.required'
+                lineItems: [{
+                    quantityAccepted: 'proofOfDelivery.required'
                 }, {
-                    quantityReceived: 'proofOfDelivery.required'
+                    quantityAccepted: 'proofOfDelivery.required'
                 }]
             });
 
-            proofOfDelivery.proofOfDeliveryLineItems[1].quantityReceived = 50;
+            proofOfDelivery.lineItems[1].quantityAccepted = 50;
 
             expect(proofOfDelivery.validate()).toEqual({
-                proofOfDeliveryLineItems: [{
-                    quantityReceived: 'proofOfDelivery.required'
+                lineItems: [{
+                    quantityAccepted: 'proofOfDelivery.required'
                 }]
             });
         });

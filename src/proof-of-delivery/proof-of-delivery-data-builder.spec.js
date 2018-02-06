@@ -22,12 +22,15 @@
         .factory('ProofOfDeliveryDataBuilder', ProofOfDeliveryDataBuilder);
 
     ProofOfDeliveryDataBuilder.$inject = [
-        'ProofOfDelivery', 'ProofOfDeliveryLineItemDataBuilder', 'OrderDataBuilder'
+        'ProofOfDelivery', 'ProofOfDeliveryLineItemDataBuilder', 'ObjectReferenceDataBuilder',
+        'ShipmentDataBuilder', 'ShipmentLineItemDataBuilder'
     ];
 
-    function ProofOfDeliveryDataBuilder(ProofOfDelivery, ProofOfDeliveryLineItemDataBuilder, OrderDataBuilder) {
+    function ProofOfDeliveryDataBuilder(ProofOfDelivery, ProofOfDeliveryLineItemDataBuilder,
+                                        ObjectReferenceDataBuilder, ShipmentDataBuilder,
+                                        ShipmentLineItemDataBuilder) {
 
-        ProofOfDeliveryDataBuilder.prototype.build = build;
+        ProofOfDeliveryDataBuilder.prototype.build = build
         ProofOfDeliveryDataBuilder.prototype.buildJson = buildJson;
         ProofOfDeliveryDataBuilder.prototype.withReceivedDate = withReceivedDate;
 
@@ -39,22 +42,46 @@
 
             var instanceNumber = ProofOfDeliveryDataBuilder.instanceNumber;
             this.id = 'proof-of-delivery-id-' + instanceNumber;
-            this.order = new OrderDataBuilder().build();
-            this.proofOfDeliveryLineItems = [
-                new ProofOfDeliveryLineItemDataBuilder().buildJson(),
-                new ProofOfDeliveryLineItemDataBuilder().buildJson()
-            ];
+            this.status = 'INITIATED';
             this.deliveredBy = 'Deliverer ' + instanceNumber;
             this.receivedBy = 'Receiver ' + instanceNumber;
             this.receivedDate = '2018-02-01';
+
+            this.lineItems = [
+                new ProofOfDeliveryLineItemDataBuilder().buildJson(),
+                new ProofOfDeliveryLineItemDataBuilder().buildJson()
+            ];
+
+            this.shipment = new ShipmentDataBuilder()
+                .withLineItems([
+                    new ShipmentLineItemDataBuilder()
+                        .withOrderable(this.lineItems[0].orderable)
+                        .withLot(this.lineItems[0].lot)
+                        .withQuantityShipped(100)
+                        .build(),
+                    new ShipmentLineItemDataBuilder()
+                        .withOrderable(this.lineItems[1].orderable)
+                        .withLot(this.lineItems[1].lot)
+                        .withQuantityShipped(200)
+                        .build()
+                ])
+                .build();
         }
 
         function build() {
-            return new ProofOfDelivery(this);
+            return new ProofOfDelivery(this.buildJson());
         }
 
         function buildJson() {
-            return angular.copy(this);
+            return {
+                id: this.id,
+                shipment: this.shipment,
+                status: this.status,
+                lineItems: this.lineItems,
+                deliveredBy: this.deliveredBy,
+                receivedBy: this.receivedBy,
+                receivedDate: this.receivedDate
+            };
         }
 
         function withReceivedDate(receivedDate) {

@@ -29,7 +29,8 @@
         'order',
         'openlmis-date',
         'openlmis-i18n',
-        'openlmis-date'
+        'openlmis-date',
+        'shipment'
     ]);
 
 })();

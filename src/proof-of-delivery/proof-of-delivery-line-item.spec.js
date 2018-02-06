@@ -29,85 +29,96 @@ describe('ProofOfDeliveryLineItem', function() {
     describe('constructor', function() {
 
         it('should copy fields from JSON', function() {
-            var json = new ProofOfDeliveryLineItemDataBuilder().buildJson();
+            var json = new ProofOfDeliveryLineItemDataBuilder()
+                .withQuantityAccepted(100)
+                .withQuantityRejected(50)
+                .buildJson();
 
-            var result = new ProofOfDeliveryLineItem(json);
+            var result = new ProofOfDeliveryLineItem(json, 150);
 
             expect(result.id).toEqual(json.id);
-            expect(result.quantityShipped).toEqual(json.quantityShipped);
-            expect(result.quantityReturned).toEqual(json.quantityReturned);
-            expect(result.quantityReceived).toEqual(json.quantityReceived);
+            expect(result.orderable).toEqual(json.orderable);
+            expect(result.lot).toEqual(json.lot);
+            expect(result.quantityAccepted).toEqual(json.quantityAccepted);
+            expect(result.quantityRejected).toEqual(json.quantityRejected);
             expect(result.notes).toEqual(json.notes);
+            expect(result.quantityShipped).toEqual(150);
         });
 
     });
 
-    describe('updateQuantityReturned', function() {
+    describe('updateQuantityRejected', function() {
 
-        beforeEach(function() {
-            proofOfDeliveryLineItem = new ProofOfDeliveryLineItem(
-                new ProofOfDeliveryLineItemDataBuilder().buildJson()
-            );
+        it('should set quantity rejected to 0 if quantity accepted is bigger than shipped', function() {
+            proofOfDeliveryLineItem = new ProofOfDeliveryLineItemDataBuilder()
+                .withQuantityAccepted(101)
+                .withQuantityRejected(10)
+                .withQuantityShipped(100)
+                .build();
+
+            proofOfDeliveryLineItem.updateQuantityRejected();
+
+            expect(proofOfDeliveryLineItem.quantityRejected).toBe(0);
         });
 
-        it('should set quantity returned to 0 if quantity accepted is bigger than shipped', function() {
-            proofOfDeliveryLineItem.quantityShipped = 100;
-            proofOfDeliveryLineItem.quantityReceived = 101;
-            proofOfDeliveryLineItem.quantityReturned = 10;
+        it('should set quantity rejected to 0 if quantity accepted matches quantity shipped', function() {
+            proofOfDeliveryLineItem = new ProofOfDeliveryLineItemDataBuilder()
+                .withQuantityShipped(100)
+                .withQuantityAccepted(100)
+                .withQuantityRejected(10)
+                .build();
 
-            proofOfDeliveryLineItem.updateQuantityReturned();
+            proofOfDeliveryLineItem.updateQuantityRejected();
 
-            expect(proofOfDeliveryLineItem.quantityReturned).toBe(0);
+            expect(proofOfDeliveryLineItem.quantityRejected).toBe(0);
         });
 
-        it('should set quantity returned to 0 if quantity accepted matches quantity shipped', function() {
-            proofOfDeliveryLineItem.quantityShipped = 100;
-            proofOfDeliveryLineItem.quantityReceived = 100;
-            proofOfDeliveryLineItem.quantityReturned = 10;
+        it('should set quantity rejected to quantity shipped if quantity accepted is 0', function() {
+            proofOfDeliveryLineItem = new ProofOfDeliveryLineItemDataBuilder()
+                .withQuantityShipped(100)
+                .withQuantityAccepted(0)
+                .withQuantityRejected(10)
+                .build();
 
-            proofOfDeliveryLineItem.updateQuantityReturned();
+            proofOfDeliveryLineItem.updateQuantityRejected();
 
-            expect(proofOfDeliveryLineItem.quantityReturned).toBe(0);
+            expect(proofOfDeliveryLineItem.quantityRejected).toBe(100);
         });
 
-        it('should set quantity returned to quantity shipped if quantity accepted is 0', function() {
-            proofOfDeliveryLineItem.quantityShipped = 100;
-            proofOfDeliveryLineItem.quantityReceived = 0;
-            proofOfDeliveryLineItem.quantityReturned = 10;
+        it('should unset quantity rejected if quantity accepted is undefined', function() {
+            proofOfDeliveryLineItem = new ProofOfDeliveryLineItemDataBuilder()
+                .withQuantityShipped(100)
+                .withQuantityAccepted(undefined)
+                .withQuantityRejected(10)
+                .build();
 
-            proofOfDeliveryLineItem.updateQuantityReturned();
+            proofOfDeliveryLineItem.updateQuantityRejected();
 
-            expect(proofOfDeliveryLineItem.quantityReturned).toBe(100);
+            expect(proofOfDeliveryLineItem.quantityRejected).toBeUndefined();
         });
 
-        it('should unset quantity returned if quantity accepted is undefined', function() {
-            proofOfDeliveryLineItem.quantityShipped = 100;
-            proofOfDeliveryLineItem.quantityReceived = undefined;
-            proofOfDeliveryLineItem.quantityReturned = 10;
+        it('should set quantity rejected to quantity shipped if quantity accepted is negative', function() {
+            proofOfDeliveryLineItem = new ProofOfDeliveryLineItemDataBuilder()
+                .withQuantityShipped(100)
+                .withQuantityAccepted(-20)
+                .withQuantityRejected(10)
+                .build();
 
-            proofOfDeliveryLineItem.updateQuantityReturned();
+            proofOfDeliveryLineItem.updateQuantityRejected();
 
-            expect(proofOfDeliveryLineItem.quantityReturned).toBeUndefined();
+            expect(proofOfDeliveryLineItem.quantityRejected).toBe(100);
         });
 
-        it('should set quantity returned to quantity shipped if quantity accepted is negative', function() {
-            proofOfDeliveryLineItem.quantityShipped = 100;
-            proofOfDeliveryLineItem.quantityReceived = -20;
-            proofOfDeliveryLineItem.quantityReturned = 10;
+        it('should calculate the quantity rejected', function() {
+            proofOfDeliveryLineItem = new ProofOfDeliveryLineItemDataBuilder()
+                .withQuantityShipped(100)
+                .withQuantityAccepted(60)
+                .withQuantityRejected(10)
+                .build();
 
-            proofOfDeliveryLineItem.updateQuantityReturned();
+            proofOfDeliveryLineItem.updateQuantityRejected();
 
-            expect(proofOfDeliveryLineItem.quantityReturned).toBe(100);
-        });
-
-        it('should calculate the quantity returned', function() {
-            proofOfDeliveryLineItem.quantityShipped = 100;
-            proofOfDeliveryLineItem.quantityReceived = 60;
-            proofOfDeliveryLineItem.quantityReturned = 10;
-
-            proofOfDeliveryLineItem.updateQuantityReturned();
-
-            expect(proofOfDeliveryLineItem.quantityReturned).toBe(40);
+            expect(proofOfDeliveryLineItem.quantityRejected).toBe(40);
         });
 
     });
@@ -124,28 +135,28 @@ describe('ProofOfDeliveryLineItem', function() {
             expect(proofOfDeliveryLineItem.validate()).toBeUndefined();
         });
 
-        it('should return error if quantityReceived is empty', function() {
-            proofOfDeliveryLineItem.quantityReceived = undefined;
+        it('should return error if quantityAccepted is empty', function() {
+            proofOfDeliveryLineItem.quantityAccepted = undefined;
 
             expect(proofOfDeliveryLineItem.validate()).toEqual({
-                quantityReceived: 'proofOfDelivery.required'
+                quantityAccepted: 'proofOfDelivery.required'
             });
         });
 
-        it('should return error if quantityReceived is negative', function() {
-            proofOfDeliveryLineItem.quantityReceived = -1;
+        it('should return error if quantityAccepted is negative', function() {
+            proofOfDeliveryLineItem.quantityAccepted = -1;
 
             expect(proofOfDeliveryLineItem.validate()).toEqual({
-                quantityReceived: 'proofOfDelivery.positive'
+                quantityAccepted: 'proofOfDelivery.positive'
             });
         });
 
         it('should return if trying to accept more than was shipped', function() {
-            proofOfDeliveryLineItem.quantityReceived = 100;
+            proofOfDeliveryLineItem.quantityAccepted = 100;
             proofOfDeliveryLineItem.quantityShipped = 90;
 
             expect(proofOfDeliveryLineItem.validate()).toEqual({
-                quantityReceived: 'proofOfDelivery.canNotAcceptMoreThanShipped'
+                quantityAccepted: 'proofOfDelivery.canNotAcceptMoreThanShipped'
             });
         });
 
