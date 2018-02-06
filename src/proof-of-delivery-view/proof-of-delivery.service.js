@@ -29,15 +29,17 @@
         .service('proofOfDeliveryService', proofOfDeliveryService);
 
     proofOfDeliveryService.$inject = [
-        '$q', 'ProofOfDeliveryRepository', 'ProofOfDeliveryRepositoryImpl', 'notificationService',
+        '$q', 'ProofOfDeliveryRepository', 'ProofOfDeliveryRepositoryImpl', 'ShipmentRepositoryImpl', 'notificationService',
         'loadingModalService'
     ];
 
     function proofOfDeliveryService($q, ProofOfDeliveryRepository, ProofOfDeliveryRepositoryImpl,
-                                    notificationService, loadingModalService) {
+                                    ShipmentRepositoryImpl, notificationService, loadingModalService) {
         var proofOfDeliveryService = this,
             repository = new ProofOfDeliveryRepository(
-                new ProofOfDeliveryRepositoryImpl()
+                new ProofOfDeliveryRepositoryImpl(
+                    new ShipmentRepositoryImpl()
+                )
             );
 
         proofOfDeliveryService.get = get;

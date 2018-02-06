@@ -1,0 +1,22 @@
+<tr ng-if="fulfillingLineItems.length">
+    <td>{{orderLineItem.orderable.fullProductName}}</td>
+    <td>{{orderLineItem.orderable.dispensable.dispensingUnit}}</td>
+    <td>{{orderLineItem.packsToShip}}</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+</tr>
+<tr ng-repeat="fulfillingLineItem in fulfillingLineItems">
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>{{proofOfDeliveryLineItem.lot.lotCode}}</td>
+    <td>{{fulfillingLineItem.quantityShipped}}</td>
+    <td><input positive-integer ng-model="fulfillingLineItem.quantityAccepted"
+        ng-change="fulfillingLineItem.updateQuantityReturned()"
+        openlmis-invalid="{{fulfillingLineItem.validate().quantityAccepted | message}}"/></td>
+    <td>{{lineItem.quantityReturned}}</td>
+    <td><input type="text" ng-model="fulfillingLineItem.notes"/></td>
+</tr>

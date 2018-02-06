@@ -30,6 +30,8 @@
         ProofOfDeliveryLineItemDataBuilder.prototype.withQuantityAccepted = withQuantityAccepted;
         ProofOfDeliveryLineItemDataBuilder.prototype.withQuantityRejected = withQuantityRejected;
         ProofOfDeliveryLineItemDataBuilder.prototype.withQuantityShipped = withQuantityShipped;
+        ProofOfDeliveryLineItemDataBuilder.prototype.withOrderable = withOrderable;
+        ProofOfDeliveryLineItemDataBuilder.prototype.withLot = withLot;
 
         return ProofOfDeliveryLineItemDataBuilder;
 
@@ -74,6 +76,16 @@
 
         function withQuantityShipped(quantityShipped) {
             this.quantityShipped = quantityShipped;
+            return this;
+        }
+
+        function withOrderable(orderable) {
+            this.orderable = orderable
+            return this;
+        }
+
+        function withLot(lot) {
+            this.lot = lot;
             return this;
         }
 

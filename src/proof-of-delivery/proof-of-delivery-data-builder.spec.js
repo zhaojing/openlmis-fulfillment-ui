@@ -33,6 +33,7 @@
         ProofOfDeliveryDataBuilder.prototype.build = build
         ProofOfDeliveryDataBuilder.prototype.buildJson = buildJson;
         ProofOfDeliveryDataBuilder.prototype.withReceivedDate = withReceivedDate;
+        ProofOfDeliveryDataBuilder.prototype.withLineItems = withLineItems;
 
         return ProofOfDeliveryDataBuilder;
 
@@ -86,6 +87,11 @@
 
         function withReceivedDate(receivedDate) {
             this.receivedDate = receivedDate;
+            return this;
+        }
+
+        function withLineItems(lineItems) {
+            this.proofOfDeliveryLineItems = lineItems;
             return this;
         }
 

@@ -99,11 +99,20 @@
             jsonLineItems.forEach(function(lineItem) {
                 var quantityShipped = shipmentLineItems.filter(function(shipmentLineItem) {
                     return shipmentLineItem.orderable.id === lineItem.orderable.id &&
-                        shipmentLineItem.lot.id === lineItem.lot.id;
+                        areLotsEqual(shipmentLineItem.lot, lineItem.lot);
                 })[0].quantityShipped;
                 lineItems.push(new ProofOfDeliveryLineItem(lineItem, quantityShipped));
             });
             return lineItems;
+        }
+
+        function areLotsEqual(left, right) {
+            if (left && right && left.id === right.id) {
+                return true;
+            } else if (!left && !right)  {
+                return true;
+            }
+            return false;
         }
 
         function validateLineItems(errors, proofOfDelivery) {

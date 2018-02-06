@@ -29,7 +29,8 @@
         'openlmis-date',
         'openlmis-pagination',
         'order',
-        'ui.router'
+        'ui.router',
+        'shipment'
     ]);
 
 })();

@@ -15,20 +15,23 @@
 
 describe('PodViewController', function() {
 
-    var vm, $controller, ProofOfDeliveryDataBuilder, proofOfDelivery;
+    var vm, $controller, ProofOfDeliveryDataBuilder, OrderDataBuilder, proofOfDelivery, order;
 
     beforeEach(function() {
         module('proof-of-delivery-view');
 
         inject(function($injector) {
             $controller = $injector.get('$controller');
+            OrderDataBuilder = $injector.get('OrderDataBuilder');
             ProofOfDeliveryDataBuilder = $injector.get('ProofOfDeliveryDataBuilder');
         });
 
         proofOfDelivery = new ProofOfDeliveryDataBuilder().build();
+        order = new OrderDataBuilder().build();
 
         vm = $controller('ProofOfDeliveryViewController', {
-            proofOfDelivery: proofOfDelivery
+            proofOfDelivery: proofOfDelivery,
+            order: order
         });
     });
 
@@ -36,6 +39,12 @@ describe('PodViewController', function() {
         vm.$onInit();
 
         expect(vm.proofOfDelivery).toBe(proofOfDelivery);
+    });
+
+    it('it should expose Order', function() {
+        vm.$onInit();
+
+        expect(vm.order).toBe(order);
     });
 
 });

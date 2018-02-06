@@ -1,33 +1,33 @@
-<h2>{{'proofOfDeliveryView.podFor' | message}} {{vm.proofOfDelivery.order.program.name}}</h2>
+<h2>{{'proofOfDeliveryView.podFor' | message}} {{vm.order.program.name}}</h2>
 <aside class="pod-info">
-    <div ng-class="{'pod-emergency': vm.proofOfDelivery.order.emergency, 'pod-regular': !vm.proofOfDelivery.order.emergency}">
+    <div ng-class="{'pod-emergency': vm.order.emergency, 'pod-regular': !vm.order.emergency}">
         <span>{{vm.typeMessage() | message}}</span>
     </div>
 
     <ul>
         <li>
             <strong>{{'proofOfDeliveryView.orderNumber' | message}}</strong>
-            {{vm.proofOfDelivery.order.orderCode}}
+            {{vm.order.orderCode}}
         </li>
         <li>
             <strong>{{'proofOfDeliveryView.orderStatus' | message}}</strong>
-            {{vm.proofOfDelivery.order.status}}
+            {{vm.order.status}}
         </li>
         <li>
             <strong>{{'proofOfDeliveryView.orderingFacility' | message}}</strong>
-            {{vm.proofOfDelivery.order.facility.code}} - {{vm.proofOfDelivery.order.facility.name}}
+            {{vm.order.facility.code}} - {{vm.order.facility.name}}
         </li>
         <li>
             <strong>{{'proofOfDeliveryView.orderDate' | message}}</strong>
-            {{vm.proofOfDelivery.order.createdDate | openlmisDatetime}}
+            {{vm.order.createdDate | openlmisDatetime}}
         </li>
         <li>
             <strong>{{'proofOfDeliveryView.reportingPeriod' | message}}</strong>
-            {{vm.proofOfDelivery.order.processingPeriod | period}}
+            {{vm.order.processingPeriod | period}}
         </li>
         <li>
             <strong>{{'proofOfDeliveryView.supplyingFacility' | message}}</strong>
-            {{vm.proofOfDelivery.order.supplyingFacility.name}}
+            {{vm.order.supplyingFacility.name}}
         </li>
     </ul>
 </aside>

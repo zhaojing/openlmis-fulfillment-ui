@@ -18,38 +18,40 @@
     'use strict';
 
     /**
-     * @ngdoc controller
-     * @name proof-of-delivery-view.controller:PodViewController
+     * @ngdoc directive
+     * @name proof-of-delivery-view.orderLineItem
      *
      * @description
-     * Controller that drives the POD view screen.
+     *
      */
     angular
-    .module('proof-of-delivery-view')
-    .controller('ProofOfDeliveryViewController', ProofOfDeliveryViewController);
+        .module('proof-of-delivery-view')
+        .directive('orderLineItem', directive);
 
-    ProofOfDeliveryViewController.$inject = ['proofOfDelivery', 'order'];
+    directive.$inject = [];
 
-    function ProofOfDeliveryViewController(proofOfDelivery, order) {
-        var vm = this;
+    function directive() {
+        var directive = {
+            restrict: 'A',
+            scope: {
+                orderLineItem: '=',
+                proofOfDelivery: '=',
+                shipment: '='
+            },
+            link: link,
+            templateUrl: 'proof-of-delivery-view/order-line-item.html'
+        };
+        return directive;
 
-        vm.$onInit = onInit;
+        function link(scope, element, attrs) {
+            var orderLineItem = scope.orderLineItem;
 
-        /**
-         * @ngdoc property
-         * @propertyOf proof-of-delivery-view.controller:PodViewController
-         * @name pod
-         * @type {Object}
-         *
-         * @description
-         * Holds Proof of Delivery.
-         */
-        vm.proofOfDelivery = undefined;
+            var fulfillingLineItems = scope.proofOfDelivery.lineItems.filter(function(proofOfDeliveryLineItem) {
+                return proofOfDeliveryLineItem.orderable.id === orderLineItem.orderable.id;
+            });
 
-        function onInit() {
-            vm.proofOfDelivery = proofOfDelivery;
-            vm.order = order;
+            scope.fulfillingLineItems = fulfillingLineItems;
         }
     }
 
-}());
+})();

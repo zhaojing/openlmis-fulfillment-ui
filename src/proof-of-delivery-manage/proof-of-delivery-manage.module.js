@@ -34,7 +34,8 @@
         'referencedata-facility',
         'referencedata-program',
         'ui.router',
-        'proof-of-delivery'
+        'proof-of-delivery',
+        'proof-of-delivery-view'
     ]);
 
 })();

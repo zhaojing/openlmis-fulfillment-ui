@@ -28,11 +28,9 @@
 		.module('proof-of-delivery')
 	    .service('proofOfDeliveryLegacyService', service);
 
-    service.$inject = ['$resource', 'fulfillmentUrlFactory'];
+    service.$inject = ['shipmentService', 'proofOfDeliveryService'];
 
-    function service($resource, fulfillmentUrlFactory) {
-
-        var resource = $resource(fulfillmentUrlFactory('/api/orders/:orderId/proofOfDeliveries'));
+    function service(shipmentService, proofOfDeliveryService) {
 
         return {
 			getByOrderId: getByOrderId
@@ -50,9 +48,17 @@
          * @return {Promise}        the list of all PODs for the given order
          */
         function getByOrderId(orderId) {
-            return resource.get({
+            return shipmentService.search({
                 orderId: orderId
-            }).$promise;
+            })
+            .then(function(shipment) {
+                return proofOfDeliveryLegacyService.search({
+                    shipmentId: shipment.content[0].id
+                });
+            })
+			.then(function(page) {
+				return page.content[0];
+			});
         }
     }
 })();

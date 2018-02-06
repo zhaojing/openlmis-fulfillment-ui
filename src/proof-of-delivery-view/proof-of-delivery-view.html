@@ -13,19 +13,7 @@
                 <th>{{'proofOfDeliveryView.notes' | message}}</th>
             </tr>
         </thead>
-        <tbody tbody-title="{{category}}">
-            <tr ng-repeat="lineItem in vm.proofOfDelivery.lineItems | orderBy : 'orderLineItem.orderable.fullProductName'">
-                <td>{{lineItem.orderLineItem.orderable.fullProductName}}</td>
-                <td>{{lineItem.orderLineItem.orderable.dispensable.dispensingUnit}}</td>
-                <td>{{lineItem.orderLineItem.packsToShip}}</td>
-                <td>{{lineItem.lot.lotCode}}</td>
-                <td>{{lineItem.quantityShipped}}</td>
-                <td><input positive-integer ng-model="lineItem.quantityReceived"
-                    ng-change="lineItem.updateQuantityRejected()"
-                    openlmis-invalid="{{lineItem.validate().quantityReceived | message}}"/></td>
-                <td>{{lineItem.quantityReturned}}</td>
-                <td><input type="text" ng-model="lineItem.notes"/></td>
-            </tr>
+        <tbody order-line-item="lineItem" proof-of-delivery="vm.proofOfDelivery" ng-repeat="lineItem in vm.order.orderLineItems | orderBy : 'orderable.fullProductName'">
         </tbody>
     </table>
 </div>
