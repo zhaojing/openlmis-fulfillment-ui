@@ -15,7 +15,8 @@
 
 describe('ProofOfDeliveryLineItem', function() {
 
-    var ProofOfDeliveryLineItem, proofOfDeliveryLineItem, ProofOfDeliveryLineItemDataBuilder;
+    var ProofOfDeliveryLineItem, proofOfDeliveryLineItem, ProofOfDeliveryLineItemDataBuilder,
+        ShipmentLineItemDataBuilder;
 
     beforeEach(function() {
         module('proof-of-delivery');
@@ -23,6 +24,7 @@ describe('ProofOfDeliveryLineItem', function() {
         inject(function($injector) {
             ProofOfDeliveryLineItem = $injector.get('ProofOfDeliveryLineItem');
             ProofOfDeliveryLineItemDataBuilder = $injector.get('ProofOfDeliveryLineItemDataBuilder');
+            ShipmentLineItemDataBuilder = $injector.get('ShipmentLineItemDataBuilder');
         });
     });
 
@@ -34,7 +36,11 @@ describe('ProofOfDeliveryLineItem', function() {
                 .withQuantityRejected(50)
                 .buildJson();
 
-            var result = new ProofOfDeliveryLineItem(json, 150);
+            var shipmentLineItemJson = new ShipmentLineItemDataBuilder()
+                .withQuantityShipped(150)
+                .build();
+
+            var result = new ProofOfDeliveryLineItem(json, shipmentLineItemJson);
 
             expect(result.id).toEqual(json.id);
             expect(result.orderable).toEqual(json.orderable);
@@ -126,9 +132,7 @@ describe('ProofOfDeliveryLineItem', function() {
     describe('validate', function() {
 
         beforeEach(function() {
-            proofOfDeliveryLineItem = new ProofOfDeliveryLineItem(
-                new ProofOfDeliveryLineItemDataBuilder().buildJson()
-            );
+            proofOfDeliveryLineItem = new ProofOfDeliveryLineItemDataBuilder().build();
         });
 
         it('should return undefined if line items is valid', function() {

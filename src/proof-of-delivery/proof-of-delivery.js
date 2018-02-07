@@ -97,11 +97,11 @@
         function createLineItems(jsonLineItems, shipmentLineItems) {
             var lineItems = [];
             jsonLineItems.forEach(function(lineItem) {
-                var quantityShipped = shipmentLineItems.filter(function(shipmentLineItem) {
+                var shipmentLineItem = shipmentLineItems.filter(function(shipmentLineItem) {
                     return shipmentLineItem.orderable.id === lineItem.orderable.id &&
                         areLotsEqual(shipmentLineItem.lot, lineItem.lot);
-                })[0].quantityShipped;
-                lineItems.push(new ProofOfDeliveryLineItem(lineItem, quantityShipped));
+                })[0];
+                lineItems.push(new ProofOfDeliveryLineItem(lineItem, shipmentLineItem));
             });
             return lineItems;
         }

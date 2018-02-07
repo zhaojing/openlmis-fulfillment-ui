@@ -49,8 +49,8 @@ describe('ProofOfDelivery', function() {
             expect(result.lineItems[0] instanceof ProofOfDeliveryLineItem).toBe(true);
             expect(result.lineItems[1] instanceof ProofOfDeliveryLineItem).toBe(true);
             expect(result.lineItems).toEqual([
-                new ProofOfDeliveryLineItem(json.lineItems[0], json.shipment.lineItems[0].quantityShipped),
-                new ProofOfDeliveryLineItem(json.lineItems[1], json.shipment.lineItems[1].quantityShipped)
+                new ProofOfDeliveryLineItem(json.lineItems[0], json.shipment.lineItems[0]),
+                new ProofOfDeliveryLineItem(json.lineItems[1], json.shipment.lineItems[1])
             ]);
         });
     });

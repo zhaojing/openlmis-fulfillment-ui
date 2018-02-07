@@ -21,9 +21,12 @@
         .module('proof-of-delivery')
         .factory('ProofOfDeliveryLineItemDataBuilder', ProofOfDeliveryLineItemDataBuilder);
 
-    ProofOfDeliveryLineItemDataBuilder.$inject = ['ProofOfDeliveryLineItem', 'ObjectReferenceDataBuilder'];
+    ProofOfDeliveryLineItemDataBuilder.$inject = [
+        'ProofOfDeliveryLineItem', 'ObjectReferenceDataBuilder', 'ShipmentLineItemDataBuilder'
+    ];
 
-    function ProofOfDeliveryLineItemDataBuilder(ProofOfDeliveryLineItem, ObjectReferenceDataBuilder) {
+    function ProofOfDeliveryLineItemDataBuilder(ProofOfDeliveryLineItem, ObjectReferenceDataBuilder,
+                                                ShipmentLineItemDataBuilder) {
 
         ProofOfDeliveryLineItemDataBuilder.prototype.build = build;
         ProofOfDeliveryLineItemDataBuilder.prototype.buildJson = buildJson;
@@ -46,11 +49,13 @@
             this.quantityAccepted = 50 + instanceNumber;
             this.quantityRejected = 50;
             this.notes = 'Proof of Delivery line item' + instanceNumber + ' notes.';
-            this.quantityShipped = this.quantityAccepted + this.quantityRejected;
+            this.shipmentLineItem = new ShipmentLineItemDataBuilder()
+                .withQuantityShipped(this.quantityAccepted + this.quantityRejected)
+                .build();
         }
 
         function build() {
-            return new ProofOfDeliveryLineItem(this.buildJson(), this.quantityShipped);
+            return new ProofOfDeliveryLineItem(this.buildJson(), this.shipmentLineItem);
         }
 
         function buildJson() {
@@ -75,7 +80,7 @@
         }
 
         function withQuantityShipped(quantityShipped) {
-            this.quantityShipped = quantityShipped;
+            this.shipmentLineItem.quantityShipped = quantityShipped;
             return this;
         }
 
