@@ -48,7 +48,8 @@
          * @name get
          *
          * @description
-         * Returns a domain object representing a Proof of Delivery decorated with utility methods.
+         * Returns a domain object representing a Proof of Delivery decorated with loading modal
+         * and notifications for success/unsuccessful actions.
          *
          * @param  {string}     id  the ID of the Proof of Delivery
          * @return {Promise}        the promise resolving to decorated Proof of Delivery
