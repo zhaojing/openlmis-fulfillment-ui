@@ -103,11 +103,11 @@ describe('OrderViewController', function() {
         });
 
         it('should set periodStartDate if period start date from was passed through the URL', function() {
-            $stateParams.periodStartDate = '2017-01-31T00:00:00.000Z';
+            $stateParams.periodStartDate = '2017-01-31';
 
             vm.$onInit();
 
-            expect(vm.periodStartDate).toEqual(new Date('2017-01-31'));
+            expect(vm.periodStartDate).toEqual('2017-01-31');
         });
 
         it('should not set periodStartDate if period start date from not passed through the URL', function() {
@@ -119,11 +119,11 @@ describe('OrderViewController', function() {
         });
 
         it('should set periodEndDate if period end date to was passed through the URL', function() {
-            $stateParams.periodEndDate = '2017-01-31T00:00:00.000Z';
+            $stateParams.periodEndDate = '2017-01-31';
 
             vm.$onInit();
 
-            expect(vm.periodEndDate).toEqual(new Date('2017-01-31'));
+            expect(vm.periodEndDate).toEqual('2017-01-31');
         });
 
         it('should not set periodEndDate if period end date to not passed through the URL', function() {

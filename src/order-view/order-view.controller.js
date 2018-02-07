@@ -147,11 +147,12 @@
             }
 
             if ($stateParams.periodStartDate) {
-                vm.periodStartDate = new Date($stateParams.periodStartDate);
+                vm.periodStartDate = $stateParams.periodStartDate;
+
             }
 
             if ($stateParams.periodEndDate) {
-                vm.periodEndDate = new Date($stateParams.periodEndDate);
+                vm.periodEndDate = $stateParams.periodEndDate;
             }
 
             $scope.$watch(function() {
