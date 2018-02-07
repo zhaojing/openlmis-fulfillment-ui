@@ -37,9 +37,7 @@
                                     ShipmentRepositoryImpl, notificationService, loadingModalService) {
         var proofOfDeliveryService = this,
             repository = new ProofOfDeliveryRepository(
-                new ProofOfDeliveryRepositoryImpl(
-                    new ShipmentRepositoryImpl()
-                )
+                new ProofOfDeliveryRepositoryImpl()
             );
 
         proofOfDeliveryService.get = get;

@@ -16,10 +16,20 @@
 describe('ProofOfDeliveryRepositoryImpl', function() {
 
     var ProofOfDeliveryRepositoryImpl, $rootScope, $q, $httpBackend, ProofOfDeliveryDataBuilder,
-        fulfillmentUrlFactory, proofOfDeliveryRepositoryImpl, proofOfDeliveryJson, ShipmentDataBuilder, shipmentJson, shipmentRepositoryImplMock;
+        fulfillmentUrlFactory, proofOfDeliveryRepositoryImpl, proofOfDeliveryJson,
+        ShipmentDataBuilder, shipmentJson, shipmentRepositoryImplMock;
 
     beforeEach(function() {
-        module('proof-of-delivery');
+        module('proof-of-delivery', function($provide) {
+            $provide.factory('ShipmentRepositoryImpl', function() {
+                return function() {
+                    shipmentRepositoryImplMock = jasmine.createSpyObj('shipmentRepositoryImpl', [
+                        'get'
+                    ]);
+                    return shipmentRepositoryImplMock;
+                };
+            });
+        });
 
         inject(function($injector) {
             ProofOfDeliveryRepositoryImpl = $injector.get('ProofOfDeliveryRepositoryImpl');
@@ -30,9 +40,7 @@ describe('ProofOfDeliveryRepositoryImpl', function() {
             fulfillmentUrlFactory = $injector.get('fulfillmentUrlFactory');
             ShipmentDataBuilder = $injector.get('ShipmentDataBuilder');
         });
-
-        shipmentRepositoryImplMock = jasmine.createSpyObj('shipmentRepositoryImpl', ['get']);
-        proofOfDeliveryRepositoryImpl = new ProofOfDeliveryRepositoryImpl(shipmentRepositoryImplMock);
+        proofOfDeliveryRepositoryImpl = new ProofOfDeliveryRepositoryImpl();
         proofOfDeliveryJson = new ProofOfDeliveryDataBuilder().buildJson();
         shipmentJson = new ShipmentDataBuilder().build();
     });

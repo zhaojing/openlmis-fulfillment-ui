@@ -22,16 +22,19 @@
      * @name proof-of-delivery.ProofOfDeliveryRepositoryImpl
      *
      * @description
-     * Implementation of the ProofOfDeliveryRepository "interface". Communicates with the REST API
-     * of the OpenLMIS server.
+     * Implementation of the ProofOfDeliveryRepository interface. Communicates with the REST API of
+     * the OpenLMIS server.
      */
     angular
         .module('proof-of-delivery')
         .factory('ProofOfDeliveryRepositoryImpl', ProofOfDeliveryRepositoryImpl);
 
-    ProofOfDeliveryRepositoryImpl.$inject = ['$resource', 'fulfillmentUrlFactory'];
+    ProofOfDeliveryRepositoryImpl.$inject = [
+        '$resource', 'fulfillmentUrlFactory', 'ShipmentRepositoryImpl'
+    ];
 
-    function ProofOfDeliveryRepositoryImpl($resource, fulfillmentUrlFactory) {
+    function ProofOfDeliveryRepositoryImpl($resource, fulfillmentUrlFactory,
+                                           ShipmentRepositoryImpl) {
 
         ProofOfDeliveryRepositoryImpl.prototype.get = get;
         ProofOfDeliveryRepositoryImpl.prototype.update = update;
@@ -47,8 +50,8 @@
          * @description
          * Creates an instance of the ProofOfDeliveryRepositoryImpl class.
          */
-        function ProofOfDeliveryRepositoryImpl(shipmentRepositoryImpl) {
-            this.shipmentRepositoryImpl = shipmentRepositoryImpl;
+        function ProofOfDeliveryRepositoryImpl() {
+            this.shipmentRepositoryImpl = new ShipmentRepositoryImpl();
             this.resource = $resource(fulfillmentUrlFactory('/api/proofOfDeliveries/:id'), {}, {
                 update: {
                     method: 'PUT'

@@ -18,7 +18,7 @@ describe('proofOfDeliveryService', function() {
     var PROOF_OF_DELIVERY_ID = 'proof-of-delivery-id';
 
     var proofOfDeliveryService, ProofOfDeliveryDataBuilder, $q, $rootScope, repositoryMock,
-        loadingModalService, notificationService;
+        loadingModalService, notificationService, proofOfDeliveryMock, saveSpy;
 
     beforeEach(function() {
         module('proof-of-delivery-view', function($provide) {
@@ -101,7 +101,7 @@ describe('proofOfDeliveryService', function() {
 
     describe('decorated save', function() {
 
-        var proofOfDeliveryMock, proofOfDelivery, saveSpy;
+        var proofOfDelivery;
 
         beforeEach(function() {
             proofOfDeliveryMock = jasmine.createSpyObj('proofOfDeliveryMock', ['save']);
