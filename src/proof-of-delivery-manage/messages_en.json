@@ -4,18 +4,19 @@
     "proofOfDeliveryManage.endDate": "End date",
     "proofOfDeliveryManage.facility": "Facility",
     "proofOfDeliveryManage.invalidProgramOrRight": "Invalid program of right",
-    "proofOfDeliveryManage.managePod": "Manage Proofs of Delivery",
-    "proofOfDeliveryManage.managePods": "Manage PODs",
+    "proofOfDeliveryManage.managePods": "Manage Proof of Delivery",
+    "proofOfDeliveryManage.managePodsWithDetails": "Manage Proof of Delivery for ${facility}: ${program}",
     "proofOfDeliveryManage.noFacilityAvailable": "There are no facilities for program. Please contact the Admin.",
     "proofOfDeliveryManage.noOrderFound": "No order found",
     "proofOfDeliveryManage.noPodsFound": "No proofs of delivery found.",
     "proofOfDeliveryManage.noProgramAvailable": "There are no programs for this facility. Please contact the Admin.",
     "proofOfDeliveryManage.orderDate": "Order date",
     "proofOfDeliveryManage.orderNumber": "Order no.",
+    "proofOfDeliveryManage.orderStatus": "Order status",
     "proofOfDeliveryManage.period": "Period",
     "proofOfDeliveryManage.program": "Program",
     "proofOfDeliveryManage.search": "Search",
     "proofOfDeliveryManage.startDate": "Start date",
     "proofOfDeliveryManage.supplyingDepot": "Supplying depot",
-    "proofOfDeliveryManage.viewOrder": "View Order"
+    "proofOfDeliveryManage.confirm": "Confirm"
 }

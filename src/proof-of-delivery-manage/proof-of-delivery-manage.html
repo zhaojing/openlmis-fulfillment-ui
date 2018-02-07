@@ -1,4 +1,7 @@
-<h2>{{'proofOfDeliveryManage.managePod' | message}}</h2>
+<h2 ng-show="vm.facility && vm.program">
+    {{'proofOfDeliveryManage.managePodsWithDetails' | message: { 'facility': vm.facility.name, 'program': vm.program.name} }}
+</h2>
+<h2 ng-hide="vm.facility && vm.program">{{'proofOfDeliveryManage.managePods' | message}}</h2>
 <section class="openlmis-table-container">
     <form ng-submit="vm.loadOrders()">
         <openlmis-facility-program-select
@@ -22,12 +25,10 @@
         <thead>
             <tr>
                 <th>{{'proofOfDeliveryManage.orderNumber' | message}}</th>
+                <th>{{'proofOfDeliveryManage.orderStatus' | message}}</th>
                 <th>{{'proofOfDeliveryManage.supplyingDepot' | message}}</th>
-                <th>{{'proofOfDeliveryManage.facility' | message}}</th>
                 <th>{{'proofOfDeliveryManage.program' | message}}</th>
                 <th>{{'proofOfDeliveryManage.period' | message}}</th>
-                <th>{{'proofOfDeliveryManage.startDate' | message}}</th>
-                <th>{{'proofOfDeliveryManage.endDate' | message}}</th>
                 <th>{{'proofOfDeliveryManage.orderDate' | message}}</th>
                 <th>{{'proofOfDeliveryManage.emergency' | message}}</th>
                 <th class="col-sticky sticky-right">{{'proofOfDeliveryManage.actions' | message}}</th>
@@ -36,19 +37,17 @@
         <tbody>
             <tr ng-repeat="order in vm.pods">
                 <td>{{order.orderCode}}</td>
+                <td>{{order.status}}</td>
                 <td>{{order.supplyingFacility.name}}</td>
-                <td>{{order.facility.code}} - {{order.facility.name}}</td>
                 <td>{{order.program.name}}</td>
                 <td>{{order.processingPeriod.name}}</td>
-                <td>{{order.processingPeriod.startDate | openlmisDate}}</td>
-                <td>{{order.processingPeriod.endDate | openlmisDate}}</td>
                 <td>{{order.createdDate | openlmisDate}}</td>
                 <td class="col-emergency">
                     <i ng-class="{'icon-ok': order.emergency}"></i>
                 </td>
                 <td>
-                    <button class="primary" ng-click="vm.openPod(order.id)">
-                        {{'proofOfDeliveryManage.viewOrder' | message}}
+                    <button ng-click="vm.openPod(order.id)">
+                        {{'proofOfDeliveryManage.confirm' | message}}
                     </button>
                 </td>
             </tr>
