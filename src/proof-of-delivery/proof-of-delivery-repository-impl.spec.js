@@ -16,17 +16,28 @@
 describe('ProofOfDeliveryRepositoryImpl', function() {
 
     var ProofOfDeliveryRepositoryImpl, $rootScope, $q, $httpBackend, ProofOfDeliveryDataBuilder,
-        fulfillmentUrlFactory, proofOfDeliveryRepositoryImpl, proofOfDeliveryJson,
-        ShipmentDataBuilder, shipmentJson, shipmentRepositoryImplMock, ShipmentLineItemDataBuilder;
+        fulfillmentUrlFactory, referencedataUrlFactory, proofOfDeliveryRepositoryImpl, proofOfDeliveryJson,
+        ShipmentDataBuilder, shipmentJson, shipmentRepositoryImplMock, ShipmentLineItemDataBuilder,
+        lotRepositoryImplMock, LotDataBuilder, lotJsons, PageDataBuilder;
 
     beforeEach(function() {
+        module('referencedata-lot');
         module('proof-of-delivery', function($provide) {
             $provide.factory('OpenLMISRepositoryImpl', function() {
-                return function() {
-                    shipmentRepositoryImplMock = jasmine.createSpyObj('shipmentRepositoryImpl', [
-                        'get'
-                    ]);
-                    return shipmentRepositoryImplMock;
+                return function(url) {
+                    if (url === fulfillmentUrlFactory('/api/shipments')) {
+                        shipmentRepositoryImplMock = jasmine.createSpyObj(
+                            'shipmentRepositoryImpl', ['get']
+                        );
+                        return shipmentRepositoryImplMock;
+                    }
+
+                    if (url === referencedataUrlFactory('/api/lots')) {
+                        lotRepositoryImplMock = jasmine.createSpyObj(
+                            'lotRepositoryImpl', ['search']
+                        );
+                        return lotRepositoryImplMock;
+                    }
                 };
             });
         });
@@ -40,10 +51,22 @@ describe('ProofOfDeliveryRepositoryImpl', function() {
             fulfillmentUrlFactory = $injector.get('fulfillmentUrlFactory');
             ShipmentDataBuilder = $injector.get('ShipmentDataBuilder');
             ShipmentLineItemDataBuilder = $injector.get('ShipmentLineItemDataBuilder');
+            referencedataUrlFactory = $injector.get('referencedataUrlFactory');
+            LotDataBuilder = $injector.get('LotDataBuilder');
+            PageDataBuilder = $injector.get('PageDataBuilder');
         });
+
         proofOfDeliveryRepositoryImpl = new ProofOfDeliveryRepositoryImpl();
         proofOfDeliveryJson = new ProofOfDeliveryDataBuilder().buildJson();
 
+        lotJsons = [
+            new LotDataBuilder()
+                .withId(proofOfDeliveryJson.lineItems[0].lot.id)
+                .build(),
+            new LotDataBuilder()
+                .withId(proofOfDeliveryJson.lineItems[1].lot.id)
+                .build()
+        ];
 
         shipmentJson = new ShipmentDataBuilder()
             .withLineItems([
@@ -65,6 +88,10 @@ describe('ProofOfDeliveryRepositoryImpl', function() {
             .respond(200, angular.copy(proofOfDeliveryJson));
 
             shipmentRepositoryImplMock.get.andReturn($q.resolve(angular.copy(shipmentJson)));
+            lotRepositoryImplMock.search.andReturn($q.resolve(new PageDataBuilder()
+                .withContent(lotJsons)
+                .build()
+            ));
 
             var result;
             proofOfDeliveryRepositoryImpl.get('proof-of-delivery-id')
@@ -75,9 +102,32 @@ describe('ProofOfDeliveryRepositoryImpl', function() {
             $httpBackend.flush();
             $rootScope.$apply();
 
-            expect(angular.toJson(result)).toEqual(angular.toJson(proofOfDeliveryJson));
-            expect(shipmentRepositoryImplMock.get)
-                .toHaveBeenCalledWith(proofOfDeliveryJson.shipment.id);
+            expect(result.id).toEqual(proofOfDeliveryJson.id);
+            expect(result.status).toEqual(proofOfDeliveryJson.status);
+            expect(result.deliveredBy).toEqual(proofOfDeliveryJson.deliveredBy);
+            expect(result.receivedBy).toEqual(proofOfDeliveryJson.receivedBy);
+            expect(result.receivedDate).toEqual(proofOfDeliveryJson.receivedDate);
+            expect(result.shipment).toEqual(shipmentJson);
+
+            var lineItem = result.lineItems[0],
+                expected = proofOfDeliveryJson.lineItems[0];
+
+            expect(lineItem.id).toEqual(expected.id);
+            expect(lineItem.orderable).toEqual(expected.orderable);
+            expect(lineItem.lot).toEqual(lotJsons[0]);
+            expect(lineItem.quantityAccepted).toEqual(expected.quantityAccepted);
+            expect(lineItem.quantityRejected).toEqual(expected.quantityRejected);
+            expect(lineItem.quantityShipped).toEqual(shipmentJson.lineItems[0].quantityShipped);
+
+            lineItem = result.lineItems[1];
+            expected = proofOfDeliveryJson.lineItems[1];
+            expect(lineItem.id).toEqual(expected.id);
+            expect(lineItem.orderable).toEqual(expected.orderable);
+            expect(lineItem.lot).toEqual(lotJsons[1]);
+            expect(lineItem.quantityAccepted).toEqual(expected.quantityAccepted);
+            expect(lineItem.quantityRejected).toEqual(expected.quantityRejected);
+            expect(lineItem.quantityShipped).toEqual(shipmentJson.lineItems[1].quantityShipped);
+
         });
 
         it('should reject if shipment repository rejects', function() {
@@ -112,6 +162,26 @@ describe('ProofOfDeliveryRepositoryImpl', function() {
             $httpBackend.flush();
 
             expect(rejected).toBe(true);
+        });
+
+        it('should reject if lot repository rejectes', function() {
+            $httpBackend
+            .expectGET(fulfillmentUrlFactory('/api/proofOfDeliveries/proof-of-delivery-id'))
+            .respond(200, angular.copy(proofOfDeliveryJson));
+
+            shipmentRepositoryImplMock.get.andReturn($q.resolve(angular.copy(shipmentJson)));
+            lotRepositoryImplMock.search.andReturn($q.reject());
+
+            var rejected;
+            proofOfDeliveryRepositoryImpl.get('proof-of-delivery-id')
+            .catch(function() {
+                rejected = true;
+            });
+            $httpBackend.flush();
+
+            expect(rejected).toBe(true);
+            expect(shipmentRepositoryImplMock.get)
+                .toHaveBeenCalledWith(proofOfDeliveryJson.shipment.id);
         });
 
     });

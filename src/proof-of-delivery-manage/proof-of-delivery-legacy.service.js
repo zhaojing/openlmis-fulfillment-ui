@@ -28,9 +28,17 @@
 		.module('proof-of-delivery')
 	    .service('proofOfDeliveryLegacyService', service);
 
-    service.$inject = ['shipmentService', 'proofOfDeliveryService'];
+    service.$inject = [
+        'shipmentService', 'proofOfDeliveryService', 'OpenLMISRepositoryImpl',
+        'fulfillmentUrlFactory'
+    ];
 
-    function service(shipmentService, proofOfDeliveryService) {
+    function service(shipmentService, proofOfDeliveryService, OpenLMISRepositoryImpl,
+                     fulfillmentUrlFactory) {
+
+        var proofOfDeliveryRepositoryImpl = new OpenLMISRepositoryImpl(
+            fulfillmentUrlFactory('/api/proofOfDeliveries')
+        );
 
         return {
 			getByOrderId: getByOrderId
@@ -52,7 +60,7 @@
                 orderId: orderId
             })
             .then(function(shipment) {
-                return proofOfDeliveryLegacyService.search({
+                return proofOfDeliveryRepositoryImpl.search({
                     shipmentId: shipment.content[0].id
                 });
             })

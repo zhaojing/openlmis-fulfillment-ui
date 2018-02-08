@@ -30,11 +30,12 @@
         .factory('ProofOfDeliveryRepositoryImpl', ProofOfDeliveryRepositoryImpl);
 
     ProofOfDeliveryRepositoryImpl.$inject = [
-        '$resource', 'fulfillmentUrlFactory', 'OpenLMISRepositoryImpl', 'referencedataUrlFactory'
+        '$resource', 'fulfillmentUrlFactory', 'OpenLMISRepositoryImpl', 'referencedataUrlFactory',
+        '$q'
     ];
 
     function ProofOfDeliveryRepositoryImpl($resource, fulfillmentUrlFactory, OpenLMISRepositoryImpl,
-                                           referencedataUrlFactory) {
+                                           referencedataUrlFactory, $q) {
 
         ProofOfDeliveryRepositoryImpl.prototype.get = get;
         ProofOfDeliveryRepositoryImpl.prototype.update = update;
@@ -51,7 +52,14 @@
          * Creates an instance of the ProofOfDeliveryRepositoryImpl class.
          */
         function ProofOfDeliveryRepositoryImpl() {
-            this.shipmentRepositoryImpl = new OpenLMISRepositoryImpl(fulfillmentUrlFactory('/api/shipments'));
+            this.shipmentRepositoryImpl = new OpenLMISRepositoryImpl(
+                fulfillmentUrlFactory('/api/shipments')
+            );
+
+            this.lotRepositoryImpl = new OpenLMISRepositoryImpl(
+                referencedataUrlFactory('/api/lots')
+            );
+
             this.resource = $resource(fulfillmentUrlFactory('/api/proofOfDeliveries/:id'), {}, {
                 update: {
                     method: 'PUT'
@@ -72,19 +80,26 @@
          * @return  {Promise}       the promise resolving to server response
          */
         function get(id) {
-            var shipmentRepositoryImpl = this.shipmentRepositoryImpl;
+            var shipmentRepositoryImpl = this.shipmentRepositoryImpl,
+                lotRepositoryImpl = this.lotRepositoryImpl;
+
             return this.resource.get({
                 id: id
             }).$promise
             .then(function(proofOfDeliveryJson) {
-                return shipmentRepositoryImpl.get(proofOfDeliveryJson.shipment.id)
-                .then(function(shipmentJson) {
-                    proofOfDeliveryJson.lineItems.forEach(function(lineItem) {
-                        lineItem.quantityShipped = getQuantityShipped(
-                            lineItem, shipmentJson.lineItems
-                        );
+                var lotIds = getLotIds(proofOfDeliveryJson.lineItems);
+
+                return $q.all([
+                    shipmentRepositoryImpl.get(proofOfDeliveryJson.shipment.id),
+                    lotRepositoryImpl.search({
+                        ids: lotIds
                     })
-                    return proofOfDeliveryJson;
+                ])
+                .then(function(responses) {
+                    var shipmentJson = responses[0],
+                        lotPage = responses[1];
+
+                    return combineResponses(proofOfDeliveryJson, shipmentJson, lotPage.content);
                 });
             });
         }
@@ -108,6 +123,35 @@
                 },
                 proofOfDelivery
             ).$promise;
+        }
+
+        function combineResponses(proofOfDeliveryJson, shipmentJson, lotJsons) {
+            proofOfDeliveryJson.shipment = shipmentJson;
+            proofOfDeliveryJson.lineItems.forEach(function(lineItem) {
+                lineItem.quantityShipped = getQuantityShipped(
+                    lineItem, shipmentJson.lineItems
+                );
+
+                if (lineItem.lot) {
+                    lineItem.lot = lotJsons.filter(function(lot) {
+                        return lineItem.lot.id === lot.id;
+                    })[0];
+                }
+            });
+
+            return proofOfDeliveryJson;
+        }
+
+        function getLotIds(lineItems) {
+            var ids = [];
+
+            lineItems.forEach(function(lineItem) {
+                if (lineItem.lot) {
+                    ids.push(lineItem.lot.id);
+                }
+            });
+
+            return ids;
         }
 
         function getQuantityShipped(lineItem, shipmentLineItems) {
