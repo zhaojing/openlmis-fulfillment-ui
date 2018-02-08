@@ -22,11 +22,11 @@
         .factory('ProofOfDeliveryLineItemDataBuilder', ProofOfDeliveryLineItemDataBuilder);
 
     ProofOfDeliveryLineItemDataBuilder.$inject = [
-        'ProofOfDeliveryLineItem', 'ObjectReferenceDataBuilder', 'ShipmentLineItemDataBuilder'
+        'ProofOfDeliveryLineItem', 'ObjectReferenceDataBuilder'
     ];
 
-    function ProofOfDeliveryLineItemDataBuilder(ProofOfDeliveryLineItem, ObjectReferenceDataBuilder,
-                                                ShipmentLineItemDataBuilder) {
+    function ProofOfDeliveryLineItemDataBuilder(ProofOfDeliveryLineItem,
+                                                ObjectReferenceDataBuilder) {
 
         ProofOfDeliveryLineItemDataBuilder.prototype.build = build;
         ProofOfDeliveryLineItemDataBuilder.prototype.buildJson = buildJson;
@@ -49,13 +49,11 @@
             this.quantityAccepted = 50 + instanceNumber;
             this.quantityRejected = 50;
             this.notes = 'Proof of Delivery line item' + instanceNumber + ' notes.';
-            this.shipmentLineItem = new ShipmentLineItemDataBuilder()
-                .withQuantityShipped(this.quantityAccepted + this.quantityRejected)
-                .build();
+            this.quantityShipped = this.quantityAccepted + this.quantityRejected;
         }
 
         function build() {
-            return new ProofOfDeliveryLineItem(this.buildJson(), this.shipmentLineItem);
+            return new ProofOfDeliveryLineItem(this.buildJson());
         }
 
         function buildJson() {
@@ -65,6 +63,7 @@
                 lot: this.lot,
                 quantityAccepted: this.quantityAccepted,
                 quantityRejected: this.quantityRejected,
+                quantityShipped: this.quantityShipped,
                 notes: this.notes,
             }
         }
@@ -80,7 +79,7 @@
         }
 
         function withQuantityShipped(quantityShipped) {
-            this.shipmentLineItem.quantityShipped = quantityShipped;
+            this.quantityShipped = quantityShipped;
             return this;
         }
 

@@ -79,7 +79,11 @@
             .then(function(proofOfDeliveryJson) {
                 return shipmentRepositoryImpl.get(proofOfDeliveryJson.shipment.id)
                 .then(function(shipmentJson) {
-                    proofOfDeliveryJson.shipment = shipmentJson;
+                    proofOfDeliveryJson.lineItems.forEach(function(lineItem) {
+                        lineItem.quantityShipped = getQuantityShipped(
+                            lineItem, shipmentJson.lineItems
+                        );
+                    })
                     return proofOfDeliveryJson;
                 });
             });
@@ -104,6 +108,22 @@
                 },
                 proofOfDelivery
             ).$promise;
+        }
+
+        function getQuantityShipped(lineItem, shipmentLineItems) {
+            return shipmentLineItems.filter(function(shipmentLineItem) {
+                return shipmentLineItem.orderable.id === lineItem.orderable.id &&
+                    areLotsEqual(shipmentLineItem.lot, lineItem.lot);
+            })[0].quantityShipped;
+        }
+
+        function areLotsEqual(left, right) {
+            if (left && right && left.id === right.id) {
+                return true;
+            } else if (!left && !right)  {
+                return true;
+            }
+            return false;
         }
 
     }

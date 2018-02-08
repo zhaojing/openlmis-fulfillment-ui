@@ -15,8 +15,7 @@
 
 describe('ProofOfDelivery', function() {
 
-    var ProofOfDelivery, ProofOfDeliveryLineItem, ProofOfDeliveryDataBuilder, $q, $rootScope, json,
-        shipment;
+    var ProofOfDelivery, ProofOfDeliveryLineItem, ProofOfDeliveryDataBuilder, $q, $rootScope, json;
 
     beforeEach(function() {
         module('proof-of-delivery');
@@ -49,8 +48,8 @@ describe('ProofOfDelivery', function() {
             expect(result.lineItems[0] instanceof ProofOfDeliveryLineItem).toBe(true);
             expect(result.lineItems[1] instanceof ProofOfDeliveryLineItem).toBe(true);
             expect(result.lineItems).toEqual([
-                new ProofOfDeliveryLineItem(json.lineItems[0], json.shipment.lineItems[0]),
-                new ProofOfDeliveryLineItem(json.lineItems[1], json.shipment.lineItems[1])
+                new ProofOfDeliveryLineItem(json.lineItems[0]),
+                new ProofOfDeliveryLineItem(json.lineItems[1])
             ]);
         });
     });

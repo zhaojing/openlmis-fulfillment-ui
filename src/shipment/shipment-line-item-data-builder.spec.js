@@ -25,6 +25,9 @@
 
     function ShipmentLineItemDataBuilder(ObjectReferenceDataBuilder) {
 
+        ShipmentLineItemDataBuilder.buildForProofOfDeliveryLineItem =
+            buildForProofOfDeliveryLineItem;
+
         ShipmentLineItemDataBuilder.prototype.withOrderable = withOrderable;
         ShipmentLineItemDataBuilder.prototype.withLot = withLot;
         ShipmentLineItemDataBuilder.prototype.withQuantityShipped = withQuantityShipped;
@@ -70,6 +73,15 @@
         function withQuantityShipped(quantityShipped) {
             this.quantityShipped = quantityShipped;
             return this;
+        }
+
+        function buildForProofOfDeliveryLineItem(proofOfDeliveryLineItem) {
+            return new ShipmentLineItemDataBuilder()
+                .withOrderable(proofOfDeliveryLineItem.orderable)
+                .withLot(proofOfDeliveryLineItem.lot)
+                .withQuantityShipped(proofOfDeliveryLineItem.quantityAccepted +
+                    proofOfDeliveryLineItem.quantityRejected)
+                .build();
         }
 
     }

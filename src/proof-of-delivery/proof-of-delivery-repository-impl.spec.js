@@ -17,7 +17,7 @@ describe('ProofOfDeliveryRepositoryImpl', function() {
 
     var ProofOfDeliveryRepositoryImpl, $rootScope, $q, $httpBackend, ProofOfDeliveryDataBuilder,
         fulfillmentUrlFactory, proofOfDeliveryRepositoryImpl, proofOfDeliveryJson,
-        ShipmentDataBuilder, shipmentJson, shipmentRepositoryImplMock;
+        ShipmentDataBuilder, shipmentJson, shipmentRepositoryImplMock, ShipmentLineItemDataBuilder;
 
     beforeEach(function() {
         module('proof-of-delivery', function($provide) {
@@ -39,10 +39,22 @@ describe('ProofOfDeliveryRepositoryImpl', function() {
             ProofOfDeliveryDataBuilder = $injector.get('ProofOfDeliveryDataBuilder');
             fulfillmentUrlFactory = $injector.get('fulfillmentUrlFactory');
             ShipmentDataBuilder = $injector.get('ShipmentDataBuilder');
+            ShipmentLineItemDataBuilder = $injector.get('ShipmentLineItemDataBuilder');
         });
         proofOfDeliveryRepositoryImpl = new ProofOfDeliveryRepositoryImpl();
         proofOfDeliveryJson = new ProofOfDeliveryDataBuilder().buildJson();
-        shipmentJson = new ShipmentDataBuilder().build();
+
+
+        shipmentJson = new ShipmentDataBuilder()
+            .withLineItems([
+                ShipmentLineItemDataBuilder.buildForProofOfDeliveryLineItem(
+                    proofOfDeliveryJson.lineItems[0]
+                ),
+                ShipmentLineItemDataBuilder.buildForProofOfDeliveryLineItem(
+                    proofOfDeliveryJson.lineItems[1]
+                )
+            ])
+            .build();
     });
 
     describe('get', function() {
@@ -58,14 +70,12 @@ describe('ProofOfDeliveryRepositoryImpl', function() {
             proofOfDeliveryRepositoryImpl.get('proof-of-delivery-id')
             .then(function(response) {
                 result = response;
-            });
+            })
+            .catch(dump)
             $httpBackend.flush();
             $rootScope.$apply();
 
-            var expected = angular.extend({}, proofOfDeliveryJson, {
-                shipment: shipmentJson
-            });
-            expect(angular.toJson(result)).toEqual(angular.toJson(expected));
+            expect(angular.toJson(result)).toEqual(angular.toJson(proofOfDeliveryJson));
             expect(shipmentRepositoryImplMock.get)
                 .toHaveBeenCalledWith(proofOfDeliveryJson.shipment.id);
         });

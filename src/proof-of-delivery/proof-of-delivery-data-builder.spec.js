@@ -47,26 +47,12 @@
             this.deliveredBy = 'Deliverer ' + instanceNumber;
             this.receivedBy = 'Receiver ' + instanceNumber;
             this.receivedDate = '2018-02-01';
+            this.shipment = new ObjectReferenceDataBuilder().build();
 
             this.lineItems = [
                 new ProofOfDeliveryLineItemDataBuilder().buildJson(),
                 new ProofOfDeliveryLineItemDataBuilder().buildJson()
             ];
-
-            this.shipment = new ShipmentDataBuilder()
-                .withLineItems([
-                    new ShipmentLineItemDataBuilder()
-                        .withOrderable(this.lineItems[0].orderable)
-                        .withLot(this.lineItems[0].lot)
-                        .withQuantityShipped(100)
-                        .build(),
-                    new ShipmentLineItemDataBuilder()
-                        .withOrderable(this.lineItems[1].orderable)
-                        .withLot(this.lineItems[1].lot)
-                        .withQuantityShipped(200)
-                        .build()
-                ])
-                .build();
         }
 
         function build() {

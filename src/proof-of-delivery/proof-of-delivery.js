@@ -53,7 +53,7 @@
         function ProofOfDelivery(json, repository) {
             angular.copy(json, this);
             this.repository = repository;
-            this.lineItems = createLineItems(json.lineItems, json.shipment.lineItems);
+            this.lineItems = createLineItems(json.lineItems);
         }
 
         /**
@@ -94,25 +94,12 @@
             return angular.equals(errors, {}) ? undefined : errors;
         }
 
-        function createLineItems(jsonLineItems, shipmentLineItems) {
+        function createLineItems(jsonLineItems) {
             var lineItems = [];
             jsonLineItems.forEach(function(lineItem) {
-                var shipmentLineItem = shipmentLineItems.filter(function(shipmentLineItem) {
-                    return shipmentLineItem.orderable.id === lineItem.orderable.id &&
-                        areLotsEqual(shipmentLineItem.lot, lineItem.lot);
-                })[0];
-                lineItems.push(new ProofOfDeliveryLineItem(lineItem, shipmentLineItem));
+                lineItems.push(new ProofOfDeliveryLineItem(lineItem));
             });
             return lineItems;
-        }
-
-        function areLotsEqual(left, right) {
-            if (left && right && left.id === right.id) {
-                return true;
-            } else if (!left && !right)  {
-                return true;
-            }
-            return false;
         }
 
         function validateLineItems(errors, proofOfDelivery) {

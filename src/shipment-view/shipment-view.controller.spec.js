@@ -235,7 +235,6 @@ describe('ShipmentViewController', function() {
                 orderFulfillmentLineItems: [lineItem],
                 updatedOrder: order
             });
-            console.log(lineItem);
             vm.$onInit();
 
             vm.confirmShipment();

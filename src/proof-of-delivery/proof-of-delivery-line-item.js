@@ -46,9 +46,8 @@
          *
          * @param   {Object}    json    the JSON to build the instance
          */
-        function ProofOfDeliveryLineItem(json, shipmentLineItemJson) {
-            angular.copy(json, this)
-            this.quantityShipped = shipmentLineItemJson.quantityShipped;
+        function ProofOfDeliveryLineItem(json) {
+            angular.copy(json, this);
         }
 
         /**

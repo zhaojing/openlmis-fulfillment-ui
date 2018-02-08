@@ -15,8 +15,7 @@
 
 describe('ProofOfDeliveryLineItem', function() {
 
-    var ProofOfDeliveryLineItem, proofOfDeliveryLineItem, ProofOfDeliveryLineItemDataBuilder,
-        ShipmentLineItemDataBuilder;
+    var ProofOfDeliveryLineItem, proofOfDeliveryLineItem, ProofOfDeliveryLineItemDataBuilder;
 
     beforeEach(function() {
         module('proof-of-delivery');
@@ -24,7 +23,6 @@ describe('ProofOfDeliveryLineItem', function() {
         inject(function($injector) {
             ProofOfDeliveryLineItem = $injector.get('ProofOfDeliveryLineItem');
             ProofOfDeliveryLineItemDataBuilder = $injector.get('ProofOfDeliveryLineItemDataBuilder');
-            ShipmentLineItemDataBuilder = $injector.get('ShipmentLineItemDataBuilder');
         });
     });
 
@@ -34,13 +32,10 @@ describe('ProofOfDeliveryLineItem', function() {
             var json = new ProofOfDeliveryLineItemDataBuilder()
                 .withQuantityAccepted(100)
                 .withQuantityRejected(50)
+                .withQuantityShipped(150)
                 .buildJson();
 
-            var shipmentLineItemJson = new ShipmentLineItemDataBuilder()
-                .withQuantityShipped(150)
-                .build();
-
-            var result = new ProofOfDeliveryLineItem(json, shipmentLineItemJson);
+            var result = new ProofOfDeliveryLineItem(json);
 
             expect(result.id).toEqual(json.id);
             expect(result.orderable).toEqual(json.orderable);
