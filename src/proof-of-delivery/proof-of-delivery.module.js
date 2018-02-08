@@ -30,7 +30,8 @@
         'openlmis-date',
         'openlmis-i18n',
         'openlmis-date',
-        'shipment'
+        'shipment',
+        'openlmis-repository'
     ]);
 
 })();

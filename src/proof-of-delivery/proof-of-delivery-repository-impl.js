@@ -30,11 +30,11 @@
         .factory('ProofOfDeliveryRepositoryImpl', ProofOfDeliveryRepositoryImpl);
 
     ProofOfDeliveryRepositoryImpl.$inject = [
-        '$resource', 'fulfillmentUrlFactory', 'ShipmentRepositoryImpl'
+        '$resource', 'fulfillmentUrlFactory', 'OpenLMISRepositoryImpl', 'referencedataUrlFactory'
     ];
 
-    function ProofOfDeliveryRepositoryImpl($resource, fulfillmentUrlFactory,
-                                           ShipmentRepositoryImpl) {
+    function ProofOfDeliveryRepositoryImpl($resource, fulfillmentUrlFactory, OpenLMISRepositoryImpl,
+                                           referencedataUrlFactory) {
 
         ProofOfDeliveryRepositoryImpl.prototype.get = get;
         ProofOfDeliveryRepositoryImpl.prototype.update = update;
@@ -51,7 +51,7 @@
          * Creates an instance of the ProofOfDeliveryRepositoryImpl class.
          */
         function ProofOfDeliveryRepositoryImpl() {
-            this.shipmentRepositoryImpl = new ShipmentRepositoryImpl();
+            this.shipmentRepositoryImpl = new OpenLMISRepositoryImpl(fulfillmentUrlFactory('/api/shipments'));
             this.resource = $resource(fulfillmentUrlFactory('/api/proofOfDeliveries/:id'), {}, {
                 update: {
                     method: 'PUT'

@@ -21,7 +21,7 @@ describe('ProofOfDeliveryRepositoryImpl', function() {
 
     beforeEach(function() {
         module('proof-of-delivery', function($provide) {
-            $provide.factory('ShipmentRepositoryImpl', function() {
+            $provide.factory('OpenLMISRepositoryImpl', function() {
                 return function() {
                     shipmentRepositoryImplMock = jasmine.createSpyObj('shipmentRepositoryImpl', [
                         'get'
