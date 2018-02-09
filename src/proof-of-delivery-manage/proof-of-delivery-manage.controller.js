@@ -111,19 +111,17 @@
          * @param {String} orderId id of order to find it's POD
          */
         function openPod(orderId) {
-            withUiBlocking(proofOfDeliveryManageService.getByOrderId(orderId)).then(function(pod) {
+            loadingModalService.open();
+            proofOfDeliveryManageService.getByOrderId(orderId)
+            .then(function(pod) {
                 $state.go('openlmis.orders.podManage.podView', {
                     podId: pod.id
                 });
-            }, function() {
+            })
+            .catch(function() {
                 notificationService.error('proofOfDeliveryManage.noOrderFound');
+                loadingModalService.close();
             });
-        }
-
-        function withUiBlocking(promise) {
-            loadingModalService.open();
-            promise.finally(loadingModalService.close);
-            return promise;
         }
     }
 })();
