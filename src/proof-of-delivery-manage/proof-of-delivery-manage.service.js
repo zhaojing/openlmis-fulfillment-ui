@@ -19,22 +19,20 @@
 
 	/**
      * @ngdoc service
-     * @name proof-of-delivery.proofOfDeliveryLegacyService
+     * @name proof-of-delivery.proofOfDeliveryManageService
      *
      * @description
      * Responsible for retrieving proofs of delivery from the server.
      */
 	angular
 		.module('proof-of-delivery')
-	    .service('proofOfDeliveryLegacyService', service);
+	    .service('proofOfDeliveryManageService', service);
 
     service.$inject = [
-        'shipmentService', 'proofOfDeliveryService', 'OpenLMISRepositoryImpl',
-        'fulfillmentUrlFactory'
+        'shipmentService', 'OpenLMISRepositoryImpl', 'fulfillmentUrlFactory'
     ];
 
-    function service(shipmentService, proofOfDeliveryService, OpenLMISRepositoryImpl,
-                     fulfillmentUrlFactory) {
+    function service(shipmentService, OpenLMISRepositoryImpl, fulfillmentUrlFactory) {
 
         var proofOfDeliveryRepositoryImpl = new OpenLMISRepositoryImpl(
             fulfillmentUrlFactory('/api/proofOfDeliveries')
@@ -46,7 +44,7 @@
 
         /**
          * @ngdoc method
-         * @methodOf order.orderService
+         * @methodOf proof-of-delivery.proofOfDeliveryManageService
          * @name getByOrderId
          *
          * @description

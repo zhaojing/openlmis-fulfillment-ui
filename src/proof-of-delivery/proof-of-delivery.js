@@ -89,22 +89,8 @@
             verifyNotEmpty(errors, this.deliveredBy, 'deliveredBy');
             verifyNotEmpty(errors, this.receivedDate, 'receivedDate');
 
-            validateLineItems(errors, this);
-
-            return angular.equals(errors, {}) ? undefined : errors;
-        }
-
-        function createLineItems(jsonLineItems) {
-            var lineItems = [];
-            jsonLineItems.forEach(function(lineItem) {
-                lineItems.push(new ProofOfDeliveryLineItem(lineItem));
-            });
-            return lineItems;
-        }
-
-        function validateLineItems(errors, proofOfDelivery) {
             var lineItemsErrors = [];
-            proofOfDelivery.lineItems.forEach(function(lineItem) {
+            this.lineItems.forEach(function(lineItem) {
                 var lineItemErrors = lineItem.validate();
 
                 if (lineItemErrors) {
@@ -115,6 +101,16 @@
             if (lineItemsErrors.length) {
                 errors.lineItems = lineItemsErrors;
             }
+
+            return angular.equals(errors, {}) ? undefined : errors;
+        }
+
+        function createLineItems(jsonLineItems) {
+            var lineItems = [];
+            jsonLineItems.forEach(function(lineItem) {
+                lineItems.push(new ProofOfDeliveryLineItem(lineItem));
+            });
+            return lineItems;
         }
 
         function verifyNotEmpty(errors, value, fieldName) {
