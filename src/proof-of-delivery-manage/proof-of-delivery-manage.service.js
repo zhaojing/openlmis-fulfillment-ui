@@ -15,18 +15,18 @@
 
 (function() {
 
-	'use strict';
+    'use strict';
 
-	/**
+    /**
      * @ngdoc service
      * @name proof-of-delivery.proofOfDeliveryManageService
      *
      * @description
      * Responsible for retrieving proofs of delivery from the server.
      */
-	angular
-		.module('proof-of-delivery')
-	    .service('proofOfDeliveryManageService', service);
+    angular
+        .module('proof-of-delivery')
+        .service('proofOfDeliveryManageService', service);
 
     service.$inject = [
         'shipmentService', 'OpenLMISRepositoryImpl', 'fulfillmentUrlFactory'
@@ -39,7 +39,7 @@
         );
 
         return {
-			getByOrderId: getByOrderId
+            getByOrderId: getByOrderId
         };
 
         /**
@@ -62,9 +62,9 @@
                     shipmentId: shipment.content[0].id
                 });
             })
-			.then(function(page) {
-				return page.content[0];
-			});
+            .then(function(page) {
+                return page.content[0];
+            });
         }
     }
 })();
