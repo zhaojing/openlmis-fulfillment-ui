@@ -14,9 +14,20 @@
     <td></td>
     <td>{{fulfillingLineItem.quantityShipped}}</td>
     <td>{{fulfillingLineItem.lot.lotCode | lotCode}}</td>
-    <td><input positive-integer ng-model="fulfillingLineItem.quantityAccepted"
-        ng-change="fulfillingLineItem.updateQuantityRejected()"
-        openlmis-invalid="{{fulfillingLineItem.validate().quantityAccepted | message}}"/></td>
+    <td ng-if="proofOfDelivery.isInitiated()">
+        <input positive-integer
+            ng-model="fulfillingLineItem.quantityAccepted"
+            ng-change="fulfillingLineItem.updateQuantityRejected()"
+            openlmis-invalid="{{fulfillingLineItem.validate().quantityAccepted | message}}"/>
+    </td>
+    <td ng-if="!proofOfDelivery.isInitiated()">
+        {{fulfillingLineItem.quantityAccepted}}
+    </td>
     <td>{{fulfillingLineItem.quantityRejected}}</td>
-    <td><input type="text" ng-model="fulfillingLineItem.notes"/></td>
+    <td ng-if="proofOfDelivery.isInitiated()">
+        <input type="text" ng-model="fulfillingLineItem.notes"/>
+    </td>
+    <td ng-if="!proofOfDelivery.isInitiated()">
+        {{fulfillingLineItem.notes}}
+    </td>
 </tr>

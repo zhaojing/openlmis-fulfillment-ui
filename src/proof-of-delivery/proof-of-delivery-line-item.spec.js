@@ -28,22 +28,31 @@ describe('ProofOfDeliveryLineItem', function() {
 
     describe('constructor', function() {
 
-        it('should copy fields from JSON', function() {
-            var json = new ProofOfDeliveryLineItemDataBuilder()
+        var json;
+
+        beforeEach(function() {
+            json = new ProofOfDeliveryLineItemDataBuilder()
                 .withQuantityAccepted(100)
-                .withQuantityRejected(50)
+                .withQuantityRejected(undefined)
                 .withQuantityShipped(150)
                 .buildJson();
+        });
 
+        it('should copy fields from JSON', function() {
             var result = new ProofOfDeliveryLineItem(json);
 
             expect(result.id).toEqual(json.id);
             expect(result.orderable).toEqual(json.orderable);
             expect(result.lot).toEqual(json.lot);
             expect(result.quantityAccepted).toEqual(json.quantityAccepted);
-            expect(result.quantityRejected).toEqual(json.quantityRejected);
             expect(result.notes).toEqual(json.notes);
             expect(result.quantityShipped).toEqual(150);
+        });
+
+        it('should calculate quantity rejected', function() {
+            var result = new ProofOfDeliveryLineItem(json);
+
+            expect(result.quantityRejected).toEqual(50);
         });
 
     });
@@ -86,7 +95,7 @@ describe('ProofOfDeliveryLineItem', function() {
             expect(proofOfDeliveryLineItem.quantityRejected).toBe(100);
         });
 
-        it('should unset quantity rejected if quantity accepted is undefined', function() {
+        it('should set quantity rejected to 0 if quantity accepted is undefined', function() {
             proofOfDeliveryLineItem = new ProofOfDeliveryLineItemDataBuilder()
                 .withQuantityShipped(100)
                 .withQuantityAccepted(undefined)
@@ -95,7 +104,7 @@ describe('ProofOfDeliveryLineItem', function() {
 
             proofOfDeliveryLineItem.updateQuantityRejected();
 
-            expect(proofOfDeliveryLineItem.quantityRejected).toBeUndefined();
+            expect(proofOfDeliveryLineItem.quantityRejected).toBe(0);
         });
 
         it('should set quantity rejected to quantity shipped if quantity accepted is negative', function() {

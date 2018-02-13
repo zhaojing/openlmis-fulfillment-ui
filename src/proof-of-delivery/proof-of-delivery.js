@@ -35,6 +35,7 @@
         ProofOfDelivery.prototype.validate = validate;
         ProofOfDelivery.prototype.save = save;
         ProofOfDelivery.prototype.confirm = confirm;
+        ProofOfDelivery.prototype.isInitiated = isInitiated;
 
         return ProofOfDelivery;
 
@@ -48,7 +49,7 @@
          *
          * @param  {Object}                     json        the JSON representation of the Proof of
          *                                                  Delivery
-         * @param  {ProofOfDeliveryRepository}  respository the instance of the
+         * @param  {ProofOfDeliveryRepository}  repository  the instance of the
          *                                                  ProofOfDeliveryRepository class
          */
         function ProofOfDelivery(json, repository) {
@@ -72,21 +73,46 @@
             return this.repository.update(this);
         }
 
+        /**
+         * @ngdoc method
+         * @methodOf proof-of-delivery.ProofOfDelivery
+         * @name confirm
+         *
+         * @description
+         * Changes the status of the Proof of Delivery to confirmed and saves it in the repository.
+         *
+         * @return {Promise}    the promise resolved when Proof of Delivery has been successfully
+         *                      confirmed, rejected otherwise
+         */
         function confirm() {
             var proofOfDelivery = this,
-                errors = proofOfDelivery.validate();
+                copy = angular.copy(proofOfDelivery),
+                errors = copy.validate();
 
             if (errors) {
                 return $q.reject(errors);
             }
 
-            proofOfDelivery.status = 'CONFIRMED';
+            copy.status = 'CONFIRMED';
 
-            return proofOfDelivery.repository.update(proofOfDelivery)
-            .catch(function(error) {
-                proofOfDelivery.status = 'INITIATED';
-                return $q.reject(error);
-            });
+            return copy.repository.update(copy)
+            .then(function() {
+                proofOfDelivery.status = 'CONFIRMED';
+            }));
+        }
+
+        /**
+         * @ngdoc methodOf
+         * @methodOf proof-of-delivery.ProofOfDelivery
+         * @name isInitiated
+         *
+         * @description
+         * Returns whether Proof of Delivery has INITIATED status.
+         *
+         * @return {Boolean}    true if Proof of Delivery has INITIATED status, false otherwise
+         */
+        function isInitiated() {
+            return this.status === 'INITIATED';
         }
 
         /**

@@ -18,7 +18,8 @@ describe('proofOfDeliveryService', function() {
     var PROOF_OF_DELIVERY_ID = 'proof-of-delivery-id';
 
     var proofOfDeliveryService, ProofOfDeliveryDataBuilder, $q, $rootScope, repositoryMock,
-        loadingModalService, notificationService, proofOfDeliveryMock, saveSpy;
+        loadingModalService, notificationService, proofOfDeliveryMock, saveSpy, confirmSpy,
+        confirmService;
 
     beforeEach(function() {
         module('proof-of-delivery-view', function($provide) {
@@ -37,6 +38,7 @@ describe('proofOfDeliveryService', function() {
             ProofOfDeliveryDataBuilder = $injector.get('ProofOfDeliveryDataBuilder');
             loadingModalService = $injector.get('loadingModalService');
             notificationService = $injector.get('notificationService');
+            confirmService = $injector.get('confirmService');
         });
     });
 
@@ -71,6 +73,22 @@ describe('proofOfDeliveryService', function() {
             $rootScope.$apply();
 
             expect(result.save).not.toBe(saveSpy);
+        });
+
+        it('should decorate confirm', function() {
+            proofOfDeliveryMock = jasmine.createSpyObj('proofOfDeliveryMock', ['save']);
+            repositoryMock.get.andReturn($q.resolve(proofOfDeliveryMock));
+
+            confirmSpy = proofOfDeliveryMock.confirm;
+
+            var result;
+            proofOfDeliveryService.get(PROOF_OF_DELIVERY_ID)
+            .then(function(proofOfDelivery) {
+                result = proofOfDelivery;
+            });
+            $rootScope.$apply();
+
+            expect(result.confirm).not.toBe(confirmSpy);
         });
 
         it('should reject if repository rejected', function() {
@@ -193,6 +211,152 @@ describe('proofOfDeliveryService', function() {
             saveSpy.andReturn($q.reject());
 
             proofOfDelivery.save();
+
+            expect(loadingModalService.close).not.toHaveBeenCalled();
+
+            $rootScope.$apply();
+
+            expect(loadingModalService.close).toHaveBeenCalled();
+        });
+
+    });
+
+    describe('decorated confirm', function() {
+
+        var proofOfDelivery;
+
+        beforeEach(function() {
+            proofOfDeliveryMock = jasmine.createSpyObj('proofOfDeliveryMock', ['confirm']);
+            repositoryMock.get.andReturn($q.resolve(proofOfDeliveryMock));
+
+            confirmSpy = proofOfDeliveryMock.confirm;
+
+            proofOfDeliveryService.get(PROOF_OF_DELIVERY_ID)
+            .then(function(result) {
+                proofOfDelivery = result;
+            });
+            $rootScope.$apply();
+
+            spyOn(notificationService, 'success');
+            spyOn(notificationService, 'error');
+            spyOn(loadingModalService, 'open');
+            spyOn(loadingModalService, 'close');
+            spyOn(confirmService, 'confirm');
+        });
+
+        it('should show confirmation modal before doing anything', function() {
+            confirmService.confirm.andReturn($q.resolve());
+
+            proofOfDelivery.confirm();
+
+            expect(confirmService.confirm).toHaveBeenCalledWith(
+                'proofOfDeliveryView.confirm.message',
+                'proofOfDeliveryView.confirm.label'
+            );
+            expect(confirmSpy).not.toHaveBeenCalled();
+            expect(notificationService.success).not.toHaveBeenCalled();
+            expect(notificationService.error).not.toHaveBeenCalled();
+            expect(loadingModalService.open).not.toHaveBeenCalled();
+            expect(loadingModalService.close).not.toHaveBeenCalled();
+        });
+
+        it('should do nothing if without confirmation', function() {
+            confirmService.confirm.andReturn($q.reject());
+
+            proofOfDelivery.confirm();
+            $rootScope.$apply();
+
+            expect(confirmService.confirm).toHaveBeenCalledWith(
+                'proofOfDeliveryView.confirm.message',
+                'proofOfDeliveryView.confirm.label'
+            );
+            expect(confirmSpy).not.toHaveBeenCalled();
+            expect(notificationService.success).not.toHaveBeenCalled();
+            expect(notificationService.error).not.toHaveBeenCalled();
+            expect(loadingModalService.open).not.toHaveBeenCalled();
+            expect(loadingModalService.close).not.toHaveBeenCalled();
+        });
+
+        it('should call original confirm method', function() {
+            confirmService.confirm.andReturn($q.resolve());
+            confirmSpy.andReturn($q.resolve());
+
+            proofOfDelivery.confirm().catch(dump);
+            $rootScope.$apply();
+
+            expect(confirmSpy).toHaveBeenCalled();
+        });
+
+        it('should show loading modal', function() {
+            confirmService.confirm.andReturn($q.resolve());
+            confirmSpy.andReturn($q.resolve());
+
+            proofOfDelivery.confirm();
+            $rootScope.$apply();
+
+            expect(loadingModalService.open).toHaveBeenCalled();
+        });
+
+        it('should show success only after confirm was successful', function() {
+            confirmService.confirm.andReturn($q.resolve());
+            confirmSpy.andReturn($q.resolve());
+
+            var confirmed;
+            proofOfDelivery.confirm()
+            .then(function() {
+                confirmed = true;
+            });
+
+            expect(confirmed).toBeUndefined();
+            expect(notificationService.success).not.toHaveBeenCalled();
+
+            $rootScope.$apply();
+
+            expect(confirmed).toBe(true);
+            expect(notificationService.error).not.toHaveBeenCalled();
+            expect(notificationService.success)
+                .toHaveBeenCalledWith('proofOfDeliveryView.proofOfDeliveryHasBeenConfirmed');
+        });
+
+        it('should close loading modal on success', function() {
+            confirmService.confirm.andReturn($q.resolve());
+            confirmSpy.andReturn($q.resolve());
+
+            proofOfDelivery.confirm();
+
+            expect(loadingModalService.close).not.toHaveBeenCalled();
+
+            $rootScope.$apply();
+
+            expect(loadingModalService.close).toHaveBeenCalled();
+        });
+
+        it('should show error only after confirm has failed', function() {
+            confirmService.confirm.andReturn($q.resolve());
+            confirmSpy.andReturn($q.reject());
+
+            var confirmed;
+            proofOfDelivery.confirm()
+            .catch(function() {
+                confirmed = false;
+            });
+
+            expect(confirmed).toBeUndefined();
+            expect(notificationService.error).not.toHaveBeenCalled();
+
+            $rootScope.$apply();
+
+            expect(confirmed).toBe(false);
+            expect(notificationService.success).not.toHaveBeenCalled();
+            expect(notificationService.error)
+                .toHaveBeenCalledWith('proofOfDeliveryView.failedToConfirmProofOfDelivery');
+        });
+
+        it('should close loading modal on failure', function() {
+            confirmService.confirm.andReturn($q.resolve());
+            confirmSpy.andReturn($q.reject());
+
+            proofOfDelivery.confirm();
 
             expect(loadingModalService.close).not.toHaveBeenCalled();
 

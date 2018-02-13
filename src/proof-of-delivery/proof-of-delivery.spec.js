@@ -258,4 +258,24 @@ describe('ProofOfDelivery', function() {
         });
 
     });
+
+    describe('isInitiated', function() {
+
+        var proofOfDelivery;
+
+        beforeEach(function() {
+            proofOfDelivery = new ProofOfDeliveryDataBuilder().build();
+        });
+
+        it('should return true if Proof of Delivery is initiated', function() {
+            expect(proofOfDelivery.isInitiated()).toBe(true);
+        });
+
+        it('should return false if Proof of Delivery is not initiated', function() {
+            proofOfDelivery.status = 'CONFIRMED';
+
+            expect(proofOfDelivery.isInitiated()).toBe(false);
+        });
+
+    });
 });

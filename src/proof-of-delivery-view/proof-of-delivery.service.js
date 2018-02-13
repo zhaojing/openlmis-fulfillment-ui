@@ -30,11 +30,11 @@
 
     proofOfDeliveryService.$inject = [
         '$q', 'ProofOfDeliveryRepository', 'ProofOfDeliveryRepositoryImpl', 'notificationService',
-        'loadingModalService'
+        'loadingModalService', 'confirmService'
     ];
 
     function proofOfDeliveryService($q, ProofOfDeliveryRepository, ProofOfDeliveryRepositoryImpl,
-                                    notificationService, loadingModalService) {
+                                    notificationService, loadingModalService, confirmService) {
         var proofOfDeliveryService = this,
             repository = new ProofOfDeliveryRepository(
                 new ProofOfDeliveryRepositoryImpl()
@@ -57,14 +57,44 @@
         function get(id) {
             if (id) {
                 return repository.get(id)
-                .then(decorate);
+                .then(function(proofOfDelivery) {
+                    decorateSave(proofOfDelivery);
+                    decorateConfirm(proofOfDelivery);
+                    return proofOfDelivery;
+                });
             }
             return $q.reject();
         }
 
-        function decorate(proofOfDelivery) {
-            var save = proofOfDelivery.save;
+        function decorateConfirm(proofOfDelivery) {
+            var confirm = proofOfDelivery.confirm;
+            proofOfDelivery.confirm = function() {
+                var confirmArguments = arguments;
+                return confirmService.confirm(
+                    'proofOfDeliveryView.confirm.message',
+                    'proofOfDeliveryView.confirm.label'
+                )
+                .then(function() {
+                    loadingModalService.open();
+                    return confirm.apply(proofOfDelivery, confirmArguments)
+                    .then(function() {
+                        notificationService.success(
+                            'proofOfDeliveryView.proofOfDeliveryHasBeenConfirmed'
+                        );
+                    })
+                    .catch(function() {
+                        notificationService.error(
+                            'proofOfDeliveryView.failedToConfirmProofOfDelivery'
+                        );
+                        return $q.reject();
+                    })
+                    .finally(loadingModalService.close);
+                });
+            };
+        }
 
+        function decorateSave(proofOfDelivery) {
+            var save = proofOfDelivery.save;
             proofOfDelivery.save = function() {
                 loadingModalService.open();
                 return save.apply(this, arguments)
@@ -76,9 +106,7 @@
                     return $q.reject();
                 })
                 .finally(loadingModalService.close);
-            };
-
-            return proofOfDelivery;
+            }
         }
     }
 

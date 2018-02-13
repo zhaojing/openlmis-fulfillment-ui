@@ -48,6 +48,7 @@
          */
         function ProofOfDeliveryLineItem(json) {
             angular.copy(json, this);
+            this.updateQuantityRejected();
         }
 
         /**
@@ -60,7 +61,7 @@
          */
         function updateQuantityRejected() {
             if (!this.quantityAccepted && this.quantityAccepted !== 0) {
-                this.quantityRejected = undefined;
+                this.quantityRejected = 0;
             } else {
                 var quantityRejected = this.quantityShipped - this.quantityAccepted;
 
