@@ -29,5 +29,6 @@
     "proofOfDeliveryView.supplyingFacility": "Supplying Facility",
     "proofOfDeliveryView.viewProofOfDelivery": "View Proof of Delivery",
     "proofOfDeliveryView.lotCode": "Lot Code",
-    "proofOfDeliveryView.orderStatus": "Order Status"
+    "proofOfDeliveryView.orderStatus": "Order Status",
+    "proofOfDeliveryView.confirm": "Confirm"
 }

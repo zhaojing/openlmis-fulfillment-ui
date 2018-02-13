@@ -11,3 +11,7 @@
     @extend .requisition-type !optional;
     @extend .requisition-type.emergency !optional;
 }
+
+#proof-of-delivery-form {
+    max-width: initial;
+}

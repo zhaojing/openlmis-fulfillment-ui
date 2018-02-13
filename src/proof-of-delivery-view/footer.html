@@ -20,7 +20,7 @@
         <dd>
             <div ng-if="!vm.isSubmitted()">
                 <openlmis-datepicker input-id="receivedDate" value="vm.proofOfDelivery.receivedDate"
-                    openlmis-invalid="{{vm.proofOfDelivery.validate().receivedDate | message}}">
+                    required="true">
                 </openlmis-datepicker>
             </div>
             <div ng-if="vm.isSubmitted()">{{vm.proofOfDelivery.receivedDate | openlmisDate}}</div>

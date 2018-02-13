@@ -1,21 +1,23 @@
 <ng-include src="'proof-of-delivery-view/header.html'"></ng-include>
-<div class="openlmis-table-container">
-    <table class="openlmis-table">
-        <thead>
-            <tr>
-                <th>{{'proofOfDeliveryView.productName' | message}}</th>
-                <th>{{'proofOfDeliveryView.productUnit' | message}}</th>
-                <th>{{'proofOfDeliveryView.quantityOrdered' | message}}</th>
-                <th>{{'proofOfDeliveryView.quantityShipped' | message}}</th>
-                <th>{{'proofOfDeliveryView.lotCode' | message}}</th>
-                <th>{{'proofOfDeliveryView.quantityAccepted' | message}}</th>
-                <th>{{'proofOfDeliveryView.quantityReturned' | message}}</th>
-                <th>{{'proofOfDeliveryView.notes' | message}}</th>
-            </tr>
-        </thead>
-        <tbody order-line-item="lineItem" proof-of-delivery="vm.proofOfDelivery" ng-repeat="lineItem in vm.order.orderLineItems | orderBy : 'orderable.fullProductName'">
-        </tbody>
-    </table>
-</div>
-<ng-include src="'proof-of-delivery-view/footer.html'"></ng-include>
+<form id="proof-of-delivery-form" ng-submit="vm.proofOfDelivery.confirm()">
+    <div class="openlmis-table-container">
+        <table class="openlmis-table">
+            <thead>
+                <tr>
+                    <th>{{'proofOfDeliveryView.productName' | message}}</th>
+                    <th>{{'proofOfDeliveryView.productUnit' | message}}</th>
+                    <th>{{'proofOfDeliveryView.quantityOrdered' | message}}</th>
+                    <th>{{'proofOfDeliveryView.quantityShipped' | message}}</th>
+                    <th>{{'proofOfDeliveryView.lotCode' | message}}</th>
+                    <th>{{'proofOfDeliveryView.quantityAccepted' | message}}</th>
+                    <th>{{'proofOfDeliveryView.quantityReturned' | message}}</th>
+                    <th>{{'proofOfDeliveryView.notes' | message}}</th>
+                </tr>
+            </thead>
+            <tbody order-line-item="lineItem" proof-of-delivery="vm.proofOfDelivery" ng-repeat="lineItem in vm.order.orderLineItems | orderBy : 'orderable.fullProductName'">
+            </tbody>
+        </table>
+    </div>
+    <ng-include src="'proof-of-delivery-view/footer.html'"></ng-include>
+</form>
 <ng-include src="'proof-of-delivery-view/toolbar.html'"></ng-include>

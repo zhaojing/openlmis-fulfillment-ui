@@ -28,12 +28,13 @@
         .module('proof-of-delivery')
         .factory('ProofOfDelivery', factory);
 
-    factory.$inject = ['ProofOfDeliveryLineItem'];
+    factory.$inject = ['ProofOfDeliveryLineItem', '$q'];
 
-    function factory(ProofOfDeliveryLineItem) {
+    function factory(ProofOfDeliveryLineItem, $q) {
 
         ProofOfDelivery.prototype.validate = validate;
         ProofOfDelivery.prototype.save = save;
+        ProofOfDelivery.prototype.confirm = confirm;
 
         return ProofOfDelivery;
 
@@ -69,6 +70,23 @@
          */
         function save() {
             return this.repository.update(this);
+        }
+
+        function confirm() {
+            var proofOfDelivery = this,
+                errors = proofOfDelivery.validate();
+
+            if (errors) {
+                return $q.reject(errors);
+            }
+
+            proofOfDelivery.status = 'CONFIRMED';
+
+            return proofOfDelivery.repository.update(proofOfDelivery)
+            .catch(function(error) {
+                proofOfDelivery.status = 'INITIATED';
+                return $q.reject(error);
+            });
         }
 
         /**

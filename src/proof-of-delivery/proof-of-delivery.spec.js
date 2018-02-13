@@ -91,6 +91,108 @@ describe('ProofOfDelivery', function() {
 
     });
 
+    describe('confirm', function() {
+
+        var proofOfDelivery, proofOfDeliveryRepositoryMock;
+
+        beforeEach(function() {
+            proofOfDeliveryRepositoryMock = jasmine.createSpyObj('repository', ['update']);
+            proofOfDelivery = new ProofOfDelivery(json, proofOfDeliveryRepositoryMock);
+        });
+
+        it('should reject if Proof of Delivery is invalid', function() {
+            proofOfDelivery.receivedBy = undefined;
+
+            var result;
+            proofOfDelivery.confirm()
+            .catch(function(errors) {
+                result = errors;
+            });
+            $rootScope.$apply();
+
+            expect(result).toEqual({
+                receivedBy: 'proofOfDelivery.required'
+            });
+        });
+
+        it('should not call repository if Proof of Delivery is invalid', function() {
+            proofOfDelivery.receivedBy = undefined;
+
+            proofOfDelivery.confirm()
+            $rootScope.$apply();
+
+            expect(proofOfDeliveryRepositoryMock.update).not.toHaveBeenCalled();
+        });
+
+        it('should not set status to confirmed if Proof of Delivery is invalid', function() {
+            proofOfDelivery.receivedBy = undefined;
+
+            proofOfDelivery.confirm();
+            $rootScope.$apply();
+
+            expect(proofOfDelivery.status).not.toBe('CONFIRMED');
+        });
+
+        it('should reject if repository rejects', function() {
+            proofOfDeliveryRepositoryMock.update.andReturn($q.reject());
+
+            var rejected;
+            proofOfDelivery.confirm()
+            .catch(function(errors) {
+                rejected = !errors;
+            });
+            $rootScope.$apply();
+
+            expect(rejected).toBe(true);
+        });
+
+        it('should not set status to confirmed if repository rejects', function() {
+            proofOfDeliveryRepositoryMock.update.andReturn($q.reject());
+
+            proofOfDelivery.confirm();
+            $rootScope.$apply();
+
+            expect(proofOfDelivery.status).not.toBe('CONFIRMED');
+        });
+
+        it('should set status to confirmed when saving in repository', function() {
+            proofOfDeliveryRepositoryMock.update.andReturn($q.reject());
+
+            var expected = angular.copy(proofOfDelivery);
+            expected.status = 'CONFIRMED';
+
+            proofOfDelivery.confirm();
+
+            expect(proofOfDeliveryRepositoryMock.update).toHaveBeenCalledWith(expected);
+
+            $rootScope.$apply();
+        });
+
+        it('should resolve after Proof of Delivery has been confirmed', function() {
+            proofOfDeliveryRepositoryMock.update.andReturn($q.resolve());
+
+            var confirmed;
+            proofOfDelivery.confirm()
+            .then(function() {
+                confirmed = true;
+            });
+            $rootScope.$apply();
+
+            expect(confirmed).toBe(true);
+        });
+
+        it('should set status as confirmed if confirm was successful', function() {
+            proofOfDeliveryRepositoryMock.update.andReturn($q.resolve());
+            expect(proofOfDelivery.status).toBe('INITIATED');
+
+            proofOfDelivery.confirm();
+            $rootScope.$apply();
+
+            expect(proofOfDelivery.status).toBe('CONFIRMED');
+        });
+
+    });
+
     describe('validate', function() {
 
         var proofOfDelivery;
