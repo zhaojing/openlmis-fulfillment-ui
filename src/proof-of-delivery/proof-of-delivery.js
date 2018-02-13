@@ -98,7 +98,7 @@
             return copy.repository.update(copy)
             .then(function() {
                 proofOfDelivery.status = 'CONFIRMED';
-            }));
+            });
         }
 
         /**
