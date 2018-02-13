@@ -12,8 +12,8 @@
     <td></td>
     <td></td>
     <td></td>
-    <td>{{fulfillingLineItem.lot.lotCode | lotCode}}</td>
     <td>{{fulfillingLineItem.quantityShipped}}</td>
+    <td>{{fulfillingLineItem.lot.lotCode | lotCode}}</td>
     <td><input positive-integer ng-model="fulfillingLineItem.quantityAccepted"
         ng-change="fulfillingLineItem.updateQuantityRejected()"
         openlmis-invalid="{{fulfillingLineItem.validate().quantityAccepted | message}}"/></td>
