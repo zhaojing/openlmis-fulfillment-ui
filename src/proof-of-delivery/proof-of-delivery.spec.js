@@ -15,7 +15,8 @@
 
 describe('ProofOfDelivery', function() {
 
-    var ProofOfDelivery, ProofOfDeliveryLineItem, ProofOfDeliveryDataBuilder, $q, $rootScope, json;
+    var ProofOfDelivery, ProofOfDeliveryLineItem, ProofOfDeliveryDataBuilder, $q, $rootScope, json,
+        PROOF_OF_DELIVERY_STATUS;
 
     beforeEach(function() {
         module('proof-of-delivery');
@@ -25,6 +26,7 @@ describe('ProofOfDelivery', function() {
             $rootScope = $injector.get('$rootScope');
             ProofOfDelivery = $injector.get('ProofOfDelivery');
             ProofOfDeliveryLineItem = $injector.get('ProofOfDeliveryLineItem');
+            PROOF_OF_DELIVERY_STATUS = $injector.get('PROOF_OF_DELIVERY_STATUS');
             ProofOfDeliveryDataBuilder = $injector.get('ProofOfDeliveryDataBuilder');
         });
 
@@ -130,7 +132,7 @@ describe('ProofOfDelivery', function() {
             proofOfDelivery.confirm();
             $rootScope.$apply();
 
-            expect(proofOfDelivery.status).not.toBe('CONFIRMED');
+            expect(proofOfDelivery.status).not.toBe(PROOF_OF_DELIVERY_STATUS.CONFIRMED);
         });
 
         it('should reject if repository rejects', function() {
@@ -152,14 +154,14 @@ describe('ProofOfDelivery', function() {
             proofOfDelivery.confirm();
             $rootScope.$apply();
 
-            expect(proofOfDelivery.status).not.toBe('CONFIRMED');
+            expect(proofOfDelivery.status).not.toBe(PROOF_OF_DELIVERY_STATUS.CONFIRMED);
         });
 
         it('should set status to confirmed when saving in repository', function() {
             proofOfDeliveryRepositoryMock.update.andReturn($q.reject());
 
             var expected = angular.copy(proofOfDelivery);
-            expected.status = 'CONFIRMED';
+            expected.status = PROOF_OF_DELIVERY_STATUS.CONFIRMED;
 
             proofOfDelivery.confirm();
 
@@ -183,12 +185,12 @@ describe('ProofOfDelivery', function() {
 
         it('should set status as confirmed if confirm was successful', function() {
             proofOfDeliveryRepositoryMock.update.andReturn($q.resolve());
-            expect(proofOfDelivery.status).toBe('INITIATED');
+            expect(proofOfDelivery.status).toBe(PROOF_OF_DELIVERY_STATUS.INITIATED);
 
             proofOfDelivery.confirm();
             $rootScope.$apply();
 
-            expect(proofOfDelivery.status).toBe('CONFIRMED');
+            expect(proofOfDelivery.status).toBe(PROOF_OF_DELIVERY_STATUS.CONFIRMED);
         });
 
     });
@@ -272,7 +274,7 @@ describe('ProofOfDelivery', function() {
         });
 
         it('should return false if Proof of Delivery is not initiated', function() {
-            proofOfDelivery.status = 'CONFIRMED';
+            proofOfDelivery.status = PROOF_OF_DELIVERY_STATUS.CONFIRMED;
 
             expect(proofOfDelivery.isInitiated()).toBe(false);
         });

@@ -23,12 +23,12 @@
 
     ProofOfDeliveryDataBuilder.$inject = [
         'ProofOfDelivery', 'ProofOfDeliveryLineItemDataBuilder', 'ObjectReferenceDataBuilder',
-        'ShipmentDataBuilder', 'ShipmentLineItemDataBuilder'
+        'ShipmentDataBuilder', 'ShipmentLineItemDataBuilder', 'PROOF_OF_DELIVERY_STATUS'
     ];
 
     function ProofOfDeliveryDataBuilder(ProofOfDelivery, ProofOfDeliveryLineItemDataBuilder,
                                         ObjectReferenceDataBuilder, ShipmentDataBuilder,
-                                        ShipmentLineItemDataBuilder) {
+                                        ShipmentLineItemDataBuilder, PROOF_OF_DELIVERY_STATUS) {
 
         ProofOfDeliveryDataBuilder.prototype.build = build
         ProofOfDeliveryDataBuilder.prototype.buildJson = buildJson;
@@ -43,7 +43,7 @@
 
             var instanceNumber = ProofOfDeliveryDataBuilder.instanceNumber;
             this.id = 'proof-of-delivery-id-' + instanceNumber;
-            this.status = 'INITIATED';
+            this.status = PROOF_OF_DELIVERY_STATUS.INITIATED;
             this.deliveredBy = 'Deliverer ' + instanceNumber;
             this.receivedBy = 'Receiver ' + instanceNumber;
             this.receivedDate = '2018-02-01';

@@ -67,16 +67,15 @@
         }
 
         function decorateConfirm(proofOfDelivery) {
-            var confirm = proofOfDelivery.confirm;
+            var originalConfirm = proofOfDelivery.confirm;
             proofOfDelivery.confirm = function() {
-                var confirmArguments = arguments;
                 return confirmService.confirm(
                     'proofOfDeliveryView.confirm.message',
                     'proofOfDeliveryView.confirm.label'
                 )
                 .then(function() {
                     loadingModalService.open();
-                    return confirm.apply(proofOfDelivery, confirmArguments)
+                    return originalConfirm.apply(proofOfDelivery)
                     .then(function() {
                         notificationService.success(
                             'proofOfDeliveryView.proofOfDeliveryHasBeenConfirmed'
@@ -94,10 +93,10 @@
         }
 
         function decorateSave(proofOfDelivery) {
-            var save = proofOfDelivery.save;
+            var originalSave = proofOfDelivery.save;
             proofOfDelivery.save = function() {
                 loadingModalService.open();
-                return save.apply(this, arguments)
+                return originalSave.apply(this)
                 .then(function() {
                     notificationService.success('proofOfDeliveryView.proofOfDeliveryHasBeenSaved');
                 })

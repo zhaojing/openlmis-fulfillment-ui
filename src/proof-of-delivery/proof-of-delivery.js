@@ -28,9 +28,9 @@
         .module('proof-of-delivery')
         .factory('ProofOfDelivery', factory);
 
-    factory.$inject = ['ProofOfDeliveryLineItem', '$q'];
+    factory.$inject = ['ProofOfDeliveryLineItem', '$q', 'PROOF_OF_DELIVERY_STATUS'];
 
-    function factory(ProofOfDeliveryLineItem, $q) {
+    function factory(ProofOfDeliveryLineItem, $q, PROOF_OF_DELIVERY_STATUS) {
 
         ProofOfDelivery.prototype.validate = validate;
         ProofOfDelivery.prototype.save = save;
@@ -93,11 +93,11 @@
                 return $q.reject(errors);
             }
 
-            copy.status = 'CONFIRMED';
+            copy.status = PROOF_OF_DELIVERY_STATUS.CONFIRMED;
 
             return copy.repository.update(copy)
             .then(function() {
-                proofOfDelivery.status = 'CONFIRMED';
+                proofOfDelivery.status = PROOF_OF_DELIVERY_STATUS.CONFIRMED;
             });
         }
 
@@ -112,7 +112,7 @@
          * @return {Boolean}    true if Proof of Delivery has INITIATED status, false otherwise
          */
         function isInitiated() {
-            return this.status === 'INITIATED';
+            return this.status === PROOF_OF_DELIVERY_STATUS.INITIATED;
         }
 
         /**
