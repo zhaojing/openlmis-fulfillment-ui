@@ -1,11 +1,14 @@
 <h2>{{'orderView.viewOrders' | message}}</h2>
+<form class="sidebar" ng-submit="vm.loadOrders()">
+    <label for="supplyingFacility">{{'orderView.supplyingFacility' | message}}</label>
+    <select id="supplyingFacility"
+            ng-model="vm.supplyingFacility"
+            ng-options="facility.name for facility in vm.supplyingFacilities"
+            required></select>
+    <input type="submit" value="{{'orderView.search' | message}}" />
+</form>
 <section class="openlmis-table-container order-view">
     <form ng-submit="vm.loadOrders()" >
-        <label for="supplyingFacility">{{'orderView.supplyingFacility' | message}}</label>
-        <select id="supplyingFacility"
-                ng-model="vm.supplyingFacility"
-                ng-options="facility.name for facility in vm.supplyingFacilities"
-                required></select>
         <label for="requestingFacility">{{'orderView.requestingFacility' | message}}</label>
         <select id="requestingFacility"
                 ng-model="vm.requestingFacility"

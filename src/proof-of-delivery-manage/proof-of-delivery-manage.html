@@ -2,16 +2,16 @@
     {{'proofOfDeliveryManage.managePodsWithDetails' | message: { 'facility': vm.facility.name, 'program': vm.program.name} }}
 </h2>
 <h2 ng-hide="vm.facility && vm.program">{{'proofOfDeliveryManage.managePods' | message}}</h2>
+<form class="sidebar" ng-submit="vm.loadOrders()">
+    <openlmis-facility-program-select
+        is-supervised="vm.isSupervised"
+        program="vm.program"
+        facility="vm.facility"
+        module="'proof-of-delivery-manage'">
+    </openlmis-facility-program-select>
+    <input type="submit" value="{{'proofOfDeliveryManage.search' | message}}"/>
+</form>
 <section class="openlmis-table-container">
-    <form ng-submit="vm.loadOrders()">
-        <openlmis-facility-program-select
-            is-supervised="vm.isSupervised"
-            program="vm.program"
-            facility="vm.facility"
-            module="'proof-of-delivery-manage'">
-        </openlmis-facility-program-select>
-        <input type="submit" value="{{'proofOfDeliveryManage.search' | message}}"/>
-    </form>
     <table>
         <caption ng-if="vm.pods && !vm.pods.length">
             {{'proofOfDeliveryManage.noPodsFound' | message}}
