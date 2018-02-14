@@ -13,7 +13,7 @@
     <td></td>
     <td></td>
     <td>{{fulfillingLineItem.quantityShipped}}</td>
-    <td>{{fulfillingLineItem.lot.lotCode | lotCode}}</td>
+    <td>{{fulfillingLineItem.lot | lotCode}}</td>
     <td ng-if="proofOfDelivery.isInitiated()">
         <input positive-integer
             ng-model="fulfillingLineItem.quantityAccepted"
