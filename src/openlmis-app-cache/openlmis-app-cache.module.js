@@ -24,7 +24,8 @@
      *
      */
     angular.module('openlmis-app-cache', [
-
+        'openlmis-i18n',
+        'openlmis-modal'
     ]);
 
 })();

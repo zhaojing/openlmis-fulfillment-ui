@@ -22,7 +22,8 @@
      * @name openlmis-app-cache.openlmisAppCache
      *
      * @description
-     *
+     * Displays whether user has the up-to-date version of the UI. Provides a way to update it from
+     * the UI.
      */
     angular
         .module('openlmis-app-cache')

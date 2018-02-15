@@ -17,20 +17,55 @@
 
     'use strict';
 
+    /**
+     * @ngdoc controller
+     * @name openlmis-app-cache.controller:OpenlmisAppCacheController
+     * @description
+     * Controller for managing OpenlmisAppCacheComponent. Keeps track of whether UI is up to date
+     * or not.
+     */
     angular
         .module('openlmis-app-cache')
         .controller('OpenlmisAppCacheController', OpenlmisAppCacheController);
 
-    OpenlmisAppCacheController.$inject = ['$window'];
+    OpenlmisAppCacheController.$inject = ['$window', 'confirmService', '$rootScope'];
 
-    function OpenlmisAppCacheController($window) {
-        var vm = this;
+    function OpenlmisAppCacheController($window, confirmService, $rootScope) {
+        var vm = this,
+            appCache = $window.applicationCache;
 
-        vm.getAppCacheStatus = getAppCacheStatus;
+        vm.$onInit = onInit;
+        vm.updateCache = updateCache;
 
-        function getAppCacheStatus() {
-            return $window.applicationCache.status;
+        function onInit() {
+            appCache.addEventListener('updateready', setUpdateReady);
+            setUpdateReady();
         }
+
+        function updateCache() {
+            confirmService.confirm(
+                'openlmisAppCache.cacheUpdate.message',
+                'openlmisAppCache.cacheUpdate.label',
+                'openlmisAppCache.cacheUpdate.cancel',
+                'openlmisAppCache.cacheUpdate.title'
+            )
+            .then(function() {
+                appCache.swapCache();
+                $window.location.reload();
+            })
+            .catch(function(error) {
+                appCache.swapCache();
+                $rootScope.$on('openlmis-auth.logout', function() {
+                    $window.location.reload();
+                });
+            })
+            .finally(setUpdateReady);
+        }
+
+        function setUpdateReady() {
+            vm.updateReady = appCache.status === appCache.UPDATEREADY;
+        }
+
     }
 
 })();
