@@ -1,8 +1,0 @@
-{
-    "openlmisAppCache.yourSoftwareIsUpToDate": "Your software is up to date",
-    "openlmisAppCache.yourSoftwareIsNotUpToDate": "Your software is not up to date",
-    "openlmisAppCache.cacheUpdate.title": "Update Available",
-    "openlmisAppCache.cacheUpdate.message": "Update this software will:\n* Delete all local data\n* Require you to login after updating",
-    "openlmisAppCache.cacheUpdate.label": "Update Now",
-    "openlmisAppCache.cacheUpdate.cancel": "Update on Logout"
-}
