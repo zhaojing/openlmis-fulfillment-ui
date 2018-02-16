@@ -1,4 +1,5 @@
 {
+    "shipmentView.title": "Fulfilling Order-${orderCode}",
     "shipmentView.viewShipment": "View Shipment",
     "shipmentView.productCode": "Product Code",
     "shipmentView.order": "Order",
@@ -32,6 +33,6 @@
     "shipmentView.confirmShipment": "Confirm Shipment",
     "shipmentView.shipmentHasBeenConfirmed": "Shipment has been confirmed",
     "shipmentView.failedToConfirmShipment": "Failed to confirm shipment",
-    "shipmentView.confirmShipment.question": "Are you sure you want to confirm shipment?",
+    "shipmentView.confirmShipment.question": "By confirming this shipment, the order will be fulfilled and the ordering facility will be notified of pending shipment with an electronic Proof of Delivery (POD).",
     "shipmentView.shipmentHasErrors": "Shipment has errors"
 }

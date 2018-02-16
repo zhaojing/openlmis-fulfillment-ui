@@ -183,7 +183,7 @@
          * was successful or not. Will take user to the previous page on success.
          */
         function deleteShipment() {
-            confirmService.confirm(
+            confirmService.confirmDestroy(
                 'shipmentView.deleteDraftConfirmation',
                 'shipmentView.deleteDraft'
             )

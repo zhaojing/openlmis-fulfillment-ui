@@ -1,30 +1,24 @@
-<h2>{{'shipmentView.viewShipment' | message}}</h2>
-<aside class="order-cce-status">
-    <p>{{'shipmentView.cceStatus' | message}}</p>
-    <facility-cce-status facility="vm.order.requestingFacility"></facility-cce-status>
+<h2>{{'shipmentView.title' | message:{orderCode:vm.order.orderCode} }}</h2>
+<aside>
+    <div ng-if="vm.order.emergency" class="emergency">
+        {{'shipmentView.emergency' | message}}
+    </div>
+    <dl>
+        <dt>{{'shipmentView.status' | message}}</dt>
+        <dd>{{vm.order.status}}<dd>
+        <dt>{{'shipmentView.dateCreated' | message}}</dt>
+        <dd>{{vm.order.createdDate | openlmisDate}}<dd>
+        <dt>{{'shipmentView.program' | message}}</dt>
+        <dd>{{vm.order.program.name}}<dd>
+        <dt>{{'shipmentView.facility' | message}}</dt>
+        <dd>{{vm.order.requestingFacility.name}}<dd>
+        <dt>{{'shipmentView.cceStatus' | message}}</dt>
+        <dd>
+            <facility-cce-status facility="vm.order.requestingFacility"></facility-cce-status>
+        </dd>
+    </dl>
 </aside>
-<dl>
-    <dt>{{'shipmentView.order' | message}}</dt>
-    <dd>{{vm.order.orderCode}}<span class="emergency" ng-if="vm.order.emergency"> / {{'shipmentView.emergency' | message}}</span></dd>
-    <dt>{{'shipmentView.status' | message}}</dt>
-    <dd>{{vm.order.status}}<dd>
-    <dt>{{'shipmentView.facility' | message}}</dt>
-    <dd>{{vm.order.requestingFacility.name}}<dd>
-    <dt>{{'shipmentView.facilityCode' | message}}</dt>
-    <dd>{{vm.order.requestingFacility.code}}<dd>
-    <dt>{{'shipmentView.program' | message}}</dt>
-    <dd>{{vm.order.program.name}}<dd>
-    <dt>{{'shipmentView.type' | message}}</dt>
-    <dd>{{vm.order.requestingFacility.type.name}}<dd>
-    <dt>{{'shipmentView.dateCreated' | message}}</dt>
-    <dd>{{vm.order.createdDate | openlmisDate}}<dd>
-    <dt>{{'shipmentView.lastUpdated' | message}}</dt>
-    <dd>{{vm.order.lastUpdatedDate | openlmisDate}}<dd>
-    <dt>{{'shipmentView.lastUpdatedBy' | message}}</dt>
-    <dd>{{vm.order.lastUpdater.username}}<dd>
-</dl>
 <section class="openlmis-table-container">
-    <button ng-show="vm.isEditable()" ng-click="vm.saveAndPrint()" class="primary">{{'shipmentView.generatePickPackList' | message}}</button>
     <table>
         <thead>
         <tr>
@@ -69,4 +63,11 @@
         </tbody>
     </table>
 </section>
-<ng-include src="'shipment-view/shipment-view-toolbar.html'"></ng-include>
+<div ng-show="vm.isEditable()" class="openlmis-toolbar">
+    <div class="button-group primary">
+        <button class="primary" ng-click="vm.confirmShipment()">{{'shipmentView.confirmShipment' | message}}</button>
+        <button ng-show="vm.shipment.id" class="danger" ng-click="vm.deleteShipment()">{{'shipmentView.deleteDraft' | message}}</button>
+    </div>
+    <button ng-click="vm.saveShipment()">{{'shipmentView.saveDelete' | message}}</button>
+    <button ng-show="vm.isEditable()" ng-click="vm.saveAndPrint()" >{{'shipmentView.generatePickPackList' | message}}</button>
+</div>
