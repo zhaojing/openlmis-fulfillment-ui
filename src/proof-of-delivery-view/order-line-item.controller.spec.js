@@ -13,7 +13,7 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-ddescribe('OrderLineItemController', function() {
+describe('OrderLineItemController', function() {
 
     var vm, $controller, $scope, orderLineItem, proofOfDelivery, reasonAssignments,
         OrderLineItemDataBuilder, ValidReasonAssignmentDataBuilder, ProofOfDeliveryDataBuilder,
