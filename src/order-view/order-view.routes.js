@@ -58,6 +58,7 @@
                 orders: function(paginationService, orderRepository, $stateParams) {
 					return paginationService.registerUrl($stateParams, function(stateParams) {
                         if (stateParams.supplyingFacility) {
+                            stateParams.sort = 'createdDate,desc';
                             return orderRepository.search(stateParams);
                         }
                         return undefined;

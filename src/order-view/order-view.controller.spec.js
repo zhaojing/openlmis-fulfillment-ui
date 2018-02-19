@@ -173,6 +173,7 @@ describe('OrderViewController', function() {
                 requestingFacility: null,
                 periodStartDate: null,
                 periodEndDate: null,
+                sort: 'createdDate,desc'
             }, {reload: true});
         });
 
@@ -187,6 +188,7 @@ describe('OrderViewController', function() {
                 requestingFacility: null,
                 periodStartDate: null,
                 periodEndDate: null,
+                sort: 'createdDate,desc'
             }, {reload: true});
         });
 
@@ -201,6 +203,7 @@ describe('OrderViewController', function() {
                 requestingFacility: vm.requestingFacility.id,
                 periodStartDate: null,
                 periodEndDate: null,
+                sort: 'createdDate,desc'
             }, {reload: true});
         });
 
@@ -214,7 +217,8 @@ describe('OrderViewController', function() {
                 program: null,
                 requestingFacility: null,
                 periodStartDate: '2017-01-31',
-                periodEndDate: null
+                periodEndDate: null,
+                sort: 'createdDate,desc'
             }, {reload: true});
         });
 
@@ -228,7 +232,8 @@ describe('OrderViewController', function() {
                 program: null,
                 requestingFacility: null,
                 periodStartDate: null,
-                periodEndDate: '2017-01-31'
+                periodEndDate: '2017-01-31',
+                sort: 'createdDate,desc'
             }, {reload: true});
         });
 

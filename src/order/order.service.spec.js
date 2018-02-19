@@ -81,13 +81,13 @@ describe('orderService', function() {
             ]);
 
             $httpBackend.whenGET(
-                fulfillmentUrlFactory('/api/orders/search?supplyingFacility=' + someId)
+                fulfillmentUrlFactory('/api/orders?supplyingFacility=' + someId)
             ).respond(200, page);
         });
 
-        it('should call /api/orders/search endpoint', function() {
+        it('should call /api/orders endpoint', function() {
             $httpBackend.expectGET(
-                fulfillmentUrlFactory('/api/orders/search?supplyingFacility=' + someId)
+                fulfillmentUrlFactory('/api/orders?supplyingFacility=' + someId)
             );
 
             orderService.search(searchParams);

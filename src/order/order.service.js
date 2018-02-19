@@ -35,7 +35,7 @@
         var resource = $resource(fulfillmentUrlFactory('/api/orders'), {}, {
             search: {
                 method: 'GET',
-                url: fulfillmentUrlFactory('/api/orders/search')
+                url: fulfillmentUrlFactory('/api/orders')
             },
             get: {
                 method: 'GET',

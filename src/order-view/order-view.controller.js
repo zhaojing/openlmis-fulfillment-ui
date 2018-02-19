@@ -186,6 +186,7 @@
             stateParams.program = vm.program ? vm.program.id : null;
             stateParams.periodStartDate = vm.periodStartDate ? $filter('isoDate')(vm.periodStartDate) : null;
             stateParams.periodEndDate = vm.periodEndDate ? $filter('isoDate')(vm.periodEndDate) : null;
+            stateParams.sort = 'createdDate,desc';
 
             $state.go('openlmis.orders.view', stateParams, {
                 reload: true

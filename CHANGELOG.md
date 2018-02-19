@@ -18,6 +18,7 @@ Improvements:
 * [OLMIS-3955](https://openlmis.atlassian.net/browse/OLMIS-3955): Renamed PICKING order status to FULFILLING. Removed PICKED and IN_TRANSIT.
 * [OLMIS-3954](https://openlmis.atlassian.net/browse/OLMIS-3954): Added hiding Fulfill button for orders with status different than FULFILLING and ORDERED. Updated UI to create shipment draft after clicking Fulfill button.
 * [OLMIS-3993](https://openlmis.atlassian.net/browse/OLMIS-3993): Updated labels and columns on Manage PoDs screen.
+* [OLMIS-4165](https://openlmis.atlassian.net/browse/OLMIS-4165): Changed Order search endpoint and renamed its parameters.
 
 5.1.0 / 2017-11-09
 ==================
