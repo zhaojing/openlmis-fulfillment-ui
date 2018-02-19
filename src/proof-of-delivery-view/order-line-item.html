@@ -1,4 +1,4 @@
-<tr ng-if="fulfillingLineItems.length">
+<tr ng-if="vm.fulfillingLineItems.length">
     <td>{{orderLineItem.orderable.fullProductName}}</td>
     <td>{{orderLineItem.orderable.dispensable.dispensingUnit}}</td>
     <td>{{orderLineItem.packsToShip}}</td>
@@ -7,27 +7,37 @@
     <td></td>
     <td></td>
     <td></td>
+    <td></td>
 </tr>
-<tr ng-repeat="fulfillingLineItem in fulfillingLineItems">
+<tr ng-repeat="fulfillingLineItem in vm.fulfillingLineItems">
     <td></td>
     <td></td>
     <td></td>
     <td>{{fulfillingLineItem.quantityShipped}}</td>
     <td>{{fulfillingLineItem.lot | lotCode}}</td>
-    <td ng-if="proofOfDelivery.isInitiated()">
+    <td ng-if="vm.proofOfDelivery.isInitiated()">
         <input positive-integer
             ng-model="fulfillingLineItem.quantityAccepted"
             ng-change="fulfillingLineItem.updateQuantityRejected()"
             openlmis-invalid="{{fulfillingLineItem.validate().quantityAccepted | message}}"/>
     </td>
-    <td ng-if="!proofOfDelivery.isInitiated()">
+    <td ng-if="!vm.proofOfDelivery.isInitiated()">
         {{fulfillingLineItem.quantityAccepted}}
     </td>
     <td>{{fulfillingLineItem.quantityRejected}}</td>
-    <td ng-if="proofOfDelivery.isInitiated()">
+    <td ng-if="vm.proofOfDelivery.isInitiated()">
+        <select ng-model="fulfillingLineItem.rejectionReasonId"
+            ng-options="assignment.reason.id as assignment.reason.name for assignment in vm.reasonAssignments"
+            openlmis-invalid="{{fulfillingLineItem.validate().rejectionReasonId | message}}">
+        </select>
+    </td>
+    <td ng-if="!vm.proofOfDelivery.isInitiated()">
+        {{vm.getReasonName(fulfillingLineItem.rejectionReasonId)}}
+    </td>
+    <td ng-if="vm.proofOfDelivery.isInitiated()">
         <input type="text" ng-model="fulfillingLineItem.notes"/>
     </td>
-    <td ng-if="!proofOfDelivery.isInitiated()">
+    <td ng-if="!vm.proofOfDelivery.isInitiated()">
         {{fulfillingLineItem.notes}}
     </td>
 </tr>

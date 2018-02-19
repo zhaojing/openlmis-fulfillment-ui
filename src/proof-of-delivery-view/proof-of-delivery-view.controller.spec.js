@@ -13,9 +13,10 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-describe('PodViewController', function() {
+ddescribe('PodViewController', function() {
 
-    var vm, $controller, ProofOfDeliveryDataBuilder, OrderDataBuilder, proofOfDelivery, order;
+    var vm, $controller, ProofOfDeliveryDataBuilder, OrderDataBuilder, proofOfDelivery, order,
+        reasonAssignments, ValidReasonAssignmentDataBuilder;
 
     beforeEach(function() {
         module('proof-of-delivery-view');
@@ -24,14 +25,20 @@ describe('PodViewController', function() {
             $controller = $injector.get('$controller');
             OrderDataBuilder = $injector.get('OrderDataBuilder');
             ProofOfDeliveryDataBuilder = $injector.get('ProofOfDeliveryDataBuilder');
+            ValidReasonAssignmentDataBuilder = $injector.get('ValidReasonAssignmentDataBuilder');
         });
 
         proofOfDelivery = new ProofOfDeliveryDataBuilder().build();
         order = new OrderDataBuilder().build();
+        reasonAssignments = [
+            ValidReasonAssignmentDataBuilder.buildWithDebitReason(),
+            ValidReasonAssignmentDataBuilder.buildWithDebitReason()
+        ];
 
         vm = $controller('ProofOfDeliveryViewController', {
             proofOfDelivery: proofOfDelivery,
-            order: order
+            order: order,
+            reasonAssignments: reasonAssignments
         });
     });
 
@@ -45,6 +52,12 @@ describe('PodViewController', function() {
         vm.$onInit();
 
         expect(vm.order).toBe(order);
+    });
+
+    it('should expose reasonAssignments', function() {
+        vm.$onInit();
+
+        expect(vm.reasonAssignments).toBe(reasonAssignments);
     });
 
 });

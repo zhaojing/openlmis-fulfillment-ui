@@ -77,7 +77,7 @@
         }
 
         function withLineItems(lineItems) {
-            this.proofOfDeliveryLineItems = lineItems;
+            this.lineItems = lineItems;
             return this;
         }
 

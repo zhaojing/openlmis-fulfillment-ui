@@ -28,9 +28,9 @@
     .module('proof-of-delivery-view')
     .controller('ProofOfDeliveryViewController', ProofOfDeliveryViewController);
 
-    ProofOfDeliveryViewController.$inject = ['proofOfDelivery', 'order'];
+    ProofOfDeliveryViewController.$inject = ['proofOfDelivery', 'order', 'reasonAssignments'];
 
-    function ProofOfDeliveryViewController(proofOfDelivery, order) {
+    function ProofOfDeliveryViewController(proofOfDelivery, order, reasonAssignments) {
         var vm = this;
 
         vm.$onInit = onInit;
@@ -49,6 +49,7 @@
         function onInit() {
             vm.proofOfDelivery = proofOfDelivery;
             vm.order = order;
+            vm.reasonAssignments = reasonAssignments;
         }
     }
 

@@ -21,7 +21,7 @@
      * @module proof-of-delivery
      *
      * @description
-     *
+     * Provides Proof of Delivery domain class along with a repository.
      */
     angular.module('proof-of-delivery', [
         'ngResource',

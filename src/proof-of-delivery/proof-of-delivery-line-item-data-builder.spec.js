@@ -34,6 +34,7 @@
         ProofOfDeliveryLineItemDataBuilder.prototype.withQuantityRejected = withQuantityRejected;
         ProofOfDeliveryLineItemDataBuilder.prototype.withQuantityShipped = withQuantityShipped;
         ProofOfDeliveryLineItemDataBuilder.prototype.withOrderable = withOrderable;
+        ProofOfDeliveryLineItemDataBuilder.prototype.withRejectionReasonId = withRejectionReasonId;
         ProofOfDeliveryLineItemDataBuilder.prototype.withLot = withLot;
 
         return ProofOfDeliveryLineItemDataBuilder;
@@ -48,6 +49,7 @@
             this.lot = new ObjectReferenceDataBuilder().build();
             this.quantityAccepted = 50 + instanceNumber;
             this.quantityRejected = 50;
+            this.rejectionReasonId = 'rejection-reason-id-' + instanceNumber;
             this.notes = 'Proof of Delivery line item' + instanceNumber + ' notes.';
             this.quantityShipped = this.quantityAccepted + this.quantityRejected;
         }
@@ -64,6 +66,7 @@
                 quantityAccepted: this.quantityAccepted,
                 quantityRejected: this.quantityRejected,
                 quantityShipped: this.quantityShipped,
+                rejectionReasonId: this.rejectionReasonId,
                 notes: this.notes,
             }
         }
@@ -85,6 +88,11 @@
 
         function withOrderable(orderable) {
             this.orderable = orderable
+            return this;
+        }
+
+        function withRejectionReasonId(rejectionReasonId) {
+            this.rejectionReasonId = rejectionReasonId
             return this;
         }
 

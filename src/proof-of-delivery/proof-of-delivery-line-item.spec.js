@@ -13,7 +13,7 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-describe('ProofOfDeliveryLineItem', function() {
+ddescribe('ProofOfDeliveryLineItem', function() {
 
     var ProofOfDeliveryLineItem, proofOfDeliveryLineItem, ProofOfDeliveryLineItemDataBuilder;
 
@@ -165,6 +165,31 @@ describe('ProofOfDeliveryLineItem', function() {
 
             expect(proofOfDeliveryLineItem.validate()).toEqual({
                 quantityAccepted: 'proofOfDelivery.canNotAcceptMoreThanShipped'
+            });
+        });
+
+        it('should return error if rejecting without reason', function() {
+            proofOfDeliveryLineItem.quantityRejected = 5;
+            proofOfDeliveryLineItem.rejectionReasonId = undefined;
+
+            expect(proofOfDeliveryLineItem.validate()).toEqual({
+                rejectionReasonId: 'proofOfDelivery.required'
+            });
+        });
+
+        it('should not return error if not rejecting and not specifying a reason', function() {
+            proofOfDeliveryLineItem.quantityRejected = 0;
+            proofOfDeliveryLineItem.rejectionReasonId = undefined;
+
+            expect(proofOfDeliveryLineItem.validate()).toBeUndefined();
+        });
+
+        it('should require rejection reason to be undefined if not rejecting anything', function() {
+            proofOfDeliveryLineItem.quantityRejected = 0;
+            proofOfDeliveryLineItem.rejectionReasonId = 'rejection-reason-id';
+
+            expect(proofOfDeliveryLineItem.validate()).toEqual({
+                rejectionReasonId: 'proofOfDelivery.canNotSpecifyReasonForRejectionIfNotRejectingAnything'
             });
         });
 

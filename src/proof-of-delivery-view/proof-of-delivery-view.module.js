@@ -30,7 +30,8 @@
         'openlmis-pagination',
         'order',
         'ui.router',
-        'shipment'
+        'shipment',
+        'stock-valid-reason'
     ]);
 
 })();

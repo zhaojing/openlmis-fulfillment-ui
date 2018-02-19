@@ -1,5 +1,6 @@
 {
     "proofOfDelivery.positive": "This field must be a non-negative number",
     "proofOfDelivery.required": "This field is required",
-    "proofOfDelivery.canNotAcceptMoreThanShipped": "You can't accept more stock than was shipped"
+    "proofOfDelivery.canNotAcceptMoreThanShipped": "You can't accept more stock than was shipped",
+    "proofOfDelivery.canNotSpecifyReasonForRejectionIfNotRejectingAnything": "You can't specify reaons for rejections if not rejecting anything"
 }

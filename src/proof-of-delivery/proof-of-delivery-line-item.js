@@ -100,6 +100,15 @@
                 errors.quantityAccepted = 'proofOfDelivery.canNotAcceptMoreThanShipped';
             }
 
+            if (this.quantityRejected && !this.rejectionReasonId) {
+                errors.rejectionReasonId = 'proofOfDelivery.required';
+            }
+
+            if (!this.quantityRejected && this.rejectionReasonId) {
+                errors.rejectionReasonId =
+                    'proofOfDelivery.canNotSpecifyReasonForRejectionIfNotRejectingAnything';
+            }
+
             return angular.equals(errors, {}) ? undefined : errors;
         }
     }

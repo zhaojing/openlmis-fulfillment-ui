@@ -22,7 +22,14 @@
      * @name proof-of-delivery-view.orderLineItem
      *
      * @description
+     * Displays row for Order Line Item and all fulfilling Proof of Delivery Line Items.
      *
+     * @example
+     * '''
+     * <tbody order-line-item="lineItem" proof-of-delivery="proofOfDelivery"
+     *  reasonAssignments="reasonAssignments">
+     * </tbody>
+     * '''
      */
     angular
         .module('proof-of-delivery-view')
@@ -33,25 +40,17 @@
     function directive() {
         var directive = {
             restrict: 'A',
+            controller: 'OrderLineItemController',
+            controllerAs: 'vm',
             scope: {
                 orderLineItem: '=',
                 proofOfDelivery: '=',
-                shipment: '='
+                reasonAssignments: '='
             },
             link: link,
             templateUrl: 'proof-of-delivery-view/order-line-item.html'
         };
         return directive;
-
-        function link(scope, element, attrs) {
-            var orderLineItem = scope.orderLineItem;
-
-            var fulfillingLineItems = scope.proofOfDelivery.lineItems.filter(function(proofOfDeliveryLineItem) {
-                return proofOfDeliveryLineItem.orderable.id === orderLineItem.orderable.id;
-            });
-
-            scope.fulfillingLineItems = fulfillingLineItems;
-        }
     }
 
 })();

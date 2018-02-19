@@ -11,10 +11,13 @@
                     <th>{{'proofOfDeliveryView.lotCode' | message}}</th>
                     <th>{{'proofOfDeliveryView.quantityAccepted' | message}}</th>
                     <th>{{'proofOfDeliveryView.quantityReturned' | message}}</th>
+                    <th>{{'proofOfDeliveryView.rejectionReason' | message}}</th>
                     <th>{{'proofOfDeliveryView.notes' | message}}</th>
                 </tr>
             </thead>
-            <tbody order-line-item="lineItem" proof-of-delivery="vm.proofOfDelivery" ng-repeat="lineItem in vm.order.orderLineItems | orderBy : 'orderable.fullProductName'">
+            <tbody order-line-item="lineItem" proof-of-delivery="vm.proofOfDelivery"
+                reasonAssignments="vm.reasonAssignments"
+                ng-repeat="lineItem in vm.order.orderLineItems | orderBy : 'orderable.fullProductName'">
             </tbody>
         </table>
     </div>

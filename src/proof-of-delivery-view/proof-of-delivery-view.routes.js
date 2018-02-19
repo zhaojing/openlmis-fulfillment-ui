@@ -39,6 +39,11 @@
                         },
                         order: function(proofOfDelivery, orderService) {
                             return orderService.get(proofOfDelivery.shipment.order.id);
+                        },
+                        reasonAssignments: function(validReasonService, order) {
+                            return validReasonService.search(
+                                order.program.id, order.facility.type.id, 'DEBIT'
+                            );
                         }
                     }
                 }
