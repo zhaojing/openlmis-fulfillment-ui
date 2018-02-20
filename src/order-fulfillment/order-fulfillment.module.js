@@ -24,6 +24,7 @@
      */
     angular.module('order-fulfillment', [
         'openlmis-date',
+        'openlmis-facility',
         'openlmis-i18n',
         'openlmis-pagination',
         'openlmis-table',

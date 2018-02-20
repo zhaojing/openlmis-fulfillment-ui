@@ -31,7 +31,7 @@
     Order.$inject = ['ORDER_STATUS'];
 
     function Order(ORDER_STATUS) {
-        Order.prototype.isFulfillmentStarted = isFulfillmentStarted;
+        Order.prototype.isFulfilling = isFulfilling;
 
         return Order;
 
@@ -42,16 +42,16 @@
         /**
          * @ngdoc method
          * @methodOf order.Order
-         * @name isFulfillmentStarted
+         * @name isFulfilling
          *
          * @description
-         * Checks whether an order fulfillment has been started.
+         * Checks whether an order has FULFILLING status.
          *
          * @param  {Object} order   the order status
-         * @return {Boolean}        true if status is FULFILLING
+         * @return {boolean}        true if status is FULFILLING
          */
-        function isFulfillmentStarted() {
-            return this.status == ORDER_STATUS.FULFILLING;
+        function isFulfilling() {
+            return this.status === ORDER_STATUS.FULFILLING;
         }
     }
 

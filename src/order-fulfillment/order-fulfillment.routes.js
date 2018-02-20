@@ -50,10 +50,10 @@
                     return programService.getAll();
                 },
                 orders: function(paginationService, orderRepository, $stateParams) {
-					return paginationService.registerUrl($stateParams, function(stateParams) {
+                    return paginationService.registerUrl($stateParams, function(stateParams) {
                         return orderRepository.search(stateParams);
-					});
-				}
+                    });
+                }
             }
         });
 

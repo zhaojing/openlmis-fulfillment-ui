@@ -117,8 +117,8 @@
             vm.orders = orders;
 
             if ($stateParams.requestingFacilityId) {
-                vm.orderingFacility = $filter('filter')(vm.orderingFacilities, {
-                    id: $stateParams.requestingFacilityId
+                vm.orderingFacility = vm.orderingFacilities.filter(function(facility) {
+                    return facility.id == $stateParams.requestingFacilityId;
                 })[0];
             }
 
@@ -127,8 +127,8 @@
             }
 
             if ($stateParams.programId) {
-                vm.program = $filter('filter')(vm.programs, {
-                    id: $stateParams.programId
+                vm.program = vm.programs.filter(function(program) {
+                    return program.id == $stateParams.programId;
                 })[0];
             }
         }
@@ -140,8 +140,6 @@
          *
          * @description
          * Retrieves the list of orders matching the selected status, ordering facility and program.
-         *
-         * @return {Array} the list of matching orders
          */
         function loadOrders() {
             var stateParams = angular.copy($stateParams);

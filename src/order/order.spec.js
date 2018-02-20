@@ -60,7 +60,7 @@ describe('Order', function() {
 
             order = new Order(orderResponse);
 
-            expect(order.isFulfillmentStarted())
+            expect(order.isFulfilling())
                 .toEqual(true);
         });
 
@@ -71,7 +71,7 @@ describe('Order', function() {
 
             order = new Order(orderResponse);
 
-            expect(order.isFulfillmentStarted())
+            expect(order.isFulfilling())
                 .toEqual(false);
         });
     });
