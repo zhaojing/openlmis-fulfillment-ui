@@ -24,6 +24,7 @@
      * Responsible for view POD screen.
      */
     angular.module('proof-of-delivery-view', [
+        'openlmis-i18n',
         'fulfillment',
         'proof-of-delivery',
         'openlmis-date',
@@ -31,6 +32,7 @@
         'order',
         'ui.router',
         'shipment',
+        'stock-constants',
         'stock-valid-reason'
     ]);
 

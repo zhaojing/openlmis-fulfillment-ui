@@ -13,6 +13,7 @@ New functionality added in a backwards-compatible manner:
 * [OLMIS-529](https://openlmis.atlassian.net/browse/OLMIS-529): Show lots in recommended sort order on fulfill view.
 * [OLMIS-685](https://openlmis.atlassian.net/browse/OLMIS-685): Added the ability to provide rejection reason for stock.
 * [OLMIS-3826](https://openlmis.atlassian.net/browse/OLMIS-3826): Added Fulfill Orders screen.
+* [OLMIS-4014](https://openlmis.atlassian.net/browse/OLMIS-4014): Added vvm status column on POD view screen.
 
 Improvements:
 * [OLMIS-3876](https://openlmis.atlassian.net/browse/OLMIS-3876): Split navigation and filter forms in manage POD and orders pages

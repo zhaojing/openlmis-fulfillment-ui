@@ -16,7 +16,7 @@
 describe('PodViewController', function() {
 
     var vm, $controller, ProofOfDeliveryDataBuilder, OrderDataBuilder, proofOfDelivery, order,
-        reasonAssignments, ValidReasonAssignmentDataBuilder;
+        reasonAssignments, ValidReasonAssignmentDataBuilder, VVM_STATUS, messageService;
 
     beforeEach(function() {
         module('proof-of-delivery-view');
@@ -26,6 +26,8 @@ describe('PodViewController', function() {
             OrderDataBuilder = $injector.get('OrderDataBuilder');
             ProofOfDeliveryDataBuilder = $injector.get('ProofOfDeliveryDataBuilder');
             ValidReasonAssignmentDataBuilder = $injector.get('ValidReasonAssignmentDataBuilder');
+            VVM_STATUS = $injector.get('VVM_STATUS');
+            messageService = $injector.get('messageService');
         });
 
         proofOfDelivery = new ProofOfDeliveryDataBuilder().build();
@@ -34,6 +36,10 @@ describe('PodViewController', function() {
             ValidReasonAssignmentDataBuilder.buildWithDebitReason(),
             ValidReasonAssignmentDataBuilder.buildWithDebitReason()
         ];
+
+        spyOn(messageService, 'get').andCallFake(function(messageKey) {
+            return messageKey;
+        });
 
         vm = $controller('ProofOfDeliveryViewController', {
             proofOfDelivery: proofOfDelivery,
@@ -60,4 +66,11 @@ describe('PodViewController', function() {
         expect(vm.reasonAssignments).toBe(reasonAssignments);
     });
 
+    describe('getStatusDisplay', function() {
+
+        it('should get display for vvm status', function() {
+            expect(vm.getStatusDisplay(VVM_STATUS.STAGE_1)).toBe('stockConstants.stage1');
+            expect(vm.getStatusDisplay(VVM_STATUS.STAGE_2)).toBe('stockConstants.stage2');
+        });
+    });
 });

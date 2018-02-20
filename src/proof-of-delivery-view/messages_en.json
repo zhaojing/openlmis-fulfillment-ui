@@ -30,5 +30,7 @@
     "proofOfDeliveryView.viewProofOfDelivery": "View Proof of Delivery",
     "proofOfDeliveryView.lotCode": "Lot Code",
     "proofOfDeliveryView.orderStatus": "Order Status",
-    "proofOfDeliveryView.rejectionReason": "Rejection Reason"
+    "proofOfDeliveryView.rejectionReason": "Rejection Reason",
+    "proofOfDeliveryView.selectStatus": "Select status",
+    "proofOfDeliveryView.vvmStatus": "Vvm status"
 }
