@@ -84,7 +84,7 @@ describe('ProofOfDeliveryRepositoryImpl', function() {
 
         it('should resolve to combined server responses if requests were successful', function() {
             $httpBackend
-            .expectGET(fulfillmentUrlFactory('/api/proofOfDeliveries/proof-of-delivery-id'))
+            .expectGET(fulfillmentUrlFactory('/api/proofsOfDelivery/proof-of-delivery-id'))
             .respond(200, angular.copy(proofOfDeliveryJson));
 
             shipmentRepositoryImplMock.get.andReturn($q.resolve(angular.copy(shipmentJson)));
@@ -132,7 +132,7 @@ describe('ProofOfDeliveryRepositoryImpl', function() {
 
         it('should reject if shipment repository rejects', function() {
             $httpBackend
-            .expectGET(fulfillmentUrlFactory('/api/proofOfDeliveries/proof-of-delivery-id'))
+            .expectGET(fulfillmentUrlFactory('/api/proofsOfDelivery/proof-of-delivery-id'))
             .respond(200, angular.copy(proofOfDeliveryJson));
 
             shipmentRepositoryImplMock.get.andReturn($q.reject());
@@ -151,7 +151,7 @@ describe('ProofOfDeliveryRepositoryImpl', function() {
 
         it('should reject if request was unsuccessful', function() {
             $httpBackend
-            .expectGET(fulfillmentUrlFactory('/api/proofOfDeliveries/proof-of-delivery-id'))
+            .expectGET(fulfillmentUrlFactory('/api/proofsOfDelivery/proof-of-delivery-id'))
             .respond(400);
 
             var rejected;
@@ -166,7 +166,7 @@ describe('ProofOfDeliveryRepositoryImpl', function() {
 
         it('should reject if lot repository rejectes', function() {
             $httpBackend
-            .expectGET(fulfillmentUrlFactory('/api/proofOfDeliveries/proof-of-delivery-id'))
+            .expectGET(fulfillmentUrlFactory('/api/proofsOfDelivery/proof-of-delivery-id'))
             .respond(200, angular.copy(proofOfDeliveryJson));
 
             shipmentRepositoryImplMock.get.andReturn($q.resolve(angular.copy(shipmentJson)));
@@ -190,7 +190,7 @@ describe('ProofOfDeliveryRepositoryImpl', function() {
 
         it('should resolve to server response if request was successful', function() {
             $httpBackend
-            .expectPUT(fulfillmentUrlFactory('/api/proofOfDeliveries/' + proofOfDeliveryJson.id), proofOfDeliveryJson)
+            .expectPUT(fulfillmentUrlFactory('/api/proofsOfDelivery/' + proofOfDeliveryJson.id), proofOfDeliveryJson)
             .respond(200, proofOfDeliveryJson);
 
             var result;
@@ -205,7 +205,7 @@ describe('ProofOfDeliveryRepositoryImpl', function() {
 
         it('should reject if request was unsuccessful', function() {
             $httpBackend
-            .expectPUT(fulfillmentUrlFactory('/api/proofOfDeliveries/' + proofOfDeliveryJson.id), proofOfDeliveryJson)
+            .expectPUT(fulfillmentUrlFactory('/api/proofsOfDelivery/' + proofOfDeliveryJson.id), proofOfDeliveryJson)
             .respond(400);
 
             var rejected;

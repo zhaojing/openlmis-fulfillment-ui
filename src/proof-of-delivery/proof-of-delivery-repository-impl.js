@@ -60,7 +60,7 @@
                 referencedataUrlFactory('/api/lots')
             );
 
-            this.resource = $resource(fulfillmentUrlFactory('/api/proofOfDeliveries/:id'), {}, {
+            this.resource = $resource(fulfillmentUrlFactory('/api/proofsOfDelivery/:id'), {}, {
                 update: {
                     method: 'PUT'
                 }
