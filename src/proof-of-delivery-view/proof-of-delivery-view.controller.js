@@ -34,7 +34,7 @@
         var vm = this;
 
         vm.$onInit = onInit;
-        vm.getStatusDisplay = getStatusDisplay;
+        vm.getStatusDisplay = VVM_STATUS.$getDisplayName;
 
         /**
          * @ngdoc property
@@ -52,21 +52,5 @@
             vm.order = order;
             vm.reasonAssignments = reasonAssignments;
         }
-
-        /**
-         * @ngdoc method
-         * @methodOf proof-of-delivery-view.controller:PodViewController
-         * @name getStatusDisplay
-         *
-         * @description
-         * Returns VVM status display.
-         *
-         * @param  {String} status VVM status
-         * @return {String}        VVM status display name
-         */
-        function getStatusDisplay(status) {
-            return messageService.get(VVM_STATUS.$getDisplayName(status));
-        };
     }
-
 }());

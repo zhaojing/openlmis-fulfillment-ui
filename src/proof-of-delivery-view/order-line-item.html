@@ -25,12 +25,12 @@
         {{fulfillingLineItem.quantityAccepted}}
     </td>
     <td>
-        <select ng-if="fulfillingLineItem.useVvm === 'true' && vm.proofOfDelivery.isInitiated()"
+        <select ng-if="fulfillingLineItem.useVvm && vm.proofOfDelivery.isInitiated()"
             ng-model="fulfillingLineItem.vvmStatus"
             ng-options="status as vm.getStatusDisplay(status) for status in vm.vvmStatuses"
             placeholder="{{'proofOfDeliveryView.selectStatus' | message}}">
         </select>
-        <div ng-if="fulfillingLineItem.useVvm === 'true' && !vm.proofOfDelivery.isInitiated()">
+        <div ng-if="fulfillingLineItem.useVvm && !vm.proofOfDelivery.isInitiated()">
             {{fulfillingLineItem.vvmStatus}}
         </div>
     </td>
