@@ -47,7 +47,6 @@
                 proofOfDelivery: '=',
                 reasonAssignments: '='
             },
-            link: link,
             templateUrl: 'proof-of-delivery-view/order-line-item.html'
         };
         return directive;

@@ -16,7 +16,7 @@
                 </tr>
             </thead>
             <tbody order-line-item="lineItem" proof-of-delivery="vm.proofOfDelivery"
-                reasonAssignments="vm.reasonAssignments"
+                reason-assignments="vm.reasonAssignments"
                 ng-repeat="lineItem in vm.order.orderLineItems | orderBy : 'orderable.fullProductName'">
             </tbody>
         </table>
