@@ -65,9 +65,6 @@
                         openlmis-download="{{vm.getDownloadUrl(order)}}">
                         {{'orderView.download'|message}}
                     </button>
-                    <button ng-if="order.canBeFulfilled()" ui-sref="openlmis.orders.shipmentView({id: order.id})">
-                        {{'orderView.fulfill' | message}}
-                    </button>
                 </td>
             </tr>
         </tbody>

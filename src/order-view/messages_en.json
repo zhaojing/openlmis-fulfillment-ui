@@ -12,7 +12,6 @@
     "orderView.period": "Period",
     "orderView.print": "Print",
     "orderView.program": "Program",
-    "orderView.program": "Program",
     "orderView.requestingFacility": "Requesting facility",
     "orderView.search": "Search",
     "orderView.startDate": "Start date",
@@ -20,6 +19,5 @@
     "orderView.supplyingFacility": "Supplying facility",
     "orderView.viewOrders": "View Orders",
     "orderView.periodStart": "Processing period start",
-    "orderView.periodEnd": "Processing period end",
-    "orderView.fulfill": "Fulfill"
+    "orderView.periodEnd": "Processing period end"
 }

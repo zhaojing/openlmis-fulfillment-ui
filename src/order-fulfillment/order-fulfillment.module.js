@@ -18,16 +18,17 @@
     'use strict';
 
     /**
-     * @module order-view
+     * @module order-fulfillment
      *
-     * Provides View Orders pages.
+     * Provides Order Fulfillment pages.
      */
-    angular.module('order-view', [
+    angular.module('order-fulfillment', [
         'openlmis-date',
         'openlmis-i18n',
         'openlmis-pagination',
         'openlmis-table',
         'order',
+        'shipment-view',
         'ui.router'
     ]);
 

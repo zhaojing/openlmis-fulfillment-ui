@@ -12,6 +12,7 @@ New functionality added in a backwards-compatible manner:
 * [OLMIS-1611](https://openlmis.atlassian.net/browse/OLMIS-1611): Added confirm shipment button.
 * [OLMIS-529](https://openlmis.atlassian.net/browse/OLMIS-529): Show lots in recommended sort order on fulfill view.
 * [OLMIS-685](https://openlmis.atlassian.net/browse/OLMIS-685): Added the ability to provide rejection reason for stock.
+* [OLMIS-3826](https://openlmis.atlassian.net/browse/OLMIS-3826): Added Fulfill Orders screen.
 
 Improvements:
 * [OLMIS-3876](https://openlmis.atlassian.net/browse/OLMIS-3876): Split navigation and filter forms in manage POD and orders pages

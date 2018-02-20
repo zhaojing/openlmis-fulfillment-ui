@@ -51,7 +51,7 @@ describe('Order', function() {
 
     });
 
-    describe('canBeFulfilled', function() {
+    describe('isFulfillmentStarted', function() {
 
         it('should return true if status is FULFILLING', function () {
             orderResponse = new BasicOrderResponseDataBuilder()
@@ -60,29 +60,18 @@ describe('Order', function() {
 
             order = new Order(orderResponse);
 
-            expect(order.canBeFulfilled())
+            expect(order.isFulfillmentStarted())
                 .toEqual(true);
         });
 
-        it('should return true if status is ORDERED', function () {
-            orderResponse = new BasicOrderResponseDataBuilder()
-                .withStatus(ORDER_STATUS.ORDERED)
-                .build();
-
-            order = new Order(orderResponse);
-
-            expect(order.canBeFulfilled())
-                .toEqual(true);
-        });
-
-        it('should return false if status is different than ORDERED and FULFILLING', function () {
+        it('should return false if status is different than FULFILLING', function () {
             orderResponse = new BasicOrderResponseDataBuilder()
                 .withStatus(ORDER_STATUS.IN_ROUTE)
                 .build();
 
             order = new Order(orderResponse);
 
-            expect(order.canBeFulfilled())
+            expect(order.isFulfillmentStarted())
                 .toEqual(false);
         });
     });
