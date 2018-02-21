@@ -128,21 +128,21 @@
 
             vm.orders = orders;
 
-            if ($stateParams.supplyingFacility) {
+            if ($stateParams.supplyingFacilityId) {
                 vm.supplyingFacility = $filter('filter')(vm.supplyingFacilities, {
-                    id: $stateParams.supplyingFacility
+                    id: $stateParams.supplyingFacilityId
                 })[0];
             }
 
-            if ($stateParams.requestingFacility) {
+            if ($stateParams.requestingFacilityId) {
                 vm.requestingFacility = $filter('filter')(vm.requestingFacilities, {
-                    id: $stateParams.requestingFacility
+                    id: $stateParams.requestingFacilityId
                 })[0];
             }
 
-            if ($stateParams.program) {
+            if ($stateParams.programId) {
                 vm.program = $filter('filter')(vm.programs, {
-                    id: $stateParams.program
+                    id: $stateParams.programId
                 })[0];
             }
 
@@ -181,9 +181,9 @@
         function loadOrders() {
             var stateParams = angular.copy($stateParams);
 
-            stateParams.supplyingFacility = vm.supplyingFacility ? vm.supplyingFacility.id : null;
-            stateParams.requestingFacility = vm.requestingFacility ? vm.requestingFacility.id : null;
-            stateParams.program = vm.program ? vm.program.id : null;
+            stateParams.supplyingFacilityId = vm.supplyingFacility ? vm.supplyingFacility.id : null;
+            stateParams.requestingFacilityId = vm.requestingFacility ? vm.requestingFacility.id : null;
+            stateParams.programId = vm.program ? vm.program.id : null;
             stateParams.periodStartDate = vm.periodStartDate ? $filter('isoDate')(vm.periodStartDate) : null;
             stateParams.periodEndDate = vm.periodEndDate ? $filter('isoDate')(vm.periodEndDate) : null;
             stateParams.sort = 'createdDate,desc';
@@ -231,8 +231,8 @@
         }
 
         function hasSupplyingFacilityChange(newValue, oldValue) {
-            return newValue.id != $stateParams.supplyingFacility
-                || (newValue.id == $stateParams.supplyingFacility && oldValue && oldValue.id != $stateParams.supplyingFacility);
+            return newValue.id != $stateParams.supplyingFacilityId
+                || (newValue.id == $stateParams.supplyingFacilityId && oldValue && oldValue.id != $stateParams.supplyingFacilityId);
         }
 
     }

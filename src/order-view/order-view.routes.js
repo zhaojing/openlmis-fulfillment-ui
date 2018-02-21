@@ -31,7 +31,7 @@
             label: 'orderView.viewOrders',
             showInNavigation: true,
             templateUrl: 'order-view/order-view.html',
-            url: '/view?supplyingFacility&requestingFacility&program&periodStartDate&periodEndDate&page&size',
+            url: '/view?supplyingFacilityId&requestingFacilityId&programId&periodStartDate&periodEndDate&page&size',
             accessRights: [
                 FULFILLMENT_RIGHTS.PODS_MANAGE,
                 FULFILLMENT_RIGHTS.ORDERS_VIEW
@@ -44,9 +44,9 @@
                     );
                 },
                 requestingFacilities: function(requestingFacilityFactory, $stateParams) {
-                    if ($stateParams.supplyingFacility) {
+                    if ($stateParams.supplyingFacilityId) {
                         return requestingFacilityFactory.loadRequestingFacilities(
-                        $stateParams.supplyingFacility).then(function(requestingFacilities) {
+                        $stateParams.supplyingFacilityId).then(function(requestingFacilities) {
                             return requestingFacilities;
                         });
                     }
@@ -57,7 +57,7 @@
                 },
                 orders: function(paginationService, orderRepository, $stateParams) {
 					return paginationService.registerUrl($stateParams, function(stateParams) {
-                        if (stateParams.supplyingFacility) {
+                        if (stateParams.supplyingFacilityId) {
                             stateParams.sort = 'createdDate,desc';
                             return orderRepository.search(stateParams);
                         }

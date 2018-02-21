@@ -168,9 +168,9 @@ describe('OrderViewController', function() {
             vm.loadOrders();
 
             expect($state.go).toHaveBeenCalledWith('openlmis.orders.view', {
-                supplyingFacility: null,
-                program: vm.program.id,
-                requestingFacility: null,
+                supplyingFacilityId: null,
+                programId: vm.program.id,
+                requestingFacilityId: null,
                 periodStartDate: null,
                 periodEndDate: null,
                 sort: 'createdDate,desc'
@@ -183,9 +183,9 @@ describe('OrderViewController', function() {
             vm.loadOrders();
 
             expect($state.go).toHaveBeenCalledWith('openlmis.orders.view', {
-                supplyingFacility: vm.supplyingFacility.id,
-                program: null,
-                requestingFacility: null,
+                supplyingFacilityId: vm.supplyingFacility.id,
+                programId: null,
+                requestingFacilityId: null,
                 periodStartDate: null,
                 periodEndDate: null,
                 sort: 'createdDate,desc'
@@ -198,9 +198,9 @@ describe('OrderViewController', function() {
             vm.loadOrders();
 
             expect($state.go).toHaveBeenCalledWith('openlmis.orders.view', {
-                supplyingFacility: null,
-                program: null,
-                requestingFacility: vm.requestingFacility.id,
+                supplyingFacilityId: null,
+                programId: null,
+                requestingFacilityId: vm.requestingFacility.id,
                 periodStartDate: null,
                 periodEndDate: null,
                 sort: 'createdDate,desc'
@@ -213,9 +213,9 @@ describe('OrderViewController', function() {
             vm.loadOrders();
 
             expect($state.go).toHaveBeenCalledWith('openlmis.orders.view', {
-                supplyingFacility: null,
-                program: null,
-                requestingFacility: null,
+                supplyingFacilityId: null,
+                programId: null,
+                requestingFacilityId: null,
                 periodStartDate: '2017-01-31',
                 periodEndDate: null,
                 sort: 'createdDate,desc'
@@ -228,9 +228,9 @@ describe('OrderViewController', function() {
             vm.loadOrders();
 
             expect($state.go).toHaveBeenCalledWith('openlmis.orders.view', {
-                supplyingFacility: null,
-                program: null,
-                requestingFacility: null,
+                supplyingFacilityId: null,
+                programId: null,
+                requestingFacilityId: null,
                 periodStartDate: null,
                 periodEndDate: '2017-01-31',
                 sort: 'createdDate,desc'

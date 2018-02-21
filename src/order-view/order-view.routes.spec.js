@@ -26,7 +26,7 @@ describe('openlmis.orders.view state', function() {
     });
 
     it('should fetch a list of requesting facilities', function() {
-        $stateParams.supplyingFacility = 'supplying-facility';
+        $stateParams.supplyingFacilityId = 'supplying-facility';
 
         var result;
 
