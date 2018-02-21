@@ -28,7 +28,7 @@
         $stateProvider.state('openlmis.orders.fulfillment', {
             controller: 'OrderFulfillmentController',
             controllerAs: 'vm',
-            label: 'orderFulfillment.fulfillment',
+            label: 'orderFulfillment.fulfillOrders',
             showInNavigation: true,
             templateUrl: 'order-fulfillment/order-fulfillment.html',
             url: '/fulfillment?requestingFacilityId&programId&status',
