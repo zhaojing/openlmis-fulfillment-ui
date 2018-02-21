@@ -35,7 +35,7 @@
     function service(shipmentService, OpenLMISRepositoryImpl, fulfillmentUrlFactory) {
 
         var proofOfDeliveryRepositoryImpl = new OpenLMISRepositoryImpl(
-            fulfillmentUrlFactory('/api/proofOfDeliveries')
+            fulfillmentUrlFactory('/api/proofsOfDelivery')
         );
 
         return {
