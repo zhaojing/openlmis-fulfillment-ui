@@ -107,7 +107,7 @@
                 $scope.proofOfDelivery.lineItems,
                 vm.orderLineItem.orderable
             );
-            vm.showVvmColumn = vm.proofOfDelivery.checkIfProductsUseVvmStatus();
+            vm.showVvmColumn = vm.proofOfDelivery.hasProductsUseVvmStatus();
         }
 
         /**

@@ -36,6 +36,7 @@
         ProofOfDeliveryLineItemDataBuilder.prototype.withOrderable = withOrderable;
         ProofOfDeliveryLineItemDataBuilder.prototype.withRejectionReasonId = withRejectionReasonId;
         ProofOfDeliveryLineItemDataBuilder.prototype.withLot = withLot;
+        ProofOfDeliveryLineItemDataBuilder.prototype.withUseVvm = withUseVvm;
 
         return ProofOfDeliveryLineItemDataBuilder;
 
@@ -52,6 +53,7 @@
             this.rejectionReasonId = 'rejection-reason-id-' + instanceNumber;
             this.notes = 'Proof of Delivery line item' + instanceNumber + ' notes.';
             this.quantityShipped = this.quantityAccepted + this.quantityRejected;
+            this.useVvm = false;
         }
 
         function build() {
@@ -68,6 +70,7 @@
                 quantityShipped: this.quantityShipped,
                 rejectionReasonId: this.rejectionReasonId,
                 notes: this.notes,
+                useVvm: this.useVvm
             }
         }
 
@@ -101,6 +104,9 @@
             return this;
         }
 
+        function withUseVvm(useVvm) {
+            this.useVvm = useVvm;
+            return this;
+        }
     }
-
 })();

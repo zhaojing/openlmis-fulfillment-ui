@@ -36,7 +36,7 @@
         ProofOfDelivery.prototype.save = save;
         ProofOfDelivery.prototype.confirm = confirm;
         ProofOfDelivery.prototype.isInitiated = isInitiated;
-        ProofOfDelivery.prototype.checkIfProductsUseVvmStatus = checkIfProductsUseVvmStatus;
+        ProofOfDelivery.prototype.hasProductsUseVvmStatus = hasProductsUseVvmStatus;
 
         return ProofOfDelivery;
 
@@ -119,14 +119,14 @@
         /**
          * @ngdoc methodOf
          * @methodOf proof-of-delivery.ProofOfDelivery
-         * @name checkIfProductsUseVvmStatus
+         * @name hasProductsUseVvmStatus
          *
          * @description
          * Checks whether any of Proof of Delivery Line Items is using VVM Status.
          *
          * @return {Boolean} true if any of Proof of Delivery Line Items use VVM Status
          */
-        function checkIfProductsUseVvmStatus() {
+        function hasProductsUseVvmStatus() {
             var result = false;
 
             this.lineItems.forEach(function(lineItem) {

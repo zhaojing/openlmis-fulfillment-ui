@@ -15,7 +15,7 @@
 
 describe('ProofOfDelivery', function() {
 
-    var ProofOfDelivery, ProofOfDeliveryLineItem, ProofOfDeliveryDataBuilder, $q, $rootScope, json,
+    var ProofOfDelivery, ProofOfDeliveryLineItem, ProofOfDeliveryDataBuilder, $q, $rootScope, json, ProofOfDeliveryLineItemDataBuilder,
         PROOF_OF_DELIVERY_STATUS;
 
     beforeEach(function() {
@@ -28,6 +28,7 @@ describe('ProofOfDelivery', function() {
             ProofOfDeliveryLineItem = $injector.get('ProofOfDeliveryLineItem');
             PROOF_OF_DELIVERY_STATUS = $injector.get('PROOF_OF_DELIVERY_STATUS');
             ProofOfDeliveryDataBuilder = $injector.get('ProofOfDeliveryDataBuilder');
+            ProofOfDeliveryLineItemDataBuilder = $injector.get('ProofOfDeliveryLineItemDataBuilder');
         });
 
         json = new ProofOfDeliveryDataBuilder().buildJson();
@@ -281,24 +282,26 @@ describe('ProofOfDelivery', function() {
 
     });
 
-    describe('checkIfProductsUseVvmStatus', function() {
+    describe('hasProductsUseVvmStatus', function() {
 
         var proofOfDelivery;
 
         beforeEach(function() {
-            proofOfDelivery = new ProofOfDeliveryDataBuilder().build();
-            proofOfDelivery.lineItems.forEach(function(lineItem) {
-                lineItem.useVvm = false;
-            });
+            proofOfDelivery = new ProofOfDeliveryDataBuilder()
+            .withLineItems([
+                new ProofOfDeliveryLineItemDataBuilder().withUseVvm(false).buildJson(),
+                new ProofOfDeliveryLineItemDataBuilder().withUseVvm(false).buildJson()
+            ])
+            .build();
         });
 
         it('should return true if Proof of Delivery Line Item uses VVM', function() {
             proofOfDelivery.lineItems[0].useVvm = true;
-            expect(proofOfDelivery.checkIfProductsUseVvmStatus()).toBe(true);
+            expect(proofOfDelivery.hasProductsUseVvmStatus()).toBe(true);
         });
 
         it('should return false if Proof of Delivery Line Items do not use VVM', function() {
-            expect(proofOfDelivery.checkIfProductsUseVvmStatus()).toBe(false);
+            expect(proofOfDelivery.hasProductsUseVvmStatus()).toBe(false);
         });
     });
 });

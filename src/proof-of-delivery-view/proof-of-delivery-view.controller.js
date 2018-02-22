@@ -71,7 +71,7 @@
             vm.order = order;
             vm.reasonAssignments = reasonAssignments;
             vm.proofOfDelivery = proofOfDelivery;
-            vm.showVvmColumn = proofOfDelivery.checkIfProductsUseVvmStatus();
+            vm.showVvmColumn = proofOfDelivery.hasProductsUseVvmStatus();
         }
     }
 }());
