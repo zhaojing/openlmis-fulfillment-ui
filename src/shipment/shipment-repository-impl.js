@@ -18,21 +18,23 @@
     'use strict';
 
     /**
-     * @module proof-of-delivery
+     * @ngdoc service
+     * @name shipment.ShipmentRepositoryImpl
      *
      * @description
-     * Provides Proof of Delivery domain class along with a repository.
+     * Implementation of the ShipmentRepository interface. Communicates with the REST API of the OpenLMIS server.
      */
-    angular.module('proof-of-delivery', [
-        'ngResource',
-        'fulfillment',
-        'order',
-        'openlmis-date',
-        'openlmis-i18n',
-        'openlmis-date',
-        'shipment',
-        'openlmis-repository',
-        'referencedata-lot'
-    ]);
+    angular
+        .module('shipment')
+        .factory('ShipmentRepositoryImpl', ShipmentRepositoryImpl);
 
+    ShipmentRepositoryImpl.$inject = ['fulfillmentUrlFactory', 'OpenLMISRepositoryImpl'];
+
+    function ShipmentRepositoryImpl(fulfillmentUrlFactory, OpenLMISRepositoryImpl) {
+        return ShipmentRepositoryImpl;
+
+        function ShipmentRepositoryImpl() {
+            return new OpenLMISRepositoryImpl(fulfillmentUrlFactory('/api/shipments'));
+        }
+    }
 })();

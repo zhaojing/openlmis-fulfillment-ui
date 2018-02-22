@@ -29,13 +29,9 @@
         .module('proof-of-delivery')
         .factory('ProofOfDeliveryRepositoryImpl', ProofOfDeliveryRepositoryImpl);
 
-    ProofOfDeliveryRepositoryImpl.$inject = [
-        '$resource', 'fulfillmentUrlFactory', 'OpenLMISRepositoryImpl', 'referencedataUrlFactory',
-        '$q'
-    ];
+    ProofOfDeliveryRepositoryImpl.$inject = ['$resource', 'fulfillmentUrlFactory', 'ShipmentRepositoryImpl', 'LotRepositoryImpl', '$q'];
 
-    function ProofOfDeliveryRepositoryImpl($resource, fulfillmentUrlFactory, OpenLMISRepositoryImpl,
-                                           referencedataUrlFactory, $q) {
+    function ProofOfDeliveryRepositoryImpl($resource, fulfillmentUrlFactory, ShipmentRepositoryImpl, LotRepositoryImpl, $q) {
 
         ProofOfDeliveryRepositoryImpl.prototype.get = get;
         ProofOfDeliveryRepositoryImpl.prototype.update = update;
@@ -52,13 +48,8 @@
          * Creates an instance of the ProofOfDeliveryRepositoryImpl class.
          */
         function ProofOfDeliveryRepositoryImpl() {
-            this.shipmentRepositoryImpl = new OpenLMISRepositoryImpl(
-                fulfillmentUrlFactory('/api/shipments')
-            );
-
-            this.lotRepositoryImpl = new OpenLMISRepositoryImpl(
-                referencedataUrlFactory('/api/lots')
-            );
+            this.shipmentRepositoryImpl = new ShipmentRepositoryImpl();
+            this.lotRepositoryImpl = new LotRepositoryImpl();
 
             this.resource = $resource(fulfillmentUrlFactory('/api/proofsOfDelivery/:id'), {}, {
                 update: {
@@ -91,7 +82,7 @@
 
                 return $q.all([
                     shipmentRepositoryImpl.get(proofOfDeliveryJson.shipment.id),
-                    lotRepositoryImpl.search({
+                    lotRepositoryImpl.query({
                         ids: lotIds
                     })
                 ])

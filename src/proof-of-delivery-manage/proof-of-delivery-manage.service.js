@@ -58,7 +58,7 @@
                 orderId: orderId
             })
             .then(function(shipment) {
-                return proofOfDeliveryRepositoryImpl.search({
+                return proofOfDeliveryRepositoryImpl.query({
                     shipmentId: shipment.content[0].id
                 });
             })

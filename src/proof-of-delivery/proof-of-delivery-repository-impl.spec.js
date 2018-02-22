@@ -34,7 +34,7 @@ describe('ProofOfDeliveryRepositoryImpl', function() {
 
                     if (url === referencedataUrlFactory('/api/lots')) {
                         lotRepositoryImplMock = jasmine.createSpyObj(
-                            'lotRepositoryImpl', ['search']
+                            'lotRepositoryImpl', ['query']
                         );
                         return lotRepositoryImplMock;
                     }
@@ -43,15 +43,15 @@ describe('ProofOfDeliveryRepositoryImpl', function() {
         });
 
         inject(function($injector) {
+            referencedataUrlFactory = $injector.get('referencedataUrlFactory');
+            fulfillmentUrlFactory = $injector.get('fulfillmentUrlFactory');
             ProofOfDeliveryRepositoryImpl = $injector.get('ProofOfDeliveryRepositoryImpl');
             $rootScope = $injector.get('$rootScope');
             $q = $injector.get('$q');
             $httpBackend = $injector.get('$httpBackend');
             ProofOfDeliveryDataBuilder = $injector.get('ProofOfDeliveryDataBuilder');
-            fulfillmentUrlFactory = $injector.get('fulfillmentUrlFactory');
             ShipmentDataBuilder = $injector.get('ShipmentDataBuilder');
             ShipmentLineItemDataBuilder = $injector.get('ShipmentLineItemDataBuilder');
-            referencedataUrlFactory = $injector.get('referencedataUrlFactory');
             LotDataBuilder = $injector.get('LotDataBuilder');
             PageDataBuilder = $injector.get('PageDataBuilder');
         });
@@ -88,7 +88,7 @@ describe('ProofOfDeliveryRepositoryImpl', function() {
             .respond(200, angular.copy(proofOfDeliveryJson));
 
             shipmentRepositoryImplMock.get.andReturn($q.resolve(angular.copy(shipmentJson)));
-            lotRepositoryImplMock.search.andReturn($q.resolve(new PageDataBuilder()
+            lotRepositoryImplMock.query.andReturn($q.resolve(new PageDataBuilder()
                 .withContent(lotJsons)
                 .build()
             ));
@@ -170,7 +170,7 @@ describe('ProofOfDeliveryRepositoryImpl', function() {
             .respond(200, angular.copy(proofOfDeliveryJson));
 
             shipmentRepositoryImplMock.get.andReturn($q.resolve(angular.copy(shipmentJson)));
-            lotRepositoryImplMock.search.andReturn($q.reject());
+            lotRepositoryImplMock.query.andReturn($q.reject());
 
             var rejected;
             proofOfDeliveryRepositoryImpl.get('proof-of-delivery-id')
