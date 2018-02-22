@@ -21,7 +21,6 @@ describe('ProofOfDeliveryRepositoryImpl', function() {
         lotRepositoryImplMock, LotDataBuilder, lotJsons, PageDataBuilder;
 
     beforeEach(function() {
-        module('referencedata-lot');
         module('proof-of-delivery', function($provide) {
             $provide.factory('OpenLMISRepositoryImpl', function() {
                 return function(url) {
