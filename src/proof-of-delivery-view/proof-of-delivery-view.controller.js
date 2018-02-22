@@ -28,13 +28,18 @@
     .module('proof-of-delivery-view')
     .controller('ProofOfDeliveryViewController', ProofOfDeliveryViewController);
 
-    ProofOfDeliveryViewController.$inject = ['proofOfDelivery', 'order', 'reasonAssignments', 'messageService', 'VVM_STATUS'];
+    ProofOfDeliveryViewController.$inject = [
+        'proofOfDelivery', 'order', 'reasonAssignments', 'messageService', 'VVM_STATUS',
+        'fulfillingLineItems'
+    ];
 
-    function ProofOfDeliveryViewController(proofOfDelivery, order, reasonAssignments, messageService, VVM_STATUS) {
+    function ProofOfDeliveryViewController(proofOfDelivery, order, reasonAssignments,
+                                           messageService, VVM_STATUS, fulfillingLineItems) {
         var vm = this;
 
         vm.$onInit = onInit;
-        vm.getStatusDisplay = VVM_STATUS.$getDisplayName;
+        vm.getStatusDisplayName = getStatusDisplayName;
+        vm.getReasonName = getReasonName;
 
         /**
          * @ngdoc property
@@ -71,7 +76,42 @@
             vm.order = order;
             vm.reasonAssignments = reasonAssignments;
             vm.proofOfDelivery = proofOfDelivery;
+            vm.fulfillingLineItems = fulfillingLineItems;
+            vm.vvmStatuses = VVM_STATUS;
             vm.showVvmColumn = proofOfDelivery.hasProductsUseVvmStatus();
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf proof-of-delivery-view.controller:PodViewController
+         * @name getStatusDisplayName
+         *
+         * @description
+         * Returns translated status display name.
+         */
+        function getStatusDisplayName(status) {
+            return messageService.get(VVM_STATUS.$getDisplayName(status));
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf proof-of-delivery-view.controller:PodViewController
+         * @name getReasonName
+         *
+         * @description
+         * Returns a name of the reason with the given ID.
+         *
+         * @param   {string}    id  the ID of the reason
+         * @return  {string}        the name of the reason
+         */
+        function getReasonName(id) {
+            if (!id) {
+                return;
+            }
+
+            return vm.reasonAssignments.filter(function(assignment) {
+                return assignment.reason.id === id;
+            })[0].reason.name;
         }
     }
 }());

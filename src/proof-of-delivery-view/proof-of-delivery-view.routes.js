@@ -44,6 +44,12 @@
                             return validReasonService.search(
                                 order.program.id, order.facility.type.id, 'DEBIT'
                             );
+                        },
+                        fulfillingLineItems: function(order, proofOfDelivery, fulfillingLineItemFactory) {
+                            return fulfillingLineItemFactory.groupByOrderLineItem(
+                                order.orderLineItems,
+                                proofOfDelivery.lineItems
+                            );
                         }
                     }
                 }

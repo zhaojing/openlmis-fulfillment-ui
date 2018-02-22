@@ -16,7 +16,8 @@
 describe('PodViewController', function() {
 
     var vm, $controller, ProofOfDeliveryDataBuilder, OrderDataBuilder, proofOfDelivery, order,
-        reasonAssignments, ValidReasonAssignmentDataBuilder, VVM_STATUS, messageService;
+        reasonAssignments, ValidReasonAssignmentDataBuilder, VVM_STATUS, messageService,
+        fulfillingLineItems;
 
     beforeEach(function() {
         module('proof-of-delivery-view');
@@ -33,18 +34,20 @@ describe('PodViewController', function() {
         proofOfDelivery = new ProofOfDeliveryDataBuilder().build();
         order = new OrderDataBuilder().build();
         reasonAssignments = [
-            ValidReasonAssignmentDataBuilder.buildWithDebitReason(),
-            ValidReasonAssignmentDataBuilder.buildWithDebitReason()
+            new ValidReasonAssignmentDataBuilder().build(),
+            new ValidReasonAssignmentDataBuilder().build(),
+            new ValidReasonAssignmentDataBuilder().build()
         ];
+        fulfillingLineItems = {};
+        fulfillingLineItems[order.orderLineItems[0]] = proofOfDelivery.lineItems;
 
-        spyOn(messageService, 'get').andCallFake(function(messageKey) {
-            return messageKey;
-        });
+        spyOn(messageService, 'get');
 
         vm = $controller('ProofOfDeliveryViewController', {
             proofOfDelivery: proofOfDelivery,
             order: order,
-            reasonAssignments: reasonAssignments
+            reasonAssignments: reasonAssignments,
+            fulfillingLineItems: fulfillingLineItems
         });
     });
 
@@ -72,11 +75,51 @@ describe('PodViewController', function() {
         expect(vm.showVvmColumn).toEqual(proofOfDelivery.hasProductsUseVvmStatus());
     });
 
+    it('should expose map of fulfilling line items', function() {
+        vm.$onInit();
+
+        expect(vm.fulfillingLineItems).toEqual(fulfillingLineItems);
+    });
 
     describe('getStatusDisplay', function() {
 
-        it('should get display for vvm status', function() {
-            expect(vm.getStatusDisplay).toBe(VVM_STATUS.$getDisplayName);
+        beforeEach(function() {
+            vm.$onInit();
         });
+
+        it('should return translated message', function() {
+            messageService.get.andReturn('translated message');
+
+            var result = vm.getStatusDisplayName(VVM_STATUS.STAGE_1);
+
+            expect(result).toBe('translated message');
+            expect(messageService.get)
+                .toHaveBeenCalledWith(VVM_STATUS.$getDisplayName(VVM_STATUS.STAGE_1));
+        });
+
+    });
+
+    describe('getReasonName', function() {
+
+        beforeEach(function() {
+            vm.$onInit();
+        });
+
+        it('should return name for reason ID', function() {
+            var result = vm.getReasonName(reasonAssignments[2].reason.id);
+
+            expect(result).toEqual(reasonAssignments[2].reason.name);
+        });
+
+        it('should return undefined if ID is not given', function() {
+            expect(vm.getReasonName()).toBeUndefined();
+        });
+
+        it('should throw exception if reason with the given ID does not exist', function() {
+            expect(function() {
+                vm.getReasonName('some-other-id');
+            }).toThrow();
+        });
+
     });
 });
