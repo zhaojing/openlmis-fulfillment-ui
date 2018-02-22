@@ -280,4 +280,25 @@ describe('ProofOfDelivery', function() {
         });
 
     });
+
+    describe('checkIfProductsUseVvmStatus', function() {
+
+        var proofOfDelivery;
+
+        beforeEach(function() {
+            proofOfDelivery = new ProofOfDeliveryDataBuilder().build();
+            proofOfDelivery.lineItems.forEach(function(lineItem) {
+                lineItem.useVvm = false;
+            });
+        });
+
+        it('should return true if Proof of Delivery Line Item uses VVM', function() {
+            proofOfDelivery.lineItems[0].useVvm = true;
+            expect(proofOfDelivery.checkIfProductsUseVvmStatus()).toBe(true);
+        });
+
+        it('should return false if Proof of Delivery Line Items do not use VVM', function() {
+            expect(proofOfDelivery.checkIfProductsUseVvmStatus()).toBe(false);
+        });
+    });
 });

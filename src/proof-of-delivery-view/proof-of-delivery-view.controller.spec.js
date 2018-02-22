@@ -66,6 +66,13 @@ describe('PodViewController', function() {
         expect(vm.reasonAssignments).toBe(reasonAssignments);
     });
 
+    it('should check if VVM Status column should be shown', function() {
+        vm.$onInit();
+
+        expect(vm.showVvmColumn).toEqual(proofOfDelivery.checkIfProductsUseVvmStatus());
+    });
+
+
     describe('getStatusDisplay', function() {
 
         it('should get display for vvm status', function() {

@@ -47,10 +47,31 @@
          */
         vm.proofOfDelivery = undefined;
 
+        /**
+         * @ngdoc property
+         * @propertyOf proof-of-delivery-view.controller:PodViewController
+         * @name showVvmColumn
+         * @type {boolean}
+         *
+         * @description
+         * Indicates if VVM Status column should be shown for current Proof of Delivery.
+         */
+        vm.showVvmColumn = undefined;
+
+        /**
+         * @ngdoc method
+         * @methodOf proof-of-delivery-view.controller:PodViewController
+         * @name $onInit
+         *
+         * @description
+         * Initialization method of the PodViewController.
+         */
         function onInit() {
             vm.proofOfDelivery = proofOfDelivery;
             vm.order = order;
             vm.reasonAssignments = reasonAssignments;
+            vm.proofOfDelivery = proofOfDelivery;
+            vm.showVvmColumn = proofOfDelivery.checkIfProductsUseVvmStatus();
         }
     }
 }());

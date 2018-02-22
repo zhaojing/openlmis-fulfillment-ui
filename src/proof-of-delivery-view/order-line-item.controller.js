@@ -39,8 +39,8 @@
         /**
          * @ngdoc property
          * @propertyOf proof-of-delivery-view.controller:OrderLineItemController
-         * @type {ProofOfDelivery}
          * @name proofOfDelivery
+         * @type {ProofOfDelivery}
          *
          * @description
          * Represents a Proof of Delivery.
@@ -50,8 +50,8 @@
         /**
          * @ngdoc property
          * @propertyOf proof-of-delivery-view.controller:OrderLineItemController
-         * @type {Object}
          * @name orderLineItem
+         * @type {Object}
          *
          * @description
          * Represents a single Order Line Item.
@@ -61,8 +61,8 @@
         /**
          * @ngdoc property
          * @propertyOf proof-of-delivery-view.controller:OrderLineItemController
-         * @type {Array}
          * @name reasonAssignments
+         * @type {Array}
          *
          * @description
          * A list od available reasons for rejecting stock.
@@ -72,13 +72,24 @@
         /**
          * @ngdoc property
          * @propertyOf proof-of-delivery-view.controller:OrderLineItemController
-         * @type {Array}
          * @name fulfillingLineItems
+         * @type {Array}
          *
          * @description
          * A list of Proof of Delivery Line Items that fulfill the specific Order Line Item.
          */
         vm.fulfillingLineItems = undefined;
+
+        /**
+         * @ngdoc property
+         * @propertyOf proof-of-delivery-view.controller:OrderLineItemController
+         * @name showVvmColumn
+         * @type {boolean}
+         *
+         * @description
+         * Indicates if VVM Status column should be shown for current Proof of Delivery.
+         */
+        vm.showVvmColumn = undefined;
 
         /**
          * @ngdoc method
@@ -96,6 +107,7 @@
                 $scope.proofOfDelivery.lineItems,
                 vm.orderLineItem.orderable
             );
+            vm.showVvmColumn = vm.proofOfDelivery.checkIfProductsUseVvmStatus();
         }
 
         /**

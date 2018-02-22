@@ -24,7 +24,7 @@
     <td ng-if="!vm.proofOfDelivery.isInitiated()">
         {{fulfillingLineItem.quantityAccepted}}
     </td>
-    <td>
+    <td ng-if="vm.showVvmColumn">
         <select ng-if="fulfillingLineItem.useVvm && vm.proofOfDelivery.isInitiated()"
             ng-model="fulfillingLineItem.vvmStatus"
             ng-options="status as vm.getStatusDisplay(status) for status in vm.vvmStatuses"

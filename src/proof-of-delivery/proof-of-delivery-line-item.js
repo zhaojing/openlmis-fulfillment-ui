@@ -109,6 +109,10 @@
                     'proofOfDelivery.canNotSpecifyReasonForRejectionIfNotRejectingAnything';
             }
 
+            if (this.quantityAccepted > 0 && this.useVvm && !this.vvmStatus) {
+                errors.vvmStatus = 'proofOfDelivery.vvmStatusIsRequired';
+            }
+
             return angular.equals(errors, {}) ? undefined : errors;
         }
     }

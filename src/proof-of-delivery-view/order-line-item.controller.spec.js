@@ -92,6 +92,11 @@ describe('OrderLineItemController', function() {
             expect(vm.proofOfDelivery).toEqual(proofOfDelivery);
         });
 
+        it('should check if VVM Status column should be shown', function() {
+            vm.$onInit();
+
+            expect(vm.showVvmColumn).toEqual(proofOfDelivery.checkIfProductsUseVvmStatus());
+        });
     });
 
     describe('getReasonName', function() {

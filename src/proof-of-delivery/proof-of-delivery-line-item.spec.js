@@ -193,6 +193,23 @@ describe('ProofOfDeliveryLineItem', function() {
             });
         });
 
-    });
+        it('should require vvm status when use vvm is true and quantity accepted', function() {
+            proofOfDeliveryLineItem.quantityAccepted = 1;
+            proofOfDeliveryLineItem.useVvm = true;
+            proofOfDeliveryLineItem.vvmStatus = undefined;
 
+            expect(proofOfDeliveryLineItem.validate()).toEqual({
+                vvmStatus: 'proofOfDelivery.vvmStatusIsRequired'
+            });
+
+            proofOfDeliveryLineItem.vvmStatus = 'STAGE_1';
+
+            expect(proofOfDeliveryLineItem.validate()).toBeUndefined();
+
+            proofOfDeliveryLineItem.quantityAccepted = 0;
+            proofOfDeliveryLineItem.vvmStatus = undefined;
+
+            expect(proofOfDeliveryLineItem.validate()).toBeUndefined();
+        });
+    });
 });

@@ -10,7 +10,7 @@
                     <th>{{'proofOfDeliveryView.quantityShipped' | message}}</th>
                     <th>{{'proofOfDeliveryView.lotCode' | message}}</th>
                     <th>{{'proofOfDeliveryView.quantityAccepted' | message}}</th>
-                    <th>{{'proofOfDeliveryView.vvmStatus' | message}}</th>
+                    <th ng-if="vm.showVvmColumn">{{'proofOfDeliveryView.vvmStatus' | message}}</th>
                     <th>{{'proofOfDeliveryView.quantityReturned' | message}}</th>
                     <th>{{'proofOfDeliveryView.rejectionReason' | message}}</th>
                     <th>{{'proofOfDeliveryView.notes' | message}}</th>
