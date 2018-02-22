@@ -42,8 +42,12 @@
 					return paginationService.registerUrl($stateParams, function(stateParams) {
                         if(stateParams.program) {
                             var paramsCopy = angular.copy(stateParams);
-                            paramsCopy.requestingFacility = stateParams.facility;
+
+                            paramsCopy.requestingFacilityId = stateParams.facility;
+                            paramsCopy.programId = stateParams.program;
+
                             delete paramsCopy.facility;
+                            delete paramsCopy.programId;
 
                             return orderRepository.searchOrdersForManagePod(paramsCopy);
                         }

@@ -40,6 +40,7 @@
         vm.$onInit = onInit;
         vm.openPod = openPod;
         vm.loadOrders = loadOrders;
+
         /**
          * @ngdoc property
          * @propertyOf proof-of-delivery-manage.controller:ProofOfDeliveryManageController
