@@ -13,7 +13,7 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-describe('ShipmentViewController', function() {
+ddescribe('ShipmentViewController', function() {
 
     var vm, $q, $controller, $rootScope, $state, $window, shipment, OrderDataBuilder, loadingModalService, shipmentService, ORDER_STATUS,
         confirmService, shipmentDraftService, notificationService, loadingDeferred, stateTrackerService, order, ShipmentDataBuilder,
@@ -355,7 +355,7 @@ describe('ShipmentViewController', function() {
             confirmDeferred = $q.defer();
             deleteDeferred = $q.defer();
 
-            spyOn(confirmService, 'confirm').andReturn(confirmDeferred.promise);
+            spyOn(confirmService, 'confirmDestroy').andReturn(confirmDeferred.promise);
             spyOn(shipmentDraftService, 'remove').andReturn(deleteDeferred.promise);
             spyOn(stateTrackerService, 'goToPreviousState');
         });
@@ -375,7 +375,7 @@ describe('ShipmentViewController', function() {
         it('should ask for confirmation before doing anything', function() {
             vm.deleteShipment();
 
-            expect(confirmService.confirm).toHaveBeenCalledWith(
+            expect(confirmService.confirmDestroy).toHaveBeenCalledWith(
                 'shipmentView.deleteDraftConfirmation',
                 'shipmentView.deleteDraft'
             );
@@ -392,7 +392,7 @@ describe('ShipmentViewController', function() {
         it('should do nothing if confirmation was dismissed', function() {
             vm.deleteShipment();
 
-            expect(confirmService.confirm).toHaveBeenCalledWith(
+            expect(confirmService.confirmDestroy).toHaveBeenCalledWith(
                 'shipmentView.deleteDraftConfirmation',
                 'shipmentView.deleteDraft'
             );
@@ -413,7 +413,7 @@ describe('ShipmentViewController', function() {
         it('should attempt to delete shipment if confirmed', function() {
             vm.deleteShipment();
 
-            expect(confirmService.confirm).toHaveBeenCalledWith(
+            expect(confirmService.confirmDestroy).toHaveBeenCalledWith(
                 'shipmentView.deleteDraftConfirmation',
                 'shipmentView.deleteDraft'
             );
@@ -435,7 +435,7 @@ describe('ShipmentViewController', function() {
         it('should close loading modal after shipment failed to delete', function() {
             vm.deleteShipment();
 
-            expect(confirmService.confirm).toHaveBeenCalledWith(
+            expect(confirmService.confirmDestroy).toHaveBeenCalledWith(
                 'shipmentView.deleteDraftConfirmation',
                 'shipmentView.deleteDraft'
             );
@@ -461,7 +461,7 @@ describe('ShipmentViewController', function() {
         it('should show notification after shipment failed to delete and loading modal was closed', function() {
             vm.deleteShipment();
 
-            expect(confirmService.confirm).toHaveBeenCalledWith(
+            expect(confirmService.confirmDestroy).toHaveBeenCalledWith(
                 'shipmentView.deleteDraftConfirmation',
                 'shipmentView.deleteDraft'
             );
@@ -492,7 +492,7 @@ describe('ShipmentViewController', function() {
         it('should take user back to the previous page after shipment was successfully deleted and let the state change close loading modal', function() {
             vm.deleteShipment();
 
-            expect(confirmService.confirm).toHaveBeenCalledWith(
+            expect(confirmService.confirmDestroy).toHaveBeenCalledWith(
                 'shipmentView.deleteDraftConfirmation',
                 'shipmentView.deleteDraft'
             );
@@ -520,7 +520,7 @@ describe('ShipmentViewController', function() {
         it('should show notification after shipment was successfully deleted and loading modal was closed', function() {
             vm.deleteShipment();
 
-            expect(confirmService.confirm).toHaveBeenCalledWith(
+            expect(confirmService.confirmDestroy).toHaveBeenCalledWith(
                 'shipmentView.deleteDraftConfirmation',
                 'shipmentView.deleteDraft'
             );
