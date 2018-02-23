@@ -211,5 +211,22 @@ describe('ProofOfDeliveryLineItem', function() {
 
             expect(proofOfDeliveryLineItem.validate()).toBeUndefined();
         });
+
+        it('should return error when VVM status is selected and nothing was accepted', function() {
+            proofOfDeliveryLineItem.quantityAccepted = 0;
+            proofOfDeliveryLineItem.vvmStatus = 'STAGE_1';
+            expect(proofOfDeliveryLineItem.validate()).toEqual({
+                vvmStatus: 'proofOfDelivery.cannotSelectVvmStatusWhenNothingAccepted'
+            });
+
+            proofOfDeliveryLineItem.vvmStatus = null;
+            expect(proofOfDeliveryLineItem.validate()).toBeUndefined();
+
+            proofOfDeliveryLineItem.vvmStatus = undefined;
+            expect(proofOfDeliveryLineItem.validate()).toBeUndefined();
+
+            proofOfDeliveryLineItem.vvmStatus = '';
+            expect(proofOfDeliveryLineItem.validate()).toBeUndefined();
+        });
     });
 });

@@ -113,6 +113,10 @@
                 errors.vvmStatus = 'proofOfDelivery.vvmStatusIsRequired';
             }
 
+            if (this.quantityAccepted === 0 && this.vvmStatus) {
+                errors.vvmStatus = 'proofOfDelivery.cannotSelectVvmStatusWhenNothingAccepted';
+            }
+
             return angular.equals(errors, {}) ? undefined : errors;
         }
     }
