@@ -20,8 +20,8 @@ describe('orderFulfillmentLineItemFactory', function() {
         StockCardSummaryDataBuilder, LotDataBuilder, OrderableDataBuilder, ShipmentLineItemWithSummary;
 
     var firstOrderLineItem, secondOrderLineItem, thirdOrderLineItem, fourthOrderLineItem,
-        fifthOrderLineItem, order, shipment, ORDER_ID, orderableOne,
-        lotOne, lotTwo, lotThree, lotFour, lotFive, lotSix, stockCardSummaries;
+        fifthOrderLineItem, order, shipment, ORDER_ID, NET_CONTENT, SOH_FIVE, SOH_THREE,
+        SOH_DEFAULT, orderableOne, lotOne, lotTwo, lotThree, lotFour, lotFive, lotSix, stockCardSummaries;
 
     beforeEach(function() {
         module('shipment-view');
@@ -43,8 +43,12 @@ describe('orderFulfillmentLineItemFactory', function() {
         });
 
         ORDER_ID = 'order-id';
+        NET_CONTENT = 2;
+        SOH_DEFAULT = 10;
+        SOH_FIVE = 5;
+        SOH_THREE = 3;
 
-        orderableOne = new OrderableDataBuilder().build();
+        orderableOne = new OrderableDataBuilder().buildJson();
 
         lotOne = new LotDataBuilder().withExpirationDate('2017-02-02T05:59:51.993Z').build();
         lotTwo = new LotDataBuilder().withExpirationDate('2017-02-02T05:59:51.993Z').build();
@@ -75,11 +79,11 @@ describe('orderFulfillmentLineItemFactory', function() {
             new StockCardSummaryDataBuilder().withOrderable(orderableOne).withLot(lotThree)
                 .withExtraData({ vvmStatus: 'STAGE_2'}).build(),
             new StockCardSummaryDataBuilder().withOrderable(orderableOne).withLot(lotFour)
-                .withStockOnHand(5).withExtraData({ vvmStatus: 'STAGE_2'}).build(),
+                .withStockOnHand(SOH_FIVE).withExtraData({ vvmStatus: 'STAGE_2'}).build(),
             new StockCardSummaryDataBuilder().withOrderable(orderableOne).withLot(lotFive)
                 .withExtraData({ vvmStatus: 'STAGE_1'}).build(),
             new StockCardSummaryDataBuilder().withOrderable(orderableOne).withLot(lotSix)
-                .withStockOnHand(3).withExtraData({ vvmStatus: 'STAGE_2'}).build(),
+                .withStockOnHand(SOH_THREE).withExtraData({ vvmStatus: 'STAGE_2'}).build(),
             new StockCardSummaryDataBuilder().build()
         ];
 
@@ -170,6 +174,15 @@ describe('orderFulfillmentLineItemFactory', function() {
 
         it('should return instances of ShipmentLineItem as shipmentLineItems', function() {
             expect(result[0].shipmentLineItems[0] instanceof ShipmentLineItemWithSummary).toBe(true);
+        });
+
+        it('should calculate stock on hand based on net content', function() {
+            expect(result[0].shipmentLineItems[0].summary.stockOnHand).toBe(Math.floor(SOH_DEFAULT / NET_CONTENT));
+            expect(result[0].shipmentLineItems[1].summary.stockOnHand).toBe(Math.floor(SOH_FIVE /  NET_CONTENT));
+            expect(result[0].shipmentLineItems[2].summary.stockOnHand).toBe(Math.floor(SOH_THREE / NET_CONTENT));
+            expect(result[0].shipmentLineItems[3].summary.stockOnHand).toBe(Math.floor(SOH_DEFAULT / NET_CONTENT));
+            expect(result[0].shipmentLineItems[4].summary.stockOnHand).toBe(Math.floor(SOH_DEFAULT / NET_CONTENT));
+            expect(result[0].shipmentLineItems[5].summary.stockOnHand).toBe(Math.floor(SOH_DEFAULT / NET_CONTENT));
         });
 
     });

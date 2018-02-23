@@ -60,6 +60,8 @@
                     shipmentLineItem.lot
                 )[0];
 
+                calculateSohInPacks(summary);
+
                 shipmentLineItems.push(new ShipmentLineItemWithSummary(
                     shipmentLineItem.id,
                     summary,
@@ -81,6 +83,10 @@
             });
 
             return orderFulfillmentLineItems;
+        }
+
+        function calculateSohInPacks(summary) {
+            summary.stockOnHand = Math.floor(summary.stockOnHand / summary.orderable.netContent);
         }
 
         function filterByOrderableAndLot(stockCardSummaries, orderable, lot) {
