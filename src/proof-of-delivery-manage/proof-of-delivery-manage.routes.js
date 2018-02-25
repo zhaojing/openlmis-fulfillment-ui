@@ -47,7 +47,7 @@
                             paramsCopy.programId = stateParams.program;
 
                             delete paramsCopy.facility;
-                            delete paramsCopy.programId;
+                            delete paramsCopy.program;
 
                             return orderRepository.searchOrdersForManagePod(paramsCopy);
                         }
