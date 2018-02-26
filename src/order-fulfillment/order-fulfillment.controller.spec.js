@@ -83,14 +83,6 @@ describe('OrderFulfillmentController', function() {
             expect(vm.orderStatus).toEqual(ORDER_STATUS.ORDERED);
         });
 
-        it('should remove invalid statuses if some were passed through the URL', function() {
-            $stateParams.status = [ORDER_STATUS.ORDERED, ORDER_STATUS.RECEIVED];
-
-            vm.$onInit();
-
-            expect(vm.orderStatus).toEqual(ORDER_STATUS.ORDERED);
-        });
-
         it('should not set program if programId was not passed through the URL', function() {
             $stateParams.programId = undefined;
 
@@ -116,14 +108,14 @@ describe('OrderFulfillmentController', function() {
         });
 
         it('should reload state params', function() {
+            spyOn($state, 'go').andReturn();
+
             $stateParams.status = [ORDER_STATUS.FULFILLING, ORDER_STATUS.ORDERED];
 
             vm.$onInit();
 
             expect($state.go).toHaveBeenCalledWith('openlmis.orders.fulfillment', {
-                status: [ORDER_STATUS.FULFILLING, ORDER_STATUS.ORDERED],
-                requestingFacilityId: null,
-                programId: null
+                status: [ORDER_STATUS.FULFILLING, ORDER_STATUS.ORDERED]
             }, {notify: false});
         });
 
