@@ -29,13 +29,12 @@
         .controller('OrderFulfillmentController', controller);
 
     controller.$inject = [
-        'orderingFacilities', 'programs', 'loadingModalService', 'notificationService',
-        'orders', '$stateParams', '$filter', '$state', '$scope',
-        'ORDER_STATUS'
+        'orderingFacilities', 'programs', 'loadingModalService', 'orders',
+        '$stateParams', '$state', 'ORDER_STATUS'
     ];
 
-    function controller(orderingFacilities, programs, loadingModalService, notificationService,
-        orders, $stateParams, $filter, $state, $scope, ORDER_STATUS) {
+    function controller(orderingFacilities, programs, loadingModalService, orders,
+        $stateParams, $state, ORDER_STATUS) {
 
         var vm = this;
 
@@ -118,7 +117,7 @@
 
             if ($stateParams.requestingFacilityId) {
                 vm.orderingFacility = vm.orderingFacilities.filter(function(facility) {
-                    return facility.id == $stateParams.requestingFacilityId;
+                    return facility.id === $stateParams.requestingFacilityId;
                 })[0];
             }
 
@@ -128,7 +127,7 @@
 
             if ($stateParams.programId) {
                 vm.program = vm.programs.filter(function(program) {
-                    return program.id == $stateParams.programId;
+                    return program.id === $stateParams.programId;
                 })[0];
             }
         }

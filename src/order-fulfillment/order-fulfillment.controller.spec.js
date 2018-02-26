@@ -15,9 +15,8 @@
 
 describe('OrderFulfillmentController', function() {
 
-    var vm, $rootScope, orderingFacilities, programs, orders, $controller,
-        $stateParams, scope, $state, BasicOrderResponseDataBuilder, ORDER_STATUS,
-        ProgramDataBuilder, FacilityDataBuilder;
+    var vm, orderingFacilities, programs, orders, $controller, $stateParams, $state,
+        BasicOrderResponseDataBuilder, ORDER_STATUS, ProgramDataBuilder, FacilityDataBuilder;
 
     beforeEach(function() {
         module('order-fulfillment');
@@ -28,8 +27,6 @@ describe('OrderFulfillmentController', function() {
             $controller = $injector.get('$controller');
             $stateParams = $injector.get('$stateParams');
             $state = $injector.get('$state');
-            $rootScope = $injector.get('$rootScope');
-            scope = $rootScope.$new();
             BasicOrderResponseDataBuilder = $injector.get('BasicOrderResponseDataBuilder');
             ProgramDataBuilder = $injector.get('ProgramDataBuilder');
             FacilityDataBuilder = $injector.get('FacilityDataBuilder');
@@ -64,8 +61,7 @@ describe('OrderFulfillmentController', function() {
             vm = $controller('OrderFulfillmentController', {
                 orderingFacilities: orderingFacilities,
                 programs: programs,
-                orders: orders,
-                $scope: scope
+                orders: orders
             });
         });
 
@@ -168,8 +164,7 @@ describe('OrderFulfillmentController', function() {
         vm = $controller('OrderFulfillmentController', {
             orderingFacilities: orderingFacilities,
             programs: programs,
-            orders: orders,
-            $scope: scope
+            orders: orders
         });
         vm.$onInit();
     }

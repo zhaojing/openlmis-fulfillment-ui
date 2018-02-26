@@ -101,13 +101,4 @@ describe('requestingFacilityFactory', function() {
         });
     });
 
-    describe('getIds', function() {
-
-        it('should return provided facilities ids', function() {
-            var ids = requestingFacilityFactory.getIds(facilities);
-
-            expect(ids).toEqual([facilities[0].id, facilities[1].id]);
-        });
-    });
-
 });

@@ -41,11 +41,13 @@
             ],
             areAllRightsRequired: false,
             resolve: {
-                supervisedFacilities: function(facilityFactory, $stateParams) {
+                supervisedFacilities: function(facilityFactory) {
                     return facilityFactory.getSupervisedFacilitiesBasedOnRights([FULFILLMENT_RIGHTS.ORDERS_VIEW]);
                 },
-                orderingFacilities: function(supervisedFacilities, requestingFacilityFactory, $stateParams) {
-                    var ids = requestingFacilityFactory.getIds(supervisedFacilities);
+                orderingFacilities: function(supervisedFacilities, requestingFacilityFactory) {
+                    var ids = supervisedFacilities.map(function(facility) {
+                        return facility.id;
+                    });
                     return requestingFacilityFactory.loadRequestingFacilities(ids).then(function(requestingFacilities) {
                         return requestingFacilities;
                     });
@@ -53,8 +55,11 @@
                 programs: function(programService) {
                     return programService.getAll();
                 },
-                orders: function(paginationService, orderRepository, $stateParams) {
+                orders: function(paginationService, orderRepository, $stateParams, ORDER_STATUS) {
                     return paginationService.registerUrl($stateParams, function(stateParams) {
+                        if (!stateParams.status) {
+                            stateParams.status = [ORDER_STATUS.FULFILLING, ORDER_STATUS.ORDERED];
+                        }
                         return orderRepository.search(stateParams);
                     });
                 }

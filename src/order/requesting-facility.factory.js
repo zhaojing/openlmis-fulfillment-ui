@@ -32,8 +32,7 @@
 
     function factory($q, facilityService) {
         var factory = {
-            loadRequestingFacilities: loadRequestingFacilities,
-            getIds: getIds
+            loadRequestingFacilities: loadRequestingFacilities
         };
         return factory;
 
@@ -72,25 +71,6 @@
             });
 
             return deferred.promise;
-        }
-
-        /**
-         * @ngdoc method
-         * @methodOf order.requestingFacilityFactory
-         * @name getIds
-         *
-         * @description
-         * Returns the list of UUIDs of facilities.
-         *
-         * @param  {Array} facilities   the list of supplying facilities
-         * @return {Array}              the list of UUIDs of supplying facilities
-         */
-        function getIds(facilities) {
-            var ids = [];
-            facilities.filter(function(facility) {
-                ids.push(facility.id);
-            });
-            return ids;
         }
     }
 
