@@ -16,7 +16,7 @@
 describe('requestingFacilityFactory', function() {
 
     var $q, requestingFacilityFactory, facilityService, requestingFacilities, minimalFacilities,
-        $rootScope;
+        $rootScope, FacilityDataBuilder, facilities;
 
     beforeEach(function() {
         module('order');
@@ -27,6 +27,7 @@ describe('requestingFacilityFactory', function() {
             $rootScope = $injector.get('$rootScope');
             requestingFacilityFactory = $injector.get('requestingFacilityFactory');
             facilityService = $injector.get('facilityService');
+            FacilityDataBuilder = $injector.get('FacilityDataBuilder');
         });
 
         requestingFacilities = ['1', '2'];
@@ -45,6 +46,11 @@ describe('requestingFacilityFactory', function() {
                 name: 'Third factory'
             }
         ];
+
+        facilities = [
+            new FacilityDataBuilder().build(),
+            new FacilityDataBuilder().build()
+        ]
 
         spyOn(facilityService, 'getAllMinimal').andReturn($q.when(minimalFacilities));
     });
@@ -92,6 +98,15 @@ describe('requestingFacilityFactory', function() {
 
             expect(result).toEqual([minimalFacilities[0],
                 minimalFacilities[1], minimalFacilities[2]]);
+        });
+    });
+
+    describe('getIds', function() {
+
+        it('should return provided facilities ids', function() {
+            var ids = requestingFacilityFactory.getIds(facilities);
+
+            expect(ids).toEqual([facilities[0].id, facilities[1].id]);
         });
     });
 

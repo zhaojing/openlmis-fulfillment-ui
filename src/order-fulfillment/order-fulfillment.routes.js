@@ -36,13 +36,17 @@
                 sort: 'createdDate,desc'
             },
             accessRights: [
-                FULFILLMENT_RIGHTS.PODS_MANAGE,
+                FULFILLMENT_RIGHTS.SHIPMENTS_VIEW,
                 FULFILLMENT_RIGHTS.ORDERS_VIEW
             ],
             areAllRightsRequired: false,
             resolve: {
-                orderingFacilities: function(requestingFacilityFactory, $stateParams) {
-                    return requestingFacilityFactory.loadRequestingFacilities().then(function(requestingFacilities) {
+                supervisedFacilities: function(facilityFactory, $stateParams) {
+                    return facilityFactory.getSupervisedFacilitiesBasedOnRights([FULFILLMENT_RIGHTS.ORDERS_VIEW]);
+                },
+                orderingFacilities: function(supervisedFacilities, requestingFacilityFactory, $stateParams) {
+                    var ids = requestingFacilityFactory.getIds(supervisedFacilities);
+                    return requestingFacilityFactory.loadRequestingFacilities(ids).then(function(requestingFacilities) {
                         return requestingFacilities;
                     });
                 },

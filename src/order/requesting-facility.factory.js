@@ -32,7 +32,8 @@
 
     function factory($q, facilityService) {
         var factory = {
-            loadRequestingFacilities: loadRequestingFacilities
+            loadRequestingFacilities: loadRequestingFacilities,
+            getIds: getIds
         };
         return factory;
 
@@ -44,15 +45,15 @@
          * @description
          * Gets the UUIDs and names of the available requesting facilities from the cache.
          *
-         * @param  {String} supplyingFacilityId (optional) the ID of the given supplying facility
-         * @return {Promise}                    the promise resolving to requesting facilities for the given supplying facility
+         * @param  {String} supplyingFacilityIds    (optional) the ID of the given supplying facility
+         * @return {Promise}                        the promise resolving to requesting facilities for the given supplying facility
          */
-        function loadRequestingFacilities(supplyingFacilityId) {
+        function loadRequestingFacilities(supplyingFacilityIds) {
             var minRequestingFacilities = [],
                 deferred = $q.defer();
 
             $q.all([
-                facilityService.getRequestingFacilities(supplyingFacilityId),
+                facilityService.getRequestingFacilities(supplyingFacilityIds),
                 facilityService.getAllMinimal()
             ]).then(function(facilities) {
                 var requestingFacilities = facilities[0],
@@ -71,6 +72,25 @@
             });
 
             return deferred.promise;
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf order.requestingFacilityFactory
+         * @name getIds
+         *
+         * @description
+         * Returns the list of UUIDs of facilities.
+         *
+         * @param  {Array} facilities   the list of supplying facilities
+         * @return {Array}              the list of UUIDs of supplying facilities
+         */
+        function getIds(facilities) {
+            var ids = [];
+            facilities.filter(function(facility) {
+                ids.push(facility.id);
+            });
+            return ids;
         }
     }
 

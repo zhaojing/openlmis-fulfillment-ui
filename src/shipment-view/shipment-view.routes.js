@@ -33,7 +33,7 @@
             templateUrl: 'shipment-view/shipment-view.html',
             url: '/:id/shipment',
             accessRights: [
-                FULFILLMENT_RIGHTS.PODS_MANAGE,
+                FULFILLMENT_RIGHTS.SHIPMENTS_VIEW,
                 FULFILLMENT_RIGHTS.ORDERS_VIEW
             ],
             areAllRightsRequired: false,

@@ -56,12 +56,12 @@
          * @description
          * Retrieves the distinct UUIDs of the available requesting facilities.
          *
-         * @param  {String} supplyingFacilityId the ID of the given supplying facility
-         * @return {Promise}       the list of all requesting facilities for the given supplying facility
+         * @param  {Array} supplyingFacilityIds the array of IDs of the given supplying facility
+         * @return {Promise}                    the list of all requesting facilities for the given supplying facility
          */
-        function getRequestingFacilities(supplyingFacilityId) {
+        function getRequestingFacilities(supplyingFacilityIds) {
             return $delegate.delegatedResource.getRequestingFacilities({
-                supplyingFacility: supplyingFacilityId
+                supplyingFacilityId: supplyingFacilityIds
             }).$promise;
         }
     }

@@ -14,7 +14,7 @@
  */
 
 describe('Facility service decorator', function() {
-    var facilityService, $rootScope, $httpBackend, fulfillmentUrlFactory;
+    var facilityService, $rootScope, $httpBackend, fulfillmentUrlFactory, facilities;
 
     beforeEach(function() {
         module('referencedata-requesting-facility');
@@ -32,19 +32,63 @@ describe('Facility service decorator', function() {
             .respond(200, facilities);
     });
 
-    it('getRequestingFacilities should return available requesting facilities', function() {
-        var requestingFacilities;
+    describe('getRequestingFacilities', function() {
 
-        facilityService.getRequestingFacilities().then(function(response){
-            requestingFacilities = response;
+        it('should return available requesting facilities by supplying facility id', function() {
+            var requestingFacilities;
+
+            $httpBackend.when('GET', fulfillmentUrlFactory(
+                '/api/orders/requestingFacilities?supplyingFacilityId=facility-1'))
+                .respond(200, facilities);
+
+            facilityService.getRequestingFacilities('facility-1').then(function(response){
+                requestingFacilities = response;
+            });
+
+            $httpBackend.flush();
+            $rootScope.$apply();
+
+            expect(requestingFacilities.length).toBe(2);
+            expect(requestingFacilities[0]).toEqual(facilities[0]);
+            expect(requestingFacilities[1]).toEqual(facilities[1]);
         });
 
-        $httpBackend.flush();
-        $rootScope.$apply();
+        it('should return available requesting facilities by multiple supplying facility ids', function() {
+            var requestingFacilities;
 
-        expect(requestingFacilities.length).toBe(2);
-        expect(requestingFacilities[0]).toEqual(facilities[0]);
-        expect(requestingFacilities[1]).toEqual(facilities[1]);
+            $httpBackend.when('GET', fulfillmentUrlFactory(
+                '/api/orders/requestingFacilities?supplyingFacilityId=facility-1&supplyingFacilityId=facility-2'))
+                .respond(200, facilities);
+
+            facilityService.getRequestingFacilities(['facility-1', 'facility-2']).then(function(response){
+                requestingFacilities = response;
+            });
+
+            $httpBackend.flush();
+            $rootScope.$apply();
+
+            expect(requestingFacilities.length).toBe(2);
+            expect(requestingFacilities[0]).toEqual(facilities[0]);
+            expect(requestingFacilities[1]).toEqual(facilities[1]);
+        });
+
+        it('should return available requesting facilities', function() {
+            var requestingFacilities;
+
+            $httpBackend.when('GET', fulfillmentUrlFactory('/api/orders/requestingFacilities'))
+                .respond(200, facilities);
+
+            facilityService.getRequestingFacilities().then(function(response){
+                requestingFacilities = response;
+            });
+
+            $httpBackend.flush();
+            $rootScope.$apply();
+
+            expect(requestingFacilities.length).toBe(2);
+            expect(requestingFacilities[0]).toEqual(facilities[0]);
+            expect(requestingFacilities[1]).toEqual(facilities[1]);
+        });
     });
 
     afterEach(function() {
