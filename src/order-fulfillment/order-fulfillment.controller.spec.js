@@ -75,8 +75,16 @@ describe('OrderFulfillmentController', function() {
             expect(vm.programs).toEqual(programs);
         });
 
-        it('should set periodStartDate if period start date from was passed through the URL', function() {
+        it('should set orderStatus if status from was passed through the URL', function() {
             $stateParams.status = ORDER_STATUS.ORDERED;
+
+            vm.$onInit();
+
+            expect(vm.orderStatus).toEqual(ORDER_STATUS.ORDERED);
+        });
+
+        it('should remove invalid statuses if some were passed through the URL', function() {
+            $stateParams.status = [ORDER_STATUS.ORDERED, ORDER_STATUS.RECEIVED];
 
             vm.$onInit();
 
@@ -105,6 +113,18 @@ describe('OrderFulfillmentController', function() {
             vm.$onInit();
 
             expect(vm.orderStatus).toBeUndefined();
+        });
+
+        it('should reload state params', function() {
+            $stateParams.status = [ORDER_STATUS.FULFILLING, ORDER_STATUS.ORDERED];
+
+            vm.$onInit();
+
+            expect($state.go).toHaveBeenCalledWith('openlmis.orders.fulfillment', {
+                status: [ORDER_STATUS.FULFILLING, ORDER_STATUS.ORDERED],
+                requestingFacilityId: null,
+                programId: null
+            }, {notify: false});
         });
 
     });

@@ -109,6 +109,10 @@
          * setting data to be available on the view.
          */
         function onInit() {
+            $state.go('openlmis.orders.fulfillment', $stateParams, {
+                notify: false
+            });
+
             vm.orderingFacilities = orderingFacilities;
             vm.orderStatuses = [ORDER_STATUS.FULFILLING, ORDER_STATUS.ORDERED];
             vm.programs = programs;

@@ -57,8 +57,13 @@
                 },
                 orders: function(paginationService, orderRepository, $stateParams, ORDER_STATUS) {
                     return paginationService.registerUrl($stateParams, function(stateParams) {
+                        var availableStatuses = [ORDER_STATUS.FULFILLING, ORDER_STATUS.ORDERED];
                         if (!stateParams.status) {
-                            stateParams.status = [ORDER_STATUS.FULFILLING, ORDER_STATUS.ORDERED];
+                            stateParams.status = availableStatuses;
+                        } else {
+                            stateParams.status = stateParams.status.filter(function(status) {
+                                return availableStatuses.indexOf(status) >= 0;
+                            });
                         }
                         return orderRepository.search(stateParams);
                     });
