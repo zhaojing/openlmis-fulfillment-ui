@@ -31,10 +31,9 @@
     factory.$inject = [];
 
     function factory() {
-        var factory = {};
-
-        factory.groupByOrderLineItem = groupByOrderLineItem;
-
+        var factory = {
+            groupByOrderLineItem: groupByOrderLineItem
+        };
         return factory;
 
         /**
