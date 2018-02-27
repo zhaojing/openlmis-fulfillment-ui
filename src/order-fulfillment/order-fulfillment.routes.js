@@ -58,12 +58,12 @@
                 orders: function(paginationService, orderRepository, $stateParams, ORDER_STATUS) {
                     return paginationService.registerUrl($stateParams, function(stateParams) {
                         var availableStatuses = [ORDER_STATUS.FULFILLING, ORDER_STATUS.ORDERED];
-                        if (!stateParams.status) {
-                            stateParams.status = availableStatuses;
-                        } else {
+                        if (stateParams.status instanceof Array) {
                             stateParams.status = stateParams.status.filter(function(status) {
                                 return availableStatuses.indexOf(status) >= 0;
                             });
+                        } else if (!stateParams.status || availableStatuses.indexOf(stateParams.status) < 0) {
+                            stateParams.status = availableStatuses;
                         }
                         return orderRepository.search(stateParams);
                     });
