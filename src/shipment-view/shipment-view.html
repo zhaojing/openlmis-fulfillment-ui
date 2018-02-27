@@ -1,22 +1,30 @@
 <h2>{{'shipmentView.title' | message:{orderCode:vm.order.orderCode} }}</h2>
-<aside>
+<aside class="requisition-info">
     <div ng-if="vm.order.emergency" class="emergency">
         {{'shipmentView.emergency' | message}}
     </div>
-    <dl>
-        <dt>{{'shipmentView.status' | message}}</dt>
-        <dd>{{vm.order.status}}<dd>
-        <dt>{{'shipmentView.dateCreated' | message}}</dt>
-        <dd>{{vm.order.createdDate | openlmisDate}}<dd>
-        <dt>{{'shipmentView.program' | message}}</dt>
-        <dd>{{vm.order.program.name}}<dd>
-        <dt>{{'shipmentView.facility' | message}}</dt>
-        <dd>{{vm.order.requestingFacility.name}}<dd>
-        <dt>{{'shipmentView.cceStatus' | message}}</dt>
-        <dd>
-            <facility-cce-status facility="vm.order.requestingFacility"></facility-cce-status>
-        </dd>
-    </dl>
+    <ul>
+      <li>
+        <strong>{{'shipmentView.status' | message}}</strong>
+        {{vm.order.status}}
+      </il>
+      <li>
+        <strong>{{'shipmentView.dateCreated' | message}}</strong>
+        {{vm.order.createdDate | openlmisDate}}
+      </li>
+      <li>
+        <strong>{{'shipmentView.program' | message}}</strong>
+        {{vm.order.program.name}}
+      </li>
+      <li>
+        <strong>{{'shipmentView.facility' | message}}</strong>
+        {{vm.order.requestingFacility.name}}
+      </li>
+      <li>
+        <strong>{{'shipmentView.cceStatus' | message}}</strong>
+        <facility-cce-status facility="vm.order.requestingFacility"></facility-cce-status>
+      </li>
+    </ul>
 </aside>
 <section class="openlmis-table-container">
     <table>

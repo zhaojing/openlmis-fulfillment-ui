@@ -16,6 +16,7 @@ New functionality added in a backwards-compatible manner:
 * [OLMIS-4014](https://openlmis.atlassian.net/browse/OLMIS-4014): Added VVM status column on POD view screen.
 
 Improvements:
+* [OLMIS-4077](https://openlmis.atlassian.net/browse/OLMIS-4077): Rearranged fulfillment view header.
 * [OLMIS-3876](https://openlmis.atlassian.net/browse/OLMIS-3876): Split navigation and filter forms in manage POD and orders pages
 * [OLMIS-3955](https://openlmis.atlassian.net/browse/OLMIS-3955): Renamed PICKING order status to FULFILLING. Removed PICKED and IN_TRANSIT.
 * [OLMIS-3954](https://openlmis.atlassian.net/browse/OLMIS-3954): Added hiding Fulfill button for orders with status different than FULFILLING and ORDERED. Updated UI to create shipment draft after clicking Fulfill button.
