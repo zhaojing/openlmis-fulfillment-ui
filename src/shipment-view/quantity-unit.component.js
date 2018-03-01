@@ -31,7 +31,7 @@
             controllerAs: 'vm',
             templateUrl: 'shipment-view/quantity-unit.html',
             bindings: {
-                quantityUnit: '=',
+                quantityUnit: '='
             }
         });
 })();
