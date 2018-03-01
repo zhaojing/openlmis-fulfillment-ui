@@ -23,6 +23,7 @@ Improvements:
 * [OLMIS-3993](https://openlmis.atlassian.net/browse/OLMIS-3993): Updated labels and columns on Manage PoDs screen.
 * [OLMIS-4165](https://openlmis.atlassian.net/browse/OLMIS-4165): Changed Order search endpoint and renamed its parameters.
 * [OLMIS-4119](https://openlmis.atlassian.net/browse/OLMIS-4119): Renamed POD endpoint.
+* [OLMIS-892](https://openlmis.atlassian.net/browse/OLMIS-4119): Show Ordered Quantity on the Proof of Delivery view
 
 5.1.0 / 2017-11-09
 ==================
