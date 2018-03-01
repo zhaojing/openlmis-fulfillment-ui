@@ -7,7 +7,7 @@
       <li>
         <strong>{{'shipmentView.status' | message}}</strong>
         {{vm.order.status}}
-      </il>
+      </li>
       <li>
         <strong>{{'shipmentView.dateCreated' | message}}</strong>
         {{vm.order.createdDate | openlmisDate}}
@@ -26,6 +26,7 @@
       </li>
     </ul>
 </aside>
+<quantity-unit quantity-unit="vm.quantityUnit"></quantity-unit>
 <section class="openlmis-table-container">
     <table>
         <thead>
@@ -48,7 +49,7 @@
             <td></td>
             <td></td>
             <td></td>
-            <td>{{item.orderedQuantity}}</td>
+            <td>{{vm.calculateQuantity(item.orderedQuantity, item.orderable.netContent)}}</td>
             <td>{{item.calculateFillQuantity()}}</td>
         </tr>
         <tr ng-repeat-end ng-repeat="shipmentLineItem in item.shipmentLineItems">
@@ -57,7 +58,7 @@
             <td>{{shipmentLineItem.lot | lotCode}}</td>
             <td>{{shipmentLineItem.summary.extraData.vvmStatus}}</td>
             <td>{{shipmentLineItem.lot.expirationDate | openlmisDate}}</td>
-            <td>{{shipmentLineItem.summary.stockOnHand}}</td>
+            <td>{{vm.calculateQuantity(shipmentLineItem.summary.stockOnHand, item.orderable.netContent)}}</td>
             <td></td>
             <td>
                 <input ng-show="vm.isEditable()"

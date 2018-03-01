@@ -47,6 +47,7 @@
         vm.saveAndPrint = saveAndPrint;
         vm.confirmShipment = confirmShipment;
         vm.isEditable = isEditable;
+        vm.calculateQuantity = calculateQuantity;
 
         /**
          * @ngdoc property
@@ -82,6 +83,17 @@
         vm.orderFulfillmentLineItems = undefined;
 
         /**
+         * @ngdoc property
+         * @propertyOf shipment-view.controller:ShipmentViewController
+         * @name quantityUnit
+         * @type {Object}
+         *
+         * @description
+         * Holds quantity unit.
+         */
+        vm.quantityUnit = {};
+
+        /**
          * @ngdoc method
          * @methodOf shipment-view.controller:ShipmentViewController
          * @name onInit
@@ -108,6 +120,24 @@
          */
         function isEditable() {
             return ORDER_STATUS.SHIPPED !== vm.order.status;
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf shipment-view.controller:ShipmentViewController
+         * @name calculateQuantity
+         *
+         * @description
+         * Returns quantity in packs or in doses.
+         *
+         * @return {number} the quantity.
+         */
+        function calculateQuantity(quantity, netContent) {
+            if (vm.quantityUnit.unit && vm.quantityUnit.unit.value === "doses") {
+                return quantity * netContent;
+            } else {
+                return quantity;
+            }
         }
 
         /**
