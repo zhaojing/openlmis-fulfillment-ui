@@ -52,7 +52,7 @@
             <tr ng-if="vm.fulfillingLineItems[orderLineItem.id].length" ng-repeat-start="orderLineItem in vm.order.orderLineItems | orderBy : 'orderable.fullProductName'">
                 <td>{{orderLineItem.orderable.fullProductName}}</td>
                 <td>{{orderLineItem.orderable.dispensable.dispensingUnit}}</td>
-                <td>{{orderLineItem.packsToShip}}</td>
+                <td>{{orderLineItem.orderedQuantity}}</td>
                 <td></td>
                 <td></td>
                 <td></td>
