@@ -37,7 +37,6 @@
             this.filledQuantity = 40 + OrderLineItemDataBuilder.instanceNumber;
             this.orderable = new OrderableDataBuilder().build();
             this.orderedQuantity = 30 + OrderLineItemDataBuilder.instanceNumber;
-            this.packsToShip = 10 + OrderLineItemDataBuilder.instanceNumber;
         }
 
         function withOrderable(orderable) {
@@ -51,7 +50,6 @@
                 filledQuantity: this.filledQuantity,
                 orderable: this.orderable,
                 orderedQuantity: this.orderedQuantity,
-                packsToShip: this.packsToShip
             };
         }
     }
