@@ -31,13 +31,14 @@
     ShipmentViewController.$inject = [
         '$scope', 'shipment', 'orderFulfillmentLineItems', 'shipmentDraftService', 'shipmentService',
         'loadingModalService', '$state', '$window', 'fulfillmentUrlFactory', 'messageService',
-        'confirmService', 'notificationService', 'stateTrackerService', 'accessTokenFactory', 'ORDER_STATUS', 'updatedOrder'
+        'confirmService', 'notificationService', 'stateTrackerService', 'accessTokenFactory',
+        'ORDER_STATUS', 'updatedOrder', 'QUANTITY_UNIT'
     ];
 
     function ShipmentViewController($scope, shipment, orderFulfillmentLineItems, shipmentDraftService, shipmentService,
                                     loadingModalService, $state, $window, fulfillmentUrlFactory, messageService,
                                     confirmService, notificationService, stateTrackerService, accessTokenFactory, ORDER_STATUS,
-                                    updatedOrder) {
+                                    updatedOrder, QUANTITY_UNIT) {
 
         var vm = this;
 
@@ -134,7 +135,7 @@
          * @return {number} the quantity.
          */
         function calculateQuantity(quantity, netContent) {
-            if (vm.quantityUnit.unit && vm.quantityUnit.unit.value === "doses") {
+            if (vm.quantityUnit.unit && vm.quantityUnit.unit.value === QUANTITY_UNIT.DOSES) {
                 return quantity * netContent;
             } else {
                 return quantity;

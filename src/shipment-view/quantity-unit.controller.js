@@ -29,14 +29,25 @@
         .controller('QuantityUnitController', QuantityUnitController);
 
     QuantityUnitController.$inject = [
-        'messageService'
+        'messageService', 'QUANTITY_UNIT'
     ];
 
-    function QuantityUnitController(messageService) {
+    function QuantityUnitController(messageService, QUANTITY_UNIT) {
 
         var vm = this;
 
         vm.$onInit = onInit;
+
+        /**
+         * @ngdoc property
+         * @propertyOf shipment-view.controller:QuantityUnitController
+         * @name quantityUnits
+         * @type {Array}
+         *
+         * @description
+         * Holds quantiy units that will be displayed on toggle component.
+         */
+        vm.quantityUnits = undefined;
 
         /**
          * @ngdoc method
@@ -50,11 +61,11 @@
         function onInit() {
             vm.quantityUnits = [
                 {
-                    value: 'packs',
+                    value: QUANTITY_UNIT.PACKS,
                     name: messageService.get('shipmentView.packs')
                 },
                 {
-                    value: 'doses',
+                    value: QUANTITY_UNIT.DOSES,
                     name: messageService.get('shipmentView.doses')
                 }
             ];
