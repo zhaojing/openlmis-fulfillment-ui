@@ -16,12 +16,13 @@
 describe('orderFulfillmentLineItemFactory', function() {
 
     var orderFulfillmentLineItemFactory, OrderLineItemDataBuilder, OrderResponseDataBuilder,
-        ShipmentDataBuilder, ObjectReferenceDataBuilder, ShipmentLineItemDataBuilder,
+        ShipmentDataBuilder, ObjectReferenceDataBuilder, ShipmentLineItemDataBuilder, OrderLineItem,
         StockCardSummaryDataBuilder, LotDataBuilder, OrderableDataBuilder, ShipmentLineItemWithSummary;
 
     var firstOrderLineItem, secondOrderLineItem, thirdOrderLineItem, fourthOrderLineItem,
-        fifthOrderLineItem, order, shipment, ORDER_ID, NET_CONTENT, SOH_FIVE, SOH_THREE,
-        SOH_DEFAULT, orderableOne, lotOne, lotTwo, lotThree, lotFour, lotFive, lotSix, stockCardSummaries;
+        fifthOrderLineItem, sixthOrderLineItem, order, shipment, ORDER_ID, NET_CONTENT, SOH_FIVE,
+        SOH_THREE, SOH_DEFAULT, orderableOne, orderableTwo, lotOne, lotTwo, lotThree, lotFour,
+        lotFive, lotSix, stockCardSummaries;
 
     beforeEach(function() {
         module('shipment-view');
@@ -39,7 +40,7 @@ describe('orderFulfillmentLineItemFactory', function() {
             LotDataBuilder = $injector.get("LotDataBuilder");
             OrderableDataBuilder = $injector.get("OrderableDataBuilder");
             ShipmentLineItemWithSummary = $injector.get("ShipmentLineItemWithSummary");
-
+            OrderLineItem = $injector.get("OrderLineItem");
         });
 
         ORDER_ID = 'order-id';
@@ -49,6 +50,7 @@ describe('orderFulfillmentLineItemFactory', function() {
         SOH_THREE = 3;
 
         orderableOne = new OrderableDataBuilder().buildJson();
+        orderableTwo = new OrderableDataBuilder().buildJson();
 
         lotOne = new LotDataBuilder().withExpirationDate('2017-02-02T05:59:51.993Z').build();
         lotTwo = new LotDataBuilder().withExpirationDate('2017-02-02T05:59:51.993Z').build();
@@ -62,13 +64,15 @@ describe('orderFulfillmentLineItemFactory', function() {
         thirdOrderLineItem = new OrderLineItemDataBuilder().withOrderable(orderableOne).build();
         fourthOrderLineItem = new OrderLineItemDataBuilder().withOrderable(orderableOne).build();
         fifthOrderLineItem = new OrderLineItemDataBuilder().withOrderable(orderableOne).build();
+        sixthOrderLineItem = new OrderLineItemDataBuilder().withOrderable(orderableTwo).build();
 
         order = new OrderResponseDataBuilder().withOrderLineItems([
             firstOrderLineItem,
             secondOrderLineItem,
             thirdOrderLineItem,
             fourthOrderLineItem,
-            fifthOrderLineItem
+            fifthOrderLineItem,
+            sixthOrderLineItem
         ]);
 
         stockCardSummaries = [
@@ -124,8 +128,10 @@ describe('orderFulfillmentLineItemFactory', function() {
                     .withOrderable(new ObjectReferenceDataBuilder().withId(orderableOne.id))
                     .withLot(new ObjectReferenceDataBuilder().withId(lotSix.id))
                     .withQuantityShipped(90)
+                    .build(),
+                new ShipmentLineItemDataBuilder()
+                    .withOrderable(new ObjectReferenceDataBuilder().withId(orderableTwo.id))
                     .build()
-
             ])
             .build();
     });
@@ -147,6 +153,13 @@ describe('orderFulfillmentLineItemFactory', function() {
             expect(result[0].shipmentLineItems[3].summary).toEqual(stockCardSummaries[2]);
             expect(result[0].shipmentLineItems[4].summary).toEqual(stockCardSummaries[0]);
             expect(result[0].shipmentLineItems[5].summary).toEqual(stockCardSummaries[4]);
+        });
+
+        it('should return line items without matching stock cards', function() {
+            expect(result[5].shipmentLineItems.length).toBe(0);
+
+            expect(result[5].orderable).toEqual(orderableTwo);
+            expect(result[5] instanceof OrderLineItem).toBe(true);
         });
 
         it('should sort line items', function() {

@@ -19,7 +19,7 @@ describe('shipmentFactory', function() {
         ShipmentDataBuilder, PageDataBuilder, OrderDataBuilder, StockCardSummaryDataBuilder,
         OrderableDataBuilder, LotDataBuilder, OrderLineItemDataBuilder, order, shipment,
         stockCardSummaries, orderableOne, orderableTwo, lotOne, lotTwo, searchPromise,
-        shipmentLineItems, ShipmentLineItemDataBuilder;
+        shipmentLineItems, ShipmentLineItemDataBuilder, orderableThree;
 
     beforeEach(function() {
         module('referencedata-lot');
@@ -45,6 +45,7 @@ describe('shipmentFactory', function() {
 
         orderableOne = new OrderableDataBuilder().build();
         orderableTwo = new OrderableDataBuilder().build();
+        orderableThree = new OrderableDataBuilder().build();
 
         lotOne = new LotDataBuilder().build();
         lotTwo = new LotDataBuilder().build();
@@ -72,27 +73,35 @@ describe('shipmentFactory', function() {
                     .build(),
                 new OrderLineItemDataBuilder()
                     .withOrderable(orderableTwo)
+                    .build(),
+                new OrderLineItemDataBuilder()
+                    .withOrderable(orderableThree)
                     .build()
             ])
             .build();
 
         shipmentLineItems = [
             new ShipmentLineItemDataBuilder()
-                    .withOrderable(stockCardSummaries[0].orderable)
-                    .withLot(stockCardSummaries[0].lot)
-                    .withQuantityShipped(0)
-                    .build(),
-                new ShipmentLineItemDataBuilder()
-                    .withOrderable(stockCardSummaries[1].orderable)
-                    .withLot(stockCardSummaries[1].lot)
-                    .withQuantityShipped(0)
-                    .build(),
-                new ShipmentLineItemDataBuilder()
-                    .withOrderable(stockCardSummaries[2].orderable)
-                    .withLot(stockCardSummaries[2].lot)
-                    .withQuantityShipped(0)
-                    .build(),
-        ]
+                .withOrderable(stockCardSummaries[0].orderable)
+                .withLot(stockCardSummaries[0].lot)
+                .withQuantityShipped(0)
+                .build(),
+            new ShipmentLineItemDataBuilder()
+                .withOrderable(stockCardSummaries[1].orderable)
+                .withLot(stockCardSummaries[1].lot)
+                .withQuantityShipped(0)
+                .build(),
+            new ShipmentLineItemDataBuilder()
+                .withOrderable(stockCardSummaries[2].orderable)
+                .withLot(stockCardSummaries[2].lot)
+                .withQuantityShipped(0)
+                .build(),
+            new ShipmentLineItemDataBuilder()
+                .withOrderable(order.orderLineItems[2].orderable)
+                .withoutLot()
+                .withQuantityShipped(0)
+                .build()
+        ];
 
         shipment = new ShipmentDataBuilder()
             .withOrder(order)
@@ -167,7 +176,7 @@ describe('shipmentFactory', function() {
             $rootScope.$apply();
 
             expect(result.order).toEqual(order);
-            expect(result.lineItems.length).toBe(3);
+            expect(result.lineItems.length).toBe(4);
 
             expect(result.lineItems[0].orderable).toEqual(stockCardSummaries[0].orderable);
             expect(result.lineItems[0].lot).toEqual(stockCardSummaries[0].lot);
@@ -180,6 +189,10 @@ describe('shipmentFactory', function() {
             expect(result.lineItems[2].orderable).toEqual(stockCardSummaries[2].orderable);
             expect(result.lineItems[2].lot).toEqual(stockCardSummaries[2].lot);
             expect(result.lineItems[2].quantityShipped).toBe(0);
+
+            expect(result.lineItems[3].orderable).toEqual(order.orderLineItems[2].orderable);
+            expect(result.lineItems[3].lot).toBeUndefined();
+            expect(result.lineItems[3].quantityShipped).toBe(0);
         });
 
         it('should save draft based on the summaries if it does not yet exist', function() {
@@ -194,7 +207,7 @@ describe('shipmentFactory', function() {
 
             expect(shipmentDraftService.save).toHaveBeenCalled();
             expect(result.order).toEqual(order);
-            expect(result.lineItems.length).toBe(3);
+            expect(result.lineItems.length).toBe(4);
         });
 
         it('should reject if shipmentService rejects', function() {

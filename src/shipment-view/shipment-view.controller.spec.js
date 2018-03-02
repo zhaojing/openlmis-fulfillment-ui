@@ -15,9 +15,11 @@
 
 describe('ShipmentViewController', function() {
 
-    var vm, $q, $controller, $rootScope, $state, $window, shipment, OrderDataBuilder, loadingModalService, shipmentService, ORDER_STATUS,
-        confirmService, shipmentDraftService, notificationService, loadingDeferred, stateTrackerService, order, ShipmentDataBuilder,
-        lineItem, ShipmentLineItemWithSummaryDataBuilder, shipmentLineItem;
+    var vm, $q, $controller, $rootScope, $state, $window, shipment, OrderDataBuilder,
+        loadingModalService, shipmentService, ORDER_STATUS, confirmService, shipmentDraftService,
+        notificationService, loadingDeferred, stateTrackerService, order, ShipmentDataBuilder,
+        lineItem, ShipmentLineItemWithSummaryDataBuilder, shipmentLineItem,
+        shipmentLineItemWithoutSummary;
 
     beforeEach(function() {
         module('shipment-view');
@@ -43,6 +45,12 @@ describe('ShipmentViewController', function() {
         shipmentLineItem = new ShipmentLineItemWithSummaryDataBuilder()
             .withQuantityShipped(10)
             .build();
+
+        shipmentLineItemWithoutSummary = new ShipmentLineItemWithSummaryDataBuilder()
+            .withoutSummary()
+            .withQuantityShipped(10)
+            .build();
+
         lineItem = {
             shipmentLineItems: [
                 shipmentLineItem
@@ -667,6 +675,23 @@ describe('ShipmentViewController', function() {
 
             vm.order.status = ORDER_STATUS.ORDERED;
             expect(vm.isEditable()).toBe(true);
+        });
+    });
+
+    describe('canBeConfirmed', function() {
+
+        it('should return true if there is at least one stock card for any shipment line item', function() {
+            vm.$onInit();
+
+            expect(vm.canBeConfirmed()).toBe(true);
+        });
+
+        it('should return false if all shipment line item does not have stock cards', function() {
+            lineItem.shipmentLineItems[0] = shipmentLineItemWithoutSummary;
+            vm.orderFulfillmentLineItems = [lineItem];
+            vm.$onInit();
+
+            expect(vm.canBeConfirmed()).toBe(false);
         });
     });
 });

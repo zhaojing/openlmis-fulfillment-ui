@@ -89,11 +89,19 @@
         }
 
         function filterByOrder(stockCardSummaries, order) {
-            return stockCardSummaries.filter(function(stockCardSummary) {
-                return filterByOrderableId(
+             return stockCardSummaries.filter(function(stockCardSummary) {
+                var filtered = filterByOrderableId(
                     order.orderLineItems,
                     stockCardSummary.orderable.id
-                ).length > 0;
+                );
+
+                order.orderLineItems.filter(function(orderLineItem) {
+                    if (filtered.indexOf(orderLineItem) < 0) {
+                        filtered.push(orderLineItem);
+                    }
+                });
+
+                return filtered;
             });
         }
 

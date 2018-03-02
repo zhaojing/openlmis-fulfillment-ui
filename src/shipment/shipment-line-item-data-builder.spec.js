@@ -31,6 +31,7 @@
         ShipmentLineItemDataBuilder.prototype.withOrderable = withOrderable;
         ShipmentLineItemDataBuilder.prototype.withLot = withLot;
         ShipmentLineItemDataBuilder.prototype.withQuantityShipped = withQuantityShipped;
+        ShipmentLineItemDataBuilder.prototype.withoutLot = withoutLot;
         ShipmentLineItemDataBuilder.prototype.build = build;
 
         return ShipmentLineItemDataBuilder;
@@ -67,6 +68,11 @@
 
         function withLot(lot) {
             this.lot = lot;
+            return this;
+        }
+
+        function withoutLot() {
+            this.lot = undefined;
             return this;
         }
 

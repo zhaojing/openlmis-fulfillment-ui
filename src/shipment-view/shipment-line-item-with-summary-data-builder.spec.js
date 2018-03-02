@@ -28,6 +28,7 @@
     function ShipmentLineItemWithSummaryDataBuilder(StockCardSummaryDataBuilder,
                                                     ShipmentLineItemWithSummary) {
 
+        ShipmentLineItemWithSummaryDataBuilder.prototype.withoutSummary = withoutSummary;
         ShipmentLineItemWithSummaryDataBuilder.prototype.withQuantityShipped = withQuantityShipped;
         ShipmentLineItemWithSummaryDataBuilder.prototype.build = build;
 
@@ -44,6 +45,11 @@
 
         function withQuantityShipped(quantityShipped) {
             this.quantityShipped = quantityShipped;
+            return this;
+        }
+
+        function withoutSummary() {
+            this.summary = {};
             return this;
         }
 
