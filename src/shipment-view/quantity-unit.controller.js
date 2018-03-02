@@ -37,6 +37,7 @@
         var vm = this;
 
         vm.$onInit = onInit;
+        vm.getMessage = getMessage;
 
         /**
          * @ngdoc property
@@ -62,14 +63,26 @@
             vm.quantityUnits = [
                 {
                     value: QUANTITY_UNIT.PACKS,
-                    name: messageService.get('shipmentView.packs')
+                    name: 'shipmentView.packs'
                 },
                 {
                     value: QUANTITY_UNIT.DOSES,
-                    name: messageService.get('shipmentView.doses')
+                    name: 'shipmentView.doses'
                 }
             ];
             vm.quantityUnit.unit = vm.quantityUnits[0];
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf proof-of-delivery-view.controller:PodViewController
+         * @name getMessage
+         *
+         * @description
+         * Returns translated mssage for key.
+         */
+        function getMessage(key) {
+            return messageService.get(key);
         }
 
     }
