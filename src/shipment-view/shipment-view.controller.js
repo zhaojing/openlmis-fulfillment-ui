@@ -93,7 +93,7 @@
          * @description
          * Holds quantity unit.
          */
-        vm.quantityUnit = {};
+        vm.quantityUnit = undefined;
 
         /**
          * @ngdoc method
@@ -135,7 +135,7 @@
          * @return {number} the quantity.
          */
         function calculateQuantity(quantity, netContent) {
-            if (vm.quantityUnit.unit && vm.quantityUnit.unit.value === QUANTITY_UNIT.DOSES) {
+            if (vm.quantityUnit && vm.quantityUnit.value === QUANTITY_UNIT.DOSES) {
                 return quantity * netContent;
             } else {
                 return quantity;

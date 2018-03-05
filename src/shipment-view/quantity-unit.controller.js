@@ -70,7 +70,7 @@
                     name: 'shipmentView.doses'
                 }
             ];
-            vm.quantityUnit.unit = vm.quantityUnits[0];
+            vm.quantityUnit = vm.quantityUnits[0];
         }
 
         /**
