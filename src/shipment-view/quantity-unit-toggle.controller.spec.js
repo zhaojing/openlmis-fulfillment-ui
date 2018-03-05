@@ -13,7 +13,7 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-describe('QuantityUnitController', function() {
+describe('QuantityUnitToggleController', function() {
 
     var vm, $controller, messageService, QUANTITY_UNIT;
 
@@ -26,7 +26,7 @@ describe('QuantityUnitController', function() {
             QUANTITY_UNIT = $injector.get('QUANTITY_UNIT');
         });
 
-        vm = $controller('QuantityUnitController', {
+        vm = $controller('QuantityUnitToggleController', {
             messageService: messageService,
         });
     });

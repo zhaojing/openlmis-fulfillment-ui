@@ -19,17 +19,17 @@
 
     /**
      * @ngdoc service
-     * @name shipment-view.component:quantityUnit
+     * @name shipment-view.component:quantityUnitToggle
      *
      * @description
-     * The Quanity Unit component.
+     * The Quanity Unit Toggle component.
      */
     angular
         .module('shipment-view')
-        .component('quantityUnit', {
-            controller: 'QuantityUnitController',
+        .component('quantityUnitToggle', {
+            controller: 'QuantityUnitToggleController',
             controllerAs: 'vm',
-            templateUrl: 'shipment-view/quantity-unit.html',
+            templateUrl: 'shipment-view/quantity-unit-toggle.html',
             bindings: {
                 quantityUnit: '='
             }

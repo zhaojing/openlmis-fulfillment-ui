@@ -19,20 +19,20 @@
 
     /**
      * @ngdoc controller
-     * @name shipment-view.controller:QuantityUnitController
+     * @name shipment-view.controller:QuantityUnitToggleController
      *
      * @description
      * Responsible for managing quantity unit element.
      */
     angular
         .module('shipment-view')
-        .controller('QuantityUnitController', QuantityUnitController);
+        .controller('QuantityUnitToggleController', QuantityUnitToggleController);
 
-    QuantityUnitController.$inject = [
+    QuantityUnitToggleController.$inject = [
         'messageService', 'QUANTITY_UNIT'
     ];
 
-    function QuantityUnitController(messageService, QUANTITY_UNIT) {
+    function QuantityUnitToggleController(messageService, QUANTITY_UNIT) {
 
         var vm = this;
 
@@ -41,7 +41,7 @@
 
         /**
          * @ngdoc property
-         * @propertyOf shipment-view.controller:QuantityUnitController
+         * @propertyOf shipment-view.controller:QuantityUnitToggleController
          * @name quantityUnits
          * @type {Array}
          *
@@ -52,7 +52,7 @@
 
         /**
          * @ngdoc property
-         * @propertyOf shipment-view.controller:QuantityUnitController
+         * @propertyOf shipment-view.controller:QuantityUnitToggleController
          * @name quantityUnit
          * @type {Object}
          *
@@ -63,7 +63,7 @@
 
         /**
          * @ngdoc method
-         * @methodOf shipment-view.controller:QuantityUnitController
+         * @methodOf shipment-view.controller:QuantityUnitToggleController
          * @name onInit
          *
          * @description
