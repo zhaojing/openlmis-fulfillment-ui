@@ -1,4 +1,5 @@
 <select id="quantityUnit"
         ng-model="vm.quantityUnit"
-        ng-options="quantityUnit as vm.getMessage(quantityUnit) for quantityUnit in vm.quantityUnits">
+        ng-options="quantityUnit as vm.getMessage(quantityUnit) for quantityUnit in vm.quantityUnits"
+        ng-change="vm.onChange()">
 </select>

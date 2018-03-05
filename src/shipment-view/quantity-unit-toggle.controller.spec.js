@@ -13,9 +13,9 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-describe('QuantityUnitToggleController', function() {
+ddescribe('QuantityUnitToggleController', function() {
 
-    var vm, $controller, messageService, QUANTITY_UNIT;
+    var vm, $controller, messageService, QUANTITY_UNIT, localStorageService;
 
     beforeEach(function() {
         module('shipment-view');
@@ -24,27 +24,47 @@ describe('QuantityUnitToggleController', function() {
             $controller = $injector.get('$controller');
             messageService = $injector.get('messageService');
             QUANTITY_UNIT = $injector.get('QUANTITY_UNIT');
+            localStorageService = $injector.get('localStorageService');
         });
 
         vm = $controller('QuantityUnitToggleController', {
             messageService: messageService,
+            localStorageService: localStorageService,
         });
     });
 
     describe('onInit', function() {
 
-        beforeEach(function() {
-            vm.$onInit();
-        });
-
         it('should expose quantityUnits', function() {
+            vm.$onInit();
             expect(vm.quantityUnits).toEqual([
                 QUANTITY_UNIT.PACKS,
                 QUANTITY_UNIT.DOSES
             ]);
         });
 
-        it('should expose quantityUnit', function() {
+        it('should expose default quantityUnit when not cached in storage', function() {
+            spyOn(localStorageService, 'get').andReturn(null);
+
+            vm.$onInit();
+
+            expect(vm.quantityUnit).toEqual(QUANTITY_UNIT.PACKS);
+            expect(localStorageService.get).toHaveBeenCalledWith('quantityUnit');
+        });
+
+        it('should expose quantityUnit doses from storage', function() {
+            spyOn(localStorageService, 'get').andReturn('DOSES');
+
+            vm.$onInit();
+
+            expect(vm.quantityUnit).toEqual(QUANTITY_UNIT.DOSES);
+        });
+
+        it('should expose quantityUnit packs from storage', function() {
+            spyOn(localStorageService, 'get').andReturn('PACKS');
+
+            vm.$onInit();
+
             expect(vm.quantityUnit).toEqual(QUANTITY_UNIT.PACKS);
         });
     });
@@ -66,6 +86,28 @@ describe('QuantityUnitToggleController', function() {
 
             expect(messageService.get).toHaveBeenCalledWith('shipmentView.doses');
         });
+    });
+
+    describe('onChange', function() {
+
+        it('should add quantityUnit doses to local storage', function() {
+            spyOn(localStorageService, 'add');
+            vm.quantityUnit = QUANTITY_UNIT.DOSES;
+
+            vm.onChange();
+
+            expect(localStorageService.add).toHaveBeenCalledWith('quantityUnit', QUANTITY_UNIT.DOSES);
+        });
+
+        it('should add quantityUnit packs to local storage', function() {
+            spyOn(localStorageService, 'add');
+            vm.quantityUnit = QUANTITY_UNIT.PACKS;
+
+            vm.onChange();
+
+            expect(localStorageService.add).toHaveBeenCalledWith('quantityUnit', QUANTITY_UNIT.PACKS);
+        });
+
     });
 
 });

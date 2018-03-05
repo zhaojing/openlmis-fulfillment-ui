@@ -36,7 +36,7 @@
         };
         var displayNames = {
             PACKS: 'shipmentView.packs',
-            DOSES: 'shipmentView.doses',
+            DOSES: 'shipmentView.doses'
         };
 
         return values;

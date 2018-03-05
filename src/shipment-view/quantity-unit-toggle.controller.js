@@ -29,15 +29,18 @@
         .controller('QuantityUnitToggleController', QuantityUnitToggleController);
 
     QuantityUnitToggleController.$inject = [
-        'messageService', 'QUANTITY_UNIT'
+        'messageService', 'QUANTITY_UNIT', 'localStorageService'
     ];
 
-    function QuantityUnitToggleController(messageService, QUANTITY_UNIT) {
+    var QUANTITY_UNIT_KEY = 'quantityUnit';
+
+    function QuantityUnitToggleController(messageService, QUANTITY_UNIT, localStorageService) {
 
         var vm = this;
 
         vm.$onInit = onInit;
         vm.getMessage = getMessage;
+        vm.onChange = onChange;
 
         /**
          * @ngdoc property
@@ -75,19 +78,36 @@
                 QUANTITY_UNIT.PACKS,
                 QUANTITY_UNIT.DOSES
             ];
-            vm.quantityUnit = QUANTITY_UNIT.PACKS;
+            var cachedQuantityUnit = localStorageService.get(QUANTITY_UNIT_KEY);
+            if (cachedQuantityUnit === null) {
+                vm.quantityUnit = QUANTITY_UNIT.PACKS;
+            } else {
+                vm.quantityUnit = cachedQuantityUnit;
+            }
         }
 
         /**
          * @ngdoc method
-         * @methodOf proof-of-delivery-view.controller:PodViewController
+         * @methodOf shipment-view.controller:QuantityUnitToggleController
          * @name getMessage
          *
          * @description
-         * Returns translated mssage for key.
+         * Returns translated message for key.
          */
         function getMessage(unit) {
             return messageService.get(QUANTITY_UNIT.$getDisplayName(unit));
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf shipment-view.controller:QuantityUnitToggleController
+         * @name onChange
+         *
+         * @description
+         * Handles change in toggle.
+         */
+        function onChange() {
+            localStorageService.add(QUANTITY_UNIT_KEY, vm.quantityUnit);
         }
 
     }
