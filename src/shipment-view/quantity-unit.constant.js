@@ -29,10 +29,21 @@
         .constant('QUANTITY_UNIT', units());
 
     function units() {
-        return {
+        var values = {
             PACKS: 'PACKS',
-            DOSES: 'DOSES'
+            DOSES: 'DOSES',
+            $getDisplayName: getDisplayName
         };
+        var displayNames = {
+            PACKS: 'shipmentView.packs',
+            DOSES: 'shipmentView.doses',
+        };
+
+        return values;
+
+        function getDisplayName(name) {
+            return displayNames[name];
+        }
     }
 
 })();

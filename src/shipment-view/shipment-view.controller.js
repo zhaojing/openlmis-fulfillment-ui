@@ -135,7 +135,7 @@
          * @return {number} the quantity.
          */
         function calculateQuantity(quantity, netContent) {
-            if (vm.quantityUnit && vm.quantityUnit.value === QUANTITY_UNIT.DOSES) {
+            if (vm.quantityUnit === QUANTITY_UNIT.DOSES) {
                 return quantity * netContent;
             } else {
                 return quantity;

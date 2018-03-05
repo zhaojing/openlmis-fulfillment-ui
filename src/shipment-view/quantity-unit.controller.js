@@ -46,9 +46,20 @@
          * @type {Array}
          *
          * @description
-         * Holds quantiy units that will be displayed on toggle component.
+         * Holds quantity units that will be displayed on toggle component.
          */
         vm.quantityUnits = undefined;
+
+        /**
+         * @ngdoc property
+         * @propertyOf shipment-view.controller:QuantityUnitController
+         * @name quantityUnit
+         * @type {Object}
+         *
+         * @description
+         * Holds quantity unit.
+         */
+        vm.quantityUnit = undefined;
 
         /**
          * @ngdoc method
@@ -61,14 +72,8 @@
          */
         function onInit() {
             vm.quantityUnits = [
-                {
-                    value: QUANTITY_UNIT.PACKS,
-                    name: 'shipmentView.packs'
-                },
-                {
-                    value: QUANTITY_UNIT.DOSES,
-                    name: 'shipmentView.doses'
-                }
+                QUANTITY_UNIT.PACKS,
+                QUANTITY_UNIT.DOSES
             ];
             vm.quantityUnit = vm.quantityUnits[0];
         }
@@ -81,8 +86,8 @@
          * @description
          * Returns translated mssage for key.
          */
-        function getMessage(key) {
-            return messageService.get(key);
+        function getMessage(unit) {
+            return messageService.get(QUANTITY_UNIT.$getDisplayName(unit));
         }
 
     }
