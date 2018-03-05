@@ -13,7 +13,7 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-ddescribe('QuantityUnitToggleController', function() {
+describe('QuantityUnitToggleController', function() {
 
     var vm, $controller, messageService, QUANTITY_UNIT, localStorageService;
 
