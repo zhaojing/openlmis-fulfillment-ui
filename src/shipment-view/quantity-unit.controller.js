@@ -75,7 +75,7 @@
                 QUANTITY_UNIT.PACKS,
                 QUANTITY_UNIT.DOSES
             ];
-            vm.quantityUnit = vm.quantityUnits[0];
+            vm.quantityUnit = QUANTITY_UNIT.PACKS;
         }
 
         /**
