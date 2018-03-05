@@ -19,7 +19,7 @@ describe('ShipmentViewController', function() {
         loadingModalService, shipmentService, ORDER_STATUS, confirmService, shipmentDraftService,
         notificationService, loadingDeferred, stateTrackerService, order, ShipmentDataBuilder,
         lineItem, ShipmentLineItemWithSummaryDataBuilder, shipmentLineItem,
-        shipmentLineItemWithoutSummary;
+        shipmentLineItemWithoutSummary, QUANTITY_UNIT;
 
     beforeEach(function() {
         module('shipment-view');
@@ -39,6 +39,7 @@ describe('ShipmentViewController', function() {
             notificationService = $injector.get('notificationService');
             stateTrackerService =  $injector.get('stateTrackerService');
             ORDER_STATUS = $injector.get('ORDER_STATUS');
+            QUANTITY_UNIT = $injector.get('QUANTITY_UNIT');
             ShipmentLineItemWithSummaryDataBuilder = $injector.get('ShipmentLineItemWithSummaryDataBuilder');
         });
 
@@ -692,6 +693,23 @@ describe('ShipmentViewController', function() {
             vm.$onInit();
 
             expect(vm.canBeConfirmed()).toBe(false);
+        });
+    });
+
+    describe('calculateQuantity', function() {
+
+        it('should properly calculate for doses', function() {
+            vm.quantityUnit = QUANTITY_UNIT.DOSES;
+
+            expect(vm.calculateQuantity(10, 5)).toBe(50);
+            expect(vm.calculateQuantity(3, 2)).toBe(6);
+        });
+
+        it('should properly calculate for packs', function() {
+            vm.quantityUnit = QUANTITY_UNIT.PACKS;
+
+            expect(vm.calculateQuantity(10, 5)).toBe(10);
+            expect(vm.calculateQuantity(3, 2)).toBe(3);
         });
     });
 });
