@@ -24,6 +24,7 @@ Improvements:
 * [OLMIS-4165](https://openlmis.atlassian.net/browse/OLMIS-4165): Changed Order search endpoint and renamed its parameters.
 * [OLMIS-4119](https://openlmis.atlassian.net/browse/OLMIS-4119): Renamed POD endpoint.
 * [OLMIS-892](https://openlmis.atlassian.net/browse/OLMIS-892): Show Ordered Quantity on the Proof of Delivery view
+* [OLMIS-4078](https://openlmis.atlassian.net/browse/OLMIS-4078): Allowed order fulfillment to start even if no matching stock cards.
 
 5.1.0 / 2017-11-09
 ==================
