@@ -49,6 +49,7 @@
         vm.confirmShipment = confirmShipment;
         vm.isEditable = isEditable;
         vm.calculateQuantity = calculateQuantity;
+        vm.getSelectedQuantityUnitKey = getSelectedQuantityUnitKey;
 
         /**
          * @ngdoc property
@@ -139,6 +140,18 @@
             } else {
                 return quantity;
             }
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf shipment-view.controller:ShipmentViewController
+         * @name getSelectedQuantityUnitKey
+         *
+         * @description
+         * Returns message key for selected quantity unit.
+         */
+        function getSelectedQuantityUnitKey() {
+            return QUANTITY_UNIT.$getDisplayName(vm.quantityUnit);
         }
 
         /**
