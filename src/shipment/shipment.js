@@ -33,8 +33,8 @@
 
         return Shipment;
 
-        function Shipment(shipment) {
-            angular.merge(this, shipment);
+        function Shipment(json) {
+            angular.copy(json, this);
         }
 
         /**
