@@ -49,7 +49,6 @@
         vm.confirmShipment = confirmShipment;
         vm.isEditable = isEditable;
         vm.calculateQuantity = calculateQuantity;
-        vm.canBeConfirmed = canBeConfirmed;
 
         /**
          * @ngdoc property
@@ -262,26 +261,6 @@
                 notificationService.error('shipmentView.failedToSaveDraft');
                 loadingModalService.close();
             });
-        }
-
-        /**
-         * @ngdoc method
-         * @methodOf shipment-view.controller:ShipmentViewController
-         * @name canBeConfirmed
-         *
-         * @description
-         * Returns true if shipment can be confirmed.
-         */
-        function canBeConfirmed() {
-            var canBeConfirmed = false;
-            vm.orderFulfillmentLineItems.forEach(function(orderLineItem) {
-                orderLineItem.shipmentLineItems.forEach(function(shipmentLineItem) {
-                    if (shipmentLineItem.summary.orderable) {
-                        canBeConfirmed = true;
-                    }
-                });
-            });
-            return canBeConfirmed;
         }
 
         function isShipmentValid() {

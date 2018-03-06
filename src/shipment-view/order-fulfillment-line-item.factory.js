@@ -60,11 +60,7 @@
                     shipmentLineItem.lot
                 )[0];
 
-                if (summary) {
-                    calculateSohInPacks(summary);
-                } else {
-                    summary = {};
-                }
+                calculateSohInPacks(summary);
 
                 shipmentLineItems.push(new ShipmentLineItemWithSummary(
                     shipmentLineItem.id,
@@ -104,7 +100,7 @@
 
         function filterByOrderableId(shipmentLineItems, orderableId) {
             return shipmentLineItems.filter(function(shipmentLineItem) {
-                if (shipmentLineItem.orderable && shipmentLineItem.orderable.id === orderableId) {
+                if (shipmentLineItem.orderable.id === orderableId) {
                     return true;
                 }
                 return false;

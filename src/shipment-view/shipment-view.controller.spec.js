@@ -679,23 +679,6 @@ describe('ShipmentViewController', function() {
         });
     });
 
-    describe('canBeConfirmed', function() {
-
-        it('should return true if there is at least one stock card for any shipment line item', function() {
-            vm.$onInit();
-
-            expect(vm.canBeConfirmed()).toBe(true);
-        });
-
-        it('should return false if all shipment line item does not have stock cards', function() {
-            lineItem.shipmentLineItems[0] = shipmentLineItemWithoutSummary;
-            vm.orderFulfillmentLineItems = [lineItem];
-            vm.$onInit();
-
-            expect(vm.canBeConfirmed()).toBe(false);
-        });
-    });
-
     describe('calculateQuantity', function() {
 
         it('should properly calculate for doses', function() {

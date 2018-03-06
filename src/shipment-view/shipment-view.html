@@ -74,9 +74,9 @@
 </section>
 <div ng-show="vm.isEditable()" class="openlmis-toolbar">
     <div class="button-group primary">
-        <button ng-show="vm.canBeConfirmed()" class="primary" ng-click="vm.confirmShipment()">{{'shipmentView.confirmShipment' | message}}</button>
+        <button ng-show="vm.shipment.canBeConfirmed()" class="primary" ng-click="vm.confirmShipment()">{{'shipmentView.confirmShipment' | message}}</button>
         <button ng-show="vm.shipment.id" class="danger" ng-click="vm.deleteShipment()">{{'shipmentView.deleteDraft' | message}}</button>
     </div>
-    <button ng-click="vm.saveShipment()">{{'shipmentView.saveDelete' | message}}</button>
-    <button ng-show="vm.isEditable()" ng-click="vm.saveAndPrint()" >{{'shipmentView.generatePickPackList' | message}}</button>
+    <button ng-show="vm.shipment.canBeConfirmed()" ng-click="vm.saveShipment()">{{'shipmentView.saveDelete' | message}}</button>
+    <button ng-show="vm.shipment.canBeConfirmed()" ng-show="vm.isEditable()" ng-click="vm.saveAndPrint()" >{{'shipmentView.generatePickPackList' | message}}</button>
 </div>

@@ -90,18 +90,10 @@
 
         function filterByOrder(stockCardSummaries, order) {
              return stockCardSummaries.filter(function(stockCardSummary) {
-                var filtered = filterByOrderableId(
+                return filterByOrderableId(
                     order.orderLineItems,
                     stockCardSummary.orderable.id
-                );
-
-                order.orderLineItems.filter(function(orderLineItem) {
-                    if (filtered.indexOf(orderLineItem) < 0) {
-                        filtered.push(orderLineItem);
-                    }
-                });
-
-                return filtered;
+                ).length > 0;
             });
         }
 
