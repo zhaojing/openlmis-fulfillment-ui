@@ -32,13 +32,13 @@
         '$scope', 'shipment', 'orderFulfillmentLineItems', 'shipmentDraftService', 'shipmentService',
         'loadingModalService', '$state', '$window', 'fulfillmentUrlFactory', 'messageService',
         'confirmService', 'notificationService', 'stateTrackerService', 'accessTokenFactory',
-        'ORDER_STATUS', 'updatedOrder', 'QUANTITY_UNIT'
+        'ORDER_STATUS', 'updatedOrder', 'QUANTITY_UNIT', 'Shipment'
     ];
 
     function ShipmentViewController($scope, shipment, orderFulfillmentLineItems, shipmentDraftService, shipmentService,
                                     loadingModalService, $state, $window, fulfillmentUrlFactory, messageService,
                                     confirmService, notificationService, stateTrackerService, accessTokenFactory, ORDER_STATUS,
-                                    updatedOrder, QUANTITY_UNIT) {
+                                    updatedOrder, QUANTITY_UNIT, Shipment) {
 
         var vm = this;
 
@@ -106,7 +106,7 @@
         function onInit() {
             vm.order = updatedOrder;
             vm.orderFulfillmentLineItems = orderFulfillmentLineItems;
-            vm.shipment = shipment;
+            vm.shipment = new Shipment(shipment);
         }
 
         /**

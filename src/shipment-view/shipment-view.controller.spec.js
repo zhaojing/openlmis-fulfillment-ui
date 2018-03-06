@@ -18,8 +18,7 @@ describe('ShipmentViewController', function() {
     var vm, $q, $controller, $rootScope, $state, $window, shipment, OrderDataBuilder,
         loadingModalService, shipmentService, ORDER_STATUS, confirmService, shipmentDraftService,
         notificationService, loadingDeferred, stateTrackerService, order, ShipmentDataBuilder,
-        lineItem, ShipmentLineItemWithSummaryDataBuilder, shipmentLineItem,
-        shipmentLineItemWithoutSummary, QUANTITY_UNIT;
+        lineItem, ShipmentLineItemWithSummaryDataBuilder, shipmentLineItem, QUANTITY_UNIT, Shipment;
 
     beforeEach(function() {
         module('shipment-view');
@@ -41,14 +40,10 @@ describe('ShipmentViewController', function() {
             ORDER_STATUS = $injector.get('ORDER_STATUS');
             QUANTITY_UNIT = $injector.get('QUANTITY_UNIT');
             ShipmentLineItemWithSummaryDataBuilder = $injector.get('ShipmentLineItemWithSummaryDataBuilder');
+            Shipment = $injector.get('Shipment');
         });
 
         shipmentLineItem = new ShipmentLineItemWithSummaryDataBuilder()
-            .withQuantityShipped(10)
-            .build();
-
-        shipmentLineItemWithoutSummary = new ShipmentLineItemWithSummaryDataBuilder()
-            .withoutSummary()
             .withQuantityShipped(10)
             .build();
 
@@ -88,7 +83,7 @@ describe('ShipmentViewController', function() {
         });
 
         it('should expose order', function() {
-            expect(vm.shipment).toEqual(shipment);
+            expect(vm.shipment).toEqual(new Shipment(shipment));
         });
     });
 
