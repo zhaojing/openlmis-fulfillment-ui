@@ -27,7 +27,7 @@
     </ul>
 </aside>
 <section class="openlmis-table-container">
-    <quantity-unit-toggle class="change-state-button" quantity-unit="vm.quantityUnit"></quantity-unit-toggle>
+    <quantity-unit-toggle class="is-primary" quantity-unit="vm.quantityUnit"></quantity-unit-toggle>
     <table>
         <thead>
         <tr>
@@ -38,7 +38,7 @@
             <th>{{'shipmentView.expiryDate' | message}}</th>
             <th popover="{{'shipmentView.quantitiesProvidedIn' | message}} {{vm.getSelectedQuantityUnitKey() | message}}">{{'shipmentView.availableSoh' | message}}</th>
             <th popover="{{'shipmentView.quantitiesProvidedIn' | message}} {{vm.getSelectedQuantityUnitKey() | message}}">{{'shipmentView.orderQuantity' | message}}</th>
-            <th>{{'shipmentView.fillQuantity' | message}}</th>
+            <th popover="{{'shipmentView.fillQuantityInPack' | message}}">{{'shipmentView.fillQuantity' | message}}</th>
         </tr>
         </thead>
         <tbody>
