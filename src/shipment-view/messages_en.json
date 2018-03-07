@@ -38,5 +38,5 @@
     "shipmentView.packs": "Packs",
     "shipmentView.doses": "Doses",
     "shipmentView.quantitiesProvidedIn": "Quantities are provided in",
-    "shipmentView.fillQantityInPack": "Fill Quantity (in Packs)"
+    "shipmentView.fillQuantityInPack": "Fill Quantity (in Packs)"
 }
