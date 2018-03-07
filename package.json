@@ -1,9 +1,9 @@
 {
-  "name": "openlmis-requisition-ui",
-  "version": "3.0.0-beta-SNAPSHOT",
+  "name": "openlmis-fulfillment-ui",
+  "version": "5.1.1-SNAPSHOT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/OpenLMIS/openlmis-requisition-refUI"
+    "url": "https://github.com/OpenLMIS/openlmis-fulfillment-ui"
   },
   "license": "AGPL-3.0",
   "devDependencies": {
