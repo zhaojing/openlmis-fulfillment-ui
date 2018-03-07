@@ -68,7 +68,7 @@
                 if (quantityRejected < 0) {
                     this.quantityRejected = 0;
                 } else if (quantityRejected > this.quantityShipped) {
-                    this.quantityRejected = this.quantityShipped
+                    this.quantityRejected = this.quantityShipped;
                 } else {
                     this.quantityRejected = quantityRejected;
                 }
@@ -88,36 +88,46 @@
         function validate() {
             var errors = {};
 
-            if(this.quantityAccepted === undefined || this.quantityAccepted === null) {
+            validateQuantityAccepted(this, errors);
+            validateRejectionReasonId(this, errors);
+            validateVvmStatus(this, errors);
+
+            return angular.equals(errors, {}) ? undefined : errors;
+        }
+
+        function validateQuantityAccepted(lineItem, errors) {
+            if(lineItem.quantityAccepted === undefined || lineItem.quantityAccepted === null) {
                 errors.quantityAccepted = 'proofOfDelivery.required';
             }
 
-            if (this.quantityAccepted < 0) {
+            if (lineItem.quantityAccepted < 0) {
                 errors.quantityAccepted = 'proofOfDelivery.positive';
             }
 
-            if (this.quantityShipped < this.quantityAccepted) {
+            if (lineItem.quantityShipped < lineItem.quantityAccepted) {
                 errors.quantityAccepted = 'proofOfDelivery.canNotAcceptMoreThanShipped';
             }
+        }
 
-            if (this.quantityRejected && !this.rejectionReasonId) {
+        function validateRejectionReasonId(lineItem, errors) {
+            if (lineItem.quantityRejected && !lineItem.rejectionReasonId) {
                 errors.rejectionReasonId = 'proofOfDelivery.required';
             }
 
-            if (!this.quantityRejected && this.rejectionReasonId) {
+            if (!lineItem.quantityRejected && lineItem.rejectionReasonId) {
                 errors.rejectionReasonId =
                     'proofOfDelivery.canNotSpecifyReasonForRejectionIfNotRejectingAnything';
             }
+        }
 
-            if (this.quantityAccepted > 0 && this.useVvm && !this.vvmStatus) {
+        function validateVvmStatus(lineItem, errors) {
+            if (lineItem.quantityAccepted > 0 && lineItem.useVvm && !lineItem.vvmStatus) {
                 errors.vvmStatus = 'proofOfDelivery.vvmStatusIsRequired';
             }
 
-            if (this.quantityAccepted === 0 && this.vvmStatus) {
+            if (lineItem.quantityAccepted === 0 && lineItem.vvmStatus) {
                 errors.vvmStatus = 'proofOfDelivery.cannotSelectVvmStatusWhenNothingAccepted';
             }
-
-            return angular.equals(errors, {}) ? undefined : errors;
         }
     }
 
