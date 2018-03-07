@@ -37,5 +37,5 @@
     "shipmentView.shipmentHasErrors": "Shipment has errors",
     "shipmentView.packs": "Packs",
     "shipmentView.doses": "Doses",
-    "shipmentView.quanitiesProvidedIn": "Quantities are provided in"
+    "shipmentView.quantitiesProvidedIn": "Quantities are provided in"
 }
