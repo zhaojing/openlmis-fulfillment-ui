@@ -17,7 +17,7 @@ describe('PodViewController', function() {
 
     var vm, $controller, ProofOfDeliveryDataBuilder, OrderDataBuilder, proofOfDelivery, order,
         reasonAssignments, ValidReasonAssignmentDataBuilder, VVM_STATUS, messageService,
-        fulfillingLineItems;
+        fulfillingLineItems, fulfillmentUrlFactoryMock;
 
     beforeEach(function() {
         module('proof-of-delivery-view');
@@ -121,5 +121,28 @@ describe('PodViewController', function() {
             }).toThrow();
         });
 
+    });
+
+    describe('getPrintUrl', function() {
+
+        beforeEach(function() {
+            fulfillmentUrlFactoryMock = jasmine.createSpy();
+            fulfillmentUrlFactoryMock.andCallFake(function(url) {
+                return 'http://some.url' + url;
+            });
+
+            vm = $controller('ProofOfDeliveryViewController', {
+                proofOfDelivery: proofOfDelivery,
+                order: order,
+                reasonAssignments: reasonAssignments,
+                fulfillingLineItems: fulfillingLineItems,
+                fulfillmentUrlFactory: fulfillmentUrlFactoryMock
+            });
+        });
+
+        it('should prepare print URL correctly', function () {
+            expect(vm.getPrintUrl(proofOfDelivery.id))
+                .toEqual('http://some.url/api/proofsOfDelivery/proof-of-delivery-id-1/print?format=pdf');
+        });
     });
 });

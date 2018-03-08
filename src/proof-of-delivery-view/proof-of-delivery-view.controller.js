@@ -30,16 +30,18 @@
 
     ProofOfDeliveryViewController.$inject = [
         'proofOfDelivery', 'order', 'reasonAssignments', 'messageService', 'VVM_STATUS',
-        'fulfillingLineItems'
+        'fulfillingLineItems', 'fulfillmentUrlFactory'
     ];
 
     function ProofOfDeliveryViewController(proofOfDelivery, order, reasonAssignments,
-                                           messageService, VVM_STATUS, fulfillingLineItems) {
+                                           messageService, VVM_STATUS, fulfillingLineItems,
+                                           fulfillmentUrlFactory) {
         var vm = this;
 
         vm.$onInit = onInit;
         vm.getStatusDisplayName = getStatusDisplayName;
         vm.getReasonName = getReasonName;
+        vm.getPrintUrl = getPrintUrl;
 
         /**
          * @ngdoc property
@@ -112,6 +114,21 @@
             return vm.reasonAssignments.filter(function(assignment) {
                 return assignment.reason.id === id;
             })[0].reason.name;
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf proof-of-delivery-view.controller:PodViewController
+         * @name getPrintUrl
+         *
+         * @description
+         * Prepares a print URL for the given proof of delivery.
+         *
+         * @param  {Object} podId the UUID of the proof of delivery to prepare the URL for
+         * @return {String}       the prepared URL
+         */
+        function getPrintUrl(podId) {
+            return fulfillmentUrlFactory('/api/proofsOfDelivery/' + podId + '/print?format=pdf');
         }
     }
 }());

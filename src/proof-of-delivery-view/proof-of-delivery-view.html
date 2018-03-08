@@ -1,4 +1,8 @@
 <h2>{{'proofOfDeliveryView.podFor' | message}} {{vm.order.program.name}}</h2>
+<button class="primary"
+        openlmis-download="{{vm.getPrintUrl(vm.proofOfDelivery.id)}}">
+    {{'proofOfDeliveryView.print'|message}}
+</button>
 <aside class="pod-info">
     <div ng-class="{'pod-emergency': vm.order.emergency, 'pod-regular': !vm.order.emergency}">
         <span>{{vm.typeMessage() | message}}</span>
