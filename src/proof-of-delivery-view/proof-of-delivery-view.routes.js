@@ -37,8 +37,8 @@
                         proofOfDelivery: function($stateParams, proofOfDeliveryService) {
                             return proofOfDeliveryService.get($stateParams.podId);
                         },
-                        order: function(proofOfDelivery, orderService) {
-                            return orderService.get(proofOfDelivery.shipment.order.id);
+                        order: function(proofOfDelivery) {
+                            return proofOfDelivery.shipment.order;
                         },
                         reasonAssignments: function(validReasonService, order) {
                             return validReasonService.search(

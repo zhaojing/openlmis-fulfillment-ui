@@ -29,9 +29,9 @@
         .module('proof-of-delivery')
         .factory('ProofOfDeliveryRepositoryImpl', ProofOfDeliveryRepositoryImpl);
 
-    ProofOfDeliveryRepositoryImpl.$inject = ['$resource', 'fulfillmentUrlFactory', 'ShipmentRepositoryImpl', 'LotRepositoryImpl', '$q'];
+    ProofOfDeliveryRepositoryImpl.$inject = ['$resource', 'fulfillmentUrlFactory', 'LotRepositoryImpl'];
 
-    function ProofOfDeliveryRepositoryImpl($resource, fulfillmentUrlFactory, ShipmentRepositoryImpl, LotRepositoryImpl, $q) {
+    function ProofOfDeliveryRepositoryImpl($resource, fulfillmentUrlFactory, LotRepositoryImpl) {
 
         ProofOfDeliveryRepositoryImpl.prototype.get = get;
         ProofOfDeliveryRepositoryImpl.prototype.update = update;
@@ -48,7 +48,6 @@
          * Creates an instance of the ProofOfDeliveryRepositoryImpl class.
          */
         function ProofOfDeliveryRepositoryImpl() {
-            this.shipmentRepositoryImpl = new ShipmentRepositoryImpl();
             this.lotRepositoryImpl = new LotRepositoryImpl();
 
             this.resource = $resource(fulfillmentUrlFactory('/api/proofsOfDelivery/:id'), {}, {
@@ -71,27 +70,21 @@
          * @return  {Promise}       the promise resolving to server response
          */
         function get(id) {
-            var shipmentRepositoryImpl = this.shipmentRepositoryImpl,
-                lotRepositoryImpl = this.lotRepositoryImpl;
+            var lotRepositoryImpl = this.lotRepositoryImpl;
 
             return this.resource.get({
-                id: id
+                id: id,
+                expand: 'shipment.order'
             }).$promise
             .then(function(proofOfDeliveryJson) {
                 var lotIds = getLotIds(proofOfDeliveryJson.lineItems);
 
-                return $q.all([
-                    shipmentRepositoryImpl.get(proofOfDeliveryJson.shipment.id),
-                    lotRepositoryImpl.query({
+                return lotRepositoryImpl.query({
                         ids: lotIds
                     })
-                ])
-                .then(function(responses) {
-                    var shipmentJson = responses[0],
-                        lotPage = responses[1];
-
-                    return combineResponses(proofOfDeliveryJson, shipmentJson, lotPage.content);
-                });
+                    .then(function(lotPage) {
+                        return combineResponses(proofOfDeliveryJson, lotPage.content);
+                    });
             });
         }
 
@@ -116,11 +109,10 @@
             ).$promise;
         }
 
-        function combineResponses(proofOfDeliveryJson, shipmentJson, lotJsons) {
-            proofOfDeliveryJson.shipment = shipmentJson;
+        function combineResponses(proofOfDeliveryJson, lotJsons) {
             proofOfDeliveryJson.lineItems.forEach(function(lineItem) {
                 lineItem.quantityShipped = getQuantityShipped(
-                    lineItem, shipmentJson.lineItems
+                    lineItem, proofOfDeliveryJson.shipment.lineItems
                 );
 
                 if (lineItem.lot) {

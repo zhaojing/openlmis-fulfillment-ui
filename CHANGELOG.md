@@ -25,6 +25,7 @@ Improvements:
 * [OLMIS-4119](https://openlmis.atlassian.net/browse/OLMIS-4119): Renamed POD endpoint.
 * [OLMIS-892](https://openlmis.atlassian.net/browse/OLMIS-892): Show Ordered Quantity on the Proof of Delivery view
 * [OLMIS-4078](https://openlmis.atlassian.net/browse/OLMIS-4078): All buttons except "Delete Shipment" no longer appears if no matching stock cards.
+* [OLMIS-4266](https://openlmis.atlassian.net/browse/OLMIS-4266): Use expand pattern for proofs of delivery.
 
 5.1.0 / 2017-11-09
 ==================

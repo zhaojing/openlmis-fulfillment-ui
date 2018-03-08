@@ -17,20 +17,13 @@ describe('ProofOfDeliveryRepositoryImpl', function() {
 
     var ProofOfDeliveryRepositoryImpl, $rootScope, $q, $httpBackend, ProofOfDeliveryDataBuilder,
         fulfillmentUrlFactory, referencedataUrlFactory, proofOfDeliveryRepositoryImpl, proofOfDeliveryJson,
-        ShipmentDataBuilder, shipmentJson, shipmentRepositoryImplMock, ShipmentLineItemDataBuilder,
+        ShipmentDataBuilder, shipmentJson, ShipmentLineItemDataBuilder,
         lotRepositoryImplMock, LotDataBuilder, lotJsons, PageDataBuilder;
 
     beforeEach(function() {
         module('proof-of-delivery', function($provide) {
             $provide.factory('OpenLMISRepositoryImpl', function() {
                 return function(url) {
-                    if (url === fulfillmentUrlFactory('/api/shipments')) {
-                        shipmentRepositoryImplMock = jasmine.createSpyObj(
-                            'shipmentRepositoryImpl', ['get']
-                        );
-                        return shipmentRepositoryImplMock;
-                    }
-
                     if (url === referencedataUrlFactory('/api/lots')) {
                         lotRepositoryImplMock = jasmine.createSpyObj(
                             'lotRepositoryImpl', ['query']
@@ -77,16 +70,17 @@ describe('ProofOfDeliveryRepositoryImpl', function() {
                 )
             ])
             .build();
+
+        proofOfDeliveryJson.shipment = shipmentJson;
     });
 
     describe('get', function() {
 
         it('should resolve to combined server responses if requests were successful', function() {
             $httpBackend
-            .expectGET(fulfillmentUrlFactory('/api/proofsOfDelivery/proof-of-delivery-id'))
+            .expectGET(fulfillmentUrlFactory('/api/proofsOfDelivery/proof-of-delivery-id?expand=shipment.order'))
             .respond(200, angular.copy(proofOfDeliveryJson));
 
-            shipmentRepositoryImplMock.get.andReturn($q.resolve(angular.copy(shipmentJson)));
             lotRepositoryImplMock.query.andReturn($q.resolve(new PageDataBuilder()
                 .withContent(lotJsons)
                 .build()
@@ -129,28 +123,9 @@ describe('ProofOfDeliveryRepositoryImpl', function() {
 
         });
 
-        it('should reject if shipment repository rejects', function() {
-            $httpBackend
-            .expectGET(fulfillmentUrlFactory('/api/proofsOfDelivery/proof-of-delivery-id'))
-            .respond(200, angular.copy(proofOfDeliveryJson));
-
-            shipmentRepositoryImplMock.get.andReturn($q.reject());
-
-            var rejected;
-            proofOfDeliveryRepositoryImpl.get('proof-of-delivery-id')
-            .catch(function() {
-                rejected = true;
-            });
-            $httpBackend.flush();
-
-            expect(rejected).toBe(true);
-            expect(shipmentRepositoryImplMock.get)
-                .toHaveBeenCalledWith(proofOfDeliveryJson.shipment.id);
-        });
-
         it('should reject if request was unsuccessful', function() {
             $httpBackend
-            .expectGET(fulfillmentUrlFactory('/api/proofsOfDelivery/proof-of-delivery-id'))
+            .expectGET(fulfillmentUrlFactory('/api/proofsOfDelivery/proof-of-delivery-id?expand=shipment.order'))
             .respond(400);
 
             var rejected;
@@ -165,10 +140,9 @@ describe('ProofOfDeliveryRepositoryImpl', function() {
 
         it('should reject if lot repository rejectes', function() {
             $httpBackend
-            .expectGET(fulfillmentUrlFactory('/api/proofsOfDelivery/proof-of-delivery-id'))
+            .expectGET(fulfillmentUrlFactory('/api/proofsOfDelivery/proof-of-delivery-id?expand=shipment.order'))
             .respond(200, angular.copy(proofOfDeliveryJson));
 
-            shipmentRepositoryImplMock.get.andReturn($q.resolve(angular.copy(shipmentJson)));
             lotRepositoryImplMock.query.andReturn($q.reject());
 
             var rejected;
@@ -179,8 +153,6 @@ describe('ProofOfDeliveryRepositoryImpl', function() {
             $httpBackend.flush();
 
             expect(rejected).toBe(true);
-            expect(shipmentRepositoryImplMock.get)
-                .toHaveBeenCalledWith(proofOfDeliveryJson.shipment.id);
         });
 
     });
