@@ -60,7 +60,7 @@
                             return permissionService.hasPermission(user.user_id, {
                                 right: FULFILLMENT_RIGHTS.PODS_MANAGE,
                                 facilityId: order.requestingFacility.id,
-                                programId: order.program.id,
+                                programId: order.program.id
                             })
                             .then(function() {
                                 return true;
