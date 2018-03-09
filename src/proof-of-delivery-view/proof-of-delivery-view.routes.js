@@ -55,7 +55,7 @@
                                 proofOfDelivery.lineItems
                             );
                         },
-                        canEdit: function(authorizationService, permissionService, order, FULFILLMENT_RIGHTS) {
+                        canEdit: function(authorizationService, permissionService, order, proofOfDelivery) {
                             var user = authorizationService.getUser();
                             return permissionService.hasPermission(user.user_id, {
                                 right: FULFILLMENT_RIGHTS.PODS_MANAGE,
@@ -63,7 +63,7 @@
                                 programId: order.program.id
                             })
                             .then(function() {
-                                return true;
+                                return proofOfDelivery.isInitiated();
                             })
                             .catch(function() {
                                 return false;

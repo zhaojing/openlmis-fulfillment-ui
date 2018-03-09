@@ -42,7 +42,6 @@
         vm.getStatusDisplayName = getStatusDisplayName;
         vm.getReasonName = getReasonName;
         vm.getPrintUrl = getPrintUrl;
-        vm.isEditable = isEditable;
 
         /**
          * @ngdoc property
@@ -67,6 +66,17 @@
         vm.showVvmColumn = undefined;
 
         /**
+         * @ngdoc property
+         * @propertyOf proof-of-delivery-view.controller:PodViewController
+         * @name canEdit
+         * @type {boolean}
+         *
+         * @description
+         * Indicates if PoD is in initiated status and if user has permission to edit it.
+         */
+        vm.canEdit = undefined;
+
+        /**
          * @ngdoc method
          * @methodOf proof-of-delivery-view.controller:PodViewController
          * @name $onInit
@@ -81,6 +91,7 @@
             vm.fulfillingLineItems = fulfillingLineItems;
             vm.vvmStatuses = VVM_STATUS;
             vm.showVvmColumn = proofOfDelivery.hasProductsUseVvmStatus();
+            vm.canEdit = canEdit;
         }
 
         /**
@@ -129,20 +140,6 @@
          */
         function getPrintUrl(podId) {
             return fulfillmentUrlFactory('/api/proofsOfDelivery/' + podId + '/print?format=pdf');
-        }
-
-        /**
-         * @ngdoc method
-         * @methodOf proof-of-delivery-view.controller:PodViewController
-         * @name isEditable
-         *
-         * @description
-         * Checks Proof of Delivery status and user permissions to indicate if view should be editable.
-         *
-         * @return {boolean} true if Proof of Delivery is not confirmed yet and user has permission to edit.
-         */
-        function isEditable() {
-            return vm.proofOfDelivery.isInitiated() && canEdit;
         }
     }
 }());

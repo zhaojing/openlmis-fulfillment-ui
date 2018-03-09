@@ -82,6 +82,21 @@ describe('PodViewController', function() {
         expect(vm.fulfillingLineItems).toEqual(fulfillingLineItems);
     });
 
+    it('should expose canEdit', function() {
+        vm.$onInit();
+        expect(vm.canEdit).toEqual(true);
+
+        vm = $controller('ProofOfDeliveryViewController', {
+            proofOfDelivery: proofOfDelivery,
+            order: order,
+            reasonAssignments: reasonAssignments,
+            fulfillingLineItems: fulfillingLineItems,
+            canEdit: false
+        });
+        vm.$onInit();
+        expect(vm.canEdit).toEqual(false);
+    });
+
     describe('getStatusDisplay', function() {
 
         beforeEach(function() {
@@ -145,53 +160,6 @@ describe('PodViewController', function() {
         it('should prepare print URL correctly', function () {
             expect(vm.getPrintUrl(proofOfDelivery.id))
                 .toEqual('http://some.url/api/proofsOfDelivery/proof-of-delivery-id-1/print?format=pdf');
-        });
-    });
-
-    describe('isEditable', function() {
-
-        beforeEach(function() {
-            spyOn(proofOfDelivery, 'isInitiated').andReturn(true);
-            vm.$onInit();
-        });
-
-        it('should return false if user has no permission', function () {
-            vm = $controller('ProofOfDeliveryViewController', {
-                proofOfDelivery: proofOfDelivery,
-                order: order,
-                reasonAssignments: reasonAssignments,
-                fulfillingLineItems: fulfillingLineItems,
-                canEdit: false
-            });
-            vm.$onInit();
-
-            expect(vm.isEditable()).toBe(false);
-
-            proofOfDelivery.isInitiated.andReturn(false);
-
-            expect(vm.isEditable()).toBe(false);
-        });
-
-        it('should return false if pod is not in initiated status', function () {
-            proofOfDelivery.isInitiated.andReturn(false);
-
-            expect(vm.isEditable()).toBe(false);
-
-            vm = $controller('ProofOfDeliveryViewController', {
-                proofOfDelivery: proofOfDelivery,
-                order: order,
-                reasonAssignments: reasonAssignments,
-                fulfillingLineItems: fulfillingLineItems,
-                canEdit: false
-            });
-            vm.$onInit();
-            proofOfDelivery.isInitiated.andReturn(false);
-
-            expect(vm.isEditable()).toBe(false);
-        });
-
-        it('should return true if user has permission and pod is in initiated status', function () {
-            expect(vm.isEditable()).toBe(true);
         });
     });
 });
