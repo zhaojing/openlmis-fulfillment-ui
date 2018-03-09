@@ -30,18 +30,19 @@
 
     ProofOfDeliveryViewController.$inject = [
         'proofOfDelivery', 'order', 'reasonAssignments', 'messageService', 'VVM_STATUS',
-        'fulfillingLineItems', 'fulfillmentUrlFactory'
+        'fulfillingLineItems', 'fulfillmentUrlFactory', 'canEdit'
     ];
 
     function ProofOfDeliveryViewController(proofOfDelivery, order, reasonAssignments,
                                            messageService, VVM_STATUS, fulfillingLineItems,
-                                           fulfillmentUrlFactory) {
+                                           fulfillmentUrlFactory, canEdit) {
         var vm = this;
 
         vm.$onInit = onInit;
         vm.getStatusDisplayName = getStatusDisplayName;
         vm.getReasonName = getReasonName;
         vm.getPrintUrl = getPrintUrl;
+        vm.isEditable = isEditable;
 
         /**
          * @ngdoc property
@@ -74,7 +75,6 @@
          * Initialization method of the PodViewController.
          */
         function onInit() {
-            vm.proofOfDelivery = proofOfDelivery;
             vm.order = order;
             vm.reasonAssignments = reasonAssignments;
             vm.proofOfDelivery = proofOfDelivery;
@@ -129,6 +129,20 @@
          */
         function getPrintUrl(podId) {
             return fulfillmentUrlFactory('/api/proofsOfDelivery/' + podId + '/print?format=pdf');
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf proof-of-delivery-view.controller:PodViewController
+         * @name isEditable
+         *
+         * @description
+         * Checks Proof of Delivery status and user permissions to indicate if view should be editable.
+         *
+         * @return {boolean} true if Proof of Delivery is not confirmed yet and user has permission to edit.
+         */
+        function isEditable() {
+            return vm.proofOfDelivery.isInitiated() && canEdit;
         }
     }
 }());

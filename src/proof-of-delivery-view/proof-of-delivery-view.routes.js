@@ -21,13 +21,17 @@
         .module('proof-of-delivery-view')
         .config(routes);
 
-    routes.$inject = ['$stateProvider'];
+    routes.$inject = ['$stateProvider', 'FULFILLMENT_RIGHTS'];
 
-    function routes($stateProvider) {
+    function routes($stateProvider, FULFILLMENT_RIGHTS) {
 
         $stateProvider.state('openlmis.orders.podManage.podView', {
             label: 'proofOfDeliveryView.viewProofOfDelivery',
             url: '^/pod/:podId?page&size',
+            accessRights: [
+                FULFILLMENT_RIGHTS.PODS_MANAGE,
+                FULFILLMENT_RIGHTS.PODS_VIEW
+            ],
             views: {
                 '@openlmis': {
                     templateUrl: 'proof-of-delivery-view/proof-of-delivery-view.html',
@@ -50,6 +54,20 @@
                                 order.orderLineItems,
                                 proofOfDelivery.lineItems
                             );
+                        },
+                        canEdit: function(authorizationService, permissionService, order, FULFILLMENT_RIGHTS) {
+                            var user = authorizationService.getUser();
+                            return permissionService.hasPermission(user.user_id, {
+                                right: FULFILLMENT_RIGHTS.PODS_MANAGE,
+                                facilityId: order.requestingFacility.id,
+                                programId: order.program.id,
+                            })
+                            .then(function() {
+                                return true;
+                            })
+                            .catch(function() {
+                                return false;
+                            });
                         }
                     }
                 }

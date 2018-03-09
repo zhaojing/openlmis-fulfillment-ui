@@ -72,17 +72,17 @@
                 <td></td>
                 <td>{{fulfillingLineItem.quantityShipped}}</td>
                 <td>{{fulfillingLineItem.lot | lotCode}}</td>
-                <td ng-if="vm.proofOfDelivery.isInitiated()">
+                <td ng-if="vm.isEditable()">
                     <input positive-integer
                         ng-model="fulfillingLineItem.quantityAccepted"
                         ng-change="fulfillingLineItem.updateQuantityRejected()"
                         openlmis-invalid="{{fulfillingLineItem.validate().quantityAccepted | message}}"/>
                 </td>
-                <td ng-if="!vm.proofOfDelivery.isInitiated()">
+                <td ng-if="!vm.isEditable()">
                     {{fulfillingLineItem.quantityAccepted}}
                 </td>
                 <td ng-if="vm.showVvmColumn">
-                    <div ng-if="fulfillingLineItem.useVvm && vm.proofOfDelivery.isInitiated()">
+                    <div ng-if="fulfillingLineItem.useVvm && vm.isEditable()">
                         <select
                             ng-model="fulfillingLineItem.vvmStatus"
                             ng-options="status as vm.getStatusDisplayName(status) for status in vm.vvmStatuses"
@@ -90,24 +90,24 @@
                             openlmis-invalid="{{fulfillingLineItem.validate().vvmStatus | message}}">
                         </select>
                     </div>
-                    <div ng-if="fulfillingLineItem.useVvm && !vm.proofOfDelivery.isInitiated()">
+                    <div ng-if="fulfillingLineItem.useVvm && !vm.isEditable()">
                         {{fulfillingLineItem.vvmStatus}}
                     </div>
                 </td>
                 <td>{{fulfillingLineItem.quantityRejected}}</td>
-                <td ng-if="vm.proofOfDelivery.isInitiated()">
+                <td ng-if="vm.isEditable()">
                     <select ng-model="fulfillingLineItem.rejectionReasonId"
                         ng-options="assignment.reason.id as assignment.reason.name for assignment in vm.reasonAssignments"
                         openlmis-invalid="{{fulfillingLineItem.validate().rejectionReasonId | message}}">
                     </select>
                 </td>
-                <td ng-if="!vm.proofOfDelivery.isInitiated()">
+                <td ng-if="!vm.isEditable()">
                     {{vm.getReasonName(fulfillingLineItem.rejectionReasonId)}}
                 </td>
-                <td ng-if="vm.proofOfDelivery.isInitiated()">
+                <td ng-if="vm.isEditable()">
                     <input type="text" ng-model="fulfillingLineItem.notes"/>
                 </td>
-                <td ng-if="!vm.proofOfDelivery.isInitiated()">
+                <td ng-if="!vm.isEditable()">
                     {{fulfillingLineItem.notes}}
                 </td>
             </tr>
@@ -117,28 +117,28 @@
         <dl>
             <dt>{{'proofOfDeliveryView.deliveredBy' | message}}</dt>
             <dd>
-                <div ng-if="vm.proofOfDelivery.isInitiated()">
+                <div ng-if="vm.isEditable()">
                     <input type="text" ng-model="vm.proofOfDelivery.deliveredBy"
                         openlmis-invalid="{{vm.proofOfDelivery.validate().deliveredBy | message}}"/>
                 </div>
-                <div ng-if="!vm.proofOfDelivery.isInitiated()">{{vm.proofOfDelivery.deliveredBy}}</div>
+                <div ng-if="!vm.isEditable()">{{vm.proofOfDelivery.deliveredBy}}</div>
             </dd>
             <dt>{{'proofOfDeliveryView.receivedBy' | message}}</dt>
             <dd>
-                <div ng-if="vm.proofOfDelivery.isInitiated()">
+                <div ng-if="vm.isEditable()">
                     <input type="text" ng-model="vm.proofOfDelivery.receivedBy"
                         openlmis-invalid="{{vm.proofOfDelivery.validate().receivedBy | message}}"/>
                 </div>
-                <div ng-if="!vm.proofOfDelivery.isInitiated()">{{vm.proofOfDelivery.receivedBy}}</div>
+                <div ng-if="!vm.isEditable()">{{vm.proofOfDelivery.receivedBy}}</div>
             </dd>
             <dt>{{'proofOfDeliveryView.receivedDate' | message}}</dt>
             <dd>
-                <div ng-if="vm.proofOfDelivery.isInitiated()">
+                <div ng-if="vm.isEditable()">
                     <openlmis-datepicker input-id="receivedDate" value="vm.proofOfDelivery.receivedDate"
                         required="true">
                     </openlmis-datepicker>
                 </div>
-                <div ng-if="!vm.proofOfDelivery.isInitiated()">
+                <div ng-if="!vm.isEditable()">
                     {{vm.proofOfDelivery.receivedDate | openlmisDate}}
                 </div>
             </dd>
@@ -146,7 +146,7 @@
     </aside>
 
 </form>
-<div class="openlmis-toolbar button-group" ng-show="vm.proofOfDelivery.isInitiated()">
+<div class="openlmis-toolbar button-group" ng-show="vm.isEditable()">
     <button ng-click="vm.proofOfDelivery.save()">{{'proofOfDeliveryView.save' | message}}</button>
     <button type="submit" class="primary" form="proof-of-delivery-form">{{'proofOfDeliveryView.confirm.label' | message}}</button>
 </div>
