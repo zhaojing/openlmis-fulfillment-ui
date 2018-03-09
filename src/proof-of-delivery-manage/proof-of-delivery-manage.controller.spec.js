@@ -15,7 +15,7 @@
 
 describe('ProofOfDeliveryManageController', function() {
 
-    var proofOfDeliveryManageService, $rootScope, loadingModalServiceMock, $state, $q, $controller, ProgramDataBuilder, FacilityDataBuilder,
+    var proofOfDeliveryManageService, $rootScope, loadingModalServiceMock, $state, $q, $controller, ProgramDataBuilder, FacilityDataBuilder, ProofOfDeliveryDataBuilder,
         vm, deferred, pod, stateParams, supplyingFacilities, programs, requestingFacilities;
 
     beforeEach(function() {
@@ -36,12 +36,10 @@ describe('ProofOfDeliveryManageController', function() {
             proofOfDeliveryManageService = $injector.get('proofOfDeliveryManageService');
             FacilityDataBuilder = $injector.get('FacilityDataBuilder');
             ProgramDataBuilder = $injector.get('ProgramDataBuilder');
+            ProofOfDeliveryDataBuilder = $injector.get('ProofOfDeliveryDataBuilder');
         });
 
-        pod = {
-            id: 'pod-one',
-            order: { id: 'order-one' }
-        };
+        pod = new ProofOfDeliveryDataBuilder().build();
         requestingFacilities = [
             new FacilityDataBuilder().build(),
             new FacilityDataBuilder().build()
@@ -145,29 +143,12 @@ describe('ProofOfDeliveryManageController', function() {
             spyOn(proofOfDeliveryManageService, 'getByOrderId').andReturn(deferred.promise);
             spyOn($state, 'go').andReturn();
 
-            vm.openPod('order-one');
+            vm.openPod(pod.id);
             deferred.resolve(pod);
             $rootScope.$apply();
 
-            expect($state.go).toHaveBeenCalledWith('openlmis.orders.podManage.podView', {podId: 'pod-one'});
+            expect($state.go).toHaveBeenCalledWith('openlmis.orders.podManage.podView', {podId: pod.id});
         });
     });
 
 });
-
-function createObjWithId(id) {
-    return {
-        id: id
-    };
-}
-
-function createOrder(id, status) {
-    return {
-        id: id,
-        status: status
-    };
-}
-
-function checkConnection() {
-    return $q.when(true);
-}

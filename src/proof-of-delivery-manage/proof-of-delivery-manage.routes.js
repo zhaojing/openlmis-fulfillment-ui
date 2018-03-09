@@ -42,8 +42,6 @@
                 },
                 supplyingFacilities: function(facilityFactory) {
                     return facilityFactory.getSupervisedFacilitiesBasedOnRights([
-                        FULFILLMENT_RIGHTS.ORDERS_EDIT,
-                        FULFILLMENT_RIGHTS.ORDERS_VIEW,
                         FULFILLMENT_RIGHTS.SHIPMENTS_EDIT,
                         FULFILLMENT_RIGHTS.SHIPMENTS_VIEW
                     ]);
@@ -56,7 +54,6 @@
                 },
                 pods: function(paginationService, orderRepository, $stateParams, programs, requestingFacilities, supplyingFacilities) {
                     return paginationService.registerUrl($stateParams, function(stateParams) {
-
                         if (programs.length === 1 && !stateParams.programId) {
                             stateParams.programId = programs[0].id;
                         }

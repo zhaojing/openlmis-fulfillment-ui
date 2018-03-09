@@ -186,7 +186,7 @@
     }
 
     function getSelectedObjectById(list, id) {
-        if (!list || list.length < 1 || !id) {
+        if (!list || !id) {
             return null;
         }
         var filteredList = list.filter(function(object) {
