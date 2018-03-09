@@ -15,6 +15,8 @@
     "proofOfDeliveryManage.orderStatus": "Order status",
     "proofOfDeliveryManage.period": "Period",
     "proofOfDeliveryManage.program": "Program",
+    "proofOfDeliveryManage.requestingFacility": "Requesting Facility",
+    "proofOfDeliveryManage.supplyingFacility": "Supplying Facilty",
     "proofOfDeliveryManage.search": "Search",
     "proofOfDeliveryManage.startDate": "Start date",
     "proofOfDeliveryManage.supplyingDepot": "Supplying depot",

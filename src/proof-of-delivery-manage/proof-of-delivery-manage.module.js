@@ -25,17 +25,15 @@
      */
     angular.module('proof-of-delivery-manage', [
         'openlmis-date',
-        'openlmis-facility-program-select',
         'openlmis-i18n',
         'openlmis-pagination',
         'openlmis-table',
         'openlmis-templates',
         'order',
-        'referencedata-facility',
+        'referencedata-facilities-permissions',
         'referencedata-program',
         'ui.router',
         'proof-of-delivery',
         'proof-of-delivery-view'
     ]);
-
 })();

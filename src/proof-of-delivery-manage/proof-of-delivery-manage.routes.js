@@ -21,39 +21,58 @@
         .module('proof-of-delivery-manage')
         .config(routes);
 
-    routes.$inject = ['$stateProvider', 'FULFILLMENT_RIGHTS', 'REQUISITION_RIGHTS'];
+    routes.$inject = ['$stateProvider', 'FULFILLMENT_RIGHTS'];
 
-    function routes($stateProvider, FULFILLMENT_RIGHTS, REQUISITION_RIGHTS) {
+    function routes($stateProvider, FULFILLMENT_RIGHTS) {
 
         $stateProvider.state('openlmis.orders.podManage', {
-			showInNavigation: true,
-			label: 'proofOfDeliveryManage.managePods',
-            url: '/manage?facility&program&supervised&page&size',
+            showInNavigation: true,
+            label: 'proofOfDeliveryManage.managePods',
+            url: '/manage?programId&requestingFacilityId&supplyingFacilityId&page&size',
             controller: 'ProofOfDeliveryManageController',
             controllerAs: 'vm',
             templateUrl: 'proof-of-delivery-manage/proof-of-delivery-manage.html',
             accessRights: [
-                REQUISITION_RIGHTS.REQUISITION_CREATE,
-                FULFILLMENT_RIGHTS.PODS_MANAGE
+                FULFILLMENT_RIGHTS.PODS_MANAGE,
+                FULFILLMENT_RIGHTS.PODS_VIEW
             ],
-            areAllRightsRequired: true,
             resolve: {
-                pods: function(paginationService, orderRepository, $stateParams) {
-					return paginationService.registerUrl($stateParams, function(stateParams) {
-                        if(stateParams.program) {
-                            var paramsCopy = angular.copy(stateParams);
+                programs: function(programService, authorizationService) {
+                    return programService.getUserSupportedPrograms(authorizationService.getUser().user_id);
+                },
+                supplyingFacilities: function(facilityFactory) {
+                    return facilityFactory.getSupervisedFacilitiesBasedOnRights([
+                        FULFILLMENT_RIGHTS.ORDERS_EDIT,
+                        FULFILLMENT_RIGHTS.ORDERS_VIEW,
+                        FULFILLMENT_RIGHTS.SHIPMENTS_EDIT,
+                        FULFILLMENT_RIGHTS.SHIPMENTS_VIEW
+                    ]);
+                },
+                requestingFacilities: function(facilityFactory) {
+                    return facilityFactory.getSupervisedFacilitiesBasedOnRights([
+                        FULFILLMENT_RIGHTS.PODS_MANAGE,
+                        FULFILLMENT_RIGHTS.PODS_VIEW
+                    ]);
+                },
+                pods: function(paginationService, orderRepository, $stateParams, programs, requestingFacilities, supplyingFacilities) {
+                    return paginationService.registerUrl($stateParams, function(stateParams) {
 
-                            paramsCopy.requestingFacilityId = stateParams.facility;
-                            paramsCopy.programId = stateParams.program;
+                        if (programs.length === 1 && !stateParams.programId) {
+                            stateParams.programId = programs[0].id;
+                        }
+                        if (requestingFacilities.length === 1 && !stateParams.requestingFacilityId) {
+                            stateParams.requestingFacilityId = requestingFacilities[0].id;
+                        }
+                        if (supplyingFacilities.length === 1 && !stateParams.supplyingFacilityId) {
+                            stateParams.supplyingFacilityId = supplyingFacilities[0].id;
+                        }
 
-                            delete paramsCopy.facility;
-                            delete paramsCopy.program;
-
-                            return orderRepository.searchOrdersForManagePod(paramsCopy);
+                        if (stateParams.programId && (stateParams.supplyingFacilityId || stateParams.requestingFacilityId)) {
+                            return orderRepository.searchOrdersForManagePod(stateParams);
                         }
                         return undefined;
-					});
-				}
+                    });
+                }
             }
         });
     }

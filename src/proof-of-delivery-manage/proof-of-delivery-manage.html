@@ -1,26 +1,31 @@
-<h2 ng-show="vm.facility && vm.program">
-    {{'proofOfDeliveryManage.managePodsWithDetails' | message: { 'facility': vm.facility.name, 'program': vm.program.name} }}
-</h2>
 <h2 ng-hide="vm.facility && vm.program">{{'proofOfDeliveryManage.managePods' | message}}</h2>
 <form class="sidebar" ng-submit="vm.loadOrders()">
-    <openlmis-facility-program-select
-        is-supervised="vm.isSupervised"
-        program="vm.program"
-        facility="vm.facility"
-        module="'proof-of-delivery-manage'">
-    </openlmis-facility-program-select>
+    <fieldset class="form-group" ng-if="vm.requestingFacilities.length > 0">
+        <label for="requestingFacility">{{'proofOfDeliveryManage.requestingFacility' | message}}</label>
+        <select id="requestingFacility"
+                ng-model="vm.requestingFacility"
+                ng-required="!vm.supplyingFacility"
+                ng-options="facility.name for facility in vm.requestingFacilities"></select>
+    </fieldset>
+    <fieldset class="form-group" ng-if="vm.supplyingFacilities.length > 0">
+        <label for="supplyingFacility">{{'proofOfDeliveryManage.supplyingFacility' | message}}</label>
+        <select id="supplyingFacility"
+                ng-model="vm.supplyingFacility"
+                ng-required="!vm.requestingFacility"
+                ng-options="facility.name for facility in vm.supplyingFacilities"></select>
+    </fieldset>
+    <fieldset class="form-group">
+        <label for="program">{{'proofOfDeliveryManage.program' | message}}</label>
+        <select id="program"
+                ng-model="vm.program"
+                ng-options="program.name for program in vm.programs" required></select>
+    </fieldset>
     <input type="submit" value="{{'proofOfDeliveryManage.search' | message}}"/>
 </form>
 <section class="openlmis-table-container">
     <table>
         <caption ng-if="vm.pods && !vm.pods.length">
             {{'proofOfDeliveryManage.noPodsFound' | message}}
-        </caption>
-        <caption ng-if="vm.programs && !vm.programs.length">
-            {{'proofOfDeliveryManage.noProgramAvailable' | message}}
-        </caption>
-        <caption ng-if="vm.requestingFacilities && !vm.requestingFacilities.length && !vm.programs.length">
-            {{'proofOfDeliveryManage.noFacilityAvailable' | message}}
         </caption>
         <thead>
             <tr>

@@ -15,28 +15,16 @@
 
 describe('ProofOfDeliveryManageController', function() {
 
-    var vm, proofOfDeliveryManageService, $rootScope, loadingModalServiceMock,
-        deferred, pod, $state, $q, $controller, stateParams;
+    var proofOfDeliveryManageService, $rootScope, loadingModalServiceMock, $state, $q, $controller, ProgramDataBuilder, FacilityDataBuilder,
+        vm, deferred, pod, stateParams, supplyingFacilities, programs, requestingFacilities;
 
     beforeEach(function() {
-
-        pod = {
-            id: 'pod-one',
-            order: { id: 'order-one' }
-        };
-
-        stateParams = {
-            page: 0,
-            size: 10
-        };
-
         module('proof-of-delivery-manage', function($provide) {
             loadingModalServiceMock = jasmine.createSpyObj('loadingModalService', ['open', 'close']);
 
             $provide.factory('loadingModalService', function() {
                 return loadingModalServiceMock;
             });
-
         });
 
         inject(function($injector) {
@@ -46,38 +34,107 @@ describe('ProofOfDeliveryManageController', function() {
             $state = $injector.get('$state');
             $controller = $injector.get('$controller');
             proofOfDeliveryManageService = $injector.get('proofOfDeliveryManageService');
-            vm = $controller('ProofOfDeliveryManageController', {
-                pods: [pod],
-                $stateParams: stateParams
-            });
+            FacilityDataBuilder = $injector.get('FacilityDataBuilder');
+            ProgramDataBuilder = $injector.get('ProgramDataBuilder');
+        });
+
+        pod = {
+            id: 'pod-one',
+            order: { id: 'order-one' }
+        };
+        requestingFacilities = [
+            new FacilityDataBuilder().build(),
+            new FacilityDataBuilder().build()
+        ];
+        supplyingFacilities = [
+            new FacilityDataBuilder().build(),
+            new FacilityDataBuilder().build()
+        ];
+        programs = [
+            new ProgramDataBuilder().build(),
+            new ProgramDataBuilder().build()
+        ];
+        stateParams = {
+            page: 0,
+            size: 10,
+            programId: programs[0].id,
+            requestingFacilityId: requestingFacilities[0].id,
+            supplyingFacilityId: supplyingFacilities[0].id,
+        };
+
+        vm = $controller('ProofOfDeliveryManageController', {
+            programs: programs,
+            requestingFacilities: requestingFacilities,
+            supplyingFacilities: supplyingFacilities,
+            pods: [pod],
+            $stateParams: stateParams
         });
     });
 
-    it('initialization should expose pod', function() {
-        vm.$onInit();
+    describe('onInit', function() {
 
-        expect(vm.pods).toEqual([pod]);
+        it('should expose pod', function() {
+            vm.$onInit();
+    
+            expect(vm.pods).toEqual([pod]);
+        });
+
+        it('should expose programs', function() {
+            vm.$onInit();
+    
+            expect(vm.programs).toEqual(programs);
+        });
+
+        it('should expose requesting facilities', function() {
+            vm.$onInit();
+    
+            expect(vm.requestingFacilities).toEqual(requestingFacilities);
+        });
+
+        it('should expose supplying facilities', function() {
+            vm.$onInit();
+    
+            expect(vm.supplyingFacilities).toEqual(supplyingFacilities);
+        });
+
+        it('should select program', function() {
+            vm.$onInit();
+    
+            expect(vm.program).toEqual(programs[0]);
+        });
+
+        it('should select requesting facility', function() {
+            vm.$onInit();
+    
+            expect(vm.requestingFacility).toEqual(requestingFacilities[0]);
+        });
+
+        it('should select supplying facility', function() {
+            vm.$onInit();
+    
+            expect(vm.supplyingFacility).toEqual(supplyingFacilities[0]);
+        });
     });
 
     it('loadOrders should reload state with right params', function() {
         spyOn($state, 'go');
 
-        vm.facility =  {
+        vm.requestingFacility =  {
             id: 'facility-one'
         };
-
+        vm.supplyingFacility =  {
+            id: 'facility-two'
+        };
         vm.program = {
             id: 'program-one'
         };
-        vm.isSupervised = true;
 
-        vm.$onInit();
         vm.loadOrders();
 
         expect($state.go).toHaveBeenCalledWith('openlmis.orders.podManage', {
-            facility: vm.facility.id,
-            program: vm.program.id,
-            supervised: vm.isSupervised,
+            requestingFacilityId: vm.requestingFacility.id,
+            supplyingFacilityId: vm.supplyingFacility.id,
+            programId: vm.program.id,
             page: 0,
             size: 10
         }, {reload: true});
