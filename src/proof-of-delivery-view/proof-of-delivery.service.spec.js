@@ -19,7 +19,7 @@ describe('proofOfDeliveryService', function() {
 
     var proofOfDeliveryService, ProofOfDeliveryDataBuilder, $q, $rootScope, repositoryMock,
         loadingModalService, notificationService, proofOfDeliveryMock, saveSpy, confirmSpy,
-        confirmService;
+        confirmService, stateTrackerService;
 
     beforeEach(function() {
         module('proof-of-delivery-view', function($provide) {
@@ -39,6 +39,7 @@ describe('proofOfDeliveryService', function() {
             loadingModalService = $injector.get('loadingModalService');
             notificationService = $injector.get('notificationService');
             confirmService = $injector.get('confirmService');
+            stateTrackerService = $injector.get('stateTrackerService');
         });
     });
 
@@ -242,6 +243,7 @@ describe('proofOfDeliveryService', function() {
             spyOn(loadingModalService, 'open');
             spyOn(loadingModalService, 'close');
             spyOn(confirmService, 'confirm');
+            spyOn(stateTrackerService, 'goToPreviousState');
         });
 
         it('should show confirmation modal before doing anything', function() {
@@ -331,6 +333,19 @@ describe('proofOfDeliveryService', function() {
             expect(loadingModalService.close).toHaveBeenCalled();
         });
 
+        it('should go to previous state on success', function() {
+            confirmService.confirm.andReturn($q.resolve());
+            confirmSpy.andReturn($q.resolve());
+
+            proofOfDelivery.confirm();
+
+            expect(stateTrackerService.goToPreviousState).not.toHaveBeenCalled();
+
+            $rootScope.$apply();
+
+            expect(stateTrackerService.goToPreviousState).toHaveBeenCalled();
+        });
+
         it('should show error only after confirm has failed', function() {
             confirmService.confirm.andReturn($q.resolve());
             confirmSpy.andReturn($q.reject());
@@ -350,6 +365,7 @@ describe('proofOfDeliveryService', function() {
             expect(notificationService.success).not.toHaveBeenCalled();
             expect(notificationService.error)
                 .toHaveBeenCalledWith('proofOfDeliveryView.failedToConfirmProofOfDelivery');
+            expect(stateTrackerService.goToPreviousState).not.toHaveBeenCalled();
         });
 
         it('should close loading modal on failure', function() {
@@ -363,6 +379,7 @@ describe('proofOfDeliveryService', function() {
             $rootScope.$apply();
 
             expect(loadingModalService.close).toHaveBeenCalled();
+            expect(stateTrackerService.goToPreviousState).not.toHaveBeenCalled();
         });
 
     });

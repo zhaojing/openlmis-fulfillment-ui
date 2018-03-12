@@ -30,11 +30,11 @@
 
     proofOfDeliveryService.$inject = [
         '$q', 'ProofOfDeliveryRepository', 'ProofOfDeliveryRepositoryImpl', 'notificationService',
-        'loadingModalService', 'confirmService'
+        'loadingModalService', 'confirmService', 'stateTrackerService'
     ];
 
     function proofOfDeliveryService($q, ProofOfDeliveryRepository, ProofOfDeliveryRepositoryImpl,
-                                    notificationService, loadingModalService, confirmService) {
+                                    notificationService, loadingModalService, confirmService, stateTrackerService) {
         var proofOfDeliveryService = this,
             repository = new ProofOfDeliveryRepository(
                 new ProofOfDeliveryRepositoryImpl()
@@ -80,6 +80,7 @@
                         notificationService.success(
                             'proofOfDeliveryView.proofOfDeliveryHasBeenConfirmed'
                         );
+                        stateTrackerService.goToPreviousState();
                     })
                     .catch(function() {
                         notificationService.error(

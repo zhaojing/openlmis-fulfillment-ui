@@ -33,7 +33,8 @@
         'ui.router',
         'shipment',
         'stock-constants',
-        'stock-valid-reason'
+        'stock-valid-reason',
+        'openlmis-state-tracker'
     ]);
 
 })();
