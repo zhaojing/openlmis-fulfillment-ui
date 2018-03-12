@@ -191,13 +191,13 @@
          *
          * @ngdoc method
          * @methodOf proof-of-delivery-manage.controller:ProofOfDeliveryManageController
-         * @name getPrintUrl
+         * @name printPod
          *
          * @description
-         * Prepares a print URL for the given proof of delivery.
+         * Prints the given proof of delivery.
          *
-         * @param  {Object} podId the UUID of the proof of delivery to prepare the URL for
-         * @return {String}       the prepared URL
+         * @param  {Object} orderId the UUID of order to find it's POD
+         * @return {String}         the prepared URL
          */
         function printPod(orderId) {
             var popup = $window.open('', '_blank');
