@@ -31,6 +31,7 @@
             <tr>
                 <th>{{'proofOfDeliveryManage.orderNumber' | message}}</th>
                 <th>{{'proofOfDeliveryManage.orderStatus' | message}}</th>
+                <th>{{'proofOfDeliveryManage.requestingFacility' | message}}</th>
                 <th>{{'proofOfDeliveryManage.supplyingDepot' | message}}</th>
                 <th>{{'proofOfDeliveryManage.program' | message}}</th>
                 <th>{{'proofOfDeliveryManage.period' | message}}</th>
@@ -43,6 +44,7 @@
             <tr ng-repeat="order in vm.pods">
                 <td>{{order.orderCode}}</td>
                 <td>{{order.status}}</td>
+                <td>{{order.requestingFacility.name}}</td>
                 <td>{{order.supplyingFacility.name}}</td>
                 <td>{{order.program.name}}</td>
                 <td>{{order.processingPeriod.name}}</td>
