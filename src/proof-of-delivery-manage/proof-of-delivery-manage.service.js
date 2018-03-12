@@ -29,10 +29,10 @@
         .service('proofOfDeliveryManageService', service);
 
     service.$inject = [
-        'shipmentService', 'OpenLMISRepositoryImpl', 'fulfillmentUrlFactory'
+        'OpenLMISRepositoryImpl', 'fulfillmentUrlFactory'
     ];
 
-    function service(shipmentService, OpenLMISRepositoryImpl, fulfillmentUrlFactory) {
+    function service(OpenLMISRepositoryImpl, fulfillmentUrlFactory) {
 
         var proofOfDeliveryRepositoryImpl = new OpenLMISRepositoryImpl(
             fulfillmentUrlFactory('/api/proofsOfDelivery')
@@ -54,13 +54,8 @@
          * @return {Promise}        the list of all PODs for the given order
          */
         function getByOrderId(orderId) {
-            return shipmentService.search({
+            return proofOfDeliveryRepositoryImpl.query({
                 orderId: orderId
-            })
-            .then(function(shipment) {
-                return proofOfDeliveryRepositoryImpl.query({
-                    shipmentId: shipment.content[0].id
-                });
             })
             .then(function(page) {
                 return page.content[0];
