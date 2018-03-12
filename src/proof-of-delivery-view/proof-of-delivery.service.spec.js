@@ -343,7 +343,7 @@ describe('proofOfDeliveryService', function() {
 
             $rootScope.$apply();
 
-            expect(stateTrackerService.goToPreviousState).toHaveBeenCalled();
+            expect(stateTrackerService.goToPreviousState).toHaveBeenCalledWith('openlmis.orders.podManage');
         });
 
         it('should show error only after confirm has failed', function() {

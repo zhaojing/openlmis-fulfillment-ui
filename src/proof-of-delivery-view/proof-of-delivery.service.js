@@ -80,7 +80,7 @@
                         notificationService.success(
                             'proofOfDeliveryView.proofOfDeliveryHasBeenConfirmed'
                         );
-                        stateTrackerService.goToPreviousState();
+                        stateTrackerService.goToPreviousState('openlmis.orders.podManage');
                     })
                     .catch(function() {
                         notificationService.error(
