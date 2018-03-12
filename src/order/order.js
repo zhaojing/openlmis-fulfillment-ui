@@ -31,12 +31,15 @@
     Order.$inject = ['ORDER_STATUS'];
 
     function Order(ORDER_STATUS) {
+
         Order.prototype.isFulfilling = isFulfilling;
+        Order.prototype.isOrdered = isOrdered;
+        Order.prototype.isShipped = isShipped;
 
         return Order;
 
         function Order(order) {
-            angular.merge(this, order);
+            angular.copy(order, this);
         }
 
         /**
@@ -52,6 +55,14 @@
          */
         function isFulfilling() {
             return this.status === ORDER_STATUS.FULFILLING;
+        }
+
+        function isOrdered() {
+            return this.status === ORDER_STATUS.ORDERED;
+        }
+
+        function isShipped() {
+            return this.status === ORDER_STATUS.SHIPPED;
         }
     }
 

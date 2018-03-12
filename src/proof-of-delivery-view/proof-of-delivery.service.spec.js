@@ -283,7 +283,7 @@ describe('proofOfDeliveryService', function() {
             confirmService.confirm.andReturn($q.resolve());
             confirmSpy.andReturn($q.resolve());
 
-            proofOfDelivery.confirm().catch(dump);
+            proofOfDelivery.confirm();
             $rootScope.$apply();
 
             expect(confirmSpy).toHaveBeenCalled();

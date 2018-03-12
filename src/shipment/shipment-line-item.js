@@ -13,53 +13,53 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-(function() {
+(function () {
 
     'use strict';
 
     /**
      * @ngdoc service
-     * @name shipment-view.ShipmentLineItemWithSummary
+     * @name shipment.ShipmentLineItem
      *
      * @description
      * Represents a single shipment line item extended by the stock card summary for the orderable
      * and lot.
      */
     angular
-        .module('shipment-view')
-        .factory('ShipmentLineItemWithSummary', ShipmentLineItemWithSummary);
+        .module('shipment')
+        .factory('ShipmentLineItem', ShipmentLineItem);
 
-    ShipmentLineItemWithSummary.$inject = [];
+    ShipmentLineItem.$inject = [];
 
-    function ShipmentLineItemWithSummary() {
+    function ShipmentLineItem() {
 
-        ShipmentLineItemWithSummary.prototype.validate = validate;
+        ShipmentLineItem.prototype.validate = validate;
 
-        return ShipmentLineItemWithSummary;
+        return ShipmentLineItem;
 
         /**
          * @ngdoc method
-         * @methodOf shipment-view.ShipmentLineItemWithSummary
-         * @name ShipmentLineItemWithSummary
+         * @methodOf shipment.ShipmentLineItem
+         * @name ShipmentLineItem
          *
          * @description
-         * Creates instance of the ShipmentLineItemWithSummary class.
+         * Creates instance of the ShipmentLineItem class.
          *
          * @param       {string}    id              the ID of the line item
          * @param       {Object}    summary         the stock card summary matching orderable and lot
          * @param       {number}    quantityShipped the shipped quantity
          */
-        function ShipmentLineItemWithSummary(id, summary, quantityShipped) {
-            this.id = id;
-            this.summary = summary;
-            this.orderable = summary.orderable;
-            this.lot = summary.lot;
-            this.quantityShipped = quantityShipped;
+        function ShipmentLineItem(json) {
+            this.id = json.id;
+            this.orderable = json.orderable;
+            this.lot = json.lot;
+            this.quantityShipped = json.quantityShipped;
+            this.stockOnHand = json.canFulfillForMe.stockOnHand;
         }
 
         /**
          * @ngdoc methodOf
-         * @methodOf shipment-view.ShipmentLineItemWithSummary
+         * @methodOf shipment.ShipmentLineItem
          * @name validate
          *
          * @description
@@ -69,14 +69,17 @@
          * @returns {boolean} true if line item is valid, false otherwise.
          */
         function validate() {
-            this.errors = {};
+            var errors = {};
 
-            if (this.quantityShipped > this.summary.stockOnHand) {
-                this.errors.quantityShipped = 'shipmentView.fillQuantityCannotExceedStockOnHand';
-                return false;
+            if (!this.quantityShipped && this.quantityShipped !== 0) {
+                errors.quantityShipped = 'shipment.required';
             }
 
-            return true;
+            if (this.quantityShipped > this.stockOnHand) {
+                errors.quantityShipped = 'shipment.fillQuantityCannotExceedStockOnHand';
+            }
+
+            return angular.equals(errors, {}) ? undefined : errors;
         }
     }
 })();

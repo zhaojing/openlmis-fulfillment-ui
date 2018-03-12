@@ -13,27 +13,30 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-(function() {
+describe('ShipmentResource', function() {
 
-    'use strict';
+    var ShipmentResource, OpenlmisResourceMock, fulfillmentUrlFactory;
 
-    /**
-     * @module shipment-view
-     *
-     * Provides Shipment Draft view state and controller.
-     */
-    angular.module('shipment-view', [
-        'fulfillment',
-        'openlmis-auth',
-        'openlmis-i18n',
-        'openlmis-table',
-        'openlmis-date',
-        'stock-card-summary',
-        'stock-constants',
-        'shipment',
-        'order',
-        'ui.router',
-        'openlmis-state-tracker'
-    ]);
+    beforeEach(function() {
+        module('shipment', function($provide) {
+            OpenlmisResourceMock = jasmine.createSpy('OpenlmisResource');
 
-})();
+            $provide.factory('OpenlmisResource', function() {
+                return OpenlmisResourceMock;
+            });
+        });
+
+        inject(function($injector) {
+            fulfillmentUrlFactory = $injector.get('fulfillmentUrlFactory');
+            ShipmentResource = $injector.get('ShipmentResource');
+        });
+    });
+
+    it('should extend OpenlmisResource', function() {
+        new ShipmentResource();
+
+        expect(OpenlmisResourceMock).toHaveBeenCalledWith(
+            fulfillmentUrlFactory('/api/shipments')
+        );
+    });
+});

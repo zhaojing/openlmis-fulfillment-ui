@@ -13,53 +13,299 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-describe('Shipment', function() {
+describe('Shipment', function () {
 
-    var Shipment, ShipmentDataBuilder, response, shipment, result;
+    var Shipment, ShipmentLineItem, ShipmentDataBuilder, OrderDataBuilder, json, shipment, $q,
+        $rootScope;
 
-    beforeEach(function() {
+    beforeEach(function () {
         module('shipment');
 
-        inject(function($injector) {
+        inject(function ($injector) {
+            $q = $injector.get('$q');
             Shipment = $injector.get('Shipment');
+            $rootScope = $injector.get('$rootScope');
+            ShipmentLineItem = $injector.get('ShipmentLineItem');
             ShipmentDataBuilder = $injector.get('ShipmentDataBuilder');
-        });
-    });
-
-    describe('constructor', function() {
-
-        it('should set all properties', function() {
-            response = new ShipmentDataBuilder().build();
-            result = new Shipment(response);
-
-            expect(result.id).toEqual(response.id);
-            expect(result.notes).toEqual(response.notes);
-            expect(result.order).toEqual(response.order);
-            expect(result.lineItems).toEqual(response.lineItems);
+            OrderDataBuilder = $injector.get('OrderDataBuilder');
         });
 
+        json = new ShipmentDataBuilder().buildJson();
+        shipment = new ShipmentDataBuilder().build();
     });
 
-    describe('canBeConfirmed', function() {
+    describe('constructor', function () {
 
-        it('should return true if shipment has at least one line item', function () {
-            response = new ShipmentDataBuilder()
+        var repositoryMock;
+
+        beforeEach(function () {
+            repositoryMock = jasmine.createSpyObj('repository', ['get']);
+        });
+
+        it('should set all properties', function () {
+            var result = new Shipment(json, repositoryMock);
+
+            expect(result.id).toEqual(json.id);
+            expect(result.notes).toEqual(json.notes);
+            expect(result.order).toEqual(json.order);
+            expect(result.repository).toEqual(repositoryMock);
+
+            expect(result.lineItems.length).toEqual(2);
+            expect(result.lineItems[0].id).toEqual(json.lineItems[0].id);
+            expect(result.lineItems[0].orderable).toEqual(json.lineItems[0].orderable);
+            expect(result.lineItems[0].lot).toEqual(json.lineItems[0].lot);
+            expect(result.lineItems[0].quantityShipped).toEqual(json.lineItems[0].quantityShipped);
+            expect(result.lineItems[0].stockOnHand)
+                .toEqual(json.lineItems[0].canFulfillForMe.stockOnHand);
+
+            expect(result.lineItems[1].id).toEqual(json.lineItems[1].id);
+            expect(result.lineItems[1].orderable).toEqual(json.lineItems[1].orderable);
+            expect(result.lineItems[1].lot).toEqual(json.lineItems[1].lot);
+            expect(result.lineItems[1].quantityShipped).toEqual(json.lineItems[1].quantityShipped);
+            expect(result.lineItems[1].stockOnHand)
+                .toEqual(json.lineItems[1].canFulfillForMe.stockOnHand);
+        });
+
+        it('should create instance of shipment line items', function () {
+            var result = new Shipment(json, repositoryMock);
+
+            expect(result.lineItems[0] instanceof ShipmentLineItem).toBe(true);
+            expect(result.lineItems[1] instanceof ShipmentLineItem).toBe(true);
+        });
+
+    });
+
+    describe('save', function () {
+
+        it('should return updated shipment', function () {
+            var updatedShipment = new ShipmentDataBuilder().build();
+
+            shipment.repository.updateDraft.andReturn($q.resolve(updatedShipment));
+
+            var result;
+            shipment.save()
+                .then(function (response) {
+                    result = response;
+                });
+            $rootScope.$apply();
+
+            expect(result).toEqual(updatedShipment);
+        });
+
+        it('should reject if repository rejects', function () {
+            shipment.repository.updateDraft.andReturn($q.reject());
+
+            var rejected;
+            shipment.save()
+            .catch(function () {
+                rejected = true;
+            });
+            $rootScope.$apply();
+
+            expect(rejected).toBe(true);
+        });
+
+        it('should reject if shipment is not editable', function() {
+            spyOn(shipment, 'isEditable').andReturn(false);
+
+            var rejected;
+            shipment.save()
+            .catch(function() {
+                rejected = true;
+            });
+            $rootScope.$apply();
+
+            expect(rejected).toBe(true);
+        });
+
+    });
+
+    describe('confirm', function() {
+
+        it('should reject if shipment is invalid', function() {
+            spyOn(shipment, 'validate');
+
+            shipment.validate.andReturn({
+                lineItems: 'invalid'
+            });
+
+            var rejected;
+            shipment.confirm()
+            .catch(function() {
+                rejected = true;
+            });
+            $rootScope.$apply();
+
+            expect(rejected).toBe(true);
+        });
+
+        it('should reject if repository rejects', function() {
+            shipment.repository.create.andReturn($q.reject());
+
+            var rejected;
+            shipment.confirm()
+            .catch(function() {
+                rejected = true;
+            });
+            $rootScope.$apply();
+
+            expect(rejected).toBe(true);
+        });
+
+        it('should resolve if shipment has been confirmed', function() {
+            spyOn(shipment, 'validate');
+
+            shipment.repository.create.andReturn($q.resolve());
+            shipment.validate.andReturn(undefined);
+
+            var confirmed;
+            shipment.confirm()
+            .then(function() {
+                confirmed = true;
+            });
+            $rootScope.$apply();
+
+            expect(confirmed).toBe(true);
+        });
+
+        it('should reject if shipment is not editable', function() {
+            spyOn(shipment, 'isEditable').andReturn(false);
+
+            var rejected;
+            shipment.confirm()
+            .catch(function() {
+                rejected = true;
+            });
+            $rootScope.$apply();
+
+            expect(rejected).toBe(true);
+        });
+
+    });
+
+    describe('delete', function() {
+
+        it('should resolve if shipment was deleted', function() {
+            shipment.repository.deleteDraft.andReturn($q.resolve());
+
+            var deleted;
+            shipment.delete()
+            .then(function() {
+                deleted = true;
+            });
+            $rootScope.$apply();
+
+            expect(deleted).toBe(true);
+        });
+
+        it('should reject if repository rejects', function() {
+            shipment.repository.deleteDraft.andReturn($q.reject());
+
+            var rejected;
+            shipment.delete()
+            .catch(function() {
+                rejected = true;
+            });
+            $rootScope.$apply();
+
+            expect(rejected).toBe(true);
+        });
+
+        it('should reject if shipment is not editable', function() {
+            spyOn(shipment, 'isEditable').andReturn(false);
+
+            var rejected;
+            shipment.delete()
+            .catch(function() {
+                rejected = true;
+            });
+            $rootScope.$apply();
+
+            expect(rejected).toBe(true);
+        });
+
+    });
+
+    describe('validate', function() {
+
+        it('should return undefined if shipment is valid', function() {
+            var result = shipment.validate();
+
+            expect(result).toBeUndefined();
+        });
+
+        it('should return error if any of the line items is invalid', function() {
+            spyOn(shipment.lineItems[0], 'validate').andReturn({
+                quantityShipped: 'shipment.required'
+            });
+
+            var result = shipment.validate();
+
+            expect(result).toEqual({
+                lineItems: [{
+                    quantityShipped: 'shipment.required'
+                }]
+            });
+        });
+
+    });
+
+    describe('isEditable', function() {
+
+        it('should return true if order status is ordered', function() {
+            shipment = new ShipmentDataBuilder()
+                .withOrder(new OrderDataBuilder().buildOrdered())
                 .build();
 
-            shipment = new Shipment(response);
+            var result = shipment.isEditable();
 
-            expect(shipment.canBeConfirmed())
-                .toEqual(true);
+            expect(result).toBe(true);
+        });
+
+        it('should return true if order status is fulfilling ', function() {
+            shipment = new ShipmentDataBuilder()
+                .withOrder(new OrderDataBuilder().buildFulfilling())
+                .build();
+
+            var result = shipment.isEditable();
+
+            expect(result).toBe(true);
+        });
+
+        it('should return false if orders status is shipped', function() {
+            shipment = new ShipmentDataBuilder()
+                .withOrder(new OrderDataBuilder().buildShipped())
+                .build();
+
+            var result = shipment.isEditable();
+
+            expect(result).toBe(false);
+        });
+
+        it('should return false if order status is past shipped', function() {
+            shipment = new ShipmentDataBuilder()
+                .withOrder(new OrderDataBuilder().buildReceived())
+                .build();
+
+            var result = shipment.isEditable();
+
+            expect(result).toBe(false);
+        });
+
+    });
+
+    describe('canBeConfirmed', function () {
+
+        it('should return true if shipment has at least one line item', function () {
+            expect(shipment.canBeConfirmed()).toEqual(true);
         });
 
         it('should return false if shipment does not have any line items', function () {
-            response = new ShipmentDataBuilder()
-                .buildWithoutLineItems();
+            shipment = new ShipmentDataBuilder()
+                .withoutLineItems()
+                .build();
 
-            shipment = new Shipment(response);
-
-            expect(shipment.canBeConfirmed())
-                .toEqual(false);
+            expect(shipment.canBeConfirmed()).toEqual(false);
         });
     });
 

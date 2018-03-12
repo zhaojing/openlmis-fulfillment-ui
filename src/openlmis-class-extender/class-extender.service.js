@@ -57,7 +57,12 @@
             }
 
             extending.prototype = angular.copy(parent.prototype);
+            extending.prototype.super = superConstructor;
             extending.prototype.constructor = extending;
+
+            function superConstructor() {
+                parent.apply(this, arguments);
+            }
         }
     }
 

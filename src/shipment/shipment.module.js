@@ -27,7 +27,10 @@
         'fulfillment',
         'ngResource',
         'ui.router',
-        'referencedata'
+        'referencedata',
+        'openlmis-repository',
+        'order',
+        'stock-card-summary'
     ]);
 
 })();

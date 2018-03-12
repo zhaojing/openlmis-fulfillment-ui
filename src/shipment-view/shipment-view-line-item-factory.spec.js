@@ -13,27 +13,8 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-(function() {
+describe('ShipmentViewLineItemFactory', function() {
 
-    'use strict';
+    //TODO: Finish tests
 
-    /**
-     * @module shipment-view
-     *
-     * Provides Shipment Draft view state and controller.
-     */
-    angular.module('shipment-view', [
-        'fulfillment',
-        'openlmis-auth',
-        'openlmis-i18n',
-        'openlmis-table',
-        'openlmis-date',
-        'stock-card-summary',
-        'stock-constants',
-        'shipment',
-        'order',
-        'ui.router',
-        'openlmis-state-tracker'
-    ]);
-
-})();
+});

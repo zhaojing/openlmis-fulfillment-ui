@@ -90,8 +90,7 @@ describe('ProofOfDeliveryRepositoryImpl', function() {
             proofOfDeliveryRepositoryImpl.get('proof-of-delivery-id')
             .then(function(response) {
                 result = response;
-            })
-            .catch(dump)
+            });
             $httpBackend.flush();
             $rootScope.$apply();
 

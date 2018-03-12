@@ -22,11 +22,17 @@
         .factory('BasicOrderResponseDataBuilder', BasicOrderResponseDataBuilder);
 
     BasicOrderResponseDataBuilder.$inject = [
-        'ProgramDataBuilder', 'FacilityDataBuilder', 'PeriodDataBuilder'
+        'ProgramDataBuilder', 'FacilityDataBuilder', 'PeriodDataBuilder', 'ORDER_STATUS'
     ];
 
     function BasicOrderResponseDataBuilder(ProgramDataBuilder, FacilityDataBuilder,
-                                           PeriodDataBuilder) {
+                                           PeriodDataBuilder, ORDER_STATUS) {
+
+        BasicOrderResponseDataBuilder.prototype.build = build;
+        BasicOrderResponseDataBuilder.prototype.buildOrdered = buildOrdered;
+        BasicOrderResponseDataBuilder.prototype.buildFulfilling = buildFulfilling;
+        BasicOrderResponseDataBuilder.prototype.buildShipped = buildShipped;
+        BasicOrderResponseDataBuilder.prototype.buildReceived = buildReceived;
 
         BasicOrderResponseDataBuilder.prototype.withId = withId;
         BasicOrderResponseDataBuilder.prototype.withCreatedDate = withCreatedDate;
@@ -34,7 +40,6 @@
         BasicOrderResponseDataBuilder.prototype.withProcessingPeriod = withProcessingPeriod;
         BasicOrderResponseDataBuilder.prototype.withOrderLineItem = withOrderLineItem;
         BasicOrderResponseDataBuilder.prototype.withStatus = withStatus;
-        BasicOrderResponseDataBuilder.prototype.build = build;
 
         return BasicOrderResponseDataBuilder;
 
@@ -53,7 +58,7 @@
             this.program = new ProgramDataBuilder().build();
             this.requestingFacility = new FacilityDataBuilder().build();
             this.orderCode = "ORDER-" + BasicOrderResponseDataBuilder.instanceNumber;
-            this.status = "IN_ROUTE";
+            this.status = "ORDERED";
             this.facility = new FacilityDataBuilder().build();
             this.receivingFacility = new FacilityDataBuilder().build();
             this.supplyingFacility = new FacilityDataBuilder().build();
@@ -89,6 +94,30 @@
         function withStatus(status) {
             this.status = status;
             return this;
+        }
+
+        function buildOrdered() {
+            return new BasicOrderResponseDataBuilder()
+                .withStatus(ORDER_STATUS.ORDERED)
+                .build();
+        }
+
+        function buildFulfilling() {
+            return new BasicOrderResponseDataBuilder()
+                .withStatus(ORDER_STATUS.FULFILLING)
+                .build();
+        }
+
+        function buildShipped() {
+            return new BasicOrderResponseDataBuilder()
+                .withStatus(ORDER_STATUS.SHIPPED)
+                .build();
+        }
+
+        function buildReceived() {
+            return new BasicOrderResponseDataBuilder()
+                .withStatus(ORDER_STATUS.RECEIVED)
+                .build();
         }
 
         function build() {

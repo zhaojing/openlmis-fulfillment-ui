@@ -38,24 +38,28 @@
             ],
             areAllRightsRequired: false,
             resolve: {
-                order: function(orderService, $stateParams) {
-                    return orderService.get($stateParams.id);
+                order: function(orderRepository, $stateParams) {
+                    return orderRepository.get($stateParams.id);
                 },
-                stockCardSummaries: function(stockCardSummariesService, order) {
-                    return stockCardSummariesService.getStockCardSummaries(
-                        order.program.id,
-                        order.supplyingFacility.id
-                    );
+                stockCardSummaries: function(StockCardSummaryRepositoryImpl, order) {
+                    var orderableIds = order.orderLineItems.map(function(lineItem) {
+                        return lineItem.orderable.id;
+                    });
+
+                    return new StockCardSummaryRepositoryImpl().query({
+                        programId: order.program.id,
+                        facilityId: order.supplyingFacility.id,
+                        orderableId: orderableIds
+                    })
+                    .then(function(page) {
+                        return page.content;
+                    });
                 },
-                shipment: function(shipmentFactory, order, stockCardSummaries) {
-                    return shipmentFactory.getForOrder(order, stockCardSummaries);
+                shipment: function(shipmentViewService, order) {
+                    return shipmentViewService.getShipmentForOrder(order);
                 },
-                orderFulfillmentLineItems: function(orderFulfillmentLineItemFactory, order, stockCardSummaries, shipment) {
-                    return orderFulfillmentLineItemFactory.get(
-                        order,
-                        shipment,
-                        stockCardSummaries
-                    );
+                tableLineItems: function(ShipmentViewLineItemFactory, shipment, stockCardSummaries) {
+                    return new ShipmentViewLineItemFactory().createFrom(shipment, stockCardSummaries);
                 },
                 updatedOrder: function(orderService, shipment) {
                     return orderService.get(shipment.order.id, 'lastUpdater');

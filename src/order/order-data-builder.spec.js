@@ -33,8 +33,8 @@
         return OrderDataBuilder;
 
         function OrderDataBuilder() {
-            OrderResponseDataBuilder.apply(this, arguments);
             BasicOrderDataBuilder.apply(this, arguments);
+            OrderResponseDataBuilder.apply(this, arguments);
         }
     }
 })();

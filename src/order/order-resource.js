@@ -13,27 +13,32 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-(function() {
+(function () {
 
     'use strict';
 
     /**
-     * @module shipment-view
+     * @ngdoc service
+     * @name shipment.OrderResource
      *
-     * Provides Shipment Draft view state and controller.
+     * @description
+     * Implementation of the ShipmentRepository interface. Communicates with the REST API of the
+     * OpenLMIS server.
      */
-    angular.module('shipment-view', [
-        'fulfillment',
-        'openlmis-auth',
-        'openlmis-i18n',
-        'openlmis-table',
-        'openlmis-date',
-        'stock-card-summary',
-        'stock-constants',
-        'shipment',
-        'order',
-        'ui.router',
-        'openlmis-state-tracker'
-    ]);
+    angular
+        .module('shipment')
+        .factory('OrderResource', OrderResource);
 
+    OrderResource.$inject = ['fulfillmentUrlFactory', 'OpenlmisResource', 'classExtender'];
+
+    function OrderResource(fulfillmentUrlFactory, OpenlmisResource, classExtender) {
+
+        classExtender.extend(OrderResource, OpenlmisResource);
+
+        return OrderResource;
+
+        function OrderResource() {
+            this.super(fulfillmentUrlFactory('/api/orders'));
+        }
+    }
 })();

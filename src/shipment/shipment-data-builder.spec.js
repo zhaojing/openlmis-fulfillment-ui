@@ -13,7 +13,7 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-(function() {
+(function () {
 
     'use strict';
 
@@ -22,17 +22,21 @@
         .factory('ShipmentDataBuilder', ShipmentDataBuilder);
 
     ShipmentDataBuilder.$inject = [
-        'ObjectReferenceDataBuilder', 'ShipmentLineItemDataBuilder'
+        'ObjectReferenceDataBuilder', 'ShipmentLineItemDataBuilder', 'OrderDataBuilder', 'Shipment'
     ];
 
-    function ShipmentDataBuilder(ObjectReferenceDataBuilder, ShipmentLineItemDataBuilder) {
+    function ShipmentDataBuilder(ObjectReferenceDataBuilder, ShipmentLineItemDataBuilder,
+                                 OrderDataBuilder, Shipment) {
+
+        ShipmentDataBuilder.prototype.build = build;
+        ShipmentDataBuilder.prototype.buildResponse = buildResponse;
+        ShipmentDataBuilder.prototype.buildJson = buildJson;
 
         ShipmentDataBuilder.prototype.withOrder = withOrder;
         ShipmentDataBuilder.prototype.withLineItems = withLineItems;
         ShipmentDataBuilder.prototype.withoutId = withoutId;
         ShipmentDataBuilder.prototype.withId = withId;
         ShipmentDataBuilder.prototype.withoutLineItems = withoutLineItems;
-        ShipmentDataBuilder.prototype.build = build;
         ShipmentDataBuilder.prototype.buildWithoutId = buildWithoutId;
         ShipmentDataBuilder.prototype.buildWithoutLineItems = buildWithoutLineItems;
 
@@ -41,23 +45,49 @@
         function ShipmentDataBuilder() {
             ShipmentDataBuilder.instanceNumber = (ShipmentDataBuilder.instanceNumber || 0) + 1;
 
-            this.id ='shipment-' + ShipmentDataBuilder.instanceNumber;
+            this.repository = jasmine.createSpyObj('shipmentRepository', [
+                'create', 'updateDraft', 'deleteDraft'
+            ]);
+            this.id = 'shipment-' + ShipmentDataBuilder.instanceNumber;
+            this.order = new OrderDataBuilder().build();
+            this.shippedBy = 'Shipper ' + ShipmentDataBuilder.instanceNumber;
+            this.shippedDate = '2018-01-16T18:34:57.915007Z';
             this.notes = 'Some notes about shipment';
-            this.order = new ObjectReferenceDataBuilder()
-                .withResource('order')
-                .build();
-
             this.lineItems = [
-                new ShipmentLineItemDataBuilder().build()
+                new ShipmentLineItemDataBuilder().buildJson(),
+                new ShipmentLineItemDataBuilder().buildJson()
             ];
+            this.extraData = {};
         }
 
         function build() {
+            return new Shipment(this.buildJson(), this.repository);
+        }
+
+        function buildJson() {
             return {
                 id: this.id,
-                notes: this.notes,
                 order: this.order,
-                lineItems: this.lineItems
+                shippedBy: this.shippedBy,
+                shippedDate: this.shippedDate,
+                notes: this.notes,
+                lineItems: this.lineItems,
+                extraData: this.extraData
+            }
+        }
+
+        function buildResponse() {
+            return {
+                id: this.id,
+                order: new ObjectReferenceDataBuilder()
+                    .withId(this.order.id)
+                    .withResource('order')
+                    .build(),
+                shippedBy: this.shippedBy,
+                shippedDate: this.shippedDate,
+                notes: this.notes,
+                lineItems: this.lineItems,
+                extraData: this.extraData
             };
         }
 

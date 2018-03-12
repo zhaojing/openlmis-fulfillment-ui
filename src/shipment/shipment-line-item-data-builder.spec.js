@@ -13,7 +13,7 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-(function() {
+(function () {
 
     'use strict';
 
@@ -21,18 +21,24 @@
         .module('shipment')
         .factory('ShipmentLineItemDataBuilder', ShipmentLineItemDataBuilder);
 
-    ShipmentLineItemDataBuilder.$inject = ['ObjectReferenceDataBuilder'];
+    ShipmentLineItemDataBuilder.$inject = [
+        'ShipmentLineItem', 'ObjectReferenceDataBuilder', 'CanFulfillForMeEntryDataBuilder'
+    ];
 
-    function ShipmentLineItemDataBuilder(ObjectReferenceDataBuilder) {
+    function ShipmentLineItemDataBuilder(ShipmentLineItem, ObjectReferenceDataBuilder,
+        CanFulfillForMeEntryDataBuilder) {
 
         ShipmentLineItemDataBuilder.buildForProofOfDeliveryLineItem =
             buildForProofOfDeliveryLineItem;
+
+        ShipmentLineItemDataBuilder.prototype.build = build;
+        ShipmentLineItemDataBuilder.prototype.buildJson = buildJson;
 
         ShipmentLineItemDataBuilder.prototype.withOrderable = withOrderable;
         ShipmentLineItemDataBuilder.prototype.withLot = withLot;
         ShipmentLineItemDataBuilder.prototype.withQuantityShipped = withQuantityShipped;
         ShipmentLineItemDataBuilder.prototype.withoutLot = withoutLot;
-        ShipmentLineItemDataBuilder.prototype.build = build;
+        ShipmentLineItemDataBuilder.prototype.withCanFulfillForMe = withCanFulfillForMe;
 
         return ShipmentLineItemDataBuilder;
 
@@ -50,14 +56,20 @@
                 .build();
 
             this.quantityShipped = 0;
+            this.canFulfillForMe = new CanFulfillForMeEntryDataBuilder().buildJson();
         }
 
         function build() {
+            return new ShipmentLineItem(this.buildJson());
+        }
+
+        function buildJson() {
             return {
                 id: this.id,
                 orderable: this.orderable,
                 lot: this.lot,
-                quantityShipped: this.quantityShipped
+                quantityShipped: this.quantityShipped,
+                canFulfillForMe: this.canFulfillForMe
             };
         }
 
@@ -87,7 +99,12 @@
                 .withLot(proofOfDeliveryLineItem.lot)
                 .withQuantityShipped(proofOfDeliveryLineItem.quantityAccepted +
                     proofOfDeliveryLineItem.quantityRejected)
-                .build();
+                .buildJson();
+        }
+
+        function withCanFulfillForMe(canFulfillForMe) {
+            this.canFulfillForMe = canFulfillForMe;
+            return this;
         }
 
     }

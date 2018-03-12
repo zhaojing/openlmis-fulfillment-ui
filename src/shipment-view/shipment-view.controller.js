@@ -29,26 +29,21 @@
         .controller('ShipmentViewController', ShipmentViewController);
 
     ShipmentViewController.$inject = [
-        '$scope', 'shipment', 'orderFulfillmentLineItems', 'shipmentDraftService', 'shipmentService',
-        'loadingModalService', '$state', '$window', 'fulfillmentUrlFactory', 'messageService',
-        'confirmService', 'notificationService', 'stateTrackerService', 'accessTokenFactory',
-        'ORDER_STATUS', 'updatedOrder', 'QUANTITY_UNIT', 'Shipment'
+        'shipment', 'loadingModalService', '$state', '$window', 'fulfillmentUrlFactory',
+        'messageService', 'notificationService', 'accessTokenFactory', 'updatedOrder',
+        'QUANTITY_UNIT', 'tableLineItems'
     ];
 
-    function ShipmentViewController($scope, shipment, orderFulfillmentLineItems, shipmentDraftService, shipmentService,
-                                    loadingModalService, $state, $window, fulfillmentUrlFactory, messageService,
-                                    confirmService, notificationService, stateTrackerService, accessTokenFactory, ORDER_STATUS,
-                                    updatedOrder, QUANTITY_UNIT, Shipment) {
+    function ShipmentViewController(shipment, loadingModalService, $state, $window,
+                                    fulfillmentUrlFactory, messageService, notificationService,
+                                    accessTokenFactory, updatedOrder, QUANTITY_UNIT,
+                                    tableLineItems) {
 
         var vm = this;
 
         vm.$onInit = onInit;
-        vm.saveShipment = saveShipment;
-        vm.deleteShipment = deleteShipment;
         vm.saveAndPrint = saveAndPrint;
-        vm.confirmShipment = confirmShipment;
-        vm.isEditable = isEditable;
-        vm.calculateQuantity = calculateQuantity;
+        vm.showInDoses = showInDoses;
         vm.getSelectedQuantityUnitKey = getSelectedQuantityUnitKey;
 
         /**
@@ -106,40 +101,22 @@
          */
         function onInit() {
             vm.order = updatedOrder;
-            vm.orderFulfillmentLineItems = orderFulfillmentLineItems;
-            vm.shipment = new Shipment(shipment);
+            vm.shipment = shipment;
+            vm.tableLineItems = tableLineItems;
         }
 
         /**
          * @ngdoc method
          * @methodOf shipment-view.controller:ShipmentViewController
-         * @name isEditable
-         *
-         * @description
-         * Checks Order status which indicates if shipment can be edited.
-         *
-         * @return {boolean} is Shipment editable
-         */
-        function isEditable() {
-            return ORDER_STATUS.SHIPPED !== vm.order.status;
-        }
-
-        /**
-         * @ngdoc method
-         * @methodOf shipment-view.controller:ShipmentViewController
-         * @name calculateQuantity
+         * @name showInDoses
          *
          * @description
          * Returns quantity in packs or in doses.
          *
          * @return {number} the quantity.
          */
-        function calculateQuantity(quantity, netContent) {
-            if (vm.quantityUnit === QUANTITY_UNIT.DOSES) {
-                return quantity * netContent;
-            } else {
-                return quantity;
-            }
+        function showInDoses() {
+            return vm.quantityUnit === QUANTITY_UNIT.DOSES;
         }
 
         /**
@@ -157,100 +134,6 @@
         /**
          * @ngdoc method
          * @methodOf shipment-view.controller:ShipmentViewController
-         * @name saveShipment
-         *
-         * @description
-         * Saves the shipment on the server. Will show a notification informing whether the action
-         * was successful or not. Will reload the state on success.
-         */
-        function saveShipment() {
-            var loadingPromise = loadingModalService.open();
-
-            shipmentDraftService.save(shipment)
-            .then(function() {
-                loadingPromise
-                .then(function() {
-                    notificationService.success('shipmentView.draftHasBeenSaved');
-                });
-                $state.reload();
-            })
-            .catch(function() {
-                loadingModalService.close();
-                notificationService.error('shipmentView.failedToSaveDraft');
-            });
-        }
-
-        /**
-         * @ngdoc method
-         * @methodOf shipment-view.controller:ShipmentViewController
-         * @name confirmShipment
-         *
-         * @description
-         * Finalizes the shipment on the server. Will show a notification informing whether the action
-         * was successful or not and reload the state on success.
-         */
-        function confirmShipment() {
-            confirmService.confirm(
-                'shipmentView.confirmShipment.question',
-                'shipmentView.confirmShipment'
-            )
-            .then(function() {
-                if (isShipmentValid()) {
-                    var loadingPromise = loadingModalService.open();
-                    shipmentService.create(shipment)
-                    .then(function() {
-                        loadingPromise
-                        .then(function() {
-                            notificationService.success('shipmentView.shipmentHasBeenConfirmed');
-                        });
-                        stateTrackerService.goToPreviousState('openlmis.orders.view');
-                    })
-                    .catch(function() {
-                        loadingModalService.close();
-                        notificationService.error('shipmentView.failedToConfirmShipment');
-                    });
-                }
-                else {
-                    $scope.$broadcast('openlmis-form-submit');
-                    notificationService.error('shipmentView.shipmentHasErrors');
-                }
-            });
-        }
-
-        /**
-         * @ngdoc method
-         * @methodOf shipment-view.controller:ShipmentViewController
-         * @name saveShipment
-         *
-         * @description
-         * Deletes the shipment on the server. Will show a notification informing whether the action
-         * was successful or not. Will take user to the previous page on success.
-         */
-        function deleteShipment() {
-            confirmService.confirmDestroy(
-                'shipmentView.deleteDraftConfirmation',
-                'shipmentView.deleteDraft'
-            )
-            .then(function() {
-                var loadingPromise = loadingModalService.open();
-                return shipmentDraftService.remove(shipment.id)
-                .then(function() {
-                    loadingPromise
-                    .then(function() {
-                        notificationService.success('shipmentView.draftHasBeenDeleted');
-                    });
-                    stateTrackerService.goToPreviousState('openlmis.orders.view');
-                })
-                .catch(function() {
-                    loadingModalService.close();
-                    notificationService.error('shipmentView.failedToDeleteDraft');
-                });
-            });
-        }
-
-        /**
-         * @ngdoc method
-         * @methodOf shipment-view.controller:ShipmentViewController
          * @name saveAndPrint
          *
          * @description
@@ -260,13 +143,11 @@
             var popup = $window.open('', '_blank');
             popup.document.write(messageService.get('shipmentView.saveDraftPending'));
 
-            var loadingPromise = loadingModalService.open();
-            shipmentDraftService.save(shipment)
+            loadingModalService.open();
+
+            shipment.save()
             .then(function(response) {
-                loadingPromise
-                .then(function() {
-                    notificationService.success('shipmentView.draftHasBeenSaved');
-                });
+                notificationService.success('shipmentView.draftHasBeenSaved');
                 popup.location.href = accessTokenFactory.addAccessToken(getPrintUrl(response.id));
                 $state.reload();
             })
@@ -274,16 +155,6 @@
                 notificationService.error('shipmentView.failedToSaveDraft');
                 loadingModalService.close();
             });
-        }
-
-        function isShipmentValid() {
-            var isValid = true;
-            vm.orderFulfillmentLineItems.forEach(function(orderLineItem) {
-                orderLineItem.shipmentLineItems.forEach(function(lineItem) {
-                    isValid = lineItem.validate() && isValid;
-                });
-            });
-            return isValid;
         }
 
         function getPrintUrl(shipmentId) {

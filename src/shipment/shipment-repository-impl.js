@@ -28,13 +28,140 @@
         .module('shipment')
         .factory('ShipmentRepositoryImpl', ShipmentRepositoryImpl);
 
-    ShipmentRepositoryImpl.$inject = ['fulfillmentUrlFactory', 'OpenLMISRepositoryImpl'];
+    ShipmentRepositoryImpl.$inject = [
+        'ShipmentResource', 'ShipmentDraftResource', 'OrderResource', 'StockCardSummaryRepositoryImpl'
+    ];
 
-    function ShipmentRepositoryImpl(fulfillmentUrlFactory, OpenLMISRepositoryImpl) {
+    function ShipmentRepositoryImpl(ShipmentResource, ShipmentDraftResource, OrderResource,
+                                    StockCardSummaryRepositoryImpl) {
+
+        ShipmentRepositoryImpl.prototype.create = create;
+        ShipmentRepositoryImpl.prototype.createDraft = createDraft;
+        ShipmentRepositoryImpl.prototype.get = get;
+        ShipmentRepositoryImpl.prototype.updateDraft = updateDraft;
+        ShipmentRepositoryImpl.prototype.getByOrderId = getByOrderId;
+        ShipmentRepositoryImpl.prototype.getDraftByOrderId = getDraftByOrderId;
+
         return ShipmentRepositoryImpl;
 
         function ShipmentRepositoryImpl() {
-            return new OpenLMISRepositoryImpl(fulfillmentUrlFactory('/api/shipments'));
+            this.shipmentResource = new ShipmentResource();
+            this.shipmentDraftResource = new ShipmentDraftResource();
+            this.stockCardSummaryRepositoryImpl = new StockCardSummaryRepositoryImpl();
+            this.orderResource = new OrderResource();
+        }
+
+        function create(json) {
+            var orderResource = this.orderResource,
+                stockCardSummaryRepositoryImpl = this.stockCardSummaryRepositoryImpl;
+
+            return this.shipmentResource.create(json)
+            .then(function(shipmentJson) {
+                return extendResponse(shipmentJson, orderResource, stockCardSummaryRepositoryImpl);
+            });
+        }
+
+        function createDraft(json) {
+            var orderResource = this.orderResource,
+                stockCardSummaryRepositoryImpl = this.stockCardSummaryRepositoryImpl;
+
+            return this.shipmentDraftResource.create(json)
+            .then(function(shipmentJson) {
+                return extendResponse(shipmentJson, orderResource, stockCardSummaryRepositoryImpl);
+             });
+        }
+
+        function get(id) {
+            var orderResource = this.orderResource,
+                stockCardSummaryRepositoryImpl = this.stockCardSummaryRepositoryImpl;
+
+            return this.shipmentResource.get(id)
+            .then(function(shipmentJson) {
+                return extendResponse(shipmentJson, orderResource, stockCardSummaryRepositoryImpl);
+            });
+        }
+
+        function updateDraft(draft) {
+            return this.shipmentDraftResource.update(draft);
+        }
+
+        function getByOrderId(orderId) {
+            var orderResource = this.orderResource,
+                stockCardSummaryRepositoryImpl = this.stockCardSummaryRepositoryImpl;
+
+            return this.shipmentResource.query({
+                orderId: orderId
+            })
+            .then(function(page) {
+                return extendResponse(page.content[0], orderResource, stockCardSummaryRepositoryImpl);
+            });
+        }
+
+        function getDraftByOrderId(orderId) {
+            var orderResource = this.orderResource,
+                stockCardSummaryRepositoryImpl = this.stockCardSummaryRepositoryImpl;
+
+            return this.shipmentDraftResource.query({
+                orderId: orderId
+            })
+            .then(function(page) {
+                return extendResponse(page.content[0], orderResource, stockCardSummaryRepositoryImpl);
+            });
+        }
+
+        function extendResponse(shipmentJson, orderResource, stockCardSummaryRepositoryImpl) {
+            return orderResource.get(shipmentJson.order.id)
+            .then(function(orderJson) {
+                var orderableIds = orderJson.orderLineItems.map(function(lineItem) {
+                    return lineItem.orderable.id;
+                });
+
+                return stockCardSummaryRepositoryImpl.query({
+                    programId: orderJson.program.id,
+                    facilityId: orderJson.supplyingFacility.id,
+                    orderableId: orderableIds
+                })
+                .then(function(page) {
+                    return page.content;
+                })
+                .then(mapCanFulfillForMe)
+                .then(function(canFulfillForMeMap) {
+                    return combineResponses(shipmentJson, orderJson, canFulfillForMeMap);
+                });
+            });
+        }
+
+        function combineResponses(shipment, order, canFulfillForMeMap) {
+            shipment.order = order;
+
+            shipment.lineItems.forEach(function(lineItem) {
+                lineItem.canFulfillForMe = canFulfillForMeMap[lineItem.orderable.id][getLotId(lineItem.lot)];
+            });
+
+            return shipment;
+        }
+
+        function mapCanFulfillForMe(summaries) {
+            var canFulfillForMeMap = {};
+
+            summaries.forEach(function(summary) {
+                summary.canFulfillForMe.forEach(function(canFulfillForMe) {
+                    var orderableId = canFulfillForMe.orderable.id,
+                        lotId = canFulfillForMe.lot ? canFulfillForMe.lot.id : undefined;
+
+                    if (!canFulfillForMeMap[orderableId]) {
+                        canFulfillForMeMap[orderableId] = {};
+                    }
+
+                    canFulfillForMeMap[orderableId][lotId] = canFulfillForMe;
+                });
+            });
+
+            return canFulfillForMeMap;
+        }
+
+        function getLotId(lot) {
+            return lot ? lot.id : undefined;
         }
     }
 })();
