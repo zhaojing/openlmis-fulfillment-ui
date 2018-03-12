@@ -30,16 +30,19 @@
 
     controller.$inject = [
         'proofOfDeliveryManageService', '$state', 'loadingModalService', 'notificationService', 'pods',
-        '$stateParams', 'programs', 'requestingFacilities', 'supplyingFacilities'
+        '$stateParams', 'programs', 'requestingFacilities', 'supplyingFacilities', 'fulfillmentUrlFactory',
+        '$window', 'accessTokenFactory'
     ];
 
     function controller(proofOfDeliveryManageService, $state, loadingModalService, notificationService,
-                        pods, $stateParams, programs, requestingFacilities, supplyingFacilities) {
+                        pods, $stateParams, programs, requestingFacilities, supplyingFacilities,
+                        fulfillmentUrlFactory, $window, accessTokenFactory) {
         var vm = this;
 
         vm.$onInit = onInit;
         vm.openPod = openPod;
         vm.loadOrders = loadOrders;
+        vm.printPod = printPod;
 
         /**
          * @ngdoc property
@@ -182,7 +185,36 @@
                 notificationService.error('proofOfDeliveryManage.noOrderFound');
                 loadingModalService.close();
             });
-        }        
+        }
+
+        /**
+         *
+         * @ngdoc method
+         * @methodOf proof-of-delivery-manage.controller:ProofOfDeliveryManageController
+         * @name getPrintUrl
+         *
+         * @description
+         * Prepares a print URL for the given proof of delivery.
+         *
+         * @param  {Object} podId the UUID of the proof of delivery to prepare the URL for
+         * @return {String}       the prepared URL
+         */
+        function printPod(orderId) {
+            var popup = $window.open('', '_blank');
+
+            loadingModalService.open();
+            proofOfDeliveryManageService.getByOrderId(orderId)
+            .then(function(pod) {
+                popup.location.href = accessTokenFactory.addAccessToken(getPrintUrl(pod.id));
+            }, function() {
+                notificationService.error('proofOfDeliveryManage.noOrderFound');
+                loadingModalService.close();
+            }).finally(loadingModalService.close);
+        }
+
+        function getPrintUrl(podId) {
+            return fulfillmentUrlFactory('/api/proofsOfDelivery/' + podId + '/print?format=pdf');
+        }
     }
 
     function getSelectedObjectById(list, id) {

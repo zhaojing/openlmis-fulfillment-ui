@@ -14,6 +14,8 @@
     "proofOfDeliveryManage.orderNumber": "Order no.",
     "proofOfDeliveryManage.orderStatus": "Order status",
     "proofOfDeliveryManage.period": "Period",
+    "proofOfDeliveryManage.podHasBeenPrinted": "Proof of Delivery has been printed",
+    "proofOfDeliveryManage.print": "Print",
     "proofOfDeliveryManage.program": "Program",
     "proofOfDeliveryManage.requestingFacility": "Requesting Facility",
     "proofOfDeliveryManage.supplyingFacility": "Supplying Facilty",
