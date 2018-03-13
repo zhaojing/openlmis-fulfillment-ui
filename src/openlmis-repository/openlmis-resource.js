@@ -43,7 +43,7 @@
             var resourceUrl = url;
 
             if (url.slice(-1) === '/') {
-                resourceUrl = url.slice(0, -1)
+                resourceUrl = url.slice(0, -1);
             }
 
             this.resource = $resource(resourceUrl + '/:id', {}, {
