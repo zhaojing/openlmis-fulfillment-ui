@@ -29,9 +29,9 @@
         .module('proof-of-delivery')
         .factory('ProofOfDeliveryRepositoryImpl', ProofOfDeliveryRepositoryImpl);
 
-    ProofOfDeliveryRepositoryImpl.$inject = ['$resource', 'fulfillmentUrlFactory', 'LotRepositoryImpl'];
+    ProofOfDeliveryRepositoryImpl.$inject = ['$q', '$resource', 'fulfillmentUrlFactory', 'LotRepositoryImpl', 'OrderableRepositoryImpl'];
 
-    function ProofOfDeliveryRepositoryImpl($resource, fulfillmentUrlFactory, LotRepositoryImpl) {
+    function ProofOfDeliveryRepositoryImpl($q, $resource, fulfillmentUrlFactory, LotRepositoryImpl, OrderableRepositoryImpl) {
 
         ProofOfDeliveryRepositoryImpl.prototype.get = get;
         ProofOfDeliveryRepositoryImpl.prototype.update = update;
@@ -49,6 +49,7 @@
          */
         function ProofOfDeliveryRepositoryImpl() {
             this.lotRepositoryImpl = new LotRepositoryImpl();
+            this.orderableRepositoryImpl = new OrderableRepositoryImpl();
 
             this.resource = $resource(fulfillmentUrlFactory('/api/proofsOfDelivery/:id'), {}, {
                 update: {
@@ -63,28 +64,37 @@
          * @name get
          *
          * @description
-         * Retrieves a proof of delivery from the OpenLMIS server. Communicates with the GET
-         * endpoint of the Proof of Delivery REST API.
+         * Retrieves a proof of delivery from the OpenLMIS server. 
+         * Communicates with the GET endpoint of the Proof of Delivery REST API.
          *
          * @param   {string}    id  the ID of the Proof of Delivery to retrieve
          * @return  {Promise}       the promise resolving to server response
          */
         function get(id) {
-            var lotRepositoryImpl = this.lotRepositoryImpl;
+            var lotRepositoryImpl = this.lotRepositoryImpl,
+                orderableRepositoryImpl = this.orderableRepositoryImpl;
 
             return this.resource.get({
                 id: id,
                 expand: 'shipment.order'
             }).$promise
             .then(function(proofOfDeliveryJson) {
-                var lotIds = getLotIds(proofOfDeliveryJson.lineItems);
+                var lotIds = getIdsFromListByObjectName(proofOfDeliveryJson.lineItems, 'lot'),
+                    orderableIds = getIdsFromListByObjectName(proofOfDeliveryJson.lineItems, 'orderable');
 
-                return lotRepositoryImpl.query({
-                        ids: lotIds
+                return $q.all([
+                    lotRepositoryImpl.query({
+                        id: lotIds
+                    }),
+                    orderableRepositoryImpl.query({
+                        id: orderableIds
                     })
-                    .then(function(lotPage) {
-                        return combineResponses(proofOfDeliveryJson, lotPage.content);
-                    });
+                ])
+                .then(function(responses) {
+                    var lotPage = responses[0],
+                        orderablePage = responses[1];
+                    return combineResponses(proofOfDeliveryJson, lotPage.content, orderablePage.content);
+                });
             });
         }
 
@@ -109,32 +119,36 @@
             ).$promise;
         }
 
-        function combineResponses(proofOfDeliveryJson, lotJsons) {
+        function combineResponses(proofOfDeliveryJson, lotJsons, orderableJsons) {
             proofOfDeliveryJson.lineItems.forEach(function(lineItem) {
                 lineItem.quantityShipped = getQuantityShipped(
                     lineItem, proofOfDeliveryJson.shipment.lineItems
                 );
 
-                if (lineItem.lot) {
-                    lineItem.lot = lotJsons.filter(function(lot) {
-                        return lineItem.lot.id === lot.id;
-                    })[0];
-                }
+                lineItem.lot = getFirstObjectFromListById(lotJsons, lineItem, 'lot');
+                lineItem.orderable = getFirstObjectFromListById(orderableJsons, lineItem, 'orderable');
             });
 
             return proofOfDeliveryJson;
         }
 
-        function getLotIds(lineItems) {
-            var ids = [];
-
-            lineItems.forEach(function(lineItem) {
-                if (lineItem.lot) {
-                    ids.push(lineItem.lot.id);
+        function getIdsFromListByObjectName(list, objectName) {
+            return list.reduce(function(ids, item) {
+                if (item[objectName]) {
+                    ids.push(item[objectName].id);
                 }
-            });
+                return ids;
+            }, []);
+        }
 
-            return ids;
+        function getFirstObjectFromListById(list, object, propertyName) {
+            var filteredList;
+            if (object[propertyName] && list.length) {
+                filteredList = list.filter(function(item) {
+                    return item.id === object[propertyName].id;
+                });
+            }
+            return filteredList && filteredList.length ? filteredList[0] : undefined;
         }
 
         function getQuantityShipped(lineItem, shipmentLineItems) {

@@ -32,7 +32,8 @@
         'openlmis-date',
         'shipment',
         'openlmis-repository',
-        'referencedata-lot'
+        'referencedata-lot',
+        'referencedata-orderable'
     ]);
 
 })();

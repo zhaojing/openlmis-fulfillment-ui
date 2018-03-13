@@ -30,12 +30,13 @@
 
     ProofOfDeliveryViewController.$inject = [
         'proofOfDelivery', 'order', 'reasonAssignments', 'messageService', 'VVM_STATUS',
-        'fulfillingLineItems', 'fulfillmentUrlFactory', 'canEdit'
+        'groupedLineItems', 'fulfillmentUrlFactory', 'canEdit'
     ];
 
     function ProofOfDeliveryViewController(proofOfDelivery, order, reasonAssignments,
-                                           messageService, VVM_STATUS, fulfillingLineItems,
+                                           messageService, VVM_STATUS, groupedLineItems,
                                            fulfillmentUrlFactory, canEdit) {
+
         var vm = this;
 
         vm.$onInit = onInit;
@@ -45,13 +46,35 @@
         /**
          * @ngdoc property
          * @propertyOf proof-of-delivery-view.controller:PodViewController
-         * @name pod
+         * @name proofOfDelivery
          * @type {Object}
          *
          * @description
          * Holds Proof of Delivery.
          */
         vm.proofOfDelivery = undefined;
+
+        /**
+         * @ngdoc property
+         * @propertyOf proof-of-delivery-view.controller:PodViewController
+         * @name order
+         * @type {Object}
+         *
+         * @description
+         * Holds Order from Proof of Delivery.
+         */
+        vm.order = undefined;
+
+        /**
+         * @ngdoc property
+         * @propertyOf proof-of-delivery-view.controller:PodViewController
+         * @name groupedLineItems
+         * @type {Object}
+         *
+         * @description
+         * Holds map of grouped by orderable Proof of Delivery Line Items.
+         */
+        vm.groupedLineItems = undefined;
 
         /**
          * @ngdoc property
@@ -87,7 +110,7 @@
             vm.order = order;
             vm.reasonAssignments = reasonAssignments;
             vm.proofOfDelivery = proofOfDelivery;
-            vm.fulfillingLineItems = fulfillingLineItems;
+            vm.groupedLineItems = groupedLineItems;
             vm.vvmStatuses = VVM_STATUS;
             vm.showVvmColumn = proofOfDelivery.hasProductsUseVvmStatus();
             vm.canEdit = canEdit;

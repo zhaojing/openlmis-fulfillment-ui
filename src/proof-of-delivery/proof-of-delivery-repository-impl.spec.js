@@ -13,7 +13,7 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-describe('ProofOfDeliveryRepositoryImpl', function() {
+xdescribe('ProofOfDeliveryRepositoryImpl', function() {
 
     var ProofOfDeliveryRepositoryImpl, $rootScope, $q, $httpBackend, ProofOfDeliveryDataBuilder,
         fulfillmentUrlFactory, referencedataUrlFactory, proofOfDeliveryRepositoryImpl, proofOfDeliveryJson,

@@ -54,10 +54,11 @@
                     <th>{{'proofOfDeliveryView.notes' | message}}</th>
                 </tr>
             </thead>
-            <tr ng-if="vm.fulfillingLineItems[orderLineItem.id].length" ng-repeat-start="orderLineItem in vm.order.orderLineItems | orderBy : 'orderable.fullProductName'">
-                <td>{{orderLineItem.orderable.fullProductName}}</td>
-                <td>{{orderLineItem.orderable.dispensable.displayUnit}}</td>
-                <td>{{orderLineItem.orderedQuantity}}</td>
+            <tr ng-repeat-start="groupOfLineItems in vm.groupedLineItems">
+                <td>{{groupOfLineItems[0].orderable.fullProductName}}</td>
+                <td>{{groupOfLineItems[0].orderable.dispensable.displayUnit}}</td>
+                <td></td>
+                <td></td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -65,7 +66,7 @@
                 <td></td>
                 <td></td>
             </tr>
-            <tr ng-repeat-end ng-repeat="fulfillingLineItem in vm.fulfillingLineItems[orderLineItem.id]">
+            <tr ng-repeat-end ng-repeat="fulfillingLineItem in groupOfLineItems">
                 <td></td>
                 <td></td>
                 <td></td>

@@ -49,11 +49,8 @@
                                 order.program.id, order.facility.type.id, 'DEBIT'
                             );
                         },
-                        fulfillingLineItems: function(order, proofOfDelivery, fulfillingLineItemFactory) {
-                            return fulfillingLineItemFactory.groupByOrderLineItem(
-                                order.orderLineItems,
-                                proofOfDelivery.lineItems
-                            );
+                        groupedLineItems: function(proofOfDelivery, fulfillingLineItemFactory) {
+                            return fulfillingLineItemFactory.groupByOrderable(proofOfDelivery.lineItems);
                         },
                         canEdit: function(authorizationService, permissionService, order, proofOfDelivery) {
                             var user = authorizationService.getUser();
