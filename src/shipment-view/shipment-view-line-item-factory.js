@@ -21,7 +21,9 @@
         .module('shipment-view')
         .factory('ShipmentViewLineItemFactory', ShipmentViewLineItemFactory);
 
-    ShipmentViewLineItemFactory.inject = ['TradeItemLineItem', 'CommodityTypeLineItem', 'LotLineItem'];
+    ShipmentViewLineItemFactory.inject = [
+        'TradeItemLineItem', 'CommodityTypeLineItem', 'LotLineItem'
+    ];
 
     function ShipmentViewLineItemFactory(TradeItemLineItem, CommodityTypeLineItem, LotLineItem) {
 
@@ -51,8 +53,6 @@
                     canFulfillForMeMap = groupByOrderables(summary.canFulfillForMe),
                     
                     tradeItemLineItems = uniqueOrderables.map(function(orderable) {
-                        //canFulfillForMeMap[orderable.id].sort(compareLineItems);
-
                         var lotLineItems = canFulfillForMeMap[orderable.id].map(function(canFulfillForMe) {
                             var lotId = canFulfillForMe.lot ? canFulfillForMe.lot.id : undefined;
                             return new LotLineItem(
@@ -104,36 +104,5 @@
                 return orderables;
             }, {}));
         }
-
-        function compareLineItems(left, right) {
-            return compareVvmStatuses(getVvmStatus(left), getVvmStatus(right)) ||
-                compareExpirationDate(getExpirationDate(left), getExpirationDate(right)) ||
-                compare(left.summary.stockOnHand, right.summary.stockOnHand);
-        }
-
-        function compareVvmStatuses(left, right) {
-            return left === right ? 0 : left === VVM_STATUS.STAGE_2 ? -1 : right === VVM_STATUS.STAGE_2 ? 1 : 0;
-        }
-
-        function compareExpirationDate(left, right) {
-            return !left && right ? 1 : !right ? -1 : compare(left, right);
-        }
-
-        function compare(left, right) {
-            return left === right ? 0 : (left && right ? (left > right ? 1 : -1) : (left ? 1 : -1));
-        }
-
-        function getVvmStatus(lineItem) {
-            if (lineItem.summary.extraData && lineItem.summary.extraData.vvmStatus) {
-                return lineItem.summary.extraData.vvmStatus;
-            }
-        }
-
-        function getExpirationDate(lineItem) {
-            if (lineItem.lot && lineItem.lot.expirationDate) {
-                return new Date(lineItem.lot.expirationDate).getTime();
-            }
-        }
     }
-
 })();
