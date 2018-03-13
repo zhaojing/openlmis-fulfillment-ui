@@ -28,15 +28,18 @@
         .module('proof-of-delivery')
         .factory('ProofOfDelivery', factory);
 
-    factory.$inject = ['ProofOfDeliveryLineItem', '$q', 'PROOF_OF_DELIVERY_STATUS'];
+    factory.$inject = ['ProofOfDeliveryLineItem', '$q', 'PROOF_OF_DELIVERY_STATUS', '$window',
+        'accessTokenFactory', 'fulfillmentUrlFactory'];
 
-    function factory(ProofOfDeliveryLineItem, $q, PROOF_OF_DELIVERY_STATUS) {
+    function factory(ProofOfDeliveryLineItem, $q, PROOF_OF_DELIVERY_STATUS, $window,
+        accessTokenFactory, fulfillmentUrlFactory) {
 
         ProofOfDelivery.prototype.validate = validate;
         ProofOfDelivery.prototype.save = save;
         ProofOfDelivery.prototype.confirm = confirm;
         ProofOfDelivery.prototype.isInitiated = isInitiated;
         ProofOfDelivery.prototype.hasProductsUseVvmStatus = hasProductsUseVvmStatus;
+        ProofOfDelivery.prototype.print = print;
 
         return ProofOfDelivery;
 
@@ -168,6 +171,30 @@
             }
 
             return angular.equals(errors, {}) ? undefined : errors;
+        }
+
+        /**
+         *
+         * @ngdoc method
+         * @methodOf proof-of-delivery.ProofOfDelivery
+         * @name print
+         *
+         * @description
+         * Saves and prints if proof of delivery is initiated or prints if confirmed.
+         */
+        function print() {
+            if (this.isInitiated()) {
+                save.apply(this)
+                .catch(function() {
+                    return $q.reject();
+                });
+            }
+            return $q.resolve(getPrintUrl(this.id));
+        }
+
+        function getPrintUrl(podId) {
+            var url = fulfillmentUrlFactory('/api/proofsOfDelivery/' + podId + '/print?format=pdf');
+            $window.open(accessTokenFactory.addAccessToken(url), '_blank');
         }
 
         function createLineItems(jsonLineItems) {

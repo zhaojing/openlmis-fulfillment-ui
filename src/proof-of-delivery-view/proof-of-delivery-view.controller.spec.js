@@ -17,25 +17,18 @@ describe('PodViewController', function() {
 
     var vm, $controller, ProofOfDeliveryDataBuilder, OrderDataBuilder, proofOfDelivery, order,
         reasonAssignments, ValidReasonAssignmentDataBuilder, VVM_STATUS, messageService,
-        fulfillingLineItems, fulfillmentUrlFactoryMock, $window, $rootScope, $q, deferred,
-        loadingModalService, loadingDeferred, notificationService;
+        fulfillingLineItems;
 
     beforeEach(function() {
         module('proof-of-delivery-view');
 
         inject(function($injector) {
             $controller = $injector.get('$controller');
-            $window = $injector.get('$window');
-            $rootScope = $injector.get('$rootScope');
-            $q = $injector.get('$q');
-            deferred = $q.defer();
             OrderDataBuilder = $injector.get('OrderDataBuilder');
             ProofOfDeliveryDataBuilder = $injector.get('ProofOfDeliveryDataBuilder');
             ValidReasonAssignmentDataBuilder = $injector.get('ValidReasonAssignmentDataBuilder');
             VVM_STATUS = $injector.get('VVM_STATUS');
             messageService = $injector.get('messageService');
-            loadingModalService = $injector.get('loadingModalService');
-            notificationService = $injector.get('notificationService');
         });
 
         proofOfDelivery = new ProofOfDeliveryDataBuilder().build();
@@ -144,103 +137,5 @@ describe('PodViewController', function() {
             }).toThrow();
         });
 
-    });
-
-    describe('printPod', function() {
-
-        beforeEach(function() {
-            fulfillmentUrlFactoryMock = jasmine.createSpy();
-            fulfillmentUrlFactoryMock.andCallFake(function(url) {
-                return 'http://some.url' + url;
-            });
-
-            vm = $controller('ProofOfDeliveryViewController', {
-                proofOfDelivery: proofOfDelivery,
-                order: order,
-                reasonAssignments: reasonAssignments,
-                fulfillingLineItems: fulfillingLineItems,
-                fulfillmentUrlFactory: fulfillmentUrlFactoryMock,
-                canEdit: true
-            });
-
-            loadingDeferred = $q.defer();
-
-            spyOn(loadingModalService, 'close');
-            spyOn(notificationService, 'success');
-            spyOn(notificationService, 'error');
-            spyOn($window, 'open').andCallThrough();
-
-            spyOn(loadingModalService, 'open').andReturn(loadingDeferred.promise);
-
-            spyOn(proofOfDelivery, 'save');
-            spyOn(proofOfDelivery, 'isInitiated');
-
-            proofOfDelivery.isInitiated.andReturn(true);
-
-            vm.$onInit();
-        });
-
-        it('should open loading modal', function() {
-            proofOfDelivery.save.andReturn(deferred.promise);
-
-            vm.printPod();
-            $rootScope.$apply();
-
-            expect(loadingModalService.open).toHaveBeenCalled();
-            expect(loadingModalService.close).not.toHaveBeenCalled();
-        });
-
-        it('should attempt to save proof of delivery', function() {
-            proofOfDelivery.save.andReturn(deferred.promise);
-
-            vm.printPod();
-            $rootScope.$apply();
-
-            expect(loadingModalService.open).toHaveBeenCalled();
-            expect(vm.proofOfDelivery.save).toHaveBeenCalled();
-            expect(loadingModalService.close).not.toHaveBeenCalled();
-        });
-
-        it('should open window after proof of delivery was successfully saved', function() {
-            proofOfDelivery.save.andReturn(deferred.promise);
-
-            vm.printPod();
-
-            expect(loadingModalService.open).toHaveBeenCalled();
-            expect(vm.proofOfDelivery.save).toHaveBeenCalled();
-
-            deferred.resolve(proofOfDelivery);
-            $rootScope.$apply();
-
-            expect($window.open).toHaveBeenCalled();
-            expect(notificationService.error).not.toHaveBeenCalled();
-            expect(notificationService.success).not.toHaveBeenCalled();
-            expect(loadingModalService.close).toHaveBeenCalled();
-        });
-
-        it('should close loading modal after pod failed to save', function() {
-            proofOfDelivery.save.andReturn(deferred.promise);
-
-            vm.printPod();
-
-            expect(loadingModalService.open).toHaveBeenCalled();
-            expect(vm.proofOfDelivery.save).toHaveBeenCalled();
-            expect(loadingModalService.close).not.toHaveBeenCalled();
-
-            deferred.reject();
-            $rootScope.$apply();
-
-            expect(loadingModalService.close).toHaveBeenCalled();
-        });
-
-        it('should not call save if pod is confirmed', function () {
-            proofOfDelivery.isInitiated.andReturn(false);
-
-            vm.printPod();
-
-            expect(loadingModalService.open).not.toHaveBeenCalled();
-            expect(vm.proofOfDelivery.save).not.toHaveBeenCalled();
-            expect($window.open).toHaveBeenCalled();
-        });
     });
 });

@@ -15,8 +15,8 @@
 
 describe('ProofOfDelivery', function() {
 
-    var ProofOfDelivery, ProofOfDeliveryLineItem, ProofOfDeliveryDataBuilder, $q, $rootScope, json, ProofOfDeliveryLineItemDataBuilder,
-        PROOF_OF_DELIVERY_STATUS;
+    var ProofOfDelivery, ProofOfDeliveryLineItem, ProofOfDeliveryDataBuilder, $q, $rootScope, json,
+        ProofOfDeliveryLineItemDataBuilder, PROOF_OF_DELIVERY_STATUS, $window, fulfillmentUrlFactoryMock;
 
     beforeEach(function() {
         module('proof-of-delivery');
@@ -24,6 +24,7 @@ describe('ProofOfDelivery', function() {
         inject(function($injector) {
             $q = $injector.get('$q');
             $rootScope = $injector.get('$rootScope');
+            $window = $injector.get('$window');
             ProofOfDelivery = $injector.get('ProofOfDelivery');
             ProofOfDeliveryLineItem = $injector.get('ProofOfDeliveryLineItem');
             PROOF_OF_DELIVERY_STATUS = $injector.get('PROOF_OF_DELIVERY_STATUS');
@@ -302,6 +303,43 @@ describe('ProofOfDelivery', function() {
 
         it('should return false if Proof of Delivery Line Items do not use VVM', function() {
             expect(proofOfDelivery.hasProductsUseVvmStatus()).toBe(false);
+        });
+    });
+
+    describe('printPod', function() {
+
+        var proofOfDelivery, proofOfDeliveryRepositoryMock;
+
+        beforeEach(function() {
+            proofOfDeliveryRepositoryMock = jasmine.createSpyObj('repository', ['update']);
+            proofOfDelivery = new ProofOfDelivery(json, proofOfDeliveryRepositoryMock);
+
+            fulfillmentUrlFactoryMock = jasmine.createSpy();
+            fulfillmentUrlFactoryMock.andCallFake(function(url) {
+                return 'http://some.url' + url;
+            });
+
+            spyOn($window, 'open').andCallThrough();
+        });
+
+        it('should attempt to save proof of delivery', function() {
+            proofOfDeliveryRepositoryMock.update.andReturn($q.resolve());
+
+            proofOfDelivery.print();
+            $rootScope.$apply();
+
+            expect(proofOfDeliveryRepositoryMock.update).toHaveBeenCalled();
+            expect($window.open).toHaveBeenCalled();
+        });
+
+        it('should not call save if pod is confirmed', function () {
+            proofOfDelivery.status = PROOF_OF_DELIVERY_STATUS.CONFIRMED;
+
+            proofOfDelivery.print();
+            $rootScope.$apply();
+
+            expect(proofOfDeliveryRepositoryMock.update).not.toHaveBeenCalled();
+            expect($window.open).toHaveBeenCalled();
         });
     });
 });
