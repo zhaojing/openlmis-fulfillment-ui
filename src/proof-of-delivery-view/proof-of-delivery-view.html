@@ -1,7 +1,6 @@
 <header>
     <h2>{{'proofOfDeliveryView.podFor' | message}} {{vm.order.program.name}}</h2>
-    <button class="primary"
-            openlmis-download="{{vm.getPrintUrl(vm.proofOfDelivery.id)}}">
+    <button class="primary" ng-click="vm.printPod()">
         {{'proofOfDeliveryView.print'|message}}
     </button>
 </header>

@@ -30,18 +30,20 @@
 
     ProofOfDeliveryViewController.$inject = [
         'proofOfDelivery', 'order', 'reasonAssignments', 'messageService', 'VVM_STATUS',
-        'fulfillingLineItems', 'fulfillmentUrlFactory', 'canEdit'
+        'fulfillingLineItems', 'fulfillmentUrlFactory', 'canEdit', 'accessTokenFactory',
+        'loadingModalService', '$window'
     ];
 
     function ProofOfDeliveryViewController(proofOfDelivery, order, reasonAssignments,
                                            messageService, VVM_STATUS, fulfillingLineItems,
-                                           fulfillmentUrlFactory, canEdit) {
+                                           fulfillmentUrlFactory, canEdit, accessTokenFactory,
+                                           loadingModalService, $window) {
         var vm = this;
 
         vm.$onInit = onInit;
         vm.getStatusDisplayName = getStatusDisplayName;
         vm.getReasonName = getReasonName;
-        vm.getPrintUrl = getPrintUrl;
+        vm.printPod = printPod;
 
         /**
          * @ngdoc property
@@ -128,18 +130,34 @@
         }
 
         /**
+         *
          * @ngdoc method
          * @methodOf proof-of-delivery-view.controller:PodViewController
-         * @name getPrintUrl
+         * @name printPod
          *
          * @description
-         * Prepares a print URL for the given proof of delivery.
-         *
-         * @param  {Object} podId the UUID of the proof of delivery to prepare the URL for
-         * @return {String}       the prepared URL
+         * Saves and prints if proof of delivery is initiated or prints if confirmed.
          */
+        function printPod() {
+            if (vm.proofOfDelivery.isInitiated()) {
+                saveAndPrint();
+            } else {
+                getPrintUrl(vm.proofOfDelivery.id);
+            }
+        }
+
+        function saveAndPrint() {
+            loadingModalService.open();
+            vm.proofOfDelivery.save()
+            .then(function() {
+                getPrintUrl(vm.proofOfDelivery.id);
+            })
+            .finally(loadingModalService.close);
+        }
+
         function getPrintUrl(podId) {
-            return fulfillmentUrlFactory('/api/proofsOfDelivery/' + podId + '/print?format=pdf');
+            var url = fulfillmentUrlFactory('/api/proofsOfDelivery/' + podId + '/print?format=pdf');
+            $window.open(accessTokenFactory.addAccessToken(url), '_blank');
         }
     }
 }());
