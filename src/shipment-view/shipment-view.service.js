@@ -30,17 +30,21 @@
 
     shipmentViewService.inject = [
         'ShipmentRepository', 'notificationService', '$state', 'stateTrackerService',
-        'loadingModalService', 'ShipmentFactory', 'confirmService'
+        'loadingModalService', 'ShipmentFactory', 'confirmService', '$q'
     ];
 
     function shipmentViewService(ShipmentRepository, notificationService, stateTrackerService,
-                                 $state, loadingModalService, ShipmentFactory, confirmService) {
+                                 $state, loadingModalService, ShipmentFactory, confirmService, $q) {
 
         var shipmentRepository = new ShipmentRepository();
 
         this.getShipmentForOrder = getShipmentForOrder;
 
         function getShipmentForOrder(order) {
+            if (!order) {
+                return $q.reject('Order can not be undefined');
+            }
+
             return getShipmentBasedOnOrderStatus(order)
             .then(function(shipment) {
                 
@@ -54,7 +58,6 @@
 
         function getShipmentBasedOnOrderStatus(order) {
             if (order.isOrdered()) {
-                //TODO: restore shipment creation from scratch
                 return new ShipmentFactory()
                 .buildFromOrder(order)
                 .then(function(shipment) {
@@ -83,6 +86,7 @@
                 .catch(function () {
                     notificationService.error('shipmentView.failedToSaveDraft');
                     loadingModalService.close();
+                    return $q.reject();
                 });
             };
         }
@@ -90,7 +94,7 @@
         function decorateConfirm(originalConfirm) {
             return function () {
                 var shipment = this;
-                confirmService.confirm(
+                return confirmService.confirm(
                     'shipmentView.confirmShipment.question',
                     'shipmentView.confirmShipment'
                 )
@@ -113,7 +117,7 @@
         function decorateDelete(originalDelete) {
             return function() {
                 var shipment = this;
-                confirmService.confirmDestroy(
+                return confirmService.confirmDestroy(
                     'shipmentView.deleteDraftConfirmation',
                     'shipmentView.deleteDraft'
                 )
