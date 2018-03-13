@@ -206,10 +206,11 @@
             proofOfDeliveryManageService.getByOrderId(orderId)
             .then(function(pod) {
                 popup.location.href = accessTokenFactory.addAccessToken(getPrintUrl(pod.id));
-            }, function() {
+            })
+            .catch(function() {
                 notificationService.error('proofOfDeliveryManage.noOrderFound');
-                loadingModalService.close();
-            }).finally(loadingModalService.close);
+            })
+            .finally(loadingModalService.close);
         }
 
         function getPrintUrl(podId) {

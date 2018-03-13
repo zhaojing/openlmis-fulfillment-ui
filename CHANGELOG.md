@@ -14,7 +14,7 @@ New functionality added in a backwards-compatible manner:
 * [OLMIS-685](https://openlmis.atlassian.net/browse/OLMIS-685): Added the ability to provide rejection reason for stock.
 * [OLMIS-3826](https://openlmis.atlassian.net/browse/OLMIS-3826): Added Fulfill Orders screen.
 * [OLMIS-4014](https://openlmis.atlassian.net/browse/OLMIS-4014): Added VVM status column on POD view screen.
-* [OLMIS-4001](https://openlmis.atlassian.net/browse/OLMIS-4001): Added print button on POD view screen.
+* [OLMIS-4001](https://openlmis.atlassian.net/browse/OLMIS-4001): Added print button on Manage and View PoD screens.
 
 Improvements:
 * [OLMIS-4077](https://openlmis.atlassian.net/browse/OLMIS-4077): Rearranged fulfillment view header.
