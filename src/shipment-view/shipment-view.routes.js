@@ -61,8 +61,8 @@
                 tableLineItems: function(ShipmentViewLineItemFactory, shipment, stockCardSummaries) {
                     return new ShipmentViewLineItemFactory().createFrom(shipment, stockCardSummaries);
                 },
-                updatedOrder: function(orderService, shipment) {
-                    return orderService.get(shipment.order.id, 'lastUpdater');
+                updatedOrder: function(shipment) {
+                    return shipment.order;
                 }
             }
         });
