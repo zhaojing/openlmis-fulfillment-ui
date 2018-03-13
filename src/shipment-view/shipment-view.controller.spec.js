@@ -15,6 +15,99 @@
 
 describe('ShipmentViewController', function() {
 
-    //TODO: Add tests
+    var vm, $controller, ShipmentDataBuilder, shipment, tableLineItems, OrderDataBuilder, QUANTITY_UNIT;
+
+    beforeEach(function() {
+        module('shipment-view');
+
+        inject(function($injector) {
+            $rootScope = $injector.get('$rootScope');
+            $controller = $injector.get('$controller');
+            ShipmentDataBuilder = $injector.get('ShipmentDataBuilder');
+            OrderDataBuilder = $injector.get('OrderDataBuilder');
+            CommodityTypeLineItemDataBuilder = $injector.get('CommodityTypeLineItemDataBuilder');
+            QUANTITY_UNIT = $injector.get('QUANTITY_UNIT');
+        });
+
+        shipment = new ShipmentDataBuilder().build();
+        order = new OrderDataBuilder().build();
+        tableLineItems = [
+            new CommodityTypeLineItemDataBuilder().build()
+        ];
+
+        vm = $controller('ShipmentViewController', {
+            shipment: shipment,
+            tableLineItems: tableLineItems,
+            updatedOrder: order
+        });
+    });
+
+    describe('$onInit', function() {
+
+        it('should expose order', function() {
+            vm.$onInit();
+
+            expect(vm.order).toEqual(order);
+        });
+
+        it('should expose shipment', function() {
+            vm.$onInit();
+
+            expect(vm.shipment).toEqual(shipment);
+        });
+
+        it('should expose tableLineItems', function() {
+            vm.$onInit();
+
+            expect(vm.tableLineItems).toEqual(tableLineItems);
+        });
+
+    });
+
+    describe('showInDoses', function() {
+
+        beforeEach(function() {
+            vm.$onInit();
+        });
+
+        it('should return true if showing in doses', function() {
+            vm.quantityUnit = QUANTITY_UNIT.DOSES;
+
+            expect(vm.showInDoses()).toEqual(true);
+        });
+
+        it('should return false if showing in packs', function() {
+            vm.quantityUnit = QUANTITY_UNIT.PACKS;
+
+            expect(vm.showInDoses()).toEqual(false);
+        });
+
+    });
+
+    describe('getSelectedQuantityUnitKeyUnitKey', function() {
+
+        beforeEach(function() {
+            vm.$onInit();
+        });
+
+        it('should return \'shipmentView.packs\' for packs', function() {
+            vm.quantityUnit = QUANTITY_UNIT.PACKS;
+
+            expect(vm.getSelectedQuantityUnitKey()).toEqual('shipmentView.packs');
+        });
+
+        it('should return \'shipmentView.doses\' for doses', function() {
+            vm.quantityUnit = QUANTITY_UNIT.DOSES;
+
+            expect(vm.getSelectedQuantityUnitKey()).toEqual('shipmentView.doses');
+        });
+
+        it('should return undefined for undefined', function() {
+            vm.quantityUnit = undefined;
+
+            expect(vm.getSelectedQuantityUnitKey()).toEqual(undefined);
+        });
+
+    });
 
 });
