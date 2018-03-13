@@ -18,7 +18,7 @@ describe('PodViewController', function() {
     var vm, $controller, ProofOfDeliveryDataBuilder, OrderDataBuilder, proofOfDelivery, order,
         reasonAssignments, ValidReasonAssignmentDataBuilder, VVM_STATUS, messageService,
         fulfillingLineItems, fulfillmentUrlFactoryMock, $window, $rootScope, $q, deferred,
-        loadingModalService, loadingDeferred, saveSpy, notificationService;
+        loadingModalService, loadingDeferred, notificationService;
 
     beforeEach(function() {
         module('proof-of-delivery-view');
