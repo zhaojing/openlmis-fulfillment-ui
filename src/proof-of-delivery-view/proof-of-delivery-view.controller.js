@@ -30,12 +30,12 @@
 
     ProofOfDeliveryViewController.$inject = [
         'proofOfDelivery', 'order', 'reasonAssignments', 'messageService', 'VVM_STATUS',
-        'fulfillingLineItems', 'fulfillmentUrlFactory', 'canEdit', 'proofOfDeliveryService'
+        'fulfillingLineItems', 'fulfillmentUrlFactory', 'canEdit'
     ];
 
     function ProofOfDeliveryViewController(proofOfDelivery, order, reasonAssignments,
                                            messageService, VVM_STATUS, fulfillingLineItems,
-                                           fulfillmentUrlFactory, canEdit, proofOfDeliveryService) {
+                                           fulfillmentUrlFactory, canEdit) {
         var vm = this;
 
         vm.$onInit = onInit;
