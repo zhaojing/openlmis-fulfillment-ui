@@ -28,15 +28,20 @@
         .module('shipment')
         .factory('Shipment', Shipment);
 
-    Shipment.$inject = ['ShipmentLineItem', 'ORDER_STATUS', '$q'];
+    Shipment.$inject = [
+        'ShipmentLineItem', 'ORDER_STATUS', '$q', '$window', 'accessTokenFactory',
+        'fulfillmentUrlFactory', 'messageService'
+    ];
 
-    function Shipment(ShipmentLineItem, ORDER_STATUS, $q) {
+    function Shipment(ShipmentLineItem, ORDER_STATUS, $q, $window, accessTokenFactory,
+                      fulfillmentUrlFactory, messageService) {
 
         Shipment.prototype.canBeConfirmed = canBeConfirmed;
         Shipment.prototype.isEditable = isEditable;
         Shipment.prototype.save = save;
         Shipment.prototype.confirm = confirm;
         Shipment.prototype.delete = deleteDraft;
+        Shipment.prototype.print = print;
         Shipment.prototype.validate = validate;
 
         return Shipment;
@@ -70,6 +75,16 @@
                 return $q.reject();
             }
             return this.repository.deleteDraft(this);
+        }
+
+        function print() {
+            var popup = $window.open('', '_blank');
+            popup.document.write(messageService.get('shipmentView.saveDraftPending'));
+
+            return save.apply(this)
+            .then(function(response) {
+                popup.location.href = accessTokenFactory.addAccessToken(getPrintUrl(response.id));
+            });
         }
 
         function validate() {
@@ -116,6 +131,10 @@
          */
         function canBeConfirmed() {
             return this.lineItems.length > 0;
+        }
+
+        function getPrintUrl(shipmentId) {
+            return fulfillmentUrlFactory('/api/reports/templates/common/583ccc35-88b7-48a8-9193-6c4857d3ff60/pdf?shipmentDraftId=' + shipmentId);
         }
     }
 

@@ -42,7 +42,6 @@
         var vm = this;
 
         vm.$onInit = onInit;
-        vm.saveAndPrint = saveAndPrint;
         vm.showInDoses = showInDoses;
         vm.getSelectedQuantityUnitKey = getSelectedQuantityUnitKey;
 
@@ -71,13 +70,13 @@
         /**
          * @ngdoc property
          * @propertyOf shipment-view.controller:ShipmentViewController
-         * @name orderFulfillmentLineItems
+         * @name tableLineItems
          * @type {Array}
          *
          * @description
-         * Holds order line items that will be displayed on the screen.
+         * Holds line items to be displayed on the grid.
          */
-        vm.orderFulfillmentLineItems = undefined;
+        vm.tableLineItems = undefined;
 
         /**
          * @ngdoc property
@@ -129,36 +128,6 @@
          */
         function getSelectedQuantityUnitKey() {
             return QUANTITY_UNIT.$getDisplayName(vm.quantityUnit);
-        }
-
-        /**
-         * @ngdoc method
-         * @methodOf shipment-view.controller:ShipmentViewController
-         * @name saveAndPrint
-         *
-         * @description
-         * Saves the shipment on the server and prints the report.
-         */
-        function saveAndPrint() {
-            var popup = $window.open('', '_blank');
-            popup.document.write(messageService.get('shipmentView.saveDraftPending'));
-
-            loadingModalService.open();
-
-            shipment.save()
-            .then(function(response) {
-                notificationService.success('shipmentView.draftHasBeenSaved');
-                popup.location.href = accessTokenFactory.addAccessToken(getPrintUrl(response.id));
-                $state.reload();
-            })
-            .catch(function() {
-                notificationService.error('shipmentView.failedToSaveDraft');
-                loadingModalService.close();
-            });
-        }
-
-        function getPrintUrl(shipmentId) {
-            return fulfillmentUrlFactory('/api/reports/templates/common/583ccc35-88b7-48a8-9193-6c4857d3ff60/pdf?shipmentDraftId=' + shipmentId);
         }
     }
 })();

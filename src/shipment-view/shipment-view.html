@@ -38,8 +38,8 @@
                 <th>{{'shipmentView.expiryDate' | message}}</th>
                 <th popover="{{'shipmentView.quantitiesProvidedIn' | message}} {{vm.getSelectedQuantityUnitKey() | message}}">{{'shipmentView.availableSoh' | message}}</th>
                 <th popover="{{'shipmentView.quantitiesProvidedIn' | message}} {{vm.getSelectedQuantityUnitKey() | message}}">{{'shipmentView.orderQuantity' | message}}</th>
-                <th popover="{{'shipmentView.fillQuantityInPack' | message}}">{{'shipmentView.fillQuantity' | message}}</th>
-                <th>{{'shipmentVIew.remainingQuantity' | message}}</th>
+                <th>{{'shipmentView.fillQuantityInPack' | message}}</th>
+                <th popover="{{'shipmentView.quantitiesProvidedIn' | message}} {{vm.getSelectedQuantityUnitKey() | message}}">{{'shipmentView.remainingQuantity' | message}}</th>
             </tr>
         </thead>
         <tbody>
@@ -69,5 +69,5 @@
         <button ng-show="vm.shipment.id" class="danger" ng-click="vm.shipment.delete()">{{'shipmentView.deleteDraft' | message}}</button>
     </div>
     <button ng-click="vm.shipment.save()">{{'shipmentView.saveDelete' | message}}</button>
-    <button ng-show="vm.shipment.isEditable()" ng-click="vm.saveAndPrint()">{{'shipmentView.generatePickPackList' | message}}</button>
+    <button ng-show="vm.shipment.isEditable()" ng-click="vm.shipment.print()">{{'shipmentView.generatePickPackList' | message}}</button>
 </div>
