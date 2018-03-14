@@ -42,7 +42,7 @@
         Shipment.prototype.confirm = confirm;
         Shipment.prototype.delete = deleteDraft;
         Shipment.prototype.print = print;
-        Shipment.prototype.validate = validate;
+        Shipment.prototype.isInvalid = isInvalid;
 
         return Shipment;
 
@@ -63,7 +63,7 @@
         }
 
         function confirm() {
-            if (this.validate() || !this.isEditable() || !this.canBeConfirmed()) {
+            if (this.isInvalid() || !this.isEditable() || !this.canBeConfirmed()) {
                 return $q.reject();
             }
 
@@ -87,12 +87,12 @@
             });
         }
 
-        function validate() {
+        function isInvalid() {
             var errors = {};
 
             var lineItemsErrors = [];
             this.lineItems.forEach(function(lineItem) {
-                var lineItemErrors = lineItem.validate();
+                var lineItemErrors = lineItem.isInvalid();
 
                 if (lineItemErrors) {
                     lineItemsErrors.push(lineItemErrors);

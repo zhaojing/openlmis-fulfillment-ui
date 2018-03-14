@@ -79,7 +79,7 @@ describe('ShipmentLineItem', function() {
 
     });
 
-    describe('validate', function() {
+    describe('isInvalid', function() {
 
         var shipmentLineItem;
 
@@ -99,7 +99,7 @@ describe('ShipmentLineItem', function() {
         });
 
         it('should return undefined if line item is valid', function() {
-            var result = shipmentLineItem.validate();
+            var result = shipmentLineItem.isInvalid();
 
             expect(result).toBeUndefined();
         });
@@ -107,7 +107,7 @@ describe('ShipmentLineItem', function() {
         it('should return error if quantity shipped is undefined', function() {
             shipmentLineItem.quantityShipped = undefined;
 
-            var result = shipmentLineItem.validate();
+            var result = shipmentLineItem.isInvalid();
 
             expect(result).toEqual({
                 quantityShipped: 'shipment.required'
@@ -117,7 +117,7 @@ describe('ShipmentLineItem', function() {
         it('should return error if quantity shipped is greater than stock on hand', function() {
             shipmentLineItem.quantityShipped = 46;
 
-            var result = shipmentLineItem.validate();
+            var result = shipmentLineItem.isInvalid();
 
             expect(result).toEqual({
                 quantityShipped: 'shipment.fillQuantityCannotExceedStockOnHand'
@@ -127,7 +127,7 @@ describe('ShipmentLineItem', function() {
         it('should return undefined if quantity shipped is 0', function() {
             shipmentLineItem.quantityShipped = 0;
 
-            var result = shipmentLineItem.validate();
+            var result = shipmentLineItem.isInvalid();
 
             expect(result).toBeUndefined();
         });

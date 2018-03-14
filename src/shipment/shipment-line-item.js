@@ -31,7 +31,7 @@
 
     function ShipmentLineItem() {
 
-        ShipmentLineItem.prototype.validate = validate;
+        ShipmentLineItem.prototype.isInvalid = isInvalid;
 
         return ShipmentLineItem;
 
@@ -58,7 +58,7 @@
         /**
          * @ngdoc methodOf
          * @methodOf shipment.ShipmentLineItem
-         * @name validate
+         * @name isInvalid
          *
          * @description
          * Validates the shipment line items and places any errors in an object under 'errors'
@@ -66,7 +66,7 @@
          *
          * @returns {boolean} true if line item is valid, false otherwise.
          */
-        function validate() {
+        function isInvalid() {
             var errors = {};
 
             if (!this.quantityShipped && this.quantityShipped !== 0) {

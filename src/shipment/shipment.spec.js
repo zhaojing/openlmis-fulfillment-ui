@@ -123,9 +123,9 @@ describe('Shipment', function() {
     describe('confirm', function() {
 
         it('should reject if shipment is invalid', function() {
-            spyOn(shipment, 'validate');
+            spyOn(shipment, 'isInvalid');
 
-            shipment.validate.andReturn({
+            shipment.isInvalid.andReturn({
                 lineItems: 'invalid'
             });
 
@@ -153,10 +153,10 @@ describe('Shipment', function() {
         });
 
         it('should resolve if shipment has been confirmed', function() {
-            spyOn(shipment, 'validate');
+            spyOn(shipment, 'isInvalid');
 
             shipment.repository.create.andReturn($q.resolve());
-            shipment.validate.andReturn(undefined);
+            shipment.isInvalid.andReturn(undefined);
 
             var confirmed;
             shipment.confirm()
@@ -239,20 +239,20 @@ describe('Shipment', function() {
 
     });
 
-    describe('validate', function() {
+    describe('isInvalid', function() {
 
         it('should return undefined if shipment is valid', function() {
-            var result = shipment.validate();
+            var result = shipment.isInvalid();
 
             expect(result).toBeUndefined();
         });
 
         it('should return error if any of the line items is invalid', function() {
-            spyOn(shipment.lineItems[0], 'validate').andReturn({
+            spyOn(shipment.lineItems[0], 'isInvalid').andReturn({
                 quantityShipped: 'shipment.required'
             });
 
-            var result = shipment.validate();
+            var result = shipment.isInvalid();
 
             expect(result).toEqual({
                 lineItems: [{

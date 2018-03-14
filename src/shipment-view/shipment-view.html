@@ -56,7 +56,7 @@
                 <td ng-if="!tableLineItem.shipmentLineItem">{{tableLineItem.getFillQuantity()}}</td>
                 <td ng-if="tableLineItem.shipmentLineItem">
                     <input ng-show="vm.shipment.isEditable()" positive-integer ng-model="tableLineItem.shipmentLineItem.quantityShipped"
-                        openlmis-invalid="{{tableLineItem.shipmentLineItem.validate().quantityShipped | message}}"/>
+                        openlmis-invalid="{{tableLineItem.shipmentLineItem.isInvalid().quantityShipped | message}}"/>
                     <div ng-show="!vm.shipment.isEditable()">{{tableLineItem.shipmentLineItem.quantityShipped}}</div>
                 </td>
                 <td>{{tableLineItem.getRemainingQuantity(vm.showInDoses())}}</td>
