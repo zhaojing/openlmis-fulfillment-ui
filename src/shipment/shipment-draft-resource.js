@@ -22,7 +22,7 @@
      * @name shipment.ShipmentDraftResource
      *
      * @description
-     * Communicates with the shipment draft endpoint of the OpenLMIS.
+     * Communicates with the RESTful shipment draft endpoint of the OpenLMIS server.
      */
     angular
         .module('shipment')

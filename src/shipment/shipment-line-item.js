@@ -22,8 +22,8 @@
      * @name shipment.ShipmentLineItem
      *
      * @description
-     * Represents a single shipment line item extended by the available stock on hand  it can be
-     * fulfilled by.
+     * Represents a single shipment line item extended by the available stock on hand it can be
+     * fulfilled with.
      */
     angular
         .module('shipment')
@@ -60,7 +60,8 @@
          *
          * @description
          * Validates the shipment line item and returns a map of errors. If the line item is valid,
-         * undefined is returned.
+         * undefined is returned. The line item is invalid if its quantity shipped is undefined or
+         * if the quantity shipped exceeds available stock on hand.
          *
          * @returns {Object} the errors map if line item is invalid, undefined otherwise
          */

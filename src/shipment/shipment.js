@@ -56,7 +56,7 @@
          * Creates an instance of the Shipment class. Also instantiates the shipment line items.
          * 
          * @param {Object}             json       the JSON representation of the shipment (draft)
-         * @param {ShipmentRepository} repository the instance of Shipment repository
+         * @param {ShipmentRepository} repository the instance of the ShipmentRepository class
          */
         function Shipment(json, repository) {
             angular.copy(json, this);
@@ -75,7 +75,7 @@
          * @description
          * Saves the shipment. The shipment won't be saved it it is not editable.
          * 
-         * @return {Promise} the promise resolved when save was successful, rejected otherwise
+         * @return {Promise} the promise resolved when save is successful, rejected otherwise
          */
         function save() {
             if (!this.isEditable()) {
@@ -93,7 +93,7 @@
          * Confirm the shipment. The shipment won't be confirmed if it is invalid, is not editable
          * or has no line items.
          * 
-         * @return {Promise} the promise resolved when confirm was successful, rejected otherwise
+         * @return {Promise} the promise resolved when confirm is successful, rejected otherwise
          */
         function confirm() {
             if (this.isInvalid() || !this.isEditable() || !this.canBeConfirmed()) {
@@ -111,7 +111,7 @@
          * @description
          * Deletes the shipment. The shipment won't be deleted if it is not editable.
          * 
-         * @return {Promise} the promise resolved when confirm was successful, rejected otherwise
+         * @return {Promise} the promise resolved when delete is successful, rejected otherwise
          */
         function deleteDraft() {
             if (!this.isEditable()) {
@@ -128,7 +128,7 @@
          * @description
          * Prints the shipment.
          * 
-         * @return {Promise} the promise resolved when print was successful, rejected otherwise
+         * @return {Promise} the promise resolved when print is successful, rejected otherwise
          */
         function print() {
             var popup = $window.open('', '_blank');
@@ -149,7 +149,7 @@
          * Validates the shipment and returns a map of errors. If the line item is valid,
          * undefined is returned. The shipment is invalid if any of the line items is invalid.
          *
-         * @returns {Object} the errors map if line item is invalid, undefined otherwise
+         * @return {Object} the errors map if the shipment is invalid, undefined otherwise
          */
         function isInvalid() {
             var errors = {};
@@ -177,7 +177,7 @@
          *
          * @description
          * Checks whether shipment is editable based on the related order status. Only shipments for
-         * order is status "Ordered" and "Fulfilling" can be edited.
+         * orders with status "Ordered" and "Fulfilling" can be edited.
          *
          * @return {boolean} true if shipment is editable, false otherwise
          */

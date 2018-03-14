@@ -82,7 +82,9 @@
          * Creates a new shipment draft on the OpenLMIS server.
          * 
          * @param  {Object}  json the JSON representation of the shipment draft
-         * @return {Promise}      returns a combined JSON which can be use d
+         * @return {Promise}      returns a promise resolving to the instance of Shipment class
+         *                        created based on the provided JSON object, rejects if anything
+         *                        goes wrong
          */
         function createDraft(json) {
             var repository = this;
