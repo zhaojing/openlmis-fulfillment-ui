@@ -54,7 +54,7 @@
             this.orderable = json.orderable;
             this.lot = json.lot;
             this.quantityShipped = json.quantityShipped;
-            this.stockOnHand = json.canFulfillForMe.stockOnHand;
+            this.stockOnHand = calculateAvailableStockOnHandInPacks(json.canFulfillForMe);
         }
 
         /**
@@ -80,6 +80,10 @@
             }
 
             return angular.equals(errors, {}) ? undefined : errors;
+        }
+
+        function calculateAvailableStockOnHandInPacks(canFulfillForMe) {
+            return Math.floor(canFulfillForMe.stockOnHand / canFulfillForMe.orderable.netContent);
         }
     }
 })();

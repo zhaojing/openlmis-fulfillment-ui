@@ -15,7 +15,8 @@
 
 describe('ShipmentLineItem', function() {
 
-    var ShipmentLineItem, ShipmentLineItemDataBuilder, json, CanFulfillForMeEntryDataBuilder;
+    var ShipmentLineItem, ShipmentLineItemDataBuilder, json, CanFulfillForMeEntryDataBuilder,
+        OrderableDataBuilder;
 
     beforeEach(function() {
         module('stock-card-summary');
@@ -24,6 +25,7 @@ describe('ShipmentLineItem', function() {
         inject(function($injector) {
             ShipmentLineItem = $injector.get('ShipmentLineItem');
             ShipmentLineItemDataBuilder = $injector.get('ShipmentLineItemDataBuilder');
+            OrderableDataBuilder = $injector.get('OrderableDataBuilder');
             CanFulfillForMeEntryDataBuilder = $injector.get('CanFulfillForMeEntryDataBuilder');
         });
 
@@ -31,7 +33,7 @@ describe('ShipmentLineItem', function() {
     });
 
     describe('constructor', function() {
-    
+
         it('should set id', function() {
             var result = new ShipmentLineItem(json);
 
@@ -56,12 +58,25 @@ describe('ShipmentLineItem', function() {
             expect(result.quantityShipped).toEqual(json.quantityShipped);
         });
 
-        it('should set stock on hand', function() {
+        it('should set stock on hand in packs', function() {
+            json = new ShipmentLineItemDataBuilder()
+                .withQuantityShipped(20)
+                .withCanFulfillForMe(
+                    new CanFulfillForMeEntryDataBuilder()
+                    .withOrderable(new OrderableDataBuilder()
+                        .withNetContent(6)
+                        .buildJson()
+                    )
+                    .withStockOnHand(45)
+                    .buildJson()
+                )
+                .buildJson();
+
             var result = new ShipmentLineItem(json);
 
-            expect(result.stockOnHand).toEqual(json.canFulfillForMe.stockOnHand);
+            expect(result.stockOnHand).toEqual(7);
         });
-    
+
     });
 
     describe('validate', function() {
@@ -73,18 +88,18 @@ describe('ShipmentLineItem', function() {
                 .withQuantityShipped(20)
                 .withCanFulfillForMe(
                     new CanFulfillForMeEntryDataBuilder()
-                        .withStockOnHand(45)
-                        .buildJson()
+                    .withStockOnHand(45)
+                    .buildJson()
                 )
-                .build(); 
+                .build();
         });
-    
+
         it('should return undefined if line item is valid', function() {
             var result = shipmentLineItem.validate();
 
             expect(result).toBeUndefined();
         });
-        
+
         it('should return error if quantity shipped is undefined', function() {
             shipmentLineItem.quantityShipped = undefined;
 
@@ -112,7 +127,7 @@ describe('ShipmentLineItem', function() {
 
             expect(result).toBeUndefined();
         });
-    
+
     });
 
 });
