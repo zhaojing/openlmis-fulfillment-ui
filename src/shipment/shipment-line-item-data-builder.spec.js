@@ -13,7 +13,7 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-(function () {
+(function() {
 
     'use strict';
 
@@ -22,11 +22,12 @@
         .factory('ShipmentLineItemDataBuilder', ShipmentLineItemDataBuilder);
 
     ShipmentLineItemDataBuilder.$inject = [
-        'ShipmentLineItem', 'ObjectReferenceDataBuilder', 'CanFulfillForMeEntryDataBuilder'
+        'ShipmentLineItem', 'ObjectReferenceDataBuilder', 'CanFulfillForMeEntryDataBuilder',
+        'OrderableDataBuilder'
     ];
 
     function ShipmentLineItemDataBuilder(ShipmentLineItem, ObjectReferenceDataBuilder,
-        CanFulfillForMeEntryDataBuilder) {
+        CanFulfillForMeEntryDataBuilder, OrderableDataBuilder) {
 
         ShipmentLineItemDataBuilder.buildForProofOfDeliveryLineItem =
             buildForProofOfDeliveryLineItem;
@@ -56,7 +57,13 @@
                 .build();
 
             this.quantityShipped = 0;
-            this.canFulfillForMe = new CanFulfillForMeEntryDataBuilder().buildJson();
+            this.canFulfillForMe = new CanFulfillForMeEntryDataBuilder()
+                .withOrderable(
+                    new OrderableDataBuilder()
+                    .withNetContent(1)
+                    .buildJson()
+                )
+                .buildJson();
         }
 
         function build() {

@@ -85,11 +85,15 @@ describe('ShipmentLineItem', function() {
 
         beforeEach(function() {
             shipmentLineItem = new ShipmentLineItemDataBuilder()
-                .withQuantityShipped(20)
+                .withQuantityShipped(5)
                 .withCanFulfillForMe(
                     new CanFulfillForMeEntryDataBuilder()
-                    .withStockOnHand(45)
-                    .buildJson()
+                        .withOrderable(new OrderableDataBuilder()
+                            .withNetContent(6)
+                            .buildJson()
+                        )
+                        .withStockOnHand(45)
+                        .buildJson()
                 )
                 .build();
         });
