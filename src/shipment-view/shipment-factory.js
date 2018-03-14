@@ -51,7 +51,7 @@
          * @return {Promise}                    the promise resolving to a shipment
          */
         function buildFromOrder(order) {
-            var orderableIds = order.orderLineItems.map(function (lineItem) {
+            var orderableIds = order.orderLineItems.map(function(lineItem) {
                 return lineItem.orderable.id;
             });
 
@@ -60,7 +60,7 @@
                 facilityId: order.supplyingFacility.id,
                 orderableId: orderableIds
             })
-            .then(function (page) {
+            .then(function(page) {
                 return page.content;
             })
             .then(function(summaries) {

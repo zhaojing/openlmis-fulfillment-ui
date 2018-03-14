@@ -13,7 +13,7 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-describe('ShipmentRepository', function () {
+describe('ShipmentRepository', function() {
 
     var ShipmentRepository, shipmentRepository, shipmentRepositoryImplMock, ShipmentDataBuilder,
         ShipmentMock, shipmentJson, $q, shipmentResponse, shipment, $rootScope, Shipment;
@@ -24,7 +24,7 @@ describe('ShipmentRepository', function () {
                 'createDraft', 'updateDraft', 'getDraftByOrderId', 'getByOrderId'
             ]);
             $provide.factory('ShipmentRepositoryImpl', function() {
-                return function () {
+                return function() {
                     return shipmentRepositoryImplMock;
                 }
             });

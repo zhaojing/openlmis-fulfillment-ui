@@ -262,7 +262,7 @@ describe('OrderViewController', function() {
             });
         });
 
-        it('should prepare print URL correctly', function () {
+        it('should prepare print URL correctly', function() {
             expect(vm.getPrintUrl(orders[0]))
                 .toEqual('http://some.url/api/orders/order-one/print?format=pdf');
         });
@@ -286,7 +286,7 @@ describe('OrderViewController', function() {
             });
         });
 
-        it('should prepare download URL correctly', function () {
+        it('should prepare download URL correctly', function() {
             expect(vm.getDownloadUrl(orders[1]))
                 .toEqual('http://some.url/api/orders/order-two/export?type=csv');
         });

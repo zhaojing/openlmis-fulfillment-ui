@@ -34,8 +34,8 @@ describe('ShipmentRepositoryImpl', function() {
             shipmentDraftResourceMock = jasmine.createSpyObj('shipmentDraftResource', [
                 'create', 'update', 'query'
             ]);
-            $provide.factory('ShipmentDraftResource', function () {
-                return function () {
+            $provide.factory('ShipmentDraftResource', function() {
+                return function() {
                     return shipmentDraftResourceMock;
                 };
             });
@@ -199,14 +199,14 @@ describe('ShipmentRepositoryImpl', function() {
     
     });
 
-    describe('createDraft', function () {
+    describe('createDraft', function() {
 
-        it('should reject if save was unsuccessful', function () {
+        it('should reject if save was unsuccessful', function() {
             shipmentDraftResourceMock.create.andReturn($q.reject());
 
             var rejected;
             shipmentRepositoryImpl.createDraft(shipment)
-                .catch(function () {
+                .catch(function() {
                     rejected = true;
                 });
             $rootScope.$apply();
@@ -217,13 +217,13 @@ describe('ShipmentRepositoryImpl', function() {
             expect(stockCardSummaryRepositoryImplMock.query).not.toHaveBeenCalled();
         });
 
-        it('should reject if could not fetch order', function () {
+        it('should reject if could not fetch order', function() {
             shipmentDraftResourceMock.create.andReturn($q.resolve(shipment));
             orderResourceMock.get.andReturn($q.reject());
 
             var rejected;
             shipmentRepositoryImpl.createDraft(shipment)
-                .catch(function () {
+                .catch(function() {
                     rejected = true;
                 });
             $rootScope.$apply();
@@ -234,14 +234,14 @@ describe('ShipmentRepositoryImpl', function() {
             expect(stockCardSummaryRepositoryImplMock.query).not.toHaveBeenCalled();
         });
 
-        it('should reject if could not fetch stock card summaries', function () {
+        it('should reject if could not fetch stock card summaries', function() {
             shipmentDraftResourceMock.create.andReturn($q.resolve(shipment));
             orderResourceMock.get.andReturn($q.resolve(order));
             stockCardSummaryRepositoryImplMock.query.andReturn($q.reject());
 
             var rejected;
             shipmentRepositoryImpl.createDraft(shipment)
-                .catch(function () {
+                .catch(function() {
                     rejected = true;
                 });
             $rootScope.$apply();
@@ -259,7 +259,7 @@ describe('ShipmentRepositoryImpl', function() {
             });
         });
 
-        it('should return combined responses', function () {
+        it('should return combined responses', function() {
             shipmentDraftResourceMock.create.andReturn($q.resolve(angular.copy(shipment)));
             orderResourceMock.get.andReturn($q.resolve(order));
             stockCardSummaryRepositoryImplMock.query.andReturn($q.resolve({
@@ -268,7 +268,7 @@ describe('ShipmentRepositoryImpl', function() {
 
             var result;
             shipmentRepositoryImpl.createDraft(shipment)
-                .then(function (response) {
+                .then(function(response) {
                     result = response;
                 });
             $rootScope.$apply();
@@ -294,14 +294,14 @@ describe('ShipmentRepositoryImpl', function() {
 
     });
 
-    describe('get', function () {
+    describe('get', function() {
 
-        it('should reject if save was unsuccessful', function () {
+        it('should reject if save was unsuccessful', function() {
             shipmentResourceMock.get.andReturn($q.reject());
 
             var rejected;
             shipmentRepositoryImpl.get(shipment.id)
-                .catch(function () {
+                .catch(function() {
                     rejected = true;
                 });
             $rootScope.$apply();
@@ -312,13 +312,13 @@ describe('ShipmentRepositoryImpl', function() {
             expect(stockCardSummaryRepositoryImplMock.query).not.toHaveBeenCalled();
         });
 
-        it('should reject if could not fetch order', function () {
+        it('should reject if could not fetch order', function() {
             shipmentResourceMock.get.andReturn($q.resolve(shipment));
             orderResourceMock.get.andReturn($q.reject());
 
             var rejected;
             shipmentRepositoryImpl.get(shipment.id)
-                .catch(function () {
+                .catch(function() {
                     rejected = true;
                 });
             $rootScope.$apply();
@@ -329,14 +329,14 @@ describe('ShipmentRepositoryImpl', function() {
             expect(stockCardSummaryRepositoryImplMock.query).not.toHaveBeenCalled();
         });
 
-        it('should reject if could not fetch stock card summaries', function () {
+        it('should reject if could not fetch stock card summaries', function() {
             shipmentResourceMock.get.andReturn($q.resolve(shipment));
             orderResourceMock.get.andReturn($q.resolve(order));
             stockCardSummaryRepositoryImplMock.query.andReturn($q.reject());
 
             var rejected;
             shipmentRepositoryImpl.get(shipment.id)
-                .catch(function () {
+                .catch(function() {
                     rejected = true;
                 });
             $rootScope.$apply();
@@ -354,7 +354,7 @@ describe('ShipmentRepositoryImpl', function() {
             });
         });
 
-        it('should return combined responses', function () {
+        it('should return combined responses', function() {
             shipmentResourceMock.get.andReturn($q.resolve(angular.copy(shipment)));
             orderResourceMock.get.andReturn($q.resolve(order));
             stockCardSummaryRepositoryImplMock.query.andReturn($q.resolve({
@@ -363,7 +363,7 @@ describe('ShipmentRepositoryImpl', function() {
 
             var result;
             shipmentRepositoryImpl.get(shipment.id)
-                .then(function (response) {
+                .then(function(response) {
                     result = response;
                 });
             $rootScope.$apply();
@@ -389,14 +389,14 @@ describe('ShipmentRepositoryImpl', function() {
 
     });
 
-    describe('updateDraft', function () {
+    describe('updateDraft', function() {
 
-        it('should reject if save was unsuccessful', function () {
+        it('should reject if save was unsuccessful', function() {
             shipmentDraftResourceMock.update.andReturn($q.reject());
 
             var rejected;
             shipmentRepositoryImpl.updateDraft(shipment)
-                .catch(function () {
+                .catch(function() {
                     rejected = true;
                 });
             $rootScope.$apply();
@@ -405,12 +405,12 @@ describe('ShipmentRepositoryImpl', function() {
             expect(shipmentDraftResourceMock.update).toHaveBeenCalledWith(shipment);
         });
 
-        it('should resolve if update was successful', function () {
+        it('should resolve if update was successful', function() {
             shipmentDraftResourceMock.update.andReturn($q.resolve(shipment));
 
             var result;
             shipmentRepositoryImpl.updateDraft(shipment)
-            .then(function (response) {
+            .then(function(response) {
                 result = response;
             });
             $rootScope.$apply();
@@ -421,14 +421,14 @@ describe('ShipmentRepositoryImpl', function() {
 
     });
 
-    describe('getByOrderId', function () {
+    describe('getByOrderId', function() {
 
-        it('should reject if save was unsuccessful', function () {
+        it('should reject if save was unsuccessful', function() {
             shipmentResourceMock.query.andReturn($q.reject());
 
             var rejected;
             shipmentRepositoryImpl.getByOrderId(shipment.order.id)
-                .catch(function () {
+                .catch(function() {
                     rejected = true;
                 });
             $rootScope.$apply();
@@ -441,7 +441,7 @@ describe('ShipmentRepositoryImpl', function() {
             expect(stockCardSummaryRepositoryImplMock.query).not.toHaveBeenCalled();
         });
 
-        it('should reject if could not fetch order', function () {
+        it('should reject if could not fetch order', function() {
             shipmentResourceMock.query.andReturn($q.resolve({
                 content: [shipment]
             }));
@@ -449,7 +449,7 @@ describe('ShipmentRepositoryImpl', function() {
 
             var rejected;
             shipmentRepositoryImpl.getByOrderId(shipment.order.id)
-                .catch(function () {
+                .catch(function() {
                     rejected = true;
                 });
             $rootScope.$apply();
@@ -462,7 +462,7 @@ describe('ShipmentRepositoryImpl', function() {
             expect(stockCardSummaryRepositoryImplMock.query).not.toHaveBeenCalled();
         });
 
-        it('should reject if could not fetch stock card summaries', function () {
+        it('should reject if could not fetch stock card summaries', function() {
             shipmentResourceMock.query.andReturn($q.resolve({
                 content: [shipment]
             }));
@@ -471,7 +471,7 @@ describe('ShipmentRepositoryImpl', function() {
 
             var rejected;
             shipmentRepositoryImpl.getByOrderId(shipment.order.id)
-                .catch(function () {
+                .catch(function() {
                     rejected = true;
                 });
             $rootScope.$apply();
@@ -491,7 +491,7 @@ describe('ShipmentRepositoryImpl', function() {
             });
         });
 
-        it('should return combined responses', function () {
+        it('should return combined responses', function() {
             shipmentResourceMock.query.andReturn($q.resolve(angular.copy({
                 content: [shipment]
             })));
@@ -502,7 +502,7 @@ describe('ShipmentRepositoryImpl', function() {
 
             var result;
             shipmentRepositoryImpl.getByOrderId(shipment.order.id)
-                .then(function (response) {
+                .then(function(response) {
                     result = response;
                 });
             $rootScope.$apply();
@@ -530,14 +530,14 @@ describe('ShipmentRepositoryImpl', function() {
 
     });
 
-    describe('getDraftByOrderId', function () {
+    describe('getDraftByOrderId', function() {
 
-        it('should reject if save was unsuccessful', function () {
+        it('should reject if save was unsuccessful', function() {
             shipmentDraftResourceMock.query.andReturn($q.reject());
 
             var rejected;
             shipmentRepositoryImpl.getDraftByOrderId(shipment.order.id)
-                .catch(function () {
+                .catch(function() {
                     rejected = true;
                 });
             $rootScope.$apply();
@@ -550,7 +550,7 @@ describe('ShipmentRepositoryImpl', function() {
             expect(stockCardSummaryRepositoryImplMock.query).not.toHaveBeenCalled();
         });
 
-        it('should reject if could not fetch order', function () {
+        it('should reject if could not fetch order', function() {
             shipmentDraftResourceMock.query.andReturn($q.resolve({
                 content: [shipment]
             }));
@@ -558,7 +558,7 @@ describe('ShipmentRepositoryImpl', function() {
 
             var rejected;
             shipmentRepositoryImpl.getDraftByOrderId(shipment.order.id)
-                .catch(function () {
+                .catch(function() {
                     rejected = true;
                 });
             $rootScope.$apply();
@@ -571,7 +571,7 @@ describe('ShipmentRepositoryImpl', function() {
             expect(stockCardSummaryRepositoryImplMock.query).not.toHaveBeenCalled();
         });
 
-        it('should reject if could not fetch stock card summaries', function () {
+        it('should reject if could not fetch stock card summaries', function() {
             shipmentDraftResourceMock.query.andReturn($q.resolve({
                 content: [shipment]
             }));
@@ -580,7 +580,7 @@ describe('ShipmentRepositoryImpl', function() {
 
             var rejected;
             shipmentRepositoryImpl.getDraftByOrderId(shipment.order.id)
-                .catch(function () {
+                .catch(function() {
                     rejected = true;
                 });
             $rootScope.$apply();
@@ -600,7 +600,7 @@ describe('ShipmentRepositoryImpl', function() {
             });
         });
 
-        it('should return combined responses', function () {
+        it('should return combined responses', function() {
             shipmentDraftResourceMock.query.andReturn($q.resolve(angular.copy({
                 content: [shipment]
             })));
@@ -611,7 +611,7 @@ describe('ShipmentRepositoryImpl', function() {
 
             var result;
             shipmentRepositoryImpl.getDraftByOrderId(shipment.order.id)
-                .then(function (response) {
+                .then(function(response) {
                     result = response;
                 });
             $rootScope.$apply();

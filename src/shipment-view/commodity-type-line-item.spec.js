@@ -13,7 +13,7 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-describe('CommodityTypeLineItem', function () {
+describe('CommodityTypeLineItem', function() {
 
     var CommodityTypeLineItem, StockCardSummaryDataBuilder, summary, tradeItemLineItems,
         TradeItemLineItemDataBuilder, orderQuantity, CommodityTypeLineItemDataBuilder,
@@ -89,14 +89,14 @@ describe('CommodityTypeLineItem', function () {
         });
     });
 
-    describe('getAvailableSoh', function () {
+    describe('getAvailableSoh', function() {
 
-        beforeEach(function () {
+        beforeEach(function() {
             spyOn(commodityTypeLineItem.tradeItemLineItems[0], 'getAvailableSoh');
             spyOn(commodityTypeLineItem.tradeItemLineItems[1], 'getAvailableSoh');
         });
 
-        it('should calculate available stock on hand ', function () {
+        it('should calculate available stock on hand ', function() {
             commodityTypeLineItem.tradeItemLineItems[0].getAvailableSoh.andReturn(10);
             commodityTypeLineItem.tradeItemLineItems[1].getAvailableSoh.andReturn(20);
 
@@ -105,7 +105,7 @@ describe('CommodityTypeLineItem', function () {
             expect(result).toEqual(30);
         });
 
-        it('should pass inDoses flag', function () {
+        it('should pass inDoses flag', function() {
             commodityTypeLineItem.tradeItemLineItems[0].getAvailableSoh.andReturn(10);
             commodityTypeLineItem.tradeItemLineItems[1].getAvailableSoh.andReturn(20);
 
@@ -120,14 +120,14 @@ describe('CommodityTypeLineItem', function () {
 
     });
 
-    describe('getFillQuantity', function () {
+    describe('getFillQuantity', function() {
 
-        beforeEach(function () {
+        beforeEach(function() {
             spyOn(commodityTypeLineItem.tradeItemLineItems[0], 'getFillQuantity');
             spyOn(commodityTypeLineItem.tradeItemLineItems[1], 'getFillQuantity');
         });
 
-        it('should calculate fill quantity', function () {
+        it('should calculate fill quantity', function() {
             commodityTypeLineItem.tradeItemLineItems[0].getFillQuantity.andReturn(10);
             commodityTypeLineItem.tradeItemLineItems[1].getFillQuantity.andReturn(20);
 

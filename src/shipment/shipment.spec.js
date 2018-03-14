@@ -13,15 +13,15 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-describe('Shipment', function () {
+describe('Shipment', function() {
 
     var Shipment, ShipmentLineItem, ShipmentDataBuilder, OrderDataBuilder, json, shipment, $q,
         $rootScope;
 
-    beforeEach(function () {
+    beforeEach(function() {
         module('shipment');
 
-        inject(function ($injector) {
+        inject(function($injector) {
             $q = $injector.get('$q');
             Shipment = $injector.get('Shipment');
             $rootScope = $injector.get('$rootScope');
@@ -34,15 +34,15 @@ describe('Shipment', function () {
         shipment = new ShipmentDataBuilder().build();
     });
 
-    describe('constructor', function () {
+    describe('constructor', function() {
 
         var repositoryMock;
 
-        beforeEach(function () {
+        beforeEach(function() {
             repositoryMock = jasmine.createSpyObj('repository', ['get']);
         });
 
-        it('should set all properties', function () {
+        it('should set all properties', function() {
             var result = new Shipment(json, repositoryMock);
 
             expect(result.id).toEqual(json.id);
@@ -66,7 +66,7 @@ describe('Shipment', function () {
                 .toEqual(json.lineItems[1].canFulfillForMe.stockOnHand);
         });
 
-        it('should create instance of shipment line items', function () {
+        it('should create instance of shipment line items', function() {
             var result = new Shipment(json, repositoryMock);
 
             expect(result.lineItems[0] instanceof ShipmentLineItem).toBe(true);
@@ -75,16 +75,16 @@ describe('Shipment', function () {
 
     });
 
-    describe('save', function () {
+    describe('save', function() {
 
-        it('should return updated shipment', function () {
+        it('should return updated shipment', function() {
             var updatedShipment = new ShipmentDataBuilder().build();
 
             shipment.repository.updateDraft.andReturn($q.resolve(updatedShipment));
 
             var result;
             shipment.save()
-                .then(function (response) {
+                .then(function(response) {
                     result = response;
                 });
             $rootScope.$apply();
@@ -92,12 +92,12 @@ describe('Shipment', function () {
             expect(result).toEqual(updatedShipment);
         });
 
-        it('should reject if repository rejects', function () {
+        it('should reject if repository rejects', function() {
             shipment.repository.updateDraft.andReturn($q.reject());
 
             var rejected;
             shipment.save()
-            .catch(function () {
+            .catch(function() {
                 rejected = true;
             });
             $rootScope.$apply();
@@ -294,13 +294,13 @@ describe('Shipment', function () {
 
     });
 
-    describe('canBeConfirmed', function () {
+    describe('canBeConfirmed', function() {
 
-        it('should return true if shipment has at least one line item', function () {
+        it('should return true if shipment has at least one line item', function() {
             expect(shipment.canBeConfirmed()).toEqual(true);
         });
 
-        it('should return false if shipment does not have any line items', function () {
+        it('should return false if shipment does not have any line items', function() {
             shipment = new ShipmentDataBuilder()
                 .withoutLineItems()
                 .build();

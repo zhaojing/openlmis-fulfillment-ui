@@ -79,11 +79,11 @@
                 loadingModalService.open();
 
                 return originalSave.apply(this, arguments)
-                .then(function () {
+                .then(function() {
                     notificationService.success('shipmentView.draftHasBeenSaved');
                     $state.reload();
                 })
-                .catch(function () {
+                .catch(function() {
                     notificationService.error('shipmentView.failedToSaveDraft');
                     loadingModalService.close();
                     return $q.reject();
@@ -92,7 +92,7 @@
         }
 
         function decorateConfirm(originalConfirm) {
-            return function () {
+            return function() {
                 var shipment = this;
                 return confirmService.confirm(
                     'shipmentView.confirmShipment.question',
@@ -102,11 +102,11 @@
                     loadingModalService.open();
 
                     return originalConfirm.apply(shipment)
-                    .then(function () {
+                    .then(function() {
                         notificationService.success('shipmentView.shipmentHasBeenConfirmed');
                         stateTrackerService.goToPreviousState('openlmis.orders.view');
                     })
-                    .catch(function () {
+                    .catch(function() {
                         notificationService.error('shipmentView.failedToConfirmShipment');
                         loadingModalService.close();
                     });

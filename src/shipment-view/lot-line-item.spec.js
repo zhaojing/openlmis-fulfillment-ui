@@ -13,15 +13,15 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-describe('LotLineItem', function () {
+describe('LotLineItem', function() {
 
     var LotLineItem, CanFulfillForMeEntryDataBuilder, OrderableDataBuilder, LotLineItemDataBuilder,
         ShipmentLineItemDataBuilder, canFulfillForMe, shipmentLineItem, lotLineItem;
 
-    beforeEach(function () {
+    beforeEach(function() {
         module('shipment-view');
 
-        inject(function ($injector) {
+        inject(function($injector) {
             LotLineItem = $injector.get('LotLineItem');
             CanFulfillForMeEntryDataBuilder = $injector.get('CanFulfillForMeEntryDataBuilder');
             ShipmentLineItemDataBuilder = $injector.get('ShipmentLineItemDataBuilder');
@@ -47,9 +47,9 @@ describe('LotLineItem', function () {
             .build();
     });
 
-    describe('constructor', function () {
+    describe('constructor', function() {
 
-        it('should set isLotLineItem flag to true', function () {
+        it('should set isLotLineItem flag to true', function() {
             var result = new LotLineItem(canFulfillForMe, shipmentLineItem);
 
             expect(result.isLotLineItem).toBe(true);
@@ -102,6 +102,7 @@ describe('LotLineItem', function () {
 
             expect(result).not.toBeUndefined();
             expect(result).toEqual(shipmentLineItem.quantityShipped);
+
         });
     
     });

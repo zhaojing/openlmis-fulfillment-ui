@@ -13,23 +13,23 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-describe('Order', function () {
+describe('Order', function() {
 
     var Order, BasicOrderResponseDataBuilder, ORDER_STATUS, orderResponse, order, result;
 
-    beforeEach(function () {
+    beforeEach(function() {
         module('order');
 
-        inject(function ($injector) {
+        inject(function($injector) {
             Order = $injector.get('Order');
             ORDER_STATUS = $injector.get('ORDER_STATUS');
             BasicOrderResponseDataBuilder = $injector.get('BasicOrderResponseDataBuilder');
         });
     });
 
-    describe('constructor', function () {
+    describe('constructor', function() {
 
-        it('should set all properties', function () {
+        it('should set all properties', function() {
             orderResponse = new BasicOrderResponseDataBuilder().build();
             result = new Order(orderResponse);
 
@@ -51,9 +51,9 @@ describe('Order', function () {
 
     });
 
-    describe('isFulfillmentStarted', function () {
+    describe('isFulfillmentStarted', function() {
 
-        it('should return true if status is FULFILLING', function () {
+        it('should return true if status is FULFILLING', function() {
             orderResponse = new BasicOrderResponseDataBuilder()
                 .withStatus(ORDER_STATUS.FULFILLING)
                 .build();
@@ -64,7 +64,7 @@ describe('Order', function () {
                 .toEqual(true);
         });
 
-        it('should return false if status is different than FULFILLING', function () {
+        it('should return false if status is different than FULFILLING', function() {
             orderResponse = new BasicOrderResponseDataBuilder()
                 .withStatus(ORDER_STATUS.IN_ROUTE)
                 .build();
@@ -76,15 +76,15 @@ describe('Order', function () {
         });
     });
 
-    describe('isOrdered', function () {
+    describe('isOrdered', function() {
 
-        it('should return true if order is in ordered status', function () {
+        it('should return true if order is in ordered status', function() {
             order = new Order(new BasicOrderResponseDataBuilder().buildOrdered());
 
             expect(order.isOrdered()).toBe(true);
         });
 
-        it('should return false if order is past ordered status', function () {
+        it('should return false if order is past ordered status', function() {
             order = new Order(new BasicOrderResponseDataBuilder().buildShipped());
 
             expect(order.isOrdered()).toBe(false);
@@ -92,15 +92,15 @@ describe('Order', function () {
 
     });
 
-    describe('isFulfilling', function () {
+    describe('isFulfilling', function() {
 
-        it('should return true if order is in fulfilling status', function () {
+        it('should return true if order is in fulfilling status', function() {
             order = new Order(new BasicOrderResponseDataBuilder().buildFulfilling());
 
             expect(order.isFulfilling()).toBe(true);
         });
 
-        it('should return false if order is past fulfilling status', function () {
+        it('should return false if order is past fulfilling status', function() {
             order = new Order(new BasicOrderResponseDataBuilder().buildShipped());
 
             expect(order.isFulfilling()).toBe(false);
@@ -108,15 +108,15 @@ describe('Order', function () {
 
     });
 
-    describe('isShipped', function () {
+    describe('isShipped', function() {
 
-        it('should return true if order is in shipped status', function () {
+        it('should return true if order is in shipped status', function() {
             order = new Order(new BasicOrderResponseDataBuilder().buildShipped());
 
             expect(order.isShipped()).toBe(true);
         });
 
-        it('should return false if order is past shipped status', function () {
+        it('should return false if order is past shipped status', function() {
             order = new Order(new BasicOrderResponseDataBuilder().buildReceived());
 
             expect(order.isShipped()).toBe(false);

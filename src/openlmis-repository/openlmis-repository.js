@@ -51,7 +51,7 @@
                 repository = this;
 
             return this.impl.get(id)
-            .then(function (response) {
+            .then(function(response) {
                 return new DomainClass(response, repository);
             });
         }

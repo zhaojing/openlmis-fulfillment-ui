@@ -54,8 +54,8 @@ describe('ShipmentViewLineItem', function() {
 
     describe('getFilledQuantity', function() {
     
-        it('should throw exception', function () {
-            expect(function () {
+        it('should throw exception', function() {
+            expect(function() {
                 shipmentViewLineItem.getFillQuantity();
             }).toThrow('Method is not supported');
         });

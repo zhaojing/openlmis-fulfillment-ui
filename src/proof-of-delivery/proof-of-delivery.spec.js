@@ -332,7 +332,7 @@ describe('ProofOfDelivery', function() {
             expect($window.open).toHaveBeenCalled();
         });
 
-        it('should not call save if pod is confirmed', function () {
+        it('should not call save if pod is confirmed', function() {
             proofOfDelivery.status = PROOF_OF_DELIVERY_STATUS.CONFIRMED;
 
             proofOfDelivery.print();

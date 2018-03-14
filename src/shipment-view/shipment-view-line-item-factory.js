@@ -34,7 +34,7 @@
         function ShipmentViewLineItemFactory() {}
 
         function buildFrom(shipment, summaries) {
-            var shipmentLineItemMap = shipment.lineItems.reduce(function (map, lineItem) {
+            var shipmentLineItemMap = shipment.lineItems.reduce(function(map, lineItem) {
                 var orderableId = lineItem.orderable.id,
                     lotId = lineItem.lot ? lineItem.lot.id : undefined;
 

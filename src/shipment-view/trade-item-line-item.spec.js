@@ -13,7 +13,7 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-describe('TradeItemLineItem', function () {
+describe('TradeItemLineItem', function() {
 
     var TradeItemLineItem, TradeItemLineItemDataBuilder, OrderableDataBuilder,
         LotLineItemDataBuilder, orderable, lotLineItems, tradeItemLineItem,

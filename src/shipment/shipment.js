@@ -91,7 +91,7 @@
             var errors = {};
 
             var lineItemsErrors = [];
-            this.lineItems.forEach(function (lineItem) {
+            this.lineItems.forEach(function(lineItem) {
                 var lineItemErrors = lineItem.validate();
 
                 if (lineItemErrors) {

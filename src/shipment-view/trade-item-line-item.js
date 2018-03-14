@@ -13,7 +13,7 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-(function () {
+(function() {
 
     'use strict';
 
@@ -47,7 +47,7 @@
         }
 
         function getFillQuantity() {
-            return this.lotLineItems.reduce(function (fillQuantity, lineItem) {
+            return this.lotLineItems.reduce(function(fillQuantity, lineItem) {
                 return fillQuantity + lineItem.getFillQuantity();
             }, 0);
         }
