@@ -181,6 +181,19 @@ describe('Shipment', function() {
             expect(rejected).toBe(true);
         });
 
+        it('should reject if shipment has no line items', function() {
+            spyOn(shipment, 'canBeConfirmed').andReturn(false);
+
+            var rejected;
+            shipment.confirm()
+                .catch(function() {
+                    rejected = true;
+                });
+            $rootScope.$apply();
+
+            expect(rejected).toBe(true);
+        });
+
     });
 
     describe('delete', function() {

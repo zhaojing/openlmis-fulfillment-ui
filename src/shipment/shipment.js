@@ -63,7 +63,7 @@
         }
 
         function confirm() {
-            if (this.validate() || !this.isEditable()) {
+            if (this.validate() || !this.isEditable() || !this.canBeConfirmed()) {
                 return $q.reject();
             }
 
