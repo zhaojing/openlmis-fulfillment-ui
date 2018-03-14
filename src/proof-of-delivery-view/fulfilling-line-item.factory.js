@@ -28,7 +28,9 @@
         .module('proof-of-delivery')
         .factory('fulfillingLineItemFactory', factory);
 
-    function factory() {
+    factory.$inject = ['OrderableFulfillsResource'];
+
+    function factory(OrderableFulfillsResource) {
         var factory = {
             groupByOrderable: groupByOrderable
         };
@@ -44,10 +46,43 @@
          * proof of delivery line items.
          *
          * @param  {Array}  proofOfDeliveryLineItems the proof of delivery line items
+         * @param  {Array}  orderLineItems           the order line items
          * @return {Object}                          the map of fulfilling line items
          */
-        function groupByOrderable(proofOfDeliveryLineItems) {
-            return proofOfDeliveryLineItems.reduce(function(groupedByOrderable, lineItem) {
+        function groupByOrderable(proofOfDeliveryLineItems, orderLineItems) {
+            
+            var orderableIds = orderLineItems.map(function(lineItem) {
+                return lineItem.orderable.id;
+            });
+
+            return new OrderableFulfillsResource().query({
+                id: orderableIds
+            })
+            .then(function(orderableFulfills) {
+                var groupedFulfillingLineItems = groupLineItemsByOrderable(proofOfDeliveryLineItems);
+                orderLineItems.forEach(function(orderLineItem) {
+                    var canFulfillForMe = orderableFulfills[orderLineItem.orderable.id] ? 
+                        orderableFulfills[orderLineItem.orderable.id].canFulfillForMe : 
+                        [];
+
+                    orderLineItem.groupedLineItems = [];
+                    canFulfillForMe.forEach(function(fulfillingOrderableId) {
+                        var foundGroupOfFulfillingLineItems = groupedFulfillingLineItems[fulfillingOrderableId];
+                        if (foundGroupOfFulfillingLineItems) {
+                            orderLineItem.groupedLineItems.push(foundGroupOfFulfillingLineItems);
+                        }
+                    });
+                    var foundGroupOfFulfillingLineItems = groupedFulfillingLineItems[orderLineItem.orderable.id];
+                    if (foundGroupOfFulfillingLineItems) {
+                        orderLineItem.groupedLineItems.push(foundGroupOfFulfillingLineItems);
+                    }
+                });
+                return orderLineItems;
+            });
+        }
+
+        function groupLineItemsByOrderable(lineItems) {
+            return lineItems.reduce(function(groupedByOrderable, lineItem) {
                 if (!(groupedByOrderable[lineItem.orderable.id] && 
                     groupedByOrderable[lineItem.orderable.id].length)) {
                     groupedByOrderable[lineItem.orderable.id] = [];

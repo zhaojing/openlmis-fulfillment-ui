@@ -30,11 +30,11 @@
 
     ProofOfDeliveryViewController.$inject = [
         'proofOfDelivery', 'order', 'reasonAssignments', 'messageService', 'VVM_STATUS',
-        'groupedLineItems', 'fulfillmentUrlFactory', 'canEdit'
+        'orderLineItems', 'fulfillmentUrlFactory', 'canEdit'
     ];
 
     function ProofOfDeliveryViewController(proofOfDelivery, order, reasonAssignments,
-                                           messageService, VVM_STATUS, groupedLineItems,
+                                           messageService, VVM_STATUS, orderLineItems,
                                            fulfillmentUrlFactory, canEdit) {
 
         var vm = this;
@@ -68,13 +68,13 @@
         /**
          * @ngdoc property
          * @propertyOf proof-of-delivery-view.controller:PodViewController
-         * @name groupedLineItems
+         * @name orderLineItems
          * @type {Object}
          *
          * @description
          * Holds map of grouped by orderable Proof of Delivery Line Items.
          */
-        vm.groupedLineItems = undefined;
+        vm.orderLineItems = undefined;
 
         /**
          * @ngdoc property
@@ -110,7 +110,7 @@
             vm.order = order;
             vm.reasonAssignments = reasonAssignments;
             vm.proofOfDelivery = proofOfDelivery;
-            vm.groupedLineItems = groupedLineItems;
+            vm.orderLineItems = orderLineItems;
             vm.vvmStatuses = VVM_STATUS;
             vm.showVvmColumn = proofOfDelivery.hasProductsUseVvmStatus();
             vm.canEdit = canEdit;
