@@ -31,8 +31,7 @@
             accessRights: [
                 FULFILLMENT_RIGHTS.PODS_MANAGE,
                 FULFILLMENT_RIGHTS.PODS_VIEW,
-                FULFILLMENT_RIGHTS.SHIPMENTS_EDIT,
-                FULFILLMENT_RIGHTS.SHIPMENTS_VIEW
+                FULFILLMENT_RIGHTS.SHIPMENTS_EDIT
             ],
             views: {
                 '@openlmis': {

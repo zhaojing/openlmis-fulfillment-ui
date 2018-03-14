@@ -88,7 +88,11 @@ describe('openlmis.orders.podManage state', function() {
     });
 
     it('should require requisition create and pods manage rights to enter', function() {
-        expect(state.accessRights).toEqual([FULFILLMENT_RIGHTS.PODS_MANAGE, FULFILLMENT_RIGHTS.PODS_VIEW]);
+        expect(state.accessRights).toEqual([
+            FULFILLMENT_RIGHTS.PODS_MANAGE, 
+            FULFILLMENT_RIGHTS.PODS_VIEW, 
+            FULFILLMENT_RIGHTS.SHIPMENTS_EDIT
+        ]);
     });
 
     function loadModules() {
