@@ -61,7 +61,7 @@ describe('openlmis.orders.podManage state', function() {
     });
 
     it('should resolve pods with default selection when lists have 1 element', function() {
-        programService.getUserSupportedPrograms.andReturn($q.when([programs[0]]));
+        programService.getUserPrograms.andReturn($q.when([programs[0]]));
         requestingFacilities = [requestingFacilities[0]];
         supplyingFacilities = [supplyingFacilities[0]];
 
@@ -143,7 +143,7 @@ describe('openlmis.orders.podManage state', function() {
         spyOn(orderRepository, 'searchOrdersForManagePod').andReturn($q.when({
             content: pods
         }));
-        spyOn(programService, 'getUserSupportedPrograms').andReturn($q.when(programs));
+        spyOn(programService, 'getUserPrograms').andReturn($q.when(programs));
         spyOn(facilityFactory, 'getSupervisedFacilitiesBasedOnRights').andCallFake(function(rights) {
             if (rights.indexOf(FULFILLMENT_RIGHTS.SHIPMENTS_EDIT) > -1 &&
                 rights.indexOf(FULFILLMENT_RIGHTS.SHIPMENTS_VIEW) > -1) {

@@ -39,7 +39,7 @@
             ],
             resolve: {
                 programs: function(programService, authorizationService) {
-                    return programService.getUserSupportedPrograms(authorizationService.getUser().user_id);
+                    return programService.getUserPrograms(authorizationService.getUser().user_id);
                 },
                 supplyingFacilities: function(facilityFactory) {
                     return facilityFactory.getSupervisedFacilitiesBasedOnRights([
