@@ -29,8 +29,6 @@
         .module('shipment')
         .factory('ShipmentLineItem', ShipmentLineItem);
 
-    ShipmentLineItem.$inject = [];
-
     function ShipmentLineItem() {
 
         ShipmentLineItem.prototype.validate = validate;
