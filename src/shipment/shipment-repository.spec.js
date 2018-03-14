@@ -64,22 +64,7 @@ describe('ShipmentRepository', function() {
             });
             $rootScope.$apply();
 
-            expect(result).toEqual(shipment);
-            expect(shipmentRepositoryImplMock.createDraft).toHaveBeenCalledWith(shipmentResponse);
-        });
-
-        it('should return an instance of the Shipment class', function() {
-            shipmentRepositoryImplMock.createDraft.andReturn($q.resolve(shipmentJson));
-            ShipmentMock.andReturn(shipment);
-
-            var result;
-            shipmentRepository.createDraft(shipmentResponse)
-            .then(function(response) {
-                result = response;
-            });
-            $rootScope.$apply();
-
-            expect(result instanceof Shipment).toBe(true);
+            expect(result).toBe(shipment);
             expect(shipmentRepositoryImplMock.createDraft).toHaveBeenCalledWith(shipmentResponse);
         });
 
@@ -112,22 +97,7 @@ describe('ShipmentRepository', function() {
             });
             $rootScope.$apply();
 
-            expect(result).toEqual(shipment);
-            expect(shipmentRepositoryImplMock.getByOrderId).toHaveBeenCalledWith(shipmentJson.order.id);
-        });
-
-        it('should return an instance of the Shipment class', function() {
-            shipmentRepositoryImplMock.getByOrderId.andReturn($q.resolve(shipmentJson));
-            ShipmentMock.andReturn(shipment);
-
-            var result;
-            shipmentRepository.getByOrderId(shipmentJson.order.id)
-            .then(function(response) {
-                result = response;
-            });
-            $rootScope.$apply();
-
-            expect(result instanceof Shipment).toBe(true);
+            expect(result).toBe(shipment);
             expect(shipmentRepositoryImplMock.getByOrderId).toHaveBeenCalledWith(shipmentJson.order.id);
         });
 
