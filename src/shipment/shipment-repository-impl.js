@@ -37,7 +37,6 @@
 
         ShipmentRepositoryImpl.prototype.create = create;
         ShipmentRepositoryImpl.prototype.createDraft = createDraft;
-        ShipmentRepositoryImpl.prototype.get = get;
         ShipmentRepositoryImpl.prototype.updateDraft = updateDraft;
         ShipmentRepositoryImpl.prototype.getByOrderId = getByOrderId;
         ShipmentRepositoryImpl.prototype.getDraftByOrderId = getDraftByOrderId;
@@ -69,16 +68,6 @@
             .then(function(shipmentJson) {
                 return extendResponse(shipmentJson, orderResource, stockCardSummaryRepositoryImpl);
              });
-        }
-
-        function get(id) {
-            var orderResource = this.orderResource,
-                stockCardSummaryRepositoryImpl = this.stockCardSummaryRepositoryImpl;
-
-            return this.shipmentResource.get(id)
-            .then(function(shipmentJson) {
-                return extendResponse(shipmentJson, orderResource, stockCardSummaryRepositoryImpl);
-            });
         }
 
         function updateDraft(draft) {
