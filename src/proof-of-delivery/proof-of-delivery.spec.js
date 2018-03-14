@@ -16,7 +16,7 @@
 describe('ProofOfDelivery', function() {
 
     var ProofOfDelivery, ProofOfDeliveryLineItem, ProofOfDeliveryDataBuilder, $q, $rootScope, json,
-        ProofOfDeliveryLineItemDataBuilder, PROOF_OF_DELIVERY_STATUS, $window, fulfillmentUrlFactoryMock;
+        ProofOfDeliveryLineItemDataBuilder, PROOF_OF_DELIVERY_STATUS, $window;
 
     beforeEach(function() {
         module('proof-of-delivery');
@@ -308,27 +308,36 @@ describe('ProofOfDelivery', function() {
 
     describe('printPod', function() {
 
-        var proofOfDelivery, proofOfDeliveryRepositoryMock;
+        var proofOfDelivery, proofOfDeliveryRepositoryMock,saveDeferred;
 
         beforeEach(function() {
             proofOfDeliveryRepositoryMock = jasmine.createSpyObj('repository', ['update']);
             proofOfDelivery = new ProofOfDelivery(json, proofOfDeliveryRepositoryMock);
 
-            fulfillmentUrlFactoryMock = jasmine.createSpy();
-            fulfillmentUrlFactoryMock.andCallFake(function(url) {
-                return 'http://some.url' + url;
-            });
-
             spyOn($window, 'open').andCallThrough();
+
+            saveDeferred = $q.defer();
+            spyOn(proofOfDelivery.save, 'apply').andCallThrough();
+            proofOfDelivery.save.apply.andReturn(saveDeferred.promise);
         });
 
-        it('should attempt to save proof of delivery', function() {
-            proofOfDeliveryRepositoryMock.update.andReturn($q.resolve());
+        it('should not open the window when save proof of delivery failed', function() {
+            saveDeferred.reject();
 
             proofOfDelivery.print();
             $rootScope.$apply();
 
-            expect(proofOfDeliveryRepositoryMock.update).toHaveBeenCalled();
+            expect(proofOfDelivery.save.apply).toHaveBeenCalled();
+            expect($window.open).not.toHaveBeenCalled();
+        });
+
+        it('should attempt to save proof of delivery', function() {
+            saveDeferred.resolve(proofOfDelivery);
+
+            proofOfDelivery.print();
+            $rootScope.$apply();
+
+            expect(proofOfDelivery.save.apply).toHaveBeenCalled();
             expect($window.open).toHaveBeenCalled();
         });
 
@@ -338,7 +347,7 @@ describe('ProofOfDelivery', function() {
             proofOfDelivery.print();
             $rootScope.$apply();
 
-            expect(proofOfDeliveryRepositoryMock.update).not.toHaveBeenCalled();
+            expect(proofOfDelivery.save.apply).not.toHaveBeenCalled();
             expect($window.open).toHaveBeenCalled();
         });
     });

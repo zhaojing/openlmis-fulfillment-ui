@@ -181,15 +181,19 @@
          *
          * @description
          * Saves and prints if proof of delivery is initiated or prints if confirmed.
+         *
+         * @return {Promise} the promise resolving to the proof of delivery that has the CONFIRMED
+         * status or the INITIATED status and successfully saved
          */
         function print() {
             if (this.isInitiated()) {
                 save.apply(this)
-                .catch(function() {
-                    return $q.reject();
+                .then(function(response) {
+                    return getPrintUrl(response.id);
                 });
+            } else {
+                return $q.resolve(getPrintUrl(this.id));
             }
-            return $q.resolve(getPrintUrl(this.id));
         }
 
         function getPrintUrl(podId) {
