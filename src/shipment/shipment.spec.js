@@ -272,7 +272,7 @@ describe('Shipment', function() {
             expect(result).toBe(true);
         });
 
-        it('should return false if orders status is shipped', function() {
+        it('should return false if order status is shipped', function() {
             shipment = new ShipmentDataBuilder()
                 .withOrder(new OrderDataBuilder().buildShipped())
                 .build();
