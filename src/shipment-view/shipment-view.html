@@ -32,6 +32,7 @@
         <thead>
             <tr>
                 <th>{{'shipmentView.productCode' | message}}</th>
+
                 <th>{{'shipmentView.product' | message}}</th>
                 <th>{{'shipmentView.lotCode' | message}}</th>
                 <th>{{'shipmentView.vvmStatus' | message}}</th>
@@ -43,19 +44,19 @@
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="tableLineItem in vm.tableLineItems" ng-class="{'is-secondary': tableLineItem.isCommodityTypeLineItem}">
+            <tr ng-repeat="tableLineItem in vm.tableLineItems" ng-class="{'is-secondary': tableLineItem.isCommodityTypeLineItem}" empty-row="tableLineItem.noStockAvailable" empty-row-message="{{'shipmentView.noStockAvailable' | message}}" empty-row-col-span="9">
                 <td>{{tableLineItem.productCode}}</td>
                 <td>{{tableLineItem.productName}}</td>
                 <td ng-if="!tableLineItem.isLotLineItem"></td>
                 <td ng-if="tableLineItem.isLotLineItem">{{tableLineItem.lot | lotCode}}</td>
                 <td></td>
-                <td>{{tableLineItem.lot.expiryDate}}</td>
+                <td>{{tableLineItem.lot.expirationDate | openlmisDate}}</td>
                 <td>{{tableLineItem.getAvailableSoh(vm.showInDoses())}}</td>
-                <td>{{tableLineItem.orderQuantity}}</td>
-                <td ng-if="!tableLineItem.isLotLineItem">{{tableLineItem.getFillQuantity()}}</td>
-                <td ng-if="tableLineItem.isLotLineItem">
-                    <input ng-show="vm.shipment.isEditable()" positive-integer ng-model="tableLineItem.shipmentLineItem.quantityShipped" ng-change="tableLineItem.shipmentLineItem.validate()"
-                        openlmis-invalid="{{tableLineItem.shipmentLineItem.errors.quantityShipped | message}}" required/>
+                <td>{{tableLineItem.getOrderQuantity(vm.showInDoses())}}</td>
+                <td ng-if="!tableLineItem.shipmentLineItem">{{tableLineItem.getFillQuantity()}}</td>
+                <td ng-if="tableLineItem.shipmentLineItem">
+                    <input ng-show="vm.shipment.isEditable()" positive-integer ng-model="tableLineItem.shipmentLineItem.quantityShipped"
+                        openlmis-invalid="{{tableLineItem.shipmentLineItem.validate().quantityShipped | message}}"/>
                     <div ng-show="!vm.shipment.isEditable()">{{tableLineItem.shipmentLineItem.quantityShipped}}</div>
                 </td>
                 <td>{{tableLineItem.getRemainingQuantity(vm.showInDoses())}}</td>

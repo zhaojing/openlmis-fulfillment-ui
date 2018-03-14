@@ -38,11 +38,12 @@ describe('LotLineItem', function() {
             )
             .buildJson();
 
-        shipmentLineItem = new ShipmentLineItemDataBuilder().build();
+        shipmentLineItem = new ShipmentLineItemDataBuilder()
+            .withCanFulfillForMe(canFulfillForMe)
+            .build();
 
         lotLineItem = new LotLineItemDataBuilder()
             .withNetContent(5)
-            .withAvailableSoh(19)
             .withShipmentLineItem(shipmentLineItem)
             .build();
     });
@@ -60,12 +61,6 @@ describe('LotLineItem', function() {
 
             expect(result.lot).not.toBeUndefined();
             expect(result.lot).toEqual(canFulfillForMe.lot);
-        });
-
-        it('should set available stock on hand', function() {
-            var result = new LotLineItem(canFulfillForMe, shipmentLineItem);
-
-            expect(result.availableSoh).toEqual(3);
         });
 
         it('should set shipment line item', function() {
@@ -103,6 +98,14 @@ describe('LotLineItem', function() {
             expect(result).not.toBeUndefined();
             expect(result).toEqual(shipmentLineItem.quantityShipped);
 
+        });
+
+        it('should return 0 if quantity shipped is undefined', function() {
+            lotLineItem.shipmentLineItem.quantityShipped = undefined;
+
+            var result = lotLineItem.getFillQuantity();
+
+            expect(result).toEqual(0);
         });
     
     });

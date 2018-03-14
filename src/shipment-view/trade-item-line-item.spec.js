@@ -27,29 +27,12 @@ describe('TradeItemLineItem', function() {
             TradeItemLineItemDataBuilder = $injector.get('TradeItemLineItemDataBuilder');
             OrderableDataBuilder = $injector.get('OrderableDataBuilder');
             LotLineItemDataBuilder = $injector.get('LotLineItemDataBuilder');
-            ShipmentLineItemDataBuilder = $injector.get('ShipmentLineItemDataBuilder');
         });
 
         orderable = new OrderableDataBuilder().buildJson();
         lotLineItems = [
-            new LotLineItemDataBuilder()
-                .withAvailableSoh(10)
-                .withNetContent(4)
-                .withShipmentLineItem(
-                    new ShipmentLineItemDataBuilder()
-                        .withQuantityShipped(5)
-                        .build()
-                )
-                .build(),
-            new LotLineItemDataBuilder()
-                .withAvailableSoh(11)
-                .withNetContent(4)
-                .withShipmentLineItem(
-                    new ShipmentLineItemDataBuilder()
-                        .withQuantityShipped(4)
-                        .build()
-                )
-                .build()
+            new LotLineItemDataBuilder().build(),
+            new LotLineItemDataBuilder().build()
         ];
 
         tradeItemLineItem = new TradeItemLineItemDataBuilder()
@@ -90,17 +73,30 @@ describe('TradeItemLineItem', function() {
     });
 
     describe('getAvailableSoh', function() {
+
+        beforeEach(function() {
+            spyOn(lotLineItems[0], 'getAvailableSoh');
+            spyOn(lotLineItems[1], 'getAvailableSoh');
+        });
     
         it('should return quantity in packs by default', function() {
+            lotLineItems[0].getAvailableSoh.andReturn(1);
+            lotLineItems[1].getAvailableSoh.andReturn(3);
+
             var result = tradeItemLineItem.getAvailableSoh();
 
             expect(result).toEqual(4);
         });
 
         it('should return in doses if flag is set', function() {
+            lotLineItems[0].getAvailableSoh.andReturn(4);
+            lotLineItems[1].getAvailableSoh.andReturn(12);
+
             var result = tradeItemLineItem.getAvailableSoh(true);
 
             expect(result).toEqual(16);
+            expect(lotLineItems[0].getAvailableSoh).toHaveBeenCalledWith(true);
+            expect(lotLineItems[1].getAvailableSoh).toHaveBeenCalledWith(true);
         });
     
     });
@@ -108,6 +104,9 @@ describe('TradeItemLineItem', function() {
     describe('getFillQuantity', function() {
     
         it('should return quantity in packs by default', function() {
+            spyOn(lotLineItems[0], 'getFillQuantity').andReturn(3);
+            spyOn(lotLineItems[1], 'getFillQuantity').andReturn(6);
+
             var result = tradeItemLineItem.getFillQuantity();
 
             expect(result).toEqual(9);

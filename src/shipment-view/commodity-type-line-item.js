@@ -29,6 +29,7 @@
 
         CommodityTypeLineItem.prototype.getAvailableSoh = getAvailableSoh;
         CommodityTypeLineItem.prototype.getFillQuantity = getFillQuantity;
+        CommodityTypeLineItem.prototype.getOrderQuantity = getOrderQuantity;
 
         return CommodityTypeLineItem;
 
@@ -39,8 +40,8 @@
             this.productCode = summary.orderable.productCode;
             this.productName = summary.orderable.fullProductName;
             this.orderQuantity = orderQuantity;
-            this.availableSoh = summary.stockOnHand;
             this.tradeItemLineItems = tradeItemLineItems;
+            this.noStockAvailable = !this.tradeItemLineItems.length || !summary.stockOnHand;
         }
 
         function getAvailableSoh(inDoses) {
@@ -53,6 +54,10 @@
             return this.tradeItemLineItems.reduce(function(fillQuantity, lineItem) {
                 return fillQuantity + lineItem.getFillQuantity();
             }, 0);
+        }
+
+        function getOrderQuantity(inDoses) {
+            return this.recalculateQuantity(this.orderQuantity, inDoses);
         }
     }
 

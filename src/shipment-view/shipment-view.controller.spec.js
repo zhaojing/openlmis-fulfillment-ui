@@ -15,13 +15,13 @@
 
 describe('ShipmentViewController', function() {
 
-    var vm, $controller, ShipmentDataBuilder, shipment, tableLineItems, OrderDataBuilder, QUANTITY_UNIT;
+    var vm, $controller, ShipmentDataBuilder, shipment, tableLineItems, OrderDataBuilder,
+        QUANTITY_UNIT, CommodityTypeLineItemDataBuilder, order;
 
     beforeEach(function() {
         module('shipment-view');
 
         inject(function($injector) {
-            $rootScope = $injector.get('$rootScope');
             $controller = $injector.get('$controller');
             ShipmentDataBuilder = $injector.get('ShipmentDataBuilder');
             OrderDataBuilder = $injector.get('OrderDataBuilder');

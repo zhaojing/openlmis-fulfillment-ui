@@ -28,6 +28,7 @@
         ShipmentViewLineItem.prototype.getAvailableSoh = throwMethodNotSupported;
         ShipmentViewLineItem.prototype.getFillQuantity = throwMethodNotSupported;
         ShipmentViewLineItem.prototype.getRemainingQuantity = getRemainingQuantity;
+        ShipmentViewLineItem.prototype.recalculateQuantity = recalculateQuantity;
 
         return ShipmentViewLineItem;
 
@@ -42,6 +43,13 @@
                 return remainingQuantity * this.netContent;
             }
             return remainingQuantity;
+        }
+
+        function recalculateQuantity(quantity, inDoses) {
+            if (inDoses) {
+                return quantity * this.netContent;
+            }
+            return quantity;
         }
         
         function throwMethodNotSupported() {

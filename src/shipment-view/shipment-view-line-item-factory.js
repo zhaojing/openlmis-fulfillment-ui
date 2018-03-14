@@ -22,10 +22,11 @@
         .factory('ShipmentViewLineItemFactory', ShipmentViewLineItemFactory);
 
     ShipmentViewLineItemFactory.inject = [
-        'TradeItemLineItem', 'CommodityTypeLineItem', 'LotLineItem'
+        'TradeItemLineItem', 'CommodityTypeLineItem', 'LotLineItem', 'GenericOrderableLineItem'
     ];
 
-    function ShipmentViewLineItemFactory(TradeItemLineItem, CommodityTypeLineItem, LotLineItem) {
+    function ShipmentViewLineItemFactory(TradeItemLineItem, CommodityTypeLineItem, LotLineItem,
+                                         GenericOrderableLineItem) {
 
         ShipmentViewLineItemFactory.prototype.createFrom = buildFrom;
 
@@ -34,35 +35,31 @@
         function ShipmentViewLineItemFactory() {}
 
         function buildFrom(shipment, summaries) {
-            var shipmentLineItemMap = shipment.lineItems.reduce(function(map, lineItem) {
-                var orderableId = lineItem.orderable.id,
-                    lotId = lineItem.lot ? lineItem.lot.id : undefined;
-
-                if (!map[orderableId]) {
-                    map[orderableId] = {};
-                }
-
-                map[orderableId][lotId] = lineItem;
-
-                return map;
-            }, {});
+            var shipmentLineItemMap = mapByOrderableAndLot(shipment.lineItems);
 
             return summaries
             .map(function(summary) {
+                if (isForGenericOrderable(summary)) {
+                    return new GenericOrderableLineItem(
+                        summary,
+                        getOrderQuantity(order.orderLineItems, summary.orderable.id),
+                        shipmentLineItemMap[summary.orderable.id][undefined]
+                    );
+                }
                 var uniqueOrderables = getUniqueOrderables(summary.canFulfillForMe),
                     canFulfillForMeMap = groupByOrderables(summary.canFulfillForMe),
                     
                     tradeItemLineItems = uniqueOrderables.map(function(orderable) {
-                        var lotLineItems = canFulfillForMeMap[orderable.id].map(function(canFulfillForMe) {
-                            var lotId = canFulfillForMe.lot ? canFulfillForMe.lot.id : undefined;
-                            return new LotLineItem(
-                                canFulfillForMe,
-                                shipmentLineItemMap[canFulfillForMe.orderable.id][lotId]
-                            );
-                        });
-
-                        return new TradeItemLineItem(orderable, lotLineItems);
+                    var lotLineItems = canFulfillForMeMap[orderable.id].map(function(canFulfillForMe) {
+                        var lotId = canFulfillForMe.lot ? canFulfillForMe.lot.id : undefined;
+                        return new LotLineItem(
+                            canFulfillForMe,
+                            shipmentLineItemMap[canFulfillForMe.orderable.id][lotId]
+                        );
                     });
+
+                    return new TradeItemLineItem(orderable, lotLineItems);
+                });
 
                 return new CommodityTypeLineItem(
                     summary,
@@ -74,12 +71,14 @@
             })
             .reduce(function(shipmentViewLineItems, lineItem) {
                 shipmentViewLineItems.push(lineItem);
-                lineItem.tradeItemLineItems.forEach(function(lineItem) {
-                    shipmentViewLineItems.push(lineItem);
-                    lineItem.lotLineItems.forEach(function(lineItem) {
+                if (!lineItem.noStockAvailable) {
+                    lineItem.tradeItemLineItems.forEach(function(lineItem) {
                         shipmentViewLineItems.push(lineItem);
+                        lineItem.lotLineItems.forEach(function(lineItem) {
+                            shipmentViewLineItems.push(lineItem);
+                        });
                     });
-                });
+                }
                 return shipmentViewLineItems;
             }, []);
         }
@@ -98,11 +97,37 @@
             }, {});
         }
 
+        function mapByOrderableAndLot(lineItems) {
+            return lineItems.reduce(function(map, lineItem) {
+                var orderableId = lineItem.orderable.id,
+                    lotId = lineItem.lot ? lineItem.lot.id : undefined;
+
+                if (!map[orderableId]) {
+                    map[orderableId] = {};
+                }
+
+                map[orderableId][lotId] = lineItem;
+
+                return map;
+            }, {});
+        }
+
         function getUniqueOrderables(canFulfillForMe) {
             return Object.values(canFulfillForMe.reduce(function(orderables, canFulfillForMe) {
                 orderables[canFulfillForMe.orderable.id] = canFulfillForMe.orderable;
                 return orderables;
             }, {}));
+        }
+
+        function getOrderQuantity(lineItems, orderableId) {
+            return lineItems.filter(function(lineItem) {
+                return lineItem.orderable.id === orderableId;
+            })[0].orderedQuantity;
+        }
+
+        function isForGenericOrderable(summary) {
+            return summary.canFulfillForMe.length === 1 &&
+                summary.orderable.id === summary.canFulfillForMe[0].orderable.id;
         }
     }
 })();

@@ -74,13 +74,6 @@ describe('CommodityTypeLineItem', function() {
 
             expect(result.orderQuantity).toEqual(orderQuantity);
         });
-        
-        it('should set available stock on hand', function() {
-            var result = new CommodityTypeLineItem(summary, orderQuantity, tradeItemLineItems);
-
-            expect(result.availableSoh).not.toBeUndefined();
-            expect(result.availableSoh).toBe(summary.stockOnHand);
-        });
 
         it('should set trade item line items', function() {
             var result = new CommodityTypeLineItem(summary, orderQuantity, tradeItemLineItems);

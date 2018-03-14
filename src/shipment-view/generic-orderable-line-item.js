@@ -19,24 +19,25 @@
 
     angular
         .module('shipment-view')
-        .factory('LotLineItem', LotLineItem);
+        .factory('GenericOrderableLineItem', GenericOrderableLineItem);
 
-    LotLineItem.inject = ['ShipmentViewLineItem', 'classExtender'];
+    GenericOrderableLineItem.inject = ['ShipmentViewLineItem', 'classExtender'];
 
-    function LotLineItem(ShipmentViewLineItem, classExtender) {
+    function GenericOrderableLineItem(ShipmentViewLineItem, classExtender) {
 
-        classExtender.extend(LotLineItem, ShipmentViewLineItem);
+        classExtender.extend(GenericOrderableLineItem, ShipmentViewLineItem);
 
-        LotLineItem.prototype.getAvailableSoh = getAvailableSoh;
-        LotLineItem.prototype.getFillQuantity = getFillQuantity;
+        GenericOrderableLineItem.prototype.getAvailableSoh = getAvailableSoh;
+        GenericOrderableLineItem.prototype.getFillQuantity = getFillQuantity;
+        GenericOrderableLineItem.prototype.getOrderQuantity = getOrderQuantity;
 
-        return LotLineItem;
+        return GenericOrderableLineItem;
 
-        function LotLineItem(canFulfillForMe, shipmentLineItem) {
-            this.super(canFulfillForMe.orderable);
-
-            this.isLotLineItem = true;
-            this.lot = canFulfillForMe.lot;
+        function GenericOrderableLineItem(summary, orderQuantity, shipmentLineItem) {
+            this.super(summary.orderable);
+            this.productCode = summary.orderable.productCode;
+            this.productName = summary.orderable.fullProductName;
+            this.orderQuantity = orderQuantity;
             this.shipmentLineItem = shipmentLineItem;
         }
 
@@ -44,9 +45,14 @@
             return this.recalculateQuantity(this.shipmentLineItem.stockOnHand, inDoses);
         }
 
-        function getFillQuantity() {
-            return this.shipmentLineItem.quantityShipped || 0;
+        function getOrderQuantity(inDoses) {
+            return this.recalculateQuantity(this.orderQuantity, inDoses);
         }
+
+        function getFillQuantity() {
+            return this.shipmentLineItem.quantityShipped;
+        }
+
     }
 
 })();

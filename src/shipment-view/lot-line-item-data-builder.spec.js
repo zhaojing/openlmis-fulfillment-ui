@@ -27,8 +27,8 @@
     ];
 
     function LotLineItemDataBuilder(LotLineItem, ShipmentLineItemDataBuilder,
-                                    CanFulfillForMeEntryDataBuilder, OrderableDataBuilder) {
-        
+        CanFulfillForMeEntryDataBuilder, OrderableDataBuilder) {
+
         LotLineItemDataBuilder.prototype.build = build;
         LotLineItemDataBuilder.prototype.withAvailableSoh = withAvailableSoh;
         LotLineItemDataBuilder.prototype.withNetContent = withNetContent;
@@ -38,7 +38,7 @@
 
         function LotLineItemDataBuilder() {
             this.canFulfillForMe = new CanFulfillForMeEntryDataBuilder().buildJson();
-            this.ShipmentLineItemDataBuilder = new ShipmentLineItemDataBuilder().build();
+            this.shipmentLineItem = new ShipmentLineItemDataBuilder().build();
         }
 
         function build() {
@@ -46,12 +46,17 @@
         }
 
         function withAvailableSoh(availableSoh) {
-            this.canFulfillForMe = new CanFulfillForMeEntryDataBuilder()
-                .withStockOnHand(availableSoh)
-                .withLot(this.canFulfillForMe.lot)
-                .withOrderable(this.canFulfillForMe.orderable)
-                .buildJson();
-            
+            this.shipmentLineItem = new ShipmentLineItemDataBuilder()
+                .withCanFulfillForMe(
+                    new CanFulfillForMeEntryDataBuilder()
+                    .withStockOnHand(availableSoh)
+                    .withLot(this.canFulfillForMe.lot)
+                    .withOrderable(this.canFulfillForMe.orderable)
+                    .buildJson()
+                )
+                .withQuantityShipped(this.shipmentLineItem.quantityShipped)
+                .build();
+
             return this;
         }
 
@@ -64,7 +69,7 @@
                     .buildJson()
                 )
                 .buildJson();
-        
+
             return this;
         }
 
