@@ -22,7 +22,7 @@
      * @name shipment.Shipment
      *
      * @description
-     * Represents a single shipment.
+     * Represents a single shipment (or shipment draft).
      */
     angular
         .module('shipment')
@@ -46,6 +46,18 @@
 
         return Shipment;
 
+        /**
+         * @ngdoc method
+         * @methodOf shipment.Shipment
+         * @name Shipment
+         * @constructor
+         * 
+         * @description
+         * Creates an instance of the Shipment class. Also instantiates the shipment line items.
+         * 
+         * @param {Object}             json       the JSON representation of the shipment (draft)
+         * @param {ShipmentRepository} repository the instance of Shipment repository
+         */
         function Shipment(json, repository) {
             angular.copy(json, this);
             this.repository = repository;
@@ -55,6 +67,16 @@
             });
         }
 
+        /**
+         * @ngdoc method
+         * @methodOf shipment.Shipment
+         * @name save
+         * 
+         * @description
+         * Saves the shipment. The shipment won't be saved it it is not editable.
+         * 
+         * @return {Promise} the promise resolved when save was successful, rejected otherwise
+         */
         function save() {
             if (!this.isEditable()) {
                 return $q.reject();
@@ -62,6 +84,17 @@
             return this.repository.updateDraft(this);
         }
 
+        /**
+         * @ngdoc method
+         * @methodOf shipment.Shipment
+         * @name confirm
+         * 
+         * @description
+         * Confirm the shipment. The shipment won't be confirmed if it is invalid, is not editable
+         * or has no line items.
+         * 
+         * @return {Promise} the promise resolved when confirm was successful, rejected otherwise
+         */
         function confirm() {
             if (this.isInvalid() || !this.isEditable() || !this.canBeConfirmed()) {
                 return $q.reject();
@@ -70,6 +103,16 @@
             return this.repository.create(this);
         }
 
+        /**
+         * @ngdoc method
+         * @methodOf shipment.Shipment
+         * @name delete
+         * 
+         * @description
+         * Deletes the shipment. The shipment won't be deleted if it is not editable.
+         * 
+         * @return {Promise} the promise resolved when confirm was successful, rejected otherwise
+         */
         function deleteDraft() {
             if (!this.isEditable()) {
                 return $q.reject();
@@ -77,6 +120,16 @@
             return this.repository.deleteDraft(this);
         }
 
+        /**
+         * @ngdoc method
+         * @methodOf shipment.Shipment
+         * @name print
+         * 
+         * @description
+         * Prints the shipment.
+         * 
+         * @return {Promise} the promise resolved when print was successful, rejected otherwise
+         */
         function print() {
             var popup = $window.open('', '_blank');
             popup.document.write(messageService.get('shipmentView.saveDraftPending'));
@@ -87,6 +140,17 @@
             });
         }
 
+        /**
+         * @ngdoc methodOf
+         * @methodOf shipment.Shipment
+         * @name isInvalid
+         *
+         * @description
+         * Validates the shipment and returns a map of errors. If the line item is valid,
+         * undefined is returned. The shipment is invalid if any of the line items is invalid.
+         *
+         * @returns {Object} the errors map if line item is invalid, undefined otherwise
+         */
         function isInvalid() {
             var errors = {};
 
@@ -112,9 +176,10 @@
          * @name isEditable
          *
          * @description
-         * Checks Order status which indicates if shipment can be edited.
+         * Checks whether shipment is editable based on the related order status. Only shipments for
+         * order is status "Ordered" and "Fulfilling" can be edited.
          *
-         * @return {boolean} is Shipment editable
+         * @return {boolean} true if shipment is editable, false otherwise
          */
         function isEditable() {
             return ORDER_STATUS.ORDERED === this.order.status ||
@@ -127,7 +192,10 @@
          * @name canBeConfirmed
          *
          * @description
-         * Returns true if shipment can be confirmed.
+         * Checks whether shipment can be confirmed. Shipment can be confirmed if it has at least
+         * one line item.
+         * 
+         * @return {boolean} true if shipment has at least one line item, false otherwise
          */
         function canBeConfirmed() {
             return this.lineItems.length > 0;

@@ -17,6 +17,13 @@
 
     'use strict';
 
+    /**
+     * @ngdoc service
+     * @name shipment.ShipmentRepository
+     *
+     * @description
+     * Interface for managing shipments.
+     */
     angular
         .module('shipment')
         .factory('ShipmentRepository', ShipmentRepository);
@@ -36,14 +43,47 @@
 
         return ShipmentRepository;
 
+        /**
+         * @ngdoc method
+         * @methodOf shipment.ShipmentRepository
+         * @name ShipmentRepository
+         * @constructor
+         * 
+         * @description
+         * Creates an object of the ShipmentRepository class. It no implementation is provided it
+         * will use an instance of the ShipmentRepositoryImpl class by default.
+         */
         function ShipmentRepository(impl) {
             this.super(Shipment, impl || new ShipmentRepositoryImpl());
         }
 
+        /**
+         * @ngdoc method
+         * @methodOf shipment.ShipmentRepository
+         * @name updateDraft
+         * 
+         * @description
+         * Updates the given shipment draft on the OpenLMIS server.
+         * 
+         * @param  {Object}  draft the shipment draft
+         * @return {Promise}       returns a promise resolving when the update was successful,
+         *                         rejects if anything goes wrong
+         */
         function updateDraft(draft) {
             return this.impl.updateDraft(draft);
         }
 
+        /**
+         * @ngdoc method
+         * @methodOf shipment.ShipmentRepository
+         * @name createDraft
+         * 
+         * @description
+         * Creates a new shipment draft on the OpenLMIS server.
+         * 
+         * @param  {Object}  json the JSON representation of the shipment draft
+         * @return {Promise}      returns a combined JSON which can be use d
+         */
         function createDraft(json) {
             var repository = this;
 
@@ -53,6 +93,19 @@
                 });
         }
 
+        /**
+         * @ngdoc method
+         * @methodOf shipment.ShipmentRepository
+         * @name getDraftByOrderId
+         * 
+         * @description
+         * Retrieves a shipment draft for order with given ID from the OpenLMIS server.
+         * 
+         * @param  {Object}  orderId the order ID
+         * @return {Promise}         returns a promise resolving to the instance of Shipment class
+         *                           created based on the provided JSON object, rejects if anything
+         *                           goes wrong
+         */
         function getDraftByOrderId(orderId) {
             var repository = this;
 
@@ -62,6 +115,19 @@
                 });
         }
 
+        /**
+         * @ngdoc method
+         * @methodOf shipment.ShipmentRepository
+         * @name getByOrderId
+         * 
+         * @description
+         * Retrieves a shipment for order with given ID from the OpenLMIS server.
+         * 
+         * @param  {Object}  orderId the order ID
+         * @return {Promise}         returns a promise resolving to the instance of Shipment class
+         *                           created based on the provided JSON object, rejects if anything
+         *                           goes wrong
+         */
         function getByOrderId(orderId) {
             var repository = this;
 

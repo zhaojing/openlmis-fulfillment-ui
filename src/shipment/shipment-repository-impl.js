@@ -22,7 +22,8 @@
      * @name shipment.ShipmentRepositoryImpl
      *
      * @description
-     * Implementation of the ShipmentRepository interface. Communicates with the REST API of the OpenLMIS server.
+     * Default implementation of the ShipmentRepository interface. Responsible for combining server
+     * responses into single object to be passed to the Shipment class constructor.
      */
     angular
         .module('shipment')
@@ -43,6 +44,16 @@
 
         return ShipmentRepositoryImpl;
 
+        /**
+         * @ngdoc method
+         * @methodOf shipment.ShipmentRepositoryImpl
+         * @name ShipmentRepositoryImpl
+         * @constructor
+         * 
+         * @description
+         * Creates an object of the ShipmentRepositoryImpl class and initiates all required
+         * dependencies.
+         */
         function ShipmentRepositoryImpl() {
             this.shipmentResource = new ShipmentResource();
             this.shipmentDraftResource = new ShipmentDraftResource();
@@ -50,6 +61,18 @@
             this.orderResource = new OrderResource();
         }
 
+        /**
+         * @ngdoc method
+         * @methodOf shipment.ShipmentRepositoryImpl
+         * @name create
+         * 
+         * @description
+         * Creates a new shipment on the OpenLMIS server.
+         * 
+         * @param  {Object}  json the JSON representation of the shipment
+         * @return {Promise}      the promise resolving to combined JSON which can be used for
+         *                        creating instance of the Shipment class
+         */
         function create(json) {
             var orderResource = this.orderResource,
                 stockCardSummaryRepositoryImpl = this.stockCardSummaryRepositoryImpl;
@@ -60,6 +83,18 @@
             });
         }
 
+        /**
+         * @ngdoc method
+         * @methodOf shipment.ShipmentRepositoryImpl
+         * @name createDraft
+         * 
+         * @description
+         * Creates a new shipment draft on the OpenLMIS server.
+         * 
+         * @param  {Object}  json the JSON representation of the shipment draft
+         * @return {Promise}      the promise resolving to combined JSON which can be used for
+         *                        creating instance of the Shipment class
+         */
         function createDraft(json) {
             var orderResource = this.orderResource,
                 stockCardSummaryRepositoryImpl = this.stockCardSummaryRepositoryImpl;
@@ -70,10 +105,35 @@
              });
         }
 
+
+        /**
+         * @ngdoc method
+         * @methodOf shipment.ShipmentRepositoryImpl
+         * @name updateDraft
+         * 
+         * @description
+         * Updates the given shipment draft on the OpenLMIS server.
+         * 
+         * @param  {Object}  draft the shipment draft
+         * @return {Promise}       returns a promise resolving when the update was successful,
+         *                         rejects if anything goes wrong
+         */
         function updateDraft(draft) {
             return this.shipmentDraftResource.update(draft);
         }
 
+        /**
+         * @ngdoc method
+         * @methodOf shipment.ShipmentRepositoryImpl
+         * @name getByOrderId
+         * 
+         * @description
+         * Retrieves a shipment for order with given ID from the OpenLMIS server.
+         * 
+         * @param  {Object}  orderId the order ID
+         * @return {Promise}         the promise resolving to combined JSON which can be used for
+         *                           creating instance of the Shipment class
+         */
         function getByOrderId(orderId) {
             var orderResource = this.orderResource,
                 stockCardSummaryRepositoryImpl = this.stockCardSummaryRepositoryImpl;
@@ -86,6 +146,18 @@
             });
         }
 
+        /**
+         * @ngdoc method
+         * @methodOf shipment.ShipmentRepositoryImpl
+         * @name getDraftByOrderId
+         * 
+         * @description
+         * Retrieves a shipment draft for order with given ID from the OpenLMIS server.
+         * 
+         * @param  {Object}  orderId the order ID
+         * @return {Promise}         the promise resolving to combined JSON which can be used for
+         *                           creating instance of the Shipment class
+         */
         function getDraftByOrderId(orderId) {
             var orderResource = this.orderResource,
                 stockCardSummaryRepositoryImpl = this.stockCardSummaryRepositoryImpl;

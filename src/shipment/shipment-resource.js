@@ -22,8 +22,7 @@
      * @name shipment.ShipmentResource
      *
      * @description
-     * Implementation of the ShipmentRepository interface. Communicates with the REST API of the
-     * OpenLMIS server.
+     * Communicates with the shipment endpoint of the OpenLMIS.
      */
     angular
         .module('shipment')

@@ -22,8 +22,8 @@
      * @name shipment.ShipmentLineItem
      *
      * @description
-     * Represents a single shipment line item extended by the stock card summary for the orderable
-     * and lot.
+     * Represents a single shipment line item extended by the available stock on hand  it can be
+     * fulfilled by.
      */
     angular
         .module('shipment')
@@ -43,9 +43,7 @@
          * @description
          * Creates instance of the ShipmentLineItem class.
          *
-         * @param       {string}    id              the ID of the line item
-         * @param       {Object}    summary         the stock card summary matching orderable and lot
-         * @param       {number}    quantityShipped the shipped quantity
+         * @param {Object} json the json representation of the shipment line item
          */
         function ShipmentLineItem(json) {
             this.id = json.id;
@@ -61,10 +59,10 @@
          * @name isInvalid
          *
          * @description
-         * Validates the shipment line items and places any errors in an object under 'errors'
-         * property.
+         * Validates the shipment line item and returns a map of errors. If the line item is valid,
+         * undefined is returned.
          *
-         * @returns {boolean} true if line item is valid, false otherwise.
+         * @returns {Object} the errors map if line item is invalid, undefined otherwise
          */
         function isInvalid() {
             var errors = {};
