@@ -41,6 +41,7 @@
         ShipmentRepositoryImpl.prototype.updateDraft = updateDraft;
         ShipmentRepositoryImpl.prototype.getByOrderId = getByOrderId;
         ShipmentRepositoryImpl.prototype.getDraftByOrderId = getDraftByOrderId;
+        ShipmentRepositoryImpl.prototype.deleteDraft = deleteDraft;
 
         return ShipmentRepositoryImpl;
 
@@ -87,7 +88,7 @@
          * @ngdoc method
          * @methodOf shipment.ShipmentRepositoryImpl
          * @name createDraft
-         * 
+         *
          * @description
          * Creates a new shipment draft on the OpenLMIS server.
          * 
@@ -120,6 +121,10 @@
          */
         function updateDraft(draft) {
             return this.shipmentDraftResource.update(draft);
+        }
+
+        function deleteDraft(draft) {
+            return this.shipmentDraftResource.delete(draft);
         }
 
         /**

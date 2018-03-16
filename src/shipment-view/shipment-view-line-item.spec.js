@@ -42,26 +42,6 @@ describe('ShipmentViewLineItem', function() {
     
     });
 
-    describe('getAvailableSoh', function() {
-    
-        it('should throw exception', function() {
-            expect(function() {
-                shipmentViewLineItem.getAvailableSoh();
-            }).toThrow('Method is not supported');
-        });
-    
-    });
-
-    describe('getFilledQuantity', function() {
-    
-        it('should throw exception', function() {
-            expect(function() {
-                shipmentViewLineItem.getFillQuantity();
-            }).toThrow('Method is not supported');
-        });
-    
-    });
-
     describe('getRemainingQuantity', function() {
 
         beforeEach(function() {

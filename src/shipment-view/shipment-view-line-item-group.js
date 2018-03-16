@@ -19,35 +19,40 @@
 
     angular
         .module('shipment-view')
-        .factory('ShipmentViewLineItem', ShipmentViewLineItem);
+        .factory('ShipmentViewLineItemGroup', ShipmentViewLineItemGroup);
 
-    ShipmentViewLineItem.inject = [];
+    ShipmentViewLineItemGroup.inject = [];
 
-    function ShipmentViewLineItem() {
-        
-        ShipmentViewLineItem.prototype.getAvailableSoh = getAvailableSoh;
-        ShipmentViewLineItem.prototype.getFillQuantity = getFillQuantity;
-        ShipmentViewLineItem.prototype.getRemainingQuantity = getRemainingQuantity;
-        ShipmentViewLineItem.prototype.recalculateQuantity = recalculateQuantity;
+    function ShipmentViewLineItemGroup() {
 
-        return ShipmentViewLineItem;
+        ShipmentViewLineItemGroup.prototype.getAvailableSoh = getAvailableSoh;
+        ShipmentViewLineItemGroup.prototype.getFillQuantity = getFillQuantity;
+        ShipmentViewLineItemGroup.prototype.getRemainingQuantity = getRemainingQuantity;
+        ShipmentViewLineItemGroup.prototype.recalculateQuantity = recalculateQuantity;
+        ShipmentViewLineItemGroup.prototype.getOrderQuantity = getOrderQuantity;
 
-        function ShipmentViewLineItem(config) {
+        return ShipmentViewLineItemGroup;
+
+        function ShipmentViewLineItemGroup(config) {
             this.productCode = config.productCode;
             this.productName = config.productName;
-            this.lot = config.lot;
-            this.vvmStatus = config.vvmStatus;
-            this.shipmentLineItem = config.shipmentLineItem;
+            this.orderQuantity = config.orderQuantity;
+            this.lineItems = config.lineItems;
             this.netContent = config.netContent;
-            this.isLot = true;
+            this.isMainGroup = config.isMainGroup;
+            this.noStockAvailable = this.getAvailableSoh() === 0;
         }
 
         function getAvailableSoh(inDoses) {
-            return this.recalculateQuantity(this.shipmentLineItem.stockOnHand, inDoses);
+            return this.lineItems.reduce(function(availableSoh, lineItem) {
+                return availableSoh + lineItem.getAvailableSoh(inDoses);
+            }, 0);
         }
 
         function getFillQuantity() {
-            return this.shipmentLineItem.quantityShipped || 0;
+            return this.lineItems.reduce(function(fillQuantity, lineItem) {
+                return fillQuantity + lineItem.getFillQuantity();
+            }, 0);
         }
 
         function getRemainingQuantity(inDoses) {
@@ -57,6 +62,13 @@
                 return remainingQuantity * this.netContent;
             }
             return remainingQuantity;
+        }
+
+        function getOrderQuantity(inDoses) {
+            if (!this.orderQuantity) {
+                return;
+            }
+            return this.recalculateQuantity(this.orderQuantity, inDoses);
         }
 
         function recalculateQuantity(quantity, inDoses) {

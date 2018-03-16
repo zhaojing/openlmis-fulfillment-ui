@@ -44,12 +44,12 @@
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="tableLineItem in vm.tableLineItems" ng-class="{'is-secondary': tableLineItem.isCommodityTypeLineItem}" empty-row="tableLineItem.noStockAvailable" empty-row-message="{{'shipmentView.noStockAvailable' | message}}" empty-row-col-span="9">
+            <tr ng-repeat="tableLineItem in vm.tableLineItems" ng-class="{'is-secondary': tableLineItem.isMainGroup}" empty-row="tableLineItem.noStockAvailable" empty-row-message="{{'shipmentView.noStockAvailable' | message}}" empty-row-col-span="9">
                 <td>{{tableLineItem.productCode}}</td>
                 <td>{{tableLineItem.productName}}</td>
-                <td ng-if="!tableLineItem.isLotLineItem"></td>
-                <td ng-if="tableLineItem.isLotLineItem">{{tableLineItem.lot | lotCode}}</td>
-                <td></td>
+                <td ng-if="!tableLineItem.isLot"></td>
+                <td ng-if="tableLineItem.isLot">{{tableLineItem.lot | lotCode}}</td>
+                <td>{{vm.getVvmStatusLabel(tableLineItem.vvmStatus) | message}}</td>
                 <td>{{tableLineItem.lot.expirationDate | openlmisDate}}</td>
                 <td>{{tableLineItem.getAvailableSoh(vm.showInDoses())}}</td>
                 <td>{{tableLineItem.getOrderQuantity(vm.showInDoses())}}</td>

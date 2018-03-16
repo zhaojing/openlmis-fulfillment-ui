@@ -31,19 +31,20 @@
     ShipmentViewController.$inject = [
         'shipment', 'loadingModalService', '$state', '$window', 'fulfillmentUrlFactory',
         'messageService', 'notificationService', 'accessTokenFactory', 'updatedOrder',
-        'QUANTITY_UNIT', 'tableLineItems'
+        'QUANTITY_UNIT', 'tableLineItems', 'VVM_STATUS'
     ];
 
     function ShipmentViewController(shipment, loadingModalService, $state, $window,
                                     fulfillmentUrlFactory, messageService, notificationService,
                                     accessTokenFactory, updatedOrder, QUANTITY_UNIT,
-                                    tableLineItems) {
+                                    tableLineItems, VVM_STATUS) {
 
         var vm = this;
 
         vm.$onInit = onInit;
         vm.showInDoses = showInDoses;
         vm.getSelectedQuantityUnitKey = getSelectedQuantityUnitKey;
+        vm.getVvmStatusLabel = getVvmStatusLabel;
 
         /**
          * @ngdoc property
@@ -128,6 +129,10 @@
          */
         function getSelectedQuantityUnitKey() {
             return QUANTITY_UNIT.$getDisplayName(vm.quantityUnit);
+        }
+
+        function getVvmStatusLabel(status) {
+            return VVM_STATUS.$getDisplayName(status);
         }
     }
 })();

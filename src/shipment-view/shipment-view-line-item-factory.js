@@ -22,11 +22,13 @@
         .factory('ShipmentViewLineItemFactory', ShipmentViewLineItemFactory);
 
     ShipmentViewLineItemFactory.inject = [
-        'TradeItemLineItem', 'CommodityTypeLineItem', 'LotLineItem', 'GenericOrderableLineItem'
+        'TradeItemLineItem', 'CommodityTypeLineItem', 'LotLineItem', 'GenericOrderableLineItem',
+        'StockCardResource', 'VVM_STATUS', 'ShipmentViewLineItem', 'ShipmentViewLineItemGroup'
     ];
 
     function ShipmentViewLineItemFactory(TradeItemLineItem, CommodityTypeLineItem, LotLineItem,
-                                         GenericOrderableLineItem) {
+                                         GenericOrderableLineItem, StockCardResource, VVM_STATUS,
+                                         ShipmentViewLineItem, ShipmentViewLineItemGroup) {
 
         ShipmentViewLineItemFactory.prototype.createFrom = buildFrom;
 
@@ -37,50 +39,115 @@
         function buildFrom(shipment, summaries) {
             var shipmentLineItemMap = mapByOrderableAndLot(shipment.lineItems);
 
-            return summaries
-            .map(function(summary) {
-                if (isForGenericOrderable(summary)) {
-                    return new GenericOrderableLineItem(
-                        summary,
-                        getOrderQuantity(order.orderLineItems, summary.orderable.id),
-                        shipmentLineItemMap[summary.orderable.id][undefined]
-                    );
-                }
-                var uniqueOrderables = getUniqueOrderables(summary.canFulfillForMe),
-                    canFulfillForMeMap = groupByOrderables(summary.canFulfillForMe),
-                    
-                    tradeItemLineItems = uniqueOrderables.map(function(orderable) {
-                    var lotLineItems = canFulfillForMeMap[orderable.id].map(function(canFulfillForMe) {
-                        var lotId = canFulfillForMe.lot ? canFulfillForMe.lot.id : undefined;
-                        return new LotLineItem(
-                            canFulfillForMe,
-                            shipmentLineItemMap[canFulfillForMe.orderable.id][lotId]
-                        );
-                    });
-
-                    return new TradeItemLineItem(orderable, lotLineItems);
+            var stockCardIds = new Set();
+            summaries.forEach(function(summary) {
+                summary.canFulfillForMe.forEach(function(canFulfillForMe) {
+                     stockCardIds.add(canFulfillForMe.stockCard.id);
                 });
+            });
 
-                return new CommodityTypeLineItem(
-                    summary,
-                    shipment.order.orderLineItems.filter(function(lineItem) {
-                        return lineItem.orderable.id === summary.orderable.id;
-                    })[0].orderedQuantity,
-                    tradeItemLineItems
-                );
+            var stockCards;
+            return new StockCardResource().query({
+                id: Array.from(stockCardIds)
             })
-            .reduce(function(shipmentViewLineItems, lineItem) {
-                shipmentViewLineItems.push(lineItem);
-                if (!lineItem.noStockAvailable) {
-                    lineItem.tradeItemLineItems.forEach(function(lineItem) {
-                        shipmentViewLineItems.push(lineItem);
-                        lineItem.lotLineItems.forEach(function(lineItem) {
-                            shipmentViewLineItems.push(lineItem);
+            .then(function(response) {
+                stockCards = response.content.reduce(function(stockCardsMap, stockCard) {
+                    stockCardsMap[stockCard.id] = stockCard;
+                    return stockCardsMap;
+                }, {});
+            })
+            .then(function() {
+                return shipment.order.orderLineItems
+                .map(function(orderLineItem) {
+                    var summary = summaries.filter(function(summary) {
+                        return summary.orderable.id === orderLineItem.orderable.id;
+                    })[0];
+
+                    if (!summary) {
+                        return new ShipmentViewLineItemGroup({
+                            productCode: orderLineItem.orderable.productCode,
+                            productName: orderLineItem.orderable.fullProductName,
+                            lineItems: [],
+                            orderQuantity: orderLineItem.orderedQuantity,
+                            isMainGroup: true,
+                            netContent: orderLineItem.orderable.netContent
                         });
+                    }
+
+                    if (isForGenericOrderable(summary) && shipmentLineItemMap[summary.orderable.id]) {
+                        return new GenericOrderableLineItem(
+                            summary,
+                            getOrderQuantity(shipment.order.orderLineItems, summary.orderable.id),
+                            shipmentLineItemMap[summary.orderable.id][undefined]
+                        );
+                    }
+                    var uniqueOrderables = getUniqueOrderables(summary.canFulfillForMe),
+                        canFulfillForMeMap = groupByOrderables(summary.canFulfillForMe),
+                        tradeItemLineItems = [];
+
+                    uniqueOrderables.forEach(function(orderable) {
+                        var lotLineItems = [];
+                        canFulfillForMeMap[orderable.id].forEach(function(canFulfillForMe) {
+                            var lotId = canFulfillForMe.lot ? canFulfillForMe.lot.id : undefined;
+
+                            if (shipmentLineItemMap[canFulfillForMe.orderable.id]) {
+                                lotLineItems.push(new ShipmentViewLineItem({
+                                    lot: canFulfillForMe.lot,
+                                    vvmStatus: stockCards[canFulfillForMe.stockCard.id].extraData ? stockCards[canFulfillForMe.stockCard.id].extraData.vvmStatus : undefined,
+                                    shipmentLineItem: shipmentLineItemMap[canFulfillForMe.orderable.id][lotId],
+                                    netContent: orderable.netContent
+                                }));
+                            }
+                            
+                        });
+
+                        lotLineItems.sort(compareLineItems);
+
+                        if (lotLineItems.length > 1) {
+                            tradeItemLineItems.push(new ShipmentViewLineItemGroup({
+                                productCode: orderable.productCode,
+                                productName: orderable.fullProductName,
+                                lineItems: lotLineItems,
+                                netContent: orderable.netContent
+                            }));
+                        } else if (lotLineItems.length) {
+                            tradeItemLineItems.push(new ShipmentViewLineItem({
+                                productCode: orderable.productCode,
+                                productName: orderable.fullProductName,
+                                lot: lotLineItems[0].lot,
+                                vvmStatus: lotLineItems[0].vvmStatus,
+                                shipmentLineItem: lotLineItems[0].shipmentLineItem,
+                                netContent: orderable.netContent
+                            }));
+                        }
                     });
-                }
-                return shipmentViewLineItems;
-            }, []);
+
+                    return new ShipmentViewLineItemGroup({
+                        productCode: summary.orderable.productCode,
+                        productName: summary.orderable.fullProductName,
+                        lineItems: tradeItemLineItems,
+                        orderQuantity: shipment.order.orderLineItems.filter(function(lineItem) {
+                            return lineItem.orderable.id === summary.orderable.id;
+                        })[0].orderedQuantity,
+                        isMainGroup: true,
+                        netContent: summary.orderable.netContent
+                    });
+                })
+                .reduce(function(shipmentViewLineItems, lineItem) {
+                    shipmentViewLineItems.push(lineItem);
+                    if (lineItem.lineItems && !lineItem.noStockAvailable) {
+                        lineItem.lineItems.forEach(function(lineItem) {
+                            shipmentViewLineItems.push(lineItem);
+                            if (lineItem.lineItems) {
+                                lineItem.lineItems.forEach(function(lineItem) {
+                                    shipmentViewLineItems.push(lineItem);
+                                });
+                            }
+                        });
+                    }
+                    return shipmentViewLineItems;
+                }, []);
+            });
         }
 
         function groupByOrderables(canFulfillForMe) {
@@ -128,6 +195,51 @@
         function isForGenericOrderable(summary) {
             return summary.canFulfillForMe.length === 1 &&
                 summary.orderable.id === summary.canFulfillForMe[0].orderable.id;
+        }
+
+        function compareLineItems(left, right) {
+            return compareLots(left.lot, right.lot) ||
+                compareVvmStatuses(left.vvmStatus, right.vvmStatus) ||
+                compareExpirationDate(getExpirationDate(left), getExpirationDate(right)) ||
+                compare(left.shipmentLineItem.stockOnHand, right.shipmentLineItem.stockOnHand);
+            }
+
+        function compareVvmStatuses(left, right) {
+            if (left === right) {
+                return 0;
+            }
+
+            if (!left && right) {
+                return -1;
+            }
+
+            if (left && !right) {
+                return 1;
+            }
+
+            return left > right ? -1 : 1;
+        }
+
+        function compareExpirationDate(left, right) {
+            return !left && right ? 1 : !right ? -1 : compare(left, right);
+        }
+
+        function compare(left, right) {
+            return left === right ? 0 : (left && right ? (left > right ? 1 : -1) : (left ? 1 : -1));
+        }
+
+        function compareLots(left, right) {
+            if ((!left && !right) || (left && right)) {
+                return 0;
+            }
+
+            return !left ? -1 : 1;
+        }
+
+        function getExpirationDate(lineItem) {
+            if (lineItem.lot && lineItem.lot.expirationDate) {
+                return new Date(lineItem.lot.expirationDate).getTime();
+            }
         }
     }
 })();

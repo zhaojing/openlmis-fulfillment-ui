@@ -40,6 +40,7 @@
         ShipmentRepository.prototype.updateDraft = updateDraft;
         ShipmentRepository.prototype.getByOrderId = getByOrderId;
         ShipmentRepository.prototype.getDraftByOrderId = getDraftByOrderId;
+        ShipmentRepository.prototype.deleteDraft = deleteDraft;
 
         return ShipmentRepository;
 
@@ -71,6 +72,10 @@
          */
         function updateDraft(draft) {
             return this.impl.updateDraft(draft);
+        }
+
+        function deleteDraft(draft) {
+            return this.impl.deleteDraft(draft);
         }
 
         /**

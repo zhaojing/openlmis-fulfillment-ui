@@ -36,6 +36,7 @@
         OpenlmisResource.prototype.get = get;
         OpenlmisResource.prototype.update = update;
         OpenlmisResource.prototype.create = create;
+        OpenlmisResource.prototype.delete = deleteObject;
 
         return OpenlmisResource;
 
@@ -101,6 +102,12 @@
 
         function create(object) {
             return this.resource.save(undefined, object).$promise;
+        }
+
+        function deleteObject(object) {
+            return this.resource.delete({
+                id: object.id
+            }).$promise;
         }
 
     }
