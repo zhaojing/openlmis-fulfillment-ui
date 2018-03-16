@@ -22,12 +22,10 @@
         .factory('ShipmentViewLineItemFactory', ShipmentViewLineItemFactory);
 
     ShipmentViewLineItemFactory.inject = [
-        'TradeItemLineItem', 'CommodityTypeLineItem', 'LotLineItem', 'GenericOrderableLineItem',
         'StockCardResource', 'VVM_STATUS', 'ShipmentViewLineItem', 'ShipmentViewLineItemGroup'
     ];
 
-    function ShipmentViewLineItemFactory(TradeItemLineItem, CommodityTypeLineItem, LotLineItem,
-                                         GenericOrderableLineItem, StockCardResource, VVM_STATUS,
+    function ShipmentViewLineItemFactory(StockCardResource, VVM_STATUS,
                                          ShipmentViewLineItem, ShipmentViewLineItemGroup) {
 
         ShipmentViewLineItemFactory.prototype.createFrom = buildFrom;
@@ -75,11 +73,12 @@
                     }
 
                     if (isForGenericOrderable(summary) && shipmentLineItemMap[summary.orderable.id]) {
-                        return new GenericOrderableLineItem(
-                            summary,
-                            getOrderQuantity(shipment.order.orderLineItems, summary.orderable.id),
-                            shipmentLineItemMap[summary.orderable.id][undefined]
-                        );
+                        return new ShipmentViewLineItem({
+                            productCode: summary.orderable.productCode,
+                            productName: summary.orderable.fullProductName,
+                            shipmentLineItem: shipmentLineItemMap[summary.orderable.id][undefined],
+                            orderQuantity: getOrderQuantity(shipment.order.orderLineItems, summary.orderable.id),
+                        });
                     }
                     var uniqueOrderables = getUniqueOrderables(summary.canFulfillForMe),
                         canFulfillForMeMap = groupByOrderables(summary.canFulfillForMe),
@@ -205,7 +204,7 @@
             }
 
         function compareVvmStatuses(left, right) {
-            if (left === right) {
+            if (left === right || !left || !right) {
                 return 0;
             }
 
