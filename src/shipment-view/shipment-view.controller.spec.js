@@ -16,7 +16,7 @@
 describe('ShipmentViewController', function() {
 
     var vm, $controller, ShipmentDataBuilder, shipment, tableLineItems, OrderDataBuilder,
-        QUANTITY_UNIT, CommodityTypeLineItemDataBuilder, order;
+        QUANTITY_UNIT, order;
 
     beforeEach(function() {
         module('shipment-view');
@@ -25,15 +25,12 @@ describe('ShipmentViewController', function() {
             $controller = $injector.get('$controller');
             ShipmentDataBuilder = $injector.get('ShipmentDataBuilder');
             OrderDataBuilder = $injector.get('OrderDataBuilder');
-            CommodityTypeLineItemDataBuilder = $injector.get('CommodityTypeLineItemDataBuilder');
             QUANTITY_UNIT = $injector.get('QUANTITY_UNIT');
         });
 
         shipment = new ShipmentDataBuilder().build();
         order = new OrderDataBuilder().build();
-        tableLineItems = [
-            new CommodityTypeLineItemDataBuilder().build()
-        ];
+        tableLineItems = [{}, {}];
 
         vm = $controller('ShipmentViewController', {
             shipment: shipment,
