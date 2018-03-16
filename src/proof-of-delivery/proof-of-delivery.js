@@ -187,7 +187,7 @@
          */
         function print() {
             if (this.isInitiated()) {
-                save.apply(this)
+                return save.apply(this)
                 .then(function(response) {
                     return getPrintUrl(response.id);
                 });

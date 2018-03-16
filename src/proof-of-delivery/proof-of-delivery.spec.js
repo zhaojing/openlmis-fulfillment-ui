@@ -331,6 +331,15 @@ describe('ProofOfDelivery', function() {
             expect($window.open).not.toHaveBeenCalled();
         });
 
+        it('should open the window after successful save proof of delivery', function() {
+            saveDeferred.resolve(proofOfDelivery);
+
+            proofOfDelivery.print();
+            $rootScope.$apply();
+
+            expect($window.open).toHaveBeenCalled();
+        });
+
         it('should attempt to save proof of delivery', function() {
             saveDeferred.resolve(proofOfDelivery);
 
@@ -338,16 +347,23 @@ describe('ProofOfDelivery', function() {
             $rootScope.$apply();
 
             expect(proofOfDelivery.save.apply).toHaveBeenCalled();
-            expect($window.open).toHaveBeenCalled();
         });
 
-        it('should not call save if pod is confirmed', function() {
+        it('should not call save if the pod is confirmed', function() {
             proofOfDelivery.status = PROOF_OF_DELIVERY_STATUS.CONFIRMED;
 
             proofOfDelivery.print();
             $rootScope.$apply();
 
             expect(proofOfDelivery.save.apply).not.toHaveBeenCalled();
+        });
+
+        it('should open the window if the pod is confirmed', function() {
+            proofOfDelivery.status = PROOF_OF_DELIVERY_STATUS.CONFIRMED;
+
+            proofOfDelivery.print();
+            $rootScope.$apply();
+
             expect($window.open).toHaveBeenCalled();
         });
     });
