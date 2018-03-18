@@ -67,14 +67,14 @@
 
                     orderLineItem.groupedLineItems = [];
                     canFulfillForMe.forEach(function(fulfillingOrderableId) {
-                        var foundGroupOfFulfillingLineItems = groupedFulfillingLineItems[fulfillingOrderableId];
-                        if (foundGroupOfFulfillingLineItems) {
-                            orderLineItem.groupedLineItems.push(foundGroupOfFulfillingLineItems);
+                        var fulfillingLineItemsGroup = groupedFulfillingLineItems[fulfillingOrderableId];
+                        if (fulfillingLineItemsGroup) {
+                            orderLineItem.groupedLineItems.push(fulfillingLineItemsGroup);
                         }
                     });
-                    var foundGroupOfFulfillingLineItems = groupedFulfillingLineItems[orderLineItem.orderable.id];
-                    if (foundGroupOfFulfillingLineItems) {
-                        orderLineItem.groupedLineItems.push(foundGroupOfFulfillingLineItems);
+                    var fulfillingLineItemsGroup = groupedFulfillingLineItems[orderLineItem.orderable.id];
+                    if (fulfillingLineItemsGroup) {
+                        orderLineItem.groupedLineItems.push(fulfillingLineItemsGroup);
                     }
                 });
                 return orderLineItems;
@@ -83,8 +83,7 @@
 
         function groupLineItemsByOrderable(lineItems) {
             return lineItems.reduce(function(groupedByOrderable, lineItem) {
-                if (!(groupedByOrderable[lineItem.orderable.id] && 
-                    groupedByOrderable[lineItem.orderable.id].length)) {
+                if (!groupedByOrderable[lineItem.orderable.id]) {
                     groupedByOrderable[lineItem.orderable.id] = [];
                 }
 

@@ -13,12 +13,12 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-xdescribe('ProofOfDeliveryRepositoryImpl', function() {
+describe('ProofOfDeliveryRepositoryImpl', function() {
 
     var ProofOfDeliveryRepositoryImpl, $rootScope, $q, $httpBackend, ProofOfDeliveryDataBuilder,
         fulfillmentUrlFactory, referencedataUrlFactory, proofOfDeliveryRepositoryImpl, proofOfDeliveryJson,
-        ShipmentDataBuilder, shipmentJson, ShipmentLineItemDataBuilder,
-        lotRepositoryImplMock, LotDataBuilder, lotJsons, PageDataBuilder;
+        ShipmentDataBuilder, shipmentJson, ShipmentLineItemDataBuilder, orderableRepositoryImplMock,
+        lotRepositoryImplMock, LotDataBuilder, lotJsons, orderableJsons, PageDataBuilder, OrderableDataBuilder;
 
     beforeEach(function() {
         module('proof-of-delivery', function($provide) {
@@ -29,6 +29,13 @@ xdescribe('ProofOfDeliveryRepositoryImpl', function() {
                             'lotRepositoryImpl', ['query']
                         );
                         return lotRepositoryImplMock;
+                    }
+
+                    if (url === referencedataUrlFactory('/api/orderables')) {
+                        orderableRepositoryImplMock = jasmine.createSpyObj(
+                            'OrderableRepositoryImpl', ['query']
+                        );
+                        return orderableRepositoryImplMock;
                     }
                 };
             });
@@ -45,6 +52,7 @@ xdescribe('ProofOfDeliveryRepositoryImpl', function() {
             ShipmentDataBuilder = $injector.get('ShipmentDataBuilder');
             ShipmentLineItemDataBuilder = $injector.get('ShipmentLineItemDataBuilder');
             LotDataBuilder = $injector.get('LotDataBuilder');
+            OrderableDataBuilder = $injector.get('OrderableDataBuilder');
             PageDataBuilder = $injector.get('PageDataBuilder');
         });
 
@@ -57,6 +65,15 @@ xdescribe('ProofOfDeliveryRepositoryImpl', function() {
                 .build(),
             new LotDataBuilder()
                 .withId(proofOfDeliveryJson.lineItems[1].lot.id)
+                .build()
+        ];
+
+        orderableJsons = [
+            new OrderableDataBuilder()
+                .withId(proofOfDeliveryJson.lineItems[0].orderable.id)
+                .build(),
+            new OrderableDataBuilder()
+                .withId(proofOfDeliveryJson.lineItems[1].orderable.id)
                 .build()
         ];
 
@@ -76,15 +93,22 @@ xdescribe('ProofOfDeliveryRepositoryImpl', function() {
 
     describe('get', function() {
 
-        it('should resolve to combined server responses if requests were successful', function() {
-            $httpBackend
-            .expectGET(fulfillmentUrlFactory('/api/proofsOfDelivery/proof-of-delivery-id?expand=shipment.order'))
-            .respond(200, angular.copy(proofOfDeliveryJson));
-
+        beforeEach(function() {
             lotRepositoryImplMock.query.andReturn($q.resolve(new PageDataBuilder()
                 .withContent(lotJsons)
                 .build()
             ));
+
+            orderableRepositoryImplMock.query.andReturn($q.resolve(new PageDataBuilder()
+                .withContent(orderableJsons)
+                .build()
+            ));
+        });
+
+        it('should resolve to combined server responses if requests were successful', function() {
+            $httpBackend
+            .expectGET(fulfillmentUrlFactory('/api/proofsOfDelivery/proof-of-delivery-id?expand=shipment.order'))
+            .respond(200, angular.copy(proofOfDeliveryJson));
 
             var result;
             proofOfDeliveryRepositoryImpl.get('proof-of-delivery-id')
@@ -105,7 +129,7 @@ xdescribe('ProofOfDeliveryRepositoryImpl', function() {
                 expected = proofOfDeliveryJson.lineItems[0];
 
             expect(lineItem.id).toEqual(expected.id);
-            expect(lineItem.orderable).toEqual(expected.orderable);
+            expect(lineItem.orderable).toEqual(orderableJsons[0]);
             expect(lineItem.lot).toEqual(lotJsons[0]);
             expect(lineItem.quantityAccepted).toEqual(expected.quantityAccepted);
             expect(lineItem.quantityRejected).toEqual(expected.quantityRejected);
@@ -114,7 +138,7 @@ xdescribe('ProofOfDeliveryRepositoryImpl', function() {
             lineItem = result.lineItems[1];
             expected = proofOfDeliveryJson.lineItems[1];
             expect(lineItem.id).toEqual(expected.id);
-            expect(lineItem.orderable).toEqual(expected.orderable);
+            expect(lineItem.orderable).toEqual(orderableJsons[1]);
             expect(lineItem.lot).toEqual(lotJsons[1]);
             expect(lineItem.quantityAccepted).toEqual(expected.quantityAccepted);
             expect(lineItem.quantityRejected).toEqual(expected.quantityRejected);
@@ -137,7 +161,7 @@ xdescribe('ProofOfDeliveryRepositoryImpl', function() {
             expect(rejected).toBe(true);
         });
 
-        it('should reject if lot repository rejectes', function() {
+        it('should reject if lot repository rejects', function() {
             $httpBackend
             .expectGET(fulfillmentUrlFactory('/api/proofsOfDelivery/proof-of-delivery-id?expand=shipment.order'))
             .respond(200, angular.copy(proofOfDeliveryJson));
@@ -154,6 +178,22 @@ xdescribe('ProofOfDeliveryRepositoryImpl', function() {
             expect(rejected).toBe(true);
         });
 
+        it('should reject if orderable repository rejects', function() {
+            $httpBackend
+            .expectGET(fulfillmentUrlFactory('/api/proofsOfDelivery/proof-of-delivery-id?expand=shipment.order'))
+            .respond(200, angular.copy(proofOfDeliveryJson));
+
+            orderableRepositoryImplMock.query.andReturn($q.reject());
+
+            var rejected;
+            proofOfDeliveryRepositoryImpl.get('proof-of-delivery-id')
+            .catch(function() {
+                rejected = true;
+            });
+            $httpBackend.flush();
+
+            expect(rejected).toBe(true);
+        });
     });
 
     describe('update', function() {

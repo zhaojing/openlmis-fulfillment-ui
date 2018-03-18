@@ -13,15 +13,25 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-xdescribe('fulfillingLineItemFactory', function() {
+describe('fulfillingLineItemFactory', function() {
 
-    var fulfillingLineItemFactory, orderLineItems, proofOfDeliveryLineItems,
+    var $q, $rootScope, fulfillingLineItemFactory, OrderableFulfillsResource,
+        orderLineItems, proofOfDeliveryLineItems, orderableFulfills,
         OrderLineItemDataBuilder, ProofOfDeliveryLineItemDataBuilder;
 
     beforeEach(function() {
-        module('proof-of-delivery-view');
+        module('proof-of-delivery-view', function($provide) {
+            OrderableFulfillsResource = jasmine.createSpyObj('OrderableFulfillsResource', ['query']);
+            $provide.factory('OrderableFulfillsResource', function() {
+                return function() {
+                    return OrderableFulfillsResource;
+                };
+            });
+        });
 
         inject(function($injector) {
+            $q = $injector.get('$q');
+            $rootScope = $injector.get('$rootScope');
             fulfillingLineItemFactory = $injector.get('fulfillingLineItemFactory');
             OrderLineItemDataBuilder = $injector.get('OrderLineItemDataBuilder');
             ProofOfDeliveryLineItemDataBuilder = $injector.get('ProofOfDeliveryLineItemDataBuilder');
@@ -33,71 +43,107 @@ xdescribe('fulfillingLineItemFactory', function() {
         ];
 
         proofOfDeliveryLineItems = [
-            new ProofOfDeliveryLineItemDataBuilder()
-                .withOrderable(orderLineItems[1].orderable)
-                .build(),
-            new ProofOfDeliveryLineItemDataBuilder()
-                .withOrderable(orderLineItems[0].orderable)
-                .build(),
-            new ProofOfDeliveryLineItemDataBuilder()
-                .withOrderable(orderLineItems[0].orderable)
-                .build(),
+            new ProofOfDeliveryLineItemDataBuilder().build(),
+            new ProofOfDeliveryLineItemDataBuilder().build(),
+            new ProofOfDeliveryLineItemDataBuilder().build()
         ];
+
+        orderableFulfills = {};
+        orderableFulfills[orderLineItems[0].orderable.id] = {
+            canFulfillForMe: [
+                proofOfDeliveryLineItems[0].orderable.id,
+                proofOfDeliveryLineItems[1].orderable.id
+            ],
+            canBeFulfilledByMe: []
+        };
+        orderableFulfills[orderLineItems[1].orderable.id] = {
+            canFulfillForMe: [
+                proofOfDeliveryLineItems[2].orderable.id 
+            ],
+            canBeFulfilledByMe: []
+        };
+
+        OrderableFulfillsResource.query.andReturn($q.resolve(orderableFulfills));
     });
 
-    describe('groupByOrderLineItem', function() {
+    describe('groupByOrderable', function() {
 
-        it('should return empty object for empty list of order line items', function() {
+        it('should reject if request for orderable fulfills fails', function() {
+            var spy = jasmine.createSpy();
+            OrderableFulfillsResource.query.andReturn($q.reject());
+
+            fulfillingLineItemFactory.groupByOrderable(proofOfDeliveryLineItems, orderLineItems)
+            .catch(spy);
+            $rootScope.$apply();
+
+            expect(spy).toHaveBeenCalled();
+        });
+
+        it('should return empty list for empty list of order line items', function() {
+            var result;
             orderLineItems = [];
 
-            expect(
-                fulfillingLineItemFactory.groupByOrderLineItem(
-                    orderLineItems,
-                    proofOfDeliveryLineItems
-                )
-            ).toEqual({});
+            fulfillingLineItemFactory.groupByOrderable(proofOfDeliveryLineItems, [])
+            .then(function(response) {
+                result = response;
+            });
+            $rootScope.$apply();
+
+            expect(result).toEqual([]);
         });
 
-        it('should return map of empty lists for empty list of proof of delivery line items', function() {
-            proofOfDeliveryLineItems = [];
+        it('should return empty order line items if there are no pod line items', function() {
+            var result;
 
-            var result = fulfillingLineItemFactory.groupByOrderLineItem(
-                orderLineItems,
-                proofOfDeliveryLineItems
-            );
+            fulfillingLineItemFactory.groupByOrderable([], orderLineItems)
+            .then(function(response) {
+                result = response;
+            });
+            $rootScope.$apply();
 
-            expect(result[orderLineItems[0].id]).toEqual([]);
-            expect(result[orderLineItems[1].id]).toEqual([]);
-        });
-
-        it('should throw exception for undefined list of order line items', function() {
-            expect(function() {
-                fulfillingLineItemFactory.groupByOrderLineItem(undefined, proofOfDeliveryLineItems);
-            }).toThrow();
-        });
-
-        it('should throw exception for undefined list of proof of delivery line items', function() {
-            expect(function() {
-                fulfillingLineItemFactory.groupByOrderLineItem(orderLineItem, undefined);
-            }).toThrow();
+            expect(result[0].groupedLineItems).toEqual([]);
+            expect(result[1].groupedLineItems).toEqual([]);
         });
 
         it('should group proof of delivery line items by order line items', function() {
-            var result = fulfillingLineItemFactory.groupByOrderLineItem(
-                orderLineItems,
-                proofOfDeliveryLineItems
-            );
+            var result;
+            
+            fulfillingLineItemFactory.groupByOrderable(proofOfDeliveryLineItems, orderLineItems)
+            .then(function(response) {
+                result = response;
+            });
+            $rootScope.$apply();
 
-            expect(result[orderLineItems[0].id]).toEqual([
-                proofOfDeliveryLineItems[1],
+            expect(result[0].groupedLineItems).toEqual([
+                [proofOfDeliveryLineItems[0]],
+                [proofOfDeliveryLineItems[1]]
+            ]);
+
+            expect(result[1].groupedLineItems).toEqual([[
                 proofOfDeliveryLineItems[2]
-            ]);
-
-            expect(result[orderLineItems[1].id]).toEqual([
-                proofOfDeliveryLineItems[0]
-            ]);
+            ]]);
         });
 
-    });
+        it('should group proof of delivery line items by order line items and trade items', function() {
+            var result;
 
+            var newPodLineItem = angular.copy(proofOfDeliveryLineItems[0]);
+            proofOfDeliveryLineItems.push(newPodLineItem);
+            
+            fulfillingLineItemFactory.groupByOrderable(proofOfDeliveryLineItems, orderLineItems)
+            .then(function(response) {
+                result = response;
+            });
+            $rootScope.$apply();
+
+            expect(result[0].groupedLineItems).toEqual([
+                [proofOfDeliveryLineItems[0], newPodLineItem],
+                [proofOfDeliveryLineItems[1]]
+            ]);
+
+            expect(result[1].groupedLineItems).toEqual([[
+                proofOfDeliveryLineItems[2]
+            ]]);
+        });
+    });
 });

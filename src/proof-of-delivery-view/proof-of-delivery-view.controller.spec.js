@@ -13,11 +13,11 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-xdescribe('PodViewController', function() {
+describe('PodViewController', function() {
 
     var vm, $controller, ProofOfDeliveryDataBuilder, OrderDataBuilder, proofOfDelivery, order,
         reasonAssignments, ValidReasonAssignmentDataBuilder, VVM_STATUS, messageService,
-        fulfillingLineItems;
+        orderLineItems;
 
     beforeEach(function() {
         module('proof-of-delivery-view');
@@ -38,8 +38,13 @@ xdescribe('PodViewController', function() {
             new ValidReasonAssignmentDataBuilder().build(),
             new ValidReasonAssignmentDataBuilder().build()
         ];
-        fulfillingLineItems = {};
-        fulfillingLineItems[order.orderLineItems[0]] = proofOfDelivery.lineItems;
+        orderLineItems = [
+            {
+                groupedLineItems: [
+                    proofOfDelivery.lineItems
+                ]
+            }
+        ];
 
         spyOn(messageService, 'get');
 
@@ -47,7 +52,7 @@ xdescribe('PodViewController', function() {
             proofOfDelivery: proofOfDelivery,
             order: order,
             reasonAssignments: reasonAssignments,
-            fulfillingLineItems: fulfillingLineItems,
+            orderLineItems: orderLineItems,
             canEdit: true
         });
     });
@@ -79,7 +84,7 @@ xdescribe('PodViewController', function() {
     it('should expose map of fulfilling line items', function() {
         vm.$onInit();
 
-        expect(vm.fulfillingLineItems).toEqual(fulfillingLineItems);
+        expect(vm.orderLineItems).toEqual(orderLineItems);
     });
 
     it('should expose canEdit', function() {
@@ -90,7 +95,7 @@ xdescribe('PodViewController', function() {
             proofOfDelivery: proofOfDelivery,
             order: order,
             reasonAssignments: reasonAssignments,
-            fulfillingLineItems: fulfillingLineItems,
+            orderLineItems: orderLineItems,
             canEdit: false
         });
         vm.$onInit();
