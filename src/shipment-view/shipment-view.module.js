@@ -33,7 +33,8 @@
         'shipment',
         'order',
         'ui.router',
-        'openlmis-state-tracker'
+        'openlmis-state-tracker',
+        'stock-card'
     ]);
 
 })();

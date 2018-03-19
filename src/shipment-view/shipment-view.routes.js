@@ -46,7 +46,7 @@
                         return lineItem.orderable.id;
                     });
 
-                    return new StockCardSummaryRepositoryImpl().query({
+                    return new StockCardSummaryRepositoryImpl().queryWithStockCards({
                         programId: order.program.id,
                         facilityId: order.supplyingFacility.id,
                         orderableId: orderableIds
