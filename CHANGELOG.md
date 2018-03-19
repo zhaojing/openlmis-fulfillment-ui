@@ -30,6 +30,7 @@ Improvements:
 * [OLMIS-4137](https://openlmis.atlassian.net/browse/OLMIS-4137): Added supplying facility dropdown on the Manage PoD screen and disabled editing PoD when user has no permission.
 * [OLMIS-4262](https://openlmis.atlassian.net/browse/OLMIS-4262): Use new orderId parameter of GET /proofsOfDelivery
 * [OLMIS-4118](https://openlmis.atlassian.net/browse/OLMIS-4118): Show display unit for Dispensable
+* [OLMIS-4326](https://openlmis.atlassian.net/browse/OLMIS-4326): Added grouping by commodity types and trade items for View Proof of Delivery screen.
 
 5.1.0 / 2017-11-09
 ==================
