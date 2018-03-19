@@ -72,7 +72,7 @@
          * @type {Object}
          *
          * @description
-         * Holds map of grouped by orderable Proof of Delivery Line Items.
+         * Holds a map of Order Line Items with Proof of Delivery Line Items grouped by orderable.
          */
         vm.orderLineItems = undefined;
 
