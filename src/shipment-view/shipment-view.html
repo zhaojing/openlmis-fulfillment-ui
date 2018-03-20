@@ -7,23 +7,23 @@
         <li>
             <strong>{{'shipmentView.status' | message}}</strong>
             {{vm.order.status}}
-            </il>
-            <li>
-                <strong>{{'shipmentView.dateCreated' | message}}</strong>
-                {{vm.order.createdDate | openlmisDate}}
-            </li>
-            <li>
-                <strong>{{'shipmentView.program' | message}}</strong>
-                {{vm.order.program.name}}
-            </li>
-            <li>
-                <strong>{{'shipmentView.facility' | message}}</strong>
-                {{vm.order.requestingFacility.name}}
-            </li>
-            <li>
-                <strong>{{'shipmentView.cceStatus' | message}}</strong>
-                <facility-cce-status facility="vm.order.requestingFacility"></facility-cce-status>
-            </li>
+        </il>
+        <li>
+            <strong>{{'shipmentView.dateCreated' | message}}</strong>
+            {{vm.order.createdDate | openlmisDate}}
+        </li>
+        <li>
+            <strong>{{'shipmentView.program' | message}}</strong>
+            {{vm.order.program.name}}
+        </li>
+        <li>
+            <strong>{{'shipmentView.facility' | message}}</strong>
+            {{vm.order.requestingFacility.name}}
+        </li>
+        <li>
+            <strong>{{'shipmentView.cceStatus' | message}}</strong>
+            <facility-cce-status facility="vm.order.requestingFacility"></facility-cce-status>
+        </li>
     </ul>
 </aside>
 <form class="openlmis-table-container" id="shipmentForm" ng-submit="vm.shipment.confirm()">
