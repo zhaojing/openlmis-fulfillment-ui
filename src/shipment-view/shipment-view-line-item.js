@@ -21,8 +21,6 @@
         .module('shipment-view')
         .factory('ShipmentViewLineItem', ShipmentViewLineItem);
 
-    ShipmentViewLineItem.inject = [];
-
     function ShipmentViewLineItem() {
         
         ShipmentViewLineItem.prototype.getAvailableSoh = getAvailableSoh;
