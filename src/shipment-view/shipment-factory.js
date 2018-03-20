@@ -61,10 +61,8 @@
                 orderableId: orderableIds
             })
             .then(function(page) {
-                return page.content;
-            })
-            .then(function(summaries) {
-                var shipmentLineItems = [];
+                var summaries = page.content,
+                    shipmentLineItems = [];
 
                 summaries.forEach(function(summary) {
                     summary.canFulfillForMe.forEach(function(canFulfillForMe) {
