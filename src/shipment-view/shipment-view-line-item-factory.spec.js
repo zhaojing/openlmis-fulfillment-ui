@@ -18,9 +18,9 @@ describe('ShipmentViewLineItemFactory', function() {
     var shipmentViewLineItemFactory, ShipmentViewLineItemFactory, OrderableDataBuilder,
         LotDataBuilder, OrderLineItemDataBuilder, OrderDataBuilder, ShipmentDataBuilder,
         ShipmentLineItemDataBuilder, StockCardSummaryDataBuilder, ShipmentViewLineItem,
-        ShipmentViewLineItemGroup, CanFulfillForMeEntryDataBuilder, commodityTypeOne,
-        commodityTypeTwo, tradeItemOne, tradeItemTwo, tradeItemThree, tradeItemFour,  lotOne,
-        lotTwo, lotThree, lotFour, shipment, summaries;
+        ShipmentViewLineItemGroup, CanFulfillForMeEntryDataBuilder, StockCardDataBuilder,
+        commodityTypeOne, commodityTypeTwo, tradeItemOne, tradeItemTwo, tradeItemThree,
+        tradeItemFour,  lotOne, lotTwo, lotThree, lotFour, shipment, summaries;
 
     beforeEach(function() {
         module('shipment-view');
@@ -37,6 +37,7 @@ describe('ShipmentViewLineItemFactory', function() {
             ShipmentViewLineItem = $injector.get('ShipmentViewLineItem');
             CanFulfillForMeEntryDataBuilder = $injector.get('CanFulfillForMeEntryDataBuilder');
             ShipmentViewLineItemGroup = $injector.get('ShipmentViewLineItemGroup');
+            StockCardDataBuilder = $injector.get('StockCardDataBuilder');
         });
 
         shipmentViewLineItemFactory = new ShipmentViewLineItemFactory();
@@ -44,7 +45,10 @@ describe('ShipmentViewLineItemFactory', function() {
         commodityTypeOne = new OrderableDataBuilder().buildJson();
         commodityTypeTwo = new OrderableDataBuilder().buildJson();
 
-        tradeItemOne = new OrderableDataBuilder().buildJson();
+        tradeItemOne = new OrderableDataBuilder()
+            .withNetContent(1)
+            .buildJson();
+
         tradeItemTwo = new OrderableDataBuilder().buildJson();
         tradeItemThree = new OrderableDataBuilder().buildJson();
         tradeItemFour = new OrderableDataBuilder().buildJson();
@@ -523,6 +527,146 @@ describe('ShipmentViewLineItemFactory', function() {
                 result[5],
                 result[6]
             ]);
+        });
+
+        it('should sort lot line items', function() {
+            summaries = [
+                new StockCardSummaryDataBuilder()
+                    .withOrderable(commodityTypeOne)
+                    .withCanFulfillForMe([
+                        new CanFulfillForMeEntryDataBuilder()
+                            .withOrderable(tradeItemOne)
+                            .withStockOnHand(20)
+                            .withLot(new LotDataBuilder()
+                                .withExpirationDate('2019-06-21T05:59:51.993Z')
+                                .build()
+                            )
+                            .withStockCard(
+                                new StockCardDataBuilder()
+                                    .withExtraData({
+                                        vvmStatus: 'STAGE_1'
+                                    })
+                                    .build()
+                            )
+                            .buildJson(),
+                        new CanFulfillForMeEntryDataBuilder()
+                            .withOrderable(tradeItemOne)
+                            .withStockOnHand(40)
+                            .withLot(new LotDataBuilder()
+                                .withExpirationDate('2020-05-20T05:59:51.993Z')
+                                .build()
+                            )
+                            .withStockCard(
+                                new StockCardDataBuilder()
+                                    .withExtraData({
+                                        vvmStatus: 'STAGE_2'
+                                    })
+                                    .build()
+                            )
+                            .buildJson(),
+                        new CanFulfillForMeEntryDataBuilder()
+                            .withOrderable(tradeItemOne)
+                            .withStockOnHand(30)
+                            .withLot(new LotDataBuilder()
+                                .withExpirationDate('2018-06-21T05:59:51.993Z')
+                                .build()
+                            )
+                            .withStockCard(
+                                new StockCardDataBuilder()
+                                    .withExtraData({
+                                        vvmStatus: 'STAGE_1'
+                                    })
+                                    .build()
+                            )
+                            .buildJson(),
+                        new CanFulfillForMeEntryDataBuilder()
+                            .withOrderable(tradeItemOne)
+                            .withStockOnHand(75)
+                            .withLot(new LotDataBuilder()
+                                .withExpirationDate('2019-06-21T05:59:51.993Z')
+                                .build()
+                            )
+                            .withStockCard(
+                                new StockCardDataBuilder()
+                                    .withExtraData({
+                                        vvmStatus: 'STAGE_1'
+                                    })
+                                    .build()
+                            )
+                            .buildJson(),
+                        new CanFulfillForMeEntryDataBuilder()
+                            .withOrderable(tradeItemOne)
+                            .withStockOnHand(150)
+                            .withLot(new LotDataBuilder()
+                                .withExpirationDate('2016-05-02T05:59:51.993Z')
+                                .build()
+                            )
+                            .buildJson(),
+
+                    ])
+                    .buildJson()
+            ];
+
+            shipment = new ShipmentDataBuilder()
+                .withOrder(
+                    new OrderDataBuilder()
+                        .withOrderLineItems([
+                            new OrderLineItemDataBuilder()
+                                .withOrderable(commodityTypeOne)
+                                .build()
+                        ])
+                        .build()
+                )
+                .withLineItems([
+                    new ShipmentLineItemDataBuilder()
+                        .withOrderable(tradeItemOne)
+                        .withCanFulfillForMe(summaries[0].canFulfillForMe[0])
+                        .withLot(summaries[0].canFulfillForMe[0].lot)
+                        .buildJson(),
+                    new ShipmentLineItemDataBuilder()
+                        .withOrderable(tradeItemOne)
+                        .withCanFulfillForMe(summaries[0].canFulfillForMe[1])
+                        .withLot(summaries[0].canFulfillForMe[1].lot)
+                        .buildJson(),
+                    new ShipmentLineItemDataBuilder()
+                        .withOrderable(tradeItemOne)
+                        .withCanFulfillForMe(summaries[0].canFulfillForMe[2])
+                        .withLot(summaries[0].canFulfillForMe[2].lot)
+                        .buildJson(),
+                    new ShipmentLineItemDataBuilder()
+                        .withOrderable(tradeItemOne)
+                        .withCanFulfillForMe(summaries[0].canFulfillForMe[3])
+                        .withLot(summaries[0].canFulfillForMe[3].lot)
+                        .buildJson(),
+                    new ShipmentLineItemDataBuilder()
+                        .withOrderable(tradeItemOne)
+                        .withCanFulfillForMe(summaries[0].canFulfillForMe[4])
+                        .withLot(summaries[0].canFulfillForMe[4].lot)
+                        .buildJson(),
+                ])
+                .build();
+
+            var result = shipmentViewLineItemFactory.createFrom(shipment, summaries);
+
+            expect(result[2].vvmStatus).toBeUndefined();
+            expect(result[2].lot.expirationDate).toEqual('2016-05-02T05:59:51.993Z');
+            expect(result[2].shipmentLineItem.stockOnHand).toEqual(150);
+
+            expect(result[3].vvmStatus).toEqual('STAGE_2');
+            expect(result[3].lot.expirationDate).toEqual('2020-05-20T05:59:51.993Z');
+            expect(result[3].shipmentLineItem.stockOnHand).toEqual(40);
+
+            expect(result[4].vvmStatus).toEqual('STAGE_1');
+            expect(result[4].lot.expirationDate).toEqual('2018-06-21T05:59:51.993Z');
+            expect(result[4].shipmentLineItem.stockOnHand).toEqual(30);
+
+            expect(result[5].vvmStatus).toEqual('STAGE_1');
+            expect(result[5].lot.expirationDate).toEqual('2019-06-21T05:59:51.993Z');
+            expect(result[5].shipmentLineItem.stockOnHand).toEqual(20);
+
+            expect(result[6].vvmStatus).toEqual('STAGE_1');
+            expect(result[6].lot.expirationDate).toEqual('2019-06-21T05:59:51.993Z');
+            expect(result[6].shipmentLineItem.stockOnHand).toEqual(75);
         });
     
     });

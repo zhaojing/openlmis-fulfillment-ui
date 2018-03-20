@@ -37,87 +37,124 @@
         function buildFrom(shipment, summaries) {
             var shipmentLineItemMap = mapByOrderableAndLot(shipment.lineItems);
 
-            return shipment.order.orderLineItems
+            var shipmentViewLineItemGroups = shipment.order.orderLineItems
             .map(function(orderLineItem) {
-                var summary = summaries.filter(function(summary) {
-                    return summary.orderable.id === orderLineItem.orderable.id;
-                })[0];
+                var orderableId = orderLineItem.orderable.id,
+                    summary = findSummaryByOrderableId(summaries, orderableId),
+                    shipmentLineItem = findShipmentLineItemByOrderableIdAndLotId(
+                        shipmentLineItemMap,
+                        orderableId,
+                        undefined
+                    );
 
-                if (!summary) {
-                    return new ShipmentViewLineItemGroup({
+                if (isForGenericOrderable(summary) && shipmentLineItem) {
+                    return new ShipmentViewLineItem({
                         productCode: orderLineItem.orderable.productCode,
                         productName: orderLineItem.orderable.fullProductName,
-                        lineItems: [],
+                        shipmentLineItem: shipmentLineItem,
                         orderQuantity: orderLineItem.orderedQuantity,
-                        isMainGroup: true,
                         netContent: orderLineItem.orderable.netContent
                     });
                 }
 
-                if (isForGenericOrderable(summary) && shipmentLineItemMap[summary.orderable.id]) {
-                    return new ShipmentViewLineItem({
-                        productCode: summary.orderable.productCode,
-                        productName: summary.orderable.fullProductName,
-                        shipmentLineItem: shipmentLineItemMap[summary.orderable.id][undefined],
-                        orderQuantity: getOrderQuantity(shipment.order.orderLineItems, summary.orderable.id),
-                        netContent: orderLineItem.orderable.netContent
-                    });
-                }
-                var uniqueOrderables = getUniqueOrderables(summary.canFulfillForMe),
-                    canFulfillForMeMap = groupByOrderables(summary.canFulfillForMe),
-                    tradeItemLineItems = [];
-
-                uniqueOrderables.forEach(function(orderable) {
-                    var lotLineItems = [];
-                    canFulfillForMeMap[orderable.id].forEach(function(canFulfillForMe) {
-                        var lotId = canFulfillForMe.lot ? canFulfillForMe.lot.id : undefined;
-
-
-
-                        if (shipmentLineItemMap[canFulfillForMe.orderable.id] && shipmentLineItemMap[canFulfillForMe.orderable.id][lotId]) {
-                            lotLineItems.push(new ShipmentViewLineItem({
-                                lot: canFulfillForMe.lot,
-                                vvmStatus: getVvmStatus(canFulfillForMe),
-                                shipmentLineItem: shipmentLineItemMap[canFulfillForMe.orderable.id][lotId],
-                                netContent: orderable.netContent
-                            }));
-                        }
-                        
-                    });
-
-                    lotLineItems.sort(compareLineItems);
-
-                    if (lotLineItems.length > 1) {
-                        tradeItemLineItems.push(new ShipmentViewLineItemGroup({
-                            productCode: orderable.productCode,
-                            productName: orderable.fullProductName,
-                            lineItems: lotLineItems,
-                            netContent: orderable.netContent
-                        }));
-                    } else if (lotLineItems.length) {
-                        tradeItemLineItems.push(new ShipmentViewLineItem({
-                            productCode: orderable.productCode,
-                            productName: orderable.fullProductName,
-                            lot: lotLineItems[0].lot,
-                            vvmStatus: lotLineItems[0].vvmStatus,
-                            shipmentLineItem: lotLineItems[0].shipmentLineItem,
-                            netContent: orderable.netContent
-                        }));
-                    }
-                });
-
+                var tradeItemLineItems = summary ? buildTradeItems(summary, shipmentLineItemMap) : [];
                 return new ShipmentViewLineItemGroup({
-                    productCode: summary.orderable.productCode,
-                    productName: summary.orderable.fullProductName,
+                    productCode: orderLineItem.orderable.productCode,
+                    productName: orderLineItem.orderable.fullProductName,
                     lineItems: tradeItemLineItems,
-                    orderQuantity: shipment.order.orderLineItems.filter(function(lineItem) {
-                        return lineItem.orderable.id === summary.orderable.id;
-                    })[0].orderedQuantity,
+                    orderQuantity: orderLineItem.orderedQuantity,
                     isMainGroup: true,
-                    netContent: summary.orderable.netContent
+                    netContent: orderLineItem.orderable.netContent
                 });
-            })
-            .reduce(function(shipmentViewLineItems, lineItem) {
+            });
+
+            sortLotLineItems(shipmentViewLineItemGroups);
+
+            return flatten(shipmentViewLineItemGroups);
+        }
+
+        function sortLotLineItems(shipmentViewLineItemGroups) {
+            shipmentViewLineItemGroups.forEach(function(group) {
+                if (group.lineItems) {
+                    group.lineItems.forEach(function(lineItem) {
+                        if (lineItem.lineItems) {
+                            lineItem.lineItems.sort(compareLineItems);
+                        }
+                    });
+                }
+            });
+        }
+
+        function buildTradeItems(summary, shipmentLineItemMap) {
+            var uniqueOrderables = getUniqueOrderables(summary.canFulfillForMe),
+                canFulfillForMeMap = groupByOrderables(summary.canFulfillForMe),
+                tradeItemLineItems = [];
+
+            uniqueOrderables.forEach(function(orderable) {
+                var lotLineItems = buildLotLineItems(shipmentLineItemMap, canFulfillForMeMap, orderable);
+
+                if (lotLineItems.length > 1) {
+                    tradeItemLineItems.push(new ShipmentViewLineItemGroup({
+                        productCode: orderable.productCode,
+                        productName: orderable.fullProductName,
+                        lineItems: lotLineItems,
+                        netContent: orderable.netContent
+                    }));
+                } else if (lotLineItems.length) {
+                    tradeItemLineItems.push(new ShipmentViewLineItem({
+                        productCode: orderable.productCode,
+                        productName: orderable.fullProductName,
+                        lot: lotLineItems[0].lot,
+                        vvmStatus: lotLineItems[0].vvmStatus,
+                        shipmentLineItem: lotLineItems[0].shipmentLineItem,
+                        netContent: orderable.netContent
+                    }));
+                }
+            });
+
+            return tradeItemLineItems;
+        }
+
+        function buildLotLineItems(shipmentLineItemMap, canFulfillForMeMap, orderable) {
+            var lotLineItems = [];
+
+            canFulfillForMeMap[orderable.id].forEach(function(canFulfillForMe) {
+                var lotId = canFulfillForMe.lot ? canFulfillForMe.lot.id : undefined,
+                    shipmentLineItem = findShipmentLineItemByOrderableIdAndLotId(
+                        shipmentLineItemMap,
+                        orderable.id,
+                        lotId
+                    );
+
+                if (shipmentLineItem) {
+                    lotLineItems.push(new ShipmentViewLineItem({
+                        lot: canFulfillForMe.lot,
+                        vvmStatus: getVvmStatus(canFulfillForMe),
+                        shipmentLineItem: shipmentLineItem,
+                        netContent: orderable.netContent
+                    }));
+                }
+            });
+
+            lotLineItems.sort(compareLineItems);
+
+            return lotLineItems;
+        }
+
+        function findShipmentLineItemByOrderableIdAndLotId(shipmentLineItemMap, orderableId, lotId) {
+            if (shipmentLineItemMap[orderableId]) {
+                return shipmentLineItemMap[orderableId][lotId];
+            }
+        }
+
+        function findSummaryByOrderableId(summaries, orderableId) {
+            return summaries.filter(function(summary) {
+                return summary.orderable.id === orderableId;
+            })[0];
+        }
+
+        function flatten(shipmentViewLineItems) {
+            return shipmentViewLineItems.reduce(function(shipmentViewLineItems, lineItem) {
                 shipmentViewLineItems.push(lineItem);
                 if (lineItem.lineItems && !lineItem.noStockAvailable) {
                     lineItem.lineItems.forEach(function(lineItem) {
@@ -169,18 +206,13 @@
             }, {});
 
             return Object.keys(orderablesMap).map(function(id) {
-                return orderablesMap[id]
+                return orderablesMap[id];
             });
         }
 
-        function getOrderQuantity(lineItems, orderableId) {
-            return lineItems.filter(function(lineItem) {
-                return lineItem.orderable.id === orderableId;
-            })[0].orderedQuantity;
-        }
-
         function isForGenericOrderable(summary) {
-            return summary.canFulfillForMe.length === 1 &&
+            return summary &&
+                summary.canFulfillForMe.length === 1 &&
                 summary.orderable.id === summary.canFulfillForMe[0].orderable.id;
         }
 
@@ -196,14 +228,6 @@
                 return 0;
             }
 
-            if (!left && right) {
-                return -1;
-            }
-
-            if (left && !right) {
-                return 1;
-            }
-
             return left > right ? -1 : 1;
         }
 
@@ -212,7 +236,15 @@
         }
 
         function compare(left, right) {
-            return left === right ? 0 : (left && right ? (left > right ? 1 : -1) : (left ? 1 : -1));
+            if (left === right) {
+                return 0;
+            }
+
+            if (!left || !right) {
+                return left ? 1 : -1;
+            }
+
+            return left > right ? 1 : -1;
         }
 
         function compareLots(left, right) {
