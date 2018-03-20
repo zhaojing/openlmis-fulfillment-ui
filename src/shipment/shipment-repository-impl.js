@@ -201,7 +201,7 @@
             shipment.order = order;
 
             shipment.lineItems.forEach(function(lineItem) {
-                lineItem.canFulfillForMe = canFulfillForMeMap[lineItem.orderable.id][getLotId(lineItem.lot)];
+                lineItem.canFulfillForMe = canFulfillForMeMap[lineItem.orderable.id][getId(lineItem.lot)];
             });
 
             return shipment;
@@ -226,8 +226,8 @@
             return canFulfillForMeMap;
         }
 
-        function getLotId(lot) {
-            return lot ? lot.id : undefined;
+        function getId(object) {
+            return object ? object.id : undefined;
         }
     }
 })();

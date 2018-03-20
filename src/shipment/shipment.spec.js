@@ -16,7 +16,7 @@
 describe('Shipment', function() {
 
     var Shipment, ShipmentLineItem, ShipmentDataBuilder, OrderDataBuilder, json, shipment, $q,
-        $rootScope;
+        $rootScope, messageService, $window;
 
     beforeEach(function() {
         module('shipment');
@@ -28,6 +28,8 @@ describe('Shipment', function() {
             ShipmentLineItem = $injector.get('ShipmentLineItem');
             ShipmentDataBuilder = $injector.get('ShipmentDataBuilder');
             OrderDataBuilder = $injector.get('OrderDataBuilder');
+            messageService = $injector.get('messageService');
+            $window = $injector.get('$window');
         });
 
         json = new ShipmentDataBuilder().buildJson();
@@ -84,9 +86,9 @@ describe('Shipment', function() {
 
             var result;
             shipment.save()
-                .then(function(response) {
-                    result = response;
-                });
+            .then(function(response) {
+                result = response;
+            });
             $rootScope.$apply();
 
             expect(result).toEqual(updatedShipment);
@@ -186,9 +188,9 @@ describe('Shipment', function() {
 
             var rejected;
             shipment.confirm()
-                .catch(function() {
-                    rejected = true;
-                });
+            .catch(function() {
+                rejected = true;
+            });
             $rootScope.$apply();
 
             expect(rejected).toBe(true);
@@ -303,6 +305,45 @@ describe('Shipment', function() {
             var result = shipment.isEditable();
 
             expect(result).toBe(false);
+        });
+
+    });
+
+    describe('print', function() {
+
+        var popup, document;
+
+        beforeEach(function() {
+            shipment.repository.updateDraft.andReturn($q.resolve(shipment));
+
+            document = jasmine.createSpyObj('document', ['write']);
+
+            popup = {
+                document: document,
+                location: {}
+            };
+
+            spyOn(messageService, 'get').andReturn('Saving and printing');
+            spyOn($window, 'open').andReturn(popup);
+        });
+
+        it('should show information when saving shipment', function() {
+            shipment.print();
+
+            expect($window.open).toHaveBeenCalledWith('', '_blank');
+            expect(document.write).toHaveBeenCalledWith('Saving and printing');
+            expect(messageService.get).toHaveBeenCalledWith('shipmentView.saveDraftPending');
+        });
+
+        it('should print shipment after it was saved', function() {
+            shipment.print();
+
+            expect(popup.location.href).toBeUndefined();
+
+            $rootScope.$apply();
+
+            expect(popup.location.href)
+                .toEqual('/api/reports/templates/common/583ccc35-88b7-48a8-9193-6c4857d3ff60/pdf?shipmentDraftId=' + shipment.id);
         });
 
     });
