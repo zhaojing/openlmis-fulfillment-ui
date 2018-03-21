@@ -22,7 +22,8 @@
      * @name shipment-view.ShipmentFactory
      *
      * @description
-     * Service for getting shipment (draft or finalized) based on order.
+     * Creates an object representing a Shipment, which can then be used for creating new shipment
+     * on the OpenLMIS server.
      */
     angular
         .module('shipment-view')
@@ -44,11 +45,10 @@
          * @name buildFromOrder
          *
          * @description
-         * Retrieves a shipment (draft or finalized) based on order status.
+         * Creates a new Shipment for the given Order.
          *
-         * @param  {Object}  order              order that we want to get shipment for
-         * @param  {Array}   stockCardSummaries stock card summaries for order supplying facility
-         * @return {Promise}                    the promise resolving to a shipment
+         * @param  {Object}  order order that we want to create shipment for
+         * @return {Promise}       the promise resolving to a shipment
          */
         function buildFromOrder(order) {
             var orderableIds = order.orderLineItems.map(function(lineItem) {
