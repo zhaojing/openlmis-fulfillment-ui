@@ -69,7 +69,7 @@
          *
          * @param  {boolean} inDoses flag defining whether the returned value should be returned in
          *                           doses or in packs
-         * @return {Number}          the available stock on hand for the specific commodity type or
+         * @return {number}          the available stock on hand for the specific commodity type or
          *                           lot
          */
         function getAvailableSoh(inDoses) {
@@ -84,7 +84,7 @@
          * @description
          * Returns available stock on hand for the commodity type or lot.
          *
-         * @return {Number}          the fill quantity for the specific commodity type or lot
+         * @return {number} the fill quantity for the specific commodity type or lot
          */
         function getFillQuantity() {
             return this.shipmentLineItem.quantityShipped || 0;
@@ -101,7 +101,7 @@
          *
          * @param  {boolean} inDoses flag defining whether the returned value should be returned in
          *                           doses or in packs
-         * @return {Number}          the remaining stock after fulfilling the order for a specific
+         * @return {number}          the remaining stock after fulfilling the order for a specific
          *                           commodity type or lot
          */
         function getRemainingQuantity(inDoses) {
@@ -119,10 +119,10 @@
          * Recalculates the given quantity in packs (if the flag is set) taking the net content into
          * consideration.
          *
-         * @param  {Number}  quantity the quantity to be recalculated
+         * @param  {number}  quantity the quantity to be recalculated
          * @param  {boolean} inDoses  flag defining whether the returned value should be returned in
          *                            doses or in packs
-         * @return {Number}           the ordered quantity for the commodity type related with the
+         * @return {number}           the ordered quantity for the commodity type related with the
          *                            line item
          */
         function recalculateQuantity(quantity, inDoses) {
