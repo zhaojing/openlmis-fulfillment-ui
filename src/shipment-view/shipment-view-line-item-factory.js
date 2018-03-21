@@ -17,6 +17,15 @@
 
     'use strict';
 
+    /**
+     * @ngdoc service
+     * @name shipment-view.ShipmentViewLineItemFactory
+     * 
+     * @description
+     * Creates a list of line items to be displayed on the Shipment View page. The created line
+     * item can represent any of the following: Commodity Type, Trade Item, Lot or a generic
+     * orderable.
+     */
     angular
         .module('shipment-view')
         .factory('ShipmentViewLineItemFactory', ShipmentViewLineItemFactory);
@@ -34,6 +43,21 @@
 
         function ShipmentViewLineItemFactory() {}
 
+        /**
+         * @ngdoc method
+         * @methodOf shipment-view.ShipmentViewLineItemFactory
+         * @name buildFrom
+         * 
+         * @description
+         * Creates a list of line items based on the provided shipment and stock card summaries. The
+         * created line items can cover any of the following: Commodity Type, Trade Item Lot or a
+         * generic orderable. The returned list is a flat list of all the line items. The references
+         * between them stay intact.
+         * 
+         * @param  {Shipment} shipment  the shipment
+         * @param  {Array}    summaries the array if stock card summaries
+         * @return {Array}              the list of line items
+         */
         function buildFrom(shipment, summaries) {
             var shipmentLineItemMap = mapByOrderableAndLot(shipment.lineItems);
 
@@ -263,7 +287,7 @@
 
         function getExpirationDate(lineItem) {
             if (lineItem.lot && lineItem.lot.expirationDate) {
-                return new Date(lineItem.lot.expirationDate).getTime();
+                return new Date(lineItem.lot.expirationDate);
             }
         }
     }
