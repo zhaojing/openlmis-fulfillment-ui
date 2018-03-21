@@ -30,14 +30,13 @@
 
     ShipmentViewController.$inject = [
         'shipment', 'loadingModalService', '$state', '$window', 'fulfillmentUrlFactory',
-        'messageService', 'notificationService', 'accessTokenFactory', 'updatedOrder',
-        'QUANTITY_UNIT', 'tableLineItems', 'VVM_STATUS'
+        'messageService', 'accessTokenFactory', 'updatedOrder', 'QUANTITY_UNIT', 'tableLineItems',
+        'VVM_STATUS'
     ];
 
     function ShipmentViewController(shipment, loadingModalService, $state, $window,
-                                    fulfillmentUrlFactory, messageService, notificationService,
-                                    accessTokenFactory, updatedOrder, QUANTITY_UNIT,
-                                    tableLineItems, VVM_STATUS) {
+                                    fulfillmentUrlFactory, messageService, accessTokenFactory,
+                                    updatedOrder, QUANTITY_UNIT, tableLineItems, VVM_STATUS) {
 
         var vm = this;
 
@@ -45,6 +44,7 @@
         vm.showInDoses = showInDoses;
         vm.getSelectedQuantityUnitKey = getSelectedQuantityUnitKey;
         vm.getVvmStatusLabel = VVM_STATUS.$getDisplayName;
+        vm.printShipment = printShipment;
 
         /**
          * @ngdoc property
@@ -129,6 +129,30 @@
          */
         function getSelectedQuantityUnitKey() {
             return QUANTITY_UNIT.$getDisplayName(vm.quantityUnit);
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf shipment-view.controller:ShipmentViewController
+         * @name printShipment
+         * 
+         * @description
+         * Prints the shipment.
+         * 
+         * @return {Promise} the promise resolved when print is successful, rejected otherwise
+         */
+        function printShipment() {
+            var popup = $window.open('', '_blank');
+            popup.document.write(messageService.get('shipmentView.saveDraftPending'));
+
+            return shipment.save()
+            .then(function(response) {
+                popup.location.href = accessTokenFactory.addAccessToken(getPrintUrl(response.id));
+            });
+        }
+
+        function getPrintUrl(shipmentId) {
+            return fulfillmentUrlFactory('/api/reports/templates/common/583ccc35-88b7-48a8-9193-6c4857d3ff60/pdf?shipmentDraftId=' + shipmentId);
         }
     }
 })();

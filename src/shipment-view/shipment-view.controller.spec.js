@@ -15,17 +15,21 @@
 
 describe('ShipmentViewController', function() {
 
-    var vm, $controller, ShipmentDataBuilder, shipment, tableLineItems, OrderDataBuilder,
-        QUANTITY_UNIT, order;
+    var vm, $q, $controller, ShipmentDataBuilder, shipment, tableLineItems, OrderDataBuilder,
+        QUANTITY_UNIT, order, messageService, $window, $rootScope;
 
     beforeEach(function() {
         module('shipment-view');
 
         inject(function($injector) {
+            $q = $injector.get('$q');
             $controller = $injector.get('$controller');
             ShipmentDataBuilder = $injector.get('ShipmentDataBuilder');
             OrderDataBuilder = $injector.get('OrderDataBuilder');
             QUANTITY_UNIT = $injector.get('QUANTITY_UNIT');
+            messageService = $injector.get('messageService');
+            $window = $injector.get('$window');
+            $rootScope = $injector.get('$rootScope');
         });
 
         shipment = new ShipmentDataBuilder().build();
@@ -103,6 +107,45 @@ describe('ShipmentViewController', function() {
             vm.quantityUnit = undefined;
 
             expect(vm.getSelectedQuantityUnitKey()).toEqual(undefined);
+        });
+
+    });
+
+    describe('printShipment', function() {
+
+        var popup, document;
+
+        beforeEach(function() {
+            spyOn(shipment, 'save').andReturn($q.resolve(shipment));
+
+            document = jasmine.createSpyObj('document', ['write']);
+
+            popup = {
+                document: document,
+                location: {}
+            };
+
+            spyOn(messageService, 'get').andReturn('Saving and printing');
+            spyOn($window, 'open').andReturn(popup);
+        });
+
+        it('should show information when saving shipment', function() {
+            vm.printShipment();
+
+            expect($window.open).toHaveBeenCalledWith('', '_blank');
+            expect(document.write).toHaveBeenCalledWith('Saving and printing');
+            expect(messageService.get).toHaveBeenCalledWith('shipmentView.saveDraftPending');
+        });
+
+        it('should print shipment after it was saved', function() {
+            vm.printShipment();
+
+            expect(popup.location.href).toBeUndefined();
+
+            $rootScope.$apply();
+
+            expect(popup.location.href)
+                .toEqual('/api/reports/templates/common/583ccc35-88b7-48a8-9193-6c4857d3ff60/pdf?shipmentDraftId=' + shipment.id);
         });
 
     });

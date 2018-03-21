@@ -41,7 +41,6 @@
         Shipment.prototype.save = save;
         Shipment.prototype.confirm = confirm;
         Shipment.prototype.delete = deleteDraft;
-        Shipment.prototype.print = print;
         Shipment.prototype.isInvalid = isInvalid;
 
         return Shipment;
@@ -121,26 +120,6 @@
         }
 
         /**
-         * @ngdoc method
-         * @methodOf shipment.Shipment
-         * @name print
-         * 
-         * @description
-         * Prints the shipment.
-         * 
-         * @return {Promise} the promise resolved when print is successful, rejected otherwise
-         */
-        function print() {
-            var popup = $window.open('', '_blank');
-            popup.document.write(messageService.get('shipmentView.saveDraftPending'));
-
-            return save.apply(this)
-            .then(function(response) {
-                popup.location.href = accessTokenFactory.addAccessToken(getPrintUrl(response.id));
-            });
-        }
-
-        /**
          * @ngdoc methodOf
          * @methodOf shipment.Shipment
          * @name isInvalid
@@ -199,10 +178,6 @@
          */
         function canBeConfirmed() {
             return this.lineItems.length > 0;
-        }
-
-        function getPrintUrl(shipmentId) {
-            return fulfillmentUrlFactory('/api/reports/templates/common/583ccc35-88b7-48a8-9193-6c4857d3ff60/pdf?shipmentDraftId=' + shipmentId);
         }
     }
 
