@@ -113,7 +113,7 @@
          * @description
          * Returns whether the screen is showing quantities in doses.
          *
-         * @return {boolean} true if the quantity unit are in doses, false otherwise
+         * @return {boolean} true if the quantities are in doses, false otherwise
          */
         function showInDoses() {
             return vm.quantityUnit === QUANTITY_UNIT.DOSES;
