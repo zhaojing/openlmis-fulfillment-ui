@@ -97,12 +97,12 @@
             return flatten(shipmentViewLineItemGroups);
         }
 
-        function sortLotLineItems(shipmentViewLineItemGroups) {
-            shipmentViewLineItemGroups.forEach(function(group) {
-                if (group.lineItems) {
-                    group.lineItems.forEach(function(lineItem) {
-                        if (lineItem.lineItems) {
-                            lineItem.lineItems.sort(compareLineItems);
+        function sortLotLineItems(commodityTypeLineItems) {
+            commodityTypeLineItems.forEach(function(commodityTypeLineItem) {
+                if (commodityTypeLineItem.lineItems) {
+                    commodityTypeLineItem.lineItems.forEach(function(tradeItemLineItems) {
+                        if (tradeItemLineItems.lineItems) {
+                            tradeItemLineItems.lineItems.sort(compareLineItems);
                         }
                     });
                 }
@@ -248,7 +248,7 @@
             }
 
         function compareVvmStatuses(left, right) {
-            if (left === right || !left || !right) {
+            if (left === right) {
                 return 0;
             }
 

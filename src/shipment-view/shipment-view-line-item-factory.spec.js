@@ -13,7 +13,7 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-describe('ShipmentViewLineItemFactory', function() {
+ddescribe('ShipmentViewLineItemFactory', function() {
 
     var shipmentViewLineItemFactory, ShipmentViewLineItemFactory, OrderableDataBuilder,
         LotDataBuilder, OrderLineItemDataBuilder, OrderDataBuilder, ShipmentDataBuilder,
@@ -620,6 +620,11 @@ describe('ShipmentViewLineItemFactory', function() {
                 .withLineItems([
                     new ShipmentLineItemDataBuilder()
                         .withOrderable(tradeItemOne)
+                        .withCanFulfillForMe(summaries[0].canFulfillForMe[2])
+                        .withLot(summaries[0].canFulfillForMe[2].lot)
+                        .buildJson(),
+                    new ShipmentLineItemDataBuilder()
+                        .withOrderable(tradeItemOne)
                         .withCanFulfillForMe(summaries[0].canFulfillForMe[0])
                         .withLot(summaries[0].canFulfillForMe[0].lot)
                         .buildJson(),
@@ -630,43 +635,38 @@ describe('ShipmentViewLineItemFactory', function() {
                         .buildJson(),
                     new ShipmentLineItemDataBuilder()
                         .withOrderable(tradeItemOne)
-                        .withCanFulfillForMe(summaries[0].canFulfillForMe[2])
-                        .withLot(summaries[0].canFulfillForMe[2].lot)
+                        .withCanFulfillForMe(summaries[0].canFulfillForMe[4])
+                        .withLot(summaries[0].canFulfillForMe[4].lot)
                         .buildJson(),
                     new ShipmentLineItemDataBuilder()
                         .withOrderable(tradeItemOne)
                         .withCanFulfillForMe(summaries[0].canFulfillForMe[3])
                         .withLot(summaries[0].canFulfillForMe[3].lot)
-                        .buildJson(),
-                    new ShipmentLineItemDataBuilder()
-                        .withOrderable(tradeItemOne)
-                        .withCanFulfillForMe(summaries[0].canFulfillForMe[4])
-                        .withLot(summaries[0].canFulfillForMe[4].lot)
-                        .buildJson(),
+                        .buildJson()
                 ])
                 .build();
 
             var result = shipmentViewLineItemFactory.createFrom(shipment, summaries);
 
-            expect(result[2].vvmStatus).toBeUndefined();
-            expect(result[2].lot.expirationDate).toEqual('2016-05-02T05:59:51.993Z');
-            expect(result[2].shipmentLineItem.stockOnHand).toEqual(150);
+            expect(result[2].vvmStatus).toEqual('STAGE_2');
+            expect(result[2].lot.expirationDate).toEqual('2020-05-20T05:59:51.993Z');
+            expect(result[2].shipmentLineItem.stockOnHand).toEqual(40);
 
-            expect(result[3].vvmStatus).toEqual('STAGE_2');
-            expect(result[3].lot.expirationDate).toEqual('2020-05-20T05:59:51.993Z');
-            expect(result[3].shipmentLineItem.stockOnHand).toEqual(40);
+            expect(result[3].vvmStatus).toEqual('STAGE_1');
+            expect(result[3].lot.expirationDate).toEqual('2018-06-21T05:59:51.993Z');
+            expect(result[3].shipmentLineItem.stockOnHand).toEqual(30);
 
             expect(result[4].vvmStatus).toEqual('STAGE_1');
-            expect(result[4].lot.expirationDate).toEqual('2018-06-21T05:59:51.993Z');
-            expect(result[4].shipmentLineItem.stockOnHand).toEqual(30);
+            expect(result[4].lot.expirationDate).toEqual('2019-06-21T05:59:51.993Z');
+            expect(result[4].shipmentLineItem.stockOnHand).toEqual(20);
 
             expect(result[5].vvmStatus).toEqual('STAGE_1');
             expect(result[5].lot.expirationDate).toEqual('2019-06-21T05:59:51.993Z');
-            expect(result[5].shipmentLineItem.stockOnHand).toEqual(20);
+            expect(result[5].shipmentLineItem.stockOnHand).toEqual(75);
 
-            expect(result[6].vvmStatus).toEqual('STAGE_1');
-            expect(result[6].lot.expirationDate).toEqual('2019-06-21T05:59:51.993Z');
-            expect(result[6].shipmentLineItem.stockOnHand).toEqual(75);
+            expect(result[6].vvmStatus).toBeUndefined();
+            expect(result[6].lot.expirationDate).toEqual('2016-05-02T05:59:51.993Z');
+            expect(result[6].shipmentLineItem.stockOnHand).toEqual(150);
         });
     
     });
