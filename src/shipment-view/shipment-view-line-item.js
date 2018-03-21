@@ -67,10 +67,10 @@
          * @description
          * Returns available stock on hand for the commodity type or lot.
          *
-         * @param {boolean} inDoses flag defining whether the returned value should be returned in
-         *                          doses or in packs
-         * @return {int}            the available stock on hand for the specific commodity type or
-         *                          lot
+         * @param  {boolean} inDoses flag defining whether the returned value should be returned in
+         *                           doses or in packs
+         * @return {Number}          the available stock on hand for the specific commodity type or
+         *                           lot
          */
         function getAvailableSoh(inDoses) {
             return this.recalculateQuantity(this.shipmentLineItem.stockOnHand, inDoses);
@@ -84,7 +84,7 @@
          * @description
          * Returns available stock on hand for the commodity type or lot.
          *
-         * @return {int}            the fill quantity for the specific commodity type or lot
+         * @return {Number}          the fill quantity for the specific commodity type or lot
          */
         function getFillQuantity() {
             return this.shipmentLineItem.quantityShipped || 0;
@@ -99,10 +99,10 @@
          * Returns the remaining stock after fulfilling the order for a specific commodity type or
          * lot
          *
-         * @param {boolean} inDoses flag defining whether the returned value should be returned in
-         *                          doses or in packs
-         * @return {int}            the remaining stock after fulfilling the order for a specific
-         *                          commodity type or lot
+         * @param  {boolean} inDoses flag defining whether the returned value should be returned in
+         *                           doses or in packs
+         * @return {Number}          the remaining stock after fulfilling the order for a specific
+         *                           commodity type or lot
          */
         function getRemainingQuantity(inDoses) {
             var remainingQuantityInPacks = this.getAvailableSoh() - this.getFillQuantity();
@@ -119,11 +119,11 @@
          * Recalculates the given quantity in packs (if the flag is set) taking the net content into
          * consideration.
          *
-         * @param {int}     quantity the quantity to be recalculated
-         * @param {boolean} inDoses  flag defining whether the returned value should be returned in
-         *                           doses or in packs
-         * @return {int}             the ordered quantity for the commodity type related with the
-         *                           line item
+         * @param  {Number}  quantity the quantity to be recalculated
+         * @param  {boolean} inDoses  flag defining whether the returned value should be returned in
+         *                            doses or in packs
+         * @return {Number}           the ordered quantity for the commodity type related with the
+         *                            line item
          */
         function recalculateQuantity(quantity, inDoses) {
             if (inDoses) {

@@ -67,9 +67,9 @@
          * @description
          * Returns a sum of all stock available for the children line items/line item groups.
          *
-         * @param {boolean} inDoses flag defining whether the returned value should be returned in
-         *                          doses or in packs
-         * @return {int}            the sum of all available stock on hand for the whole group
+         * @param  {boolean} inDoses flag defining whether the returned value should be returned in
+         *                           doses or in packs
+         * @return {Number}          the sum of all available stock on hand for the whole group
          */
         function getAvailableSoh(inDoses) {
             return this.lineItems.reduce(function(availableSoh, lineItem) {
@@ -85,9 +85,9 @@
          * @description
          * Returns a sum of all fill quantities for the children line items/line item groups.
          *
-         * @param {boolean} inDoses flag defining whether the returned value should be returned in
-         *                          doses or in packs
-         * @return {int}            the sum of all fill quantities for the whole group
+         * @param  {boolean} inDoses flag defining whether the returned value should be returned in
+         *                           doses or in packs
+         * @return {Number}          the sum of all fill quantities for the whole group
          */
         function getFillQuantity() {
             return this.lineItems.reduce(function(fillQuantity, lineItem) {
@@ -103,10 +103,10 @@
          * @description
          * Returns an ordered quantity for the commodity type related with the line item.
          *
-         * @param {boolean} inDoses flag defining whether the returned value should be returned in
-         *                          doses or in packs
-         * @return {int}            the ordered quantity for the commodity type related with the
-         *                          line item
+         * @param  {boolean} inDoses flag defining whether the returned value should be returned in
+         *                           doses or in packs
+         * @return {Number}          the ordered quantity for the commodity type related with the
+         *                           line item
          */
         function getOrderQuantity(inDoses) {
             if (!this.orderQuantity) {
