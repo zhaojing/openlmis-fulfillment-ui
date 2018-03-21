@@ -280,7 +280,7 @@
         }
 
         function getVvmStatus(canFulfillForMe) {
-            if (canFulfillForMe.stockCard.extraData) {
+            if (canFulfillForMe.stockCard && canFulfillForMe.stockCard.extraData) {
                 return canFulfillForMe.stockCard.extraData.vvmStatus;
             }
         }
