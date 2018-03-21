@@ -22,7 +22,7 @@
      * @name shipment-view.controller:ShipmentViewController
      *
      * @description
-     * Responsible for managing shipment.
+     * Responsible for managing shipment view screen.
      */
     angular
         .module('shipment-view')
@@ -111,9 +111,9 @@
          * @name showInDoses
          *
          * @description
-         * Returns quantity in packs or in doses.
+         * Returns whether the screen is showing quantities in doses.
          *
-         * @return {number} the quantity.
+         * @return {boolean} true if the quantity unit are in doses, false otherwise
          */
         function showInDoses() {
             return vm.quantityUnit === QUANTITY_UNIT.DOSES;
