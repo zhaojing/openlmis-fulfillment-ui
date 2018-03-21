@@ -22,7 +22,8 @@
      * @name shipment-view.StockCardSummaryRepositoryImpl
      *
      * @description
-     * Extends program service for this module.
+     * Extends stock card summary repository implementation with the ability to query for them with
+     * the stock cards.
      */
     angular
         .module('shipment-view')
@@ -39,6 +40,17 @@
 
         return StockCardSummaryRepositoryImpl;
 
+        /**
+         * @ngdoc method
+         * @methodOf shipment-view.StockCardSummaryRepositoryImpl
+         * @name queryWithStockCards
+         *
+         * @description
+         * Queries OpenLMIS server and fetches a list of matching stock card summaries extended with
+         * the stock cards
+         *
+         * @param {Object} params the search parameters
+         */
         function queryWithStockCards(params) {
             return this.query(params)
             .then(function(page) {

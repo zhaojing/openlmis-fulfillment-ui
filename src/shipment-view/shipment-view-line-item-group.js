@@ -17,65 +17,102 @@
 
     'use strict';
 
+    /**
+     * @ngdoc service
+     * @name shipment-view.ShipmentViewLineItemGroup
+     *
+     * @description
+     * Represents a group of line items or line item groups.
+     */
     angular
         .module('shipment-view')
         .factory('ShipmentViewLineItemGroup', ShipmentViewLineItemGroup);
 
-    ShipmentViewLineItemGroup.inject = [];
+    ShipmentViewLineItemGroup.inject = ['ShipmentViewLineItem', 'classExtender'];
 
-    function ShipmentViewLineItemGroup() {
+    function ShipmentViewLineItemGroup(ShipmentViewLineItem, classExtender) {
+
+        classExtender.extend(ShipmentViewLineItemGroup, ShipmentViewLineItem);
 
         ShipmentViewLineItemGroup.prototype.getAvailableSoh = getAvailableSoh;
         ShipmentViewLineItemGroup.prototype.getFillQuantity = getFillQuantity;
-        ShipmentViewLineItemGroup.prototype.getRemainingQuantity = getRemainingQuantity;
-        ShipmentViewLineItemGroup.prototype.recalculateQuantity = recalculateQuantity;
         ShipmentViewLineItemGroup.prototype.getOrderQuantity = getOrderQuantity;
 
         return ShipmentViewLineItemGroup;
 
+        /**
+         * @ngdoc method
+         * @methodOf shipment-view.ShipmentViewLineItemGroup
+         * @name ShipmentViewLineItemGroup
+         * @constructor
+         *
+         * @description
+         * Creates an instance of the ShipmentViewLineItemGroup.
+         *
+         * @param {Object} config configuration object used when creating new instance of the class
+         */
         function ShipmentViewLineItemGroup(config) {
-            this.productCode = config.productCode;
-            this.productName = config.productName;
+            this.super(config);
             this.orderQuantity = config.orderQuantity;
             this.lineItems = config.lineItems;
-            this.netContent = config.netContent;
             this.isMainGroup = config.isMainGroup;
             this.noStockAvailable = this.getAvailableSoh() === 0;
         }
 
+        /**
+         * @ngdoc method
+         * @methodOf shipment-view.ShipmentViewLineItemGroup
+         * @name getAvailableSoh
+         *
+         * @description
+         * Returns a sum of all stock available for the children line items/line item groups.
+         *
+         * @param {boolean} inDoses flag defining whether the returned value should be returned in
+         *                          doses or in packs
+         * @return {int}            the sum of all available stock on hand for the whole group
+         */
         function getAvailableSoh(inDoses) {
             return this.lineItems.reduce(function(availableSoh, lineItem) {
                 return availableSoh + lineItem.getAvailableSoh(inDoses);
             }, 0);
         }
 
+        /**
+         * @ngdoc method
+         * @methodOf shipment-view.ShipmentViewLineItemGroup
+         * @name getFillQuantity
+         *
+         * @description
+         * Returns a sum of all fill quantities for the children line items/line item groups.
+         *
+         * @param {boolean} inDoses flag defining whether the returned value should be returned in
+         *                          doses or in packs
+         * @return {int}            the sum of all fill quantities for the whole group
+         */
         function getFillQuantity() {
             return this.lineItems.reduce(function(fillQuantity, lineItem) {
                 return fillQuantity + lineItem.getFillQuantity();
             }, 0);
         }
 
-        function getRemainingQuantity(inDoses) {
-            var remainingQuantity = this.getAvailableSoh() - this.getFillQuantity();
-
-            if (inDoses) {
-                return remainingQuantity * this.netContent;
-            }
-            return remainingQuantity;
-        }
-
+        /**
+         * @ngdoc method
+         * @methodOf shipment-view.ShipmentViewLineItemGroup
+         * @name getOrderQuantity
+         *
+         * @description
+         * Returns an ordered quantity for the commodity type related with the line item.
+         *
+         * @param {boolean} inDoses flag defining whether the returned value should be returned in
+         *                          doses or in packs
+         * @return {int}            the ordered quantity for the commodity type related with the
+         *                          line item
+         */
         function getOrderQuantity(inDoses) {
             if (!this.orderQuantity) {
                 return;
             }
             return this.recalculateQuantity(this.orderQuantity, inDoses);
-        }
-
-        function recalculateQuantity(quantity, inDoses) {
-            if (inDoses) {
-                return quantity * this.netContent;
-            }
-            return quantity;
         }
     }
 

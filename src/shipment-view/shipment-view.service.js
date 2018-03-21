@@ -22,7 +22,7 @@
      * @name shipment-view.shipmentViewService
      *
      * @description
-     * 
+     * Application layer service that prepares domain objects to be used on the view.
      */
     angular
         .module('shipment-view')
@@ -40,6 +40,18 @@
 
         this.getShipmentForOrder = getShipmentForOrder;
 
+        /**
+         * @ngdoc method
+         * @methodOf shipment-view.shipmentViewService
+         * @name getShipmentForOrder
+         *
+         * @description
+         * Returns a domain object representing a Shipment decorated with loading modal and
+         * notifications for success/unsuccessful actions.
+         *
+         * @param  {Order}   order the order to get the shipment for
+         * @return {Promise}       the promise resolving to a decorated Shipment
+         */
         function getShipmentForOrder(order) {
             if (!order) {
                 return $q.reject('Order can not be undefined');

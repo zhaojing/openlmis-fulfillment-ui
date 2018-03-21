@@ -17,6 +17,14 @@
 
     'use strict';
 
+    /**
+     * @ngdoc service
+     * @name shipment-view.ShipmentViewLineItem
+     *
+     * @description
+     * Represents a single shipment view line item. It can represent either a single lot or a
+     * generic orderable.
+     */
     angular
         .module('shipment-view')
         .factory('ShipmentViewLineItem', ShipmentViewLineItem);
@@ -30,6 +38,17 @@
 
         return ShipmentViewLineItem;
 
+        /**
+         * @ngdoc method
+         * @methodOf shipment-view.ShipmentViewLineItem
+         * @name ShipmentViewLineItem
+         * @constructor
+         *
+         * @description
+         * Creates an instance of the ShipmentViewLineItem.
+         *
+         * @param {Object} config configuration object used when creating new instance of the class
+         */
         function ShipmentViewLineItem(config) {
             this.productCode = config.productCode;
             this.productName = config.productName;
@@ -40,23 +59,72 @@
             this.isLot = true;
         }
 
+        /**
+         * @ngdoc method
+         * @methodOf shipment-view.ShipmentViewLineItem
+         * @name getAvailableSoh
+         *
+         * @description
+         * Returns available stock on hand for the commodity type or lot.
+         *
+         * @param {boolean} inDoses flag defining whether the returned value should be returned in
+         *                          doses or in packs
+         * @return {int}            the available stock on hand for the specific commodity type or
+         *                          lot
+         */
         function getAvailableSoh(inDoses) {
             return this.recalculateQuantity(this.shipmentLineItem.stockOnHand, inDoses);
         }
 
+        /**
+         * @ngdoc method
+         * @methodOf shipment-view.ShipmentViewLineItem
+         * @name getFillQuantity
+         *
+         * @description
+         * Returns available stock on hand for the commodity type or lot.
+         *
+         * @return {int}            the fill quantity for the specific commodity type or lot
+         */
         function getFillQuantity() {
             return this.shipmentLineItem.quantityShipped || 0;
         }
 
+        /**
+         * @ngdoc method
+         * @methodOf shipment-view.ShipmentViewLineItem
+         * @name getRemainingQuantity
+         *
+         * @description
+         * Returns the remaining stock after fulfilling the order for a specific commodity type or
+         * lot
+         *
+         * @param {boolean} inDoses flag defining whether the returned value should be returned in
+         *                          doses or in packs
+         * @return {int}            the remaining stock after fulfilling the order for a specific
+         *                          commodity type or lot
+         */
         function getRemainingQuantity(inDoses) {
-            var remainingQuantity = this.getAvailableSoh() - this.getFillQuantity();
+            var remainingQuantityInPacks = this.getAvailableSoh() - this.getFillQuantity();
 
-            if (inDoses) {
-                return remainingQuantity * this.netContent;
-            }
-            return remainingQuantity;
+            return this.recalculateQuantity(remainingQuantityInPacks, inDoses);
         }
 
+        /**
+         * @ngdoc method
+         * @methodOf shipment-view.ShipmentViewLineItem
+         * @name recalculateQuantity
+         *
+         * @description
+         * Recalculates the given quantity in packs (if the flag is set) taking the net content into
+         * consideration.
+         *
+         * @param {int}     quantity the quantity to be recalculated
+         * @param {boolean} inDoses  flag defining whether the returned value should be returned in
+         *                           doses or in packs
+         * @return {int}             the ordered quantity for the commodity type related with the
+         *                           line item
+         */
         function recalculateQuantity(quantity, inDoses) {
             if (inDoses) {
                 return quantity * this.netContent;
