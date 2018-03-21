@@ -44,7 +44,7 @@
         vm.$onInit = onInit;
         vm.showInDoses = showInDoses;
         vm.getSelectedQuantityUnitKey = getSelectedQuantityUnitKey;
-        vm.getVvmStatusLabel = getVvmStatusLabel;
+        vm.getVvmStatusLabel = VVM_STATUS.$getDisplayName;
 
         /**
          * @ngdoc property
@@ -129,10 +129,6 @@
          */
         function getSelectedQuantityUnitKey() {
             return QUANTITY_UNIT.$getDisplayName(vm.quantityUnit);
-        }
-
-        function getVvmStatusLabel(status) {
-            return VVM_STATUS.$getDisplayName(status);
         }
     }
 })();
