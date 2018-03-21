@@ -13,7 +13,7 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-ddescribe('ShipmentViewLineItemFactory', function() {
+describe('ShipmentViewLineItemFactory', function() {
 
     var shipmentViewLineItemFactory, ShipmentViewLineItemFactory, OrderableDataBuilder,
         LotDataBuilder, OrderLineItemDataBuilder, OrderDataBuilder, ShipmentDataBuilder,
