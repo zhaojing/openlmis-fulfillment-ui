@@ -28,13 +28,9 @@
         .module('shipment')
         .factory('Shipment', Shipment);
 
-    Shipment.$inject = [
-        'ShipmentLineItem', 'ORDER_STATUS', '$q', '$window', 'accessTokenFactory',
-        'fulfillmentUrlFactory', 'messageService'
-    ];
+    Shipment.$inject = ['ShipmentLineItem', 'ORDER_STATUS', '$q'];
 
-    function Shipment(ShipmentLineItem, ORDER_STATUS, $q, $window, accessTokenFactory,
-                      fulfillmentUrlFactory, messageService) {
+    function Shipment(ShipmentLineItem, ORDER_STATUS, $q) {
 
         Shipment.prototype.canBeConfirmed = canBeConfirmed;
         Shipment.prototype.isEditable = isEditable;
