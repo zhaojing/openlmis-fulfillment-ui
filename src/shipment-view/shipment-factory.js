@@ -62,21 +62,21 @@
             })
             .then(function(page) {
                 var summaries = page.content,
-                    shipmentLineItems = [];
-
-                summaries.forEach(function(summary) {
-                    summary.canFulfillForMe.forEach(function(canFulfillForMe) {
-                        shipmentLineItems.push({
-                            orderable: canFulfillForMe.orderable,
-                            lot: canFulfillForMe.lot,
-                            quantityShipped: 0
-                        });
-                    });
-                });
+                    shipmentViewLineItems = summaries.reduce(function(shipmentViewLineItems, summary) {
+                        return shipmentViewLineItems.concat(
+                            summary.canFulfillForMe.map(function(canFulfillForMe) {
+                                return {
+                                    orderable: canFulfillForMe.orderable,
+                                    lot: canFulfillForMe.lot,
+                                    quantityShipped: 0
+                                };
+                            })
+                        );
+                    }, []);
 
                 return {
                     order: order,
-                    lineItems: shipmentLineItems
+                    lineItems: shipmentViewLineItems
                 };
             });
         }
