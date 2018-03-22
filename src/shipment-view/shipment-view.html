@@ -36,9 +36,9 @@
                 <th>{{'shipmentView.lotCode' | message}}</th>
                 <th>{{'shipmentView.vvmStatus' | message}}</th>
                 <th>{{'shipmentView.expiryDate' | message}}</th>
-                <th popover="{{'shipmentView.quantitiesProvidedIn' | message}} {{vm.getSelectedQuantityUnitKey() | message}}">{{'shipmentView.availableSoh' | message}}</th>
                 <th popover="{{'shipmentView.quantitiesProvidedIn' | message}} {{vm.getSelectedQuantityUnitKey() | message}}">{{'shipmentView.orderQuantity' | message}}</th>
                 <th>{{'shipmentView.fillQuantityInPack' | message}}</th>
+                <th popover="{{'shipmentView.quantitiesProvidedIn' | message}} {{vm.getSelectedQuantityUnitKey() | message}}">{{'shipmentView.availableSoh' | message}}</th>
                 <th popover="{{'shipmentView.quantitiesProvidedIn' | message}} {{vm.getSelectedQuantityUnitKey() | message}}">{{'shipmentView.remainingQuantity' | message}}</th>
             </tr>
         </thead>
@@ -50,7 +50,6 @@
                 <td ng-if="tableLineItem.isLot">{{tableLineItem.lot | lotCode}}</td>
                 <td>{{vm.getVvmStatusLabel(tableLineItem.vvmStatus) | message}}</td>
                 <td>{{tableLineItem.lot.expirationDate | openlmisDate}}</td>
-                <td>{{tableLineItem.getAvailableSoh(vm.showInDoses())}}</td>
                 <td>{{tableLineItem.getOrderQuantity(vm.showInDoses())}}</td>
                 <td ng-if="!tableLineItem.shipmentLineItem">{{tableLineItem.getFillQuantity()}}</td>
                 <td ng-if="tableLineItem.shipmentLineItem">
@@ -58,6 +57,7 @@
                         openlmis-invalid="{{tableLineItem.shipmentLineItem.isInvalid().quantityShipped | message}}"/>
                     <div ng-show="!vm.shipment.isEditable()">{{tableLineItem.shipmentLineItem.quantityShipped}}</div>
                 </td>
+                <td>{{tableLineItem.getAvailableSoh(vm.showInDoses())}}</td>
                 <td>{{tableLineItem.getRemainingQuantity(vm.showInDoses())}}</td>
             </tr>
         </tbody>
