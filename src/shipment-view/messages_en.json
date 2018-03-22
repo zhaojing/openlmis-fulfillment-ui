@@ -37,6 +37,6 @@
     "shipmentView.doses": "Doses",
     "shipmentView.quantitiesProvidedIn": "Quantities are provided in",
     "shipmentView.fillQuantityInPack": "Fill Quantity (in Packs)",
-    "shipmentView.remainingQuantity": "Remaining Quantity",
+    "shipmentView.remainingSoh": "Remaining SOH",
     "shipmentView.noStockAvailable": "No stock available"
 }

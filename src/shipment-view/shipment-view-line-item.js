@@ -33,7 +33,7 @@
         
         ShipmentViewLineItem.prototype.getAvailableSoh = getAvailableSoh;
         ShipmentViewLineItem.prototype.getFillQuantity = getFillQuantity;
-        ShipmentViewLineItem.prototype.getRemainingQuantity = getRemainingQuantity;
+        ShipmentViewLineItem.prototype.getRemainingSoh = getRemainingSoh;
         ShipmentViewLineItem.prototype.recalculateQuantity = recalculateQuantity;
 
         return ShipmentViewLineItem;
@@ -93,7 +93,7 @@
         /**
          * @ngdoc method
          * @methodOf shipment-view.ShipmentViewLineItem
-         * @name getRemainingQuantity
+         * @name getRemainingSoh
          *
          * @description
          * Returns the remaining stock after fulfilling the order for a specific commodity type or
@@ -104,7 +104,7 @@
          * @return {number}          the remaining stock after fulfilling the order for a specific
          *                           commodity type or lot
          */
-        function getRemainingQuantity(inDoses) {
+        function getRemainingSoh(inDoses) {
             var remainingQuantityInPacks = this.getAvailableSoh() - this.getFillQuantity();
 
             return this.recalculateQuantity(remainingQuantityInPacks, inDoses);

@@ -42,7 +42,7 @@ describe('ShipmentViewLineItem', function() {
     
     });
 
-    describe('getRemainingQuantity', function() {
+    describe('getRemainingSoh', function() {
 
         beforeEach(function() {
             spyOn(shipmentViewLineItem, 'getAvailableSoh');
@@ -53,7 +53,7 @@ describe('ShipmentViewLineItem', function() {
             shipmentViewLineItem.getAvailableSoh.andReturn(160);
             shipmentViewLineItem.getFillQuantity.andReturn(33);
 
-            var result = shipmentViewLineItem.getRemainingQuantity();
+            var result = shipmentViewLineItem.getRemainingSoh();
 
             expect(result).toEqual(127);
         });
@@ -62,7 +62,7 @@ describe('ShipmentViewLineItem', function() {
             shipmentViewLineItem.getAvailableSoh.andReturn(20);
             shipmentViewLineItem.getFillQuantity.andReturn(5);
 
-            var result = shipmentViewLineItem.getRemainingQuantity(true);
+            var result = shipmentViewLineItem.getRemainingSoh(true);
 
             expect(result).toEqual(75);
         });
