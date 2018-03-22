@@ -22,9 +22,7 @@
      * @name shipment-view.ShipmentViewLineItemFactory
      * 
      * @description
-     * Creates a list of line items to be displayed on the Shipment View page. The created line
-     * item can represent any of the following: Commodity Type, Trade Item, Lot or a generic
-     * orderable.
+     * Responsible for creating a list of line items to be displayed on the Shipment View page.
      */
     angular
         .module('shipment-view')
