@@ -1,5 +1,5 @@
 {
-    "shipmentView.title": "Fulfilling Order-${orderCode}",
+    "shipmentView.title": "Fulfilling Order - ${orderCode}",
     "shipmentView.viewShipment": "View Shipment",
     "shipmentView.productCode": "Product Code",
     "shipmentView.order": "Order",
