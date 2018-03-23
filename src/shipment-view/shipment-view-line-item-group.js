@@ -57,6 +57,7 @@
             this.lineItems = config.lineItems;
             this.isMainGroup = config.isMainGroup;
             this.noStockAvailable = this.getAvailableSoh() === 0;
+            this.isLot = false;
         }
 
         /**
