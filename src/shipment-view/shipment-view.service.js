@@ -91,9 +91,11 @@
                 loadingModalService.open();
 
                 return originalSave.apply(this, arguments)
-                .then(function() {
+                .then(function(response) {
                     notificationService.success('shipmentView.draftHasBeenSaved');
                     $state.reload();
+
+                    return response;
                 })
                 .catch(function() {
                     notificationService.error('shipmentView.failedToSaveDraft');
