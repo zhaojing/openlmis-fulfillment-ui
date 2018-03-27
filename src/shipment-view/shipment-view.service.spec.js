@@ -261,10 +261,12 @@ describe('shipmentViewService', function() {
             expect(notificationService.success).not.toHaveBeenCalled();
         });
 
-        it('should show message and reload on success', function() {
-            originalSave.andReturn($q.resolve());
+        it('should show message, reload on success and return response', function() {
+            var result;
 
-            shipment.save();
+            originalSave.andReturn($q.resolve(shipment));
+
+            shipment.save().then(function (response) { result = response; });
             $rootScope.$apply();
 
             expect(loadingModalService.open).toHaveBeenCalled();
@@ -272,6 +274,7 @@ describe('shipmentViewService', function() {
             expect($state.reload).toHaveBeenCalled();
             expect(notificationService.success)
                 .toHaveBeenCalledWith('shipmentView.draftHasBeenSaved');
+            expect(result).toEqual(shipment);
 
             expect(notificationService.error).not.toHaveBeenCalled();
             expect(loadingModalService.close).not.toHaveBeenCalled();
