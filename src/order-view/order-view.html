@@ -20,7 +20,7 @@
         <label for=periodStartDate>{{'orderView.periodStart' | message}}</label>
         <openlmis-datepicker input-id="periodStartDate" value="vm.periodStartDate" max-date="vm.periodEndDate"></openlmis-datepicker>
         <label for=periodEndDate>{{'orderView.periodEnd' | message}}</label>
-        <openlmis-datepicker input-id="periodEndDate" value="vm.periodEndDate" min-date="vm.periodEndDate"></openlmis-datepicker>
+        <openlmis-datepicker input-id="periodEndDate" value="vm.periodEndDate" min-date="vm.periodStartDate"></openlmis-datepicker>
         <input type="submit" class="btn btn-primary" value="{{'orderView.search' | message}}"/>
     </form>
     <table>
