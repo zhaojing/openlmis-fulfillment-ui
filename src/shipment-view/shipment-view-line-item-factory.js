@@ -250,20 +250,32 @@
                 return 0;
             }
 
+            if (!left || !right) {
+                return !left ? 1 : -1;
+            }
+
             return left > right ? -1 : 1;
         }
 
         function compareExpirationDate(left, right) {
-            return !left && right ? 1 : !right ? -1 : compare(left, right);
-        }
-
-        function compare(left, right) {
             if (left === right) {
                 return 0;
             }
 
             if (!left || !right) {
-                return left ? 1 : -1;
+                return !left ? -1 : 1;
+            }
+
+            if (left.getTime() === right.getTime()) {
+                return 0;
+            }
+
+            return left > right ? 1 : -1;
+        }
+
+        function compare(left, right) {
+            if (left === right) {
+                return 0;
             }
 
             return left > right ? 1 : -1;
