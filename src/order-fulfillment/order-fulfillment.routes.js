@@ -31,7 +31,7 @@
             label: 'orderFulfillment.fulfillOrders',
             showInNavigation: true,
             templateUrl: 'order-fulfillment/order-fulfillment.html',
-            url: '/fulfillment?requestingFacilityId&programId&status',
+            url: '/fulfillment?requestingFacilityId&programId&status&page&size',
             params: {
                 sort: 'createdDate,desc'
             },
