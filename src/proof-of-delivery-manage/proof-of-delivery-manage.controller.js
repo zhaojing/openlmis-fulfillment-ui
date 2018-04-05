@@ -122,6 +122,28 @@
         vm.supplyingFacility = undefined;
 
         /**
+         * @ngdoc property
+         * @propertyOf proof-of-delivery-manage.controller:ProofOfDeliveryManageController
+         * @name facilityName
+         * @type {string}
+         * 
+         * @description
+         * The name of the requesting facility for which the Proofs of Delivery are shown.
+         */
+        vm.facilityName = undefined;
+
+        /**
+         * @ngdoc property
+         * @propertyOf proof-of-delivery-manage.controller:ProofOfDeliveryManageController
+         * @name programName
+         * @type {string}
+         * 
+         * @description
+         * The name of the program for which the Proofs of Delivery are shown.
+         */
+        vm.programName = undefined;
+
+        /**
          * @ngdoc method
          * @methodOf proof-of-delivery-manage.controller:ProofOfDeliveryManageController
          * @name $onInit
@@ -138,6 +160,8 @@
             vm.program = getSelectedObjectById(programs, $stateParams.programId);
             vm.requestingFacility = getSelectedObjectById(requestingFacilities, $stateParams.requestingFacilityId);
             vm.supplyingFacility = getSelectedObjectById(supplyingFacilities, $stateParams.supplyingFacilityId);
+            vm.facilityName = getName(vm.requestingFacility);
+            vm.programName = getName(vm.program);
         }
 
         /**
@@ -216,6 +240,10 @@
         function getPrintUrl(podId) {
             return fulfillmentUrlFactory('/api/proofsOfDelivery/' + podId + '/print?format=pdf');
         }
+    }
+
+    function getName(object) {
+        return object ? object.name : undefined;
     }
 
     function getSelectedObjectById(list, id) {

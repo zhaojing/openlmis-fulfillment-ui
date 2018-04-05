@@ -120,6 +120,18 @@ describe('ProofOfDeliveryManageController', function() {
     
             expect(vm.supplyingFacility).toEqual(supplyingFacilities[0]);
         });
+
+        it('should set program name', function() {
+            vm.$onInit();
+            
+            expect(vm.facilityName).toEqual(vm.requestingFacility.name);
+        });
+
+        it('should set facility name', function() {
+            vm.$onInit();
+
+            expect(vm.programName).toEqual(vm.program.name);
+        });
     });
 
     it('loadOrders should reload state with right params', function() {
