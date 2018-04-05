@@ -29,9 +29,11 @@
         .module('proof-of-delivery')
         .factory('ProofOfDeliveryRepositoryImpl', ProofOfDeliveryRepositoryImpl);
 
-    ProofOfDeliveryRepositoryImpl.$inject = ['$q', '$resource', 'fulfillmentUrlFactory', 'LotRepositoryImpl', 'OrderableRepositoryImpl'];
+    ProofOfDeliveryRepositoryImpl.$inject = [
+        '$q', '$resource', 'fulfillmentUrlFactory', 'LotRepositoryImpl', 'OrderableResource'
+    ];
 
-    function ProofOfDeliveryRepositoryImpl($q, $resource, fulfillmentUrlFactory, LotRepositoryImpl, OrderableRepositoryImpl) {
+    function ProofOfDeliveryRepositoryImpl($q, $resource, fulfillmentUrlFactory, LotRepositoryImpl, OrderableResource) {
 
         ProofOfDeliveryRepositoryImpl.prototype.get = get;
         ProofOfDeliveryRepositoryImpl.prototype.update = update;
@@ -49,7 +51,7 @@
          */
         function ProofOfDeliveryRepositoryImpl() {
             this.lotRepositoryImpl = new LotRepositoryImpl();
-            this.orderableRepositoryImpl = new OrderableRepositoryImpl();
+            this.orderableResource = new OrderableResource();
 
             this.resource = $resource(fulfillmentUrlFactory('/api/proofsOfDelivery/:id'), {}, {
                 update: {
@@ -72,7 +74,7 @@
          */
         function get(id) {
             var lotRepositoryImpl = this.lotRepositoryImpl,
-                orderableRepositoryImpl = this.orderableRepositoryImpl;
+                orderableResource = this.orderableResource;
 
             return this.resource.get({
                 id: id,
@@ -86,7 +88,7 @@
                     lotRepositoryImpl.query({
                         id: lotIds
                     }),
-                    orderableRepositoryImpl.query({
+                    orderableResource.query({
                         id: orderableIds
                     })
                 ])

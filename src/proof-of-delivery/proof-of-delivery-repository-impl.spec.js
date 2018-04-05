@@ -15,34 +15,33 @@
 
 describe('ProofOfDeliveryRepositoryImpl', function() {
 
-    var ProofOfDeliveryRepositoryImpl, $rootScope, $q, $httpBackend, ProofOfDeliveryDataBuilder,
-        fulfillmentUrlFactory, referencedataUrlFactory, proofOfDeliveryRepositoryImpl, proofOfDeliveryJson,
-        ShipmentDataBuilder, shipmentJson, ShipmentLineItemDataBuilder, orderableRepositoryImplMock,
-        lotRepositoryImplMock, LotDataBuilder, lotJsons, orderableJsons, PageDataBuilder, OrderableDataBuilder;
+    var ProofOfDeliveryRepositoryImpl, $rootScope, $q, $httpBackend, ProofOfDeliveryDataBuilder, fulfillmentUrlFactory,
+        proofOfDeliveryRepositoryImpl, proofOfDeliveryJson, ShipmentDataBuilder, shipmentJson,
+        ShipmentLineItemDataBuilder, orderableResourceMock, lotRepositoryImplMock, LotDataBuilder, lotJsons,
+        orderableJsons, PageDataBuilder, OrderableDataBuilder;
 
     beforeEach(function() {
         module('proof-of-delivery', function($provide) {
             $provide.factory('OpenLMISRepositoryImpl', function() {
                 return function(url) {
-                    if (url === referencedataUrlFactory('/api/lots')) {
-                        lotRepositoryImplMock = jasmine.createSpyObj(
-                            'lotRepositoryImpl', ['query']
-                        );
-                        return lotRepositoryImplMock;
-                    }
+                    lotRepositoryImplMock = jasmine.createSpyObj(
+                        'lotRepositoryImpl', ['query']
+                    );
+                    return lotRepositoryImplMock;
+                };
+            });
 
-                    if (url === referencedataUrlFactory('/api/orderables')) {
-                        orderableRepositoryImplMock = jasmine.createSpyObj(
-                            'OrderableRepositoryImpl', ['query']
-                        );
-                        return orderableRepositoryImplMock;
-                    }
+            $provide.factory('OrderableResource', function() {
+                return function(url) {
+                    orderableResourceMock = jasmine.createSpyObj(
+                        'OrderableResource', ['query']
+                    );
+                    return orderableResourceMock;
                 };
             });
         });
 
         inject(function($injector) {
-            referencedataUrlFactory = $injector.get('referencedataUrlFactory');
             fulfillmentUrlFactory = $injector.get('fulfillmentUrlFactory');
             ProofOfDeliveryRepositoryImpl = $injector.get('ProofOfDeliveryRepositoryImpl');
             $rootScope = $injector.get('$rootScope');
@@ -99,7 +98,7 @@ describe('ProofOfDeliveryRepositoryImpl', function() {
                 .build()
             ));
 
-            orderableRepositoryImplMock.query.andReturn($q.resolve(new PageDataBuilder()
+            orderableResourceMock.query.andReturn($q.resolve(new PageDataBuilder()
                 .withContent(orderableJsons)
                 .build()
             ));
@@ -183,7 +182,7 @@ describe('ProofOfDeliveryRepositoryImpl', function() {
             .expectGET(fulfillmentUrlFactory('/api/proofsOfDelivery/proof-of-delivery-id?expand=shipment.order'))
             .respond(200, angular.copy(proofOfDeliveryJson));
 
-            orderableRepositoryImplMock.query.andReturn($q.reject());
+            orderableResourceMock.query.andReturn($q.reject());
 
             var rejected;
             proofOfDeliveryRepositoryImpl.get('proof-of-delivery-id')

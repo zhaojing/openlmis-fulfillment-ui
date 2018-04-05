@@ -28,9 +28,9 @@
         .module('openlmis-repository')
         .factory('OpenlmisResource', OpenlmisResource);
 
-    OpenlmisResource.$inject = ['$resource', '$q'];
+    OpenlmisResource.$inject = ['$resource', '$q', 'MAX_URI_LENGTH', 'openlmisUrlFactory', 'ParameterSplitter'];
 
-    function OpenlmisResource($resource, $q) {
+    function OpenlmisResource($resource, $q, MAX_URI_LENGTH, openlmisUrlFactory, ParameterSplitter) {
 
         OpenlmisResource.prototype.query = query;
         OpenlmisResource.prototype.get = get;
@@ -40,12 +40,15 @@
 
         return OpenlmisResource;
 
-        function OpenlmisResource(url) {
-            var resourceUrl = url;
+        function OpenlmisResource(uri) {
+            this.uri = uri;
+            var resourceUrl = uri;
 
-            if (url.slice(-1) === '/') {
-                resourceUrl = url.slice(0, -1);
+            if (uri.slice(-1) === '/') {
+                resourceUrl = uri.slice(0, -1);
             }
+
+            resourceUrl = openlmisUrlFactory(resourceUrl);
 
             this.resource = $resource(resourceUrl + '/:id', {}, {
                 query: {
@@ -56,6 +59,8 @@
                     method: 'PUT'
                 }
             });
+
+            this.splitter = new ParameterSplitter();
         }
 
         /**
@@ -91,7 +96,19 @@
          * @return  {Promise}           the promise resolving to the server response
          */
         function query(params) {
-            return this.resource.query(params).$promise;
+            var requests = [];
+            var resource = this.resource;
+            this.splitter.split(this.uri, params).forEach(function(params) {
+                requests.push(resource.query(params).$promise);
+            });
+
+            return $q.all(requests)
+            .then(function(responses) {
+                return responses.reduce(function(left, right) {
+                    left.content = left.content.concat(right.content);
+                    return left;
+                });
+            });
         }
 
         function update(object) {
