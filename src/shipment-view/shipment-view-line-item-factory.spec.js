@@ -602,7 +602,21 @@ describe('ShipmentViewLineItemFactory', function() {
                                 .build()
                             )
                             .buildJson(),
-
+                        new CanFulfillForMeEntryDataBuilder()
+                            .withOrderable(tradeItemOne)
+                            .withStockOnHand(10)
+                            .withLot(new LotDataBuilder()
+                                .withExpirationDate('2019-06-21T05:59:51.993Z')
+                                .build()
+                            )
+                            .withStockCard(
+                                new StockCardDataBuilder()
+                                    .withExtraData({
+                                        vvmStatus: 'STAGE_1'
+                                    })
+                                    .build()
+                            )
+                            .buildJson(),
                     ])
                     .buildJson()
             ];
@@ -642,6 +656,11 @@ describe('ShipmentViewLineItemFactory', function() {
                         .withOrderable(tradeItemOne)
                         .withCanFulfillForMe(summaries[0].canFulfillForMe[3])
                         .withLot(summaries[0].canFulfillForMe[3].lot)
+                        .buildJson(),
+                    new ShipmentLineItemDataBuilder()
+                        .withOrderable(tradeItemOne)
+                        .withCanFulfillForMe(summaries[0].canFulfillForMe[5])
+                        .withLot(summaries[0].canFulfillForMe[5].lot)
                         .buildJson()
                 ])
                 .build();
@@ -658,15 +677,19 @@ describe('ShipmentViewLineItemFactory', function() {
 
             expect(result[4].vvmStatus).toEqual('STAGE_1');
             expect(result[4].lot.expirationDate).toEqual('2019-06-21T05:59:51.993Z');
-            expect(result[4].shipmentLineItem.stockOnHand).toEqual(20);
+            expect(result[4].shipmentLineItem.stockOnHand).toEqual(10);
 
             expect(result[5].vvmStatus).toEqual('STAGE_1');
             expect(result[5].lot.expirationDate).toEqual('2019-06-21T05:59:51.993Z');
-            expect(result[5].shipmentLineItem.stockOnHand).toEqual(75);
+            expect(result[5].shipmentLineItem.stockOnHand).toEqual(20);
 
-            expect(result[6].vvmStatus).toBeUndefined();
-            expect(result[6].lot.expirationDate).toEqual('2016-05-02T05:59:51.993Z');
-            expect(result[6].shipmentLineItem.stockOnHand).toEqual(150);
+            expect(result[6].vvmStatus).toEqual('STAGE_1');
+            expect(result[6].lot.expirationDate).toEqual('2019-06-21T05:59:51.993Z');
+            expect(result[6].shipmentLineItem.stockOnHand).toEqual(75);
+
+            expect(result[7].vvmStatus).toBeUndefined();
+            expect(result[7].lot.expirationDate).toEqual('2016-05-02T05:59:51.993Z');
+            expect(result[7].shipmentLineItem.stockOnHand).toEqual(150);
         });
     
     });
