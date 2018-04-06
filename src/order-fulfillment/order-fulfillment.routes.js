@@ -57,15 +57,17 @@
                 },
                 orders: function(paginationService, orderRepository, $stateParams, ORDER_STATUS) {
                     return paginationService.registerUrl($stateParams, function(stateParams) {
-                        var availableStatuses = [ORDER_STATUS.FULFILLING, ORDER_STATUS.ORDERED];
+                        var availableStatuses = [ORDER_STATUS.FULFILLING, ORDER_STATUS.ORDERED],
+                            copy = angular.copy(stateParams);
                         if (stateParams.status instanceof Array) {
                             stateParams.status = stateParams.status.filter(function(status) {
                                 return availableStatuses.indexOf(status) >= 0;
                             });
+                            copy = angular.copy(stateParams);
                         } else if (!stateParams.status || availableStatuses.indexOf(stateParams.status) < 0) {
-                            stateParams.status = availableStatuses;
+                            copy.status = availableStatuses;
                         }
-                        return orderRepository.search(stateParams);
+                        return orderRepository.search(copy);
                     });
                 }
             }

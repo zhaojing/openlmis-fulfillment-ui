@@ -32,6 +32,9 @@ Improvements:
 * [OLMIS-4118](https://openlmis.atlassian.net/browse/OLMIS-4118): Show display unit for Dispensable
 * [OLMIS-4326](https://openlmis.atlassian.net/browse/OLMIS-4326): Added grouping by commodity types and trade items for View Proof of Delivery screen.
 
+Bug fixes:
+* [OLMIS-4391](https://openlmis.atlassian.net/browse/OLMIS-4391): Removed default order statuses from the url on the Order Fulfill
+
 5.1.0 / 2017-11-09
 ==================
 
