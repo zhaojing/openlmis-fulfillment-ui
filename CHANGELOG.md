@@ -1,5 +1,8 @@
-5.1.1 / WIP
+6.0.0 / WIP
 ==================
+
+Breaking changes:
+* [OLMIS-3995](https://openlmis.atlassian.net/browse/OLMIS-3995): Reworked View Proof of Delivery screen.
 
 New functionality added in a backwards-compatible manner:
 * [OLMIS-3610](https://openlmis.atlassian.net/browse/OLMIS-3610): Added saving for shipment draft.
