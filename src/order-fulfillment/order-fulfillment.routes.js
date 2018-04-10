@@ -37,7 +37,7 @@
             },
             accessRights: [
                 FULFILLMENT_RIGHTS.SHIPMENTS_VIEW,
-                FULFILLMENT_RIGHTS.ORDERS_VIEW
+                FULFILLMENT_RIGHTS.SHIPMENTS_EDIT
             ],
             areAllRightsRequired: false,
             resolve: {

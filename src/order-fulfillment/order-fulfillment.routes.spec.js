@@ -124,7 +124,7 @@ describe('openlmis.orders.fulfillment state', function() {
     it('should require FULFILLMENT_RIGHTS right to enter', function() {
         state = $state.get('openlmis.orders.fulfillment');
         expect(state.accessRights).toEqual(
-            [FULFILLMENT_RIGHTS.SHIPMENTS_VIEW, FULFILLMENT_RIGHTS.ORDERS_VIEW]);
+            [FULFILLMENT_RIGHTS.SHIPMENTS_VIEW, FULFILLMENT_RIGHTS.SHIPMENTS_EDIT]);
     });
 
     function goToState() {
