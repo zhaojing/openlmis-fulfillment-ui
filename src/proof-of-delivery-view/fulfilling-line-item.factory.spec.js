@@ -101,8 +101,7 @@ describe('fulfillingLineItemFactory', function() {
             });
             $rootScope.$apply();
 
-            expect(result[0].groupedLineItems).toEqual([]);
-            expect(result[1].groupedLineItems).toEqual([]);
+            expect(result.length).toEqual(0);
         });
 
         it('should group proof of delivery line items by order line items', function() {
@@ -144,6 +143,24 @@ describe('fulfillingLineItemFactory', function() {
             expect(result[1].groupedLineItems).toEqual([[
                 proofOfDeliveryLineItems[2]
             ]]);
+        });
+
+        it('should filter out empty groups', function() {
+            var result;
+
+            proofOfDeliveryLineItems = [proofOfDeliveryLineItems[0], proofOfDeliveryLineItems[1]];
+
+            fulfillingLineItemFactory.groupByOrderable(proofOfDeliveryLineItems, orderLineItems)
+            .then(function(response) {
+                result = response;
+            });
+            $rootScope.$apply();
+
+            expect(result.length).toEqual(1);
+            expect(result[0].groupedLineItems).toEqual([
+                [proofOfDeliveryLineItems[0]],
+                [proofOfDeliveryLineItems[1]]
+            ]);
         });
     });
 });

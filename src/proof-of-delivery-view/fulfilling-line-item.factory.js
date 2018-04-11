@@ -77,7 +77,10 @@
                         orderLineItem.groupedLineItems.push(fulfillingLineItemsGroup);
                     }
                 });
-                return orderLineItems;
+
+                return orderLineItems.filter(function(orderLineItem) {
+                    return orderLineItem.groupedLineItems.length;
+                });
             });
         }
 
