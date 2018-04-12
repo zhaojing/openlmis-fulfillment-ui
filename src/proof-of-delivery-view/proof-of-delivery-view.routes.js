@@ -45,10 +45,8 @@
                         order: function(proofOfDelivery) {
                             return proofOfDelivery.shipment.order;
                         },
-                        reasonAssignments: function(validReasonService, order) {
-                            return validReasonService.search(
-                                order.program.id, order.facility.type.id, 'DEBIT'
-                            );
+                        reasonAssignments: function(stockReasonsFactory, order) {
+                            return stockReasonsFactory.getReasons(order.program.id, order.facility.type.id, 'DEBIT');
                         },
                         orderLineItems: function(proofOfDelivery, order, fulfillingLineItemFactory) {
                             return fulfillingLineItemFactory.groupByOrderable(proofOfDelivery.lineItems, order.orderLineItems);

@@ -34,7 +34,7 @@
         'shipment',
         'stock-constants',
         'stock-valid-reason',
+        'stock-reasons',
         'openlmis-state-tracker'
     ]);
-
 })();
