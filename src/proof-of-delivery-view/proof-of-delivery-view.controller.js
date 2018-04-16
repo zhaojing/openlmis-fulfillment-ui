@@ -29,14 +29,14 @@
     .controller('ProofOfDeliveryViewController', ProofOfDeliveryViewController);
 
     ProofOfDeliveryViewController.$inject = [
-        'proofOfDelivery', 'order', 'reasonAssignments', 'messageService', 'VVM_STATUS',
+        'proofOfDelivery', 'order', 'reasons', 'messageService', 'VVM_STATUS',
         'orderLineItems', 'fulfillmentUrlFactory', 'canEdit'
     ];
 
-    function ProofOfDeliveryViewController(proofOfDelivery, order, reasonAssignments,
+    function ProofOfDeliveryViewController(proofOfDelivery, order, reasons,
                                            messageService, VVM_STATUS, orderLineItems,
                                            fulfillmentUrlFactory, canEdit) {
-
+                                               
         var vm = this;
 
         vm.$onInit = onInit;
@@ -99,6 +99,17 @@
         vm.canEdit = undefined;
 
         /**
+         * @ngdoc property
+         * @propertyOf proof-of-delivery-view.controller:PodViewController
+         * @name reasons
+         * @type {Array}
+         *
+         * @description
+         * List of available stock reasons.
+         */
+        vm.reasons = undefined;
+
+        /**
          * @ngdoc method
          * @methodOf proof-of-delivery-view.controller:PodViewController
          * @name $onInit
@@ -108,7 +119,7 @@
          */
         function onInit() {
             vm.order = order;
-            vm.reasonAssignments = reasonAssignments;
+            vm.reasons = reasons;
             vm.proofOfDelivery = proofOfDelivery;
             vm.orderLineItems = orderLineItems;
             vm.vvmStatuses = VVM_STATUS;
@@ -136,17 +147,17 @@
          * @description
          * Returns a name of the reason with the given ID.
          *
-         * @param   {string}    id  the ID of the reason
-         * @return  {string}        the name of the reason
+         * @param  {string} id the ID of the reason
+         * @return {string}    the name of the reason
          */
         function getReasonName(id) {
             if (!id) {
                 return;
             }
 
-            return vm.reasonAssignments.filter(function(assignment) {
-                return assignment.reason.id === id;
-            })[0].reason.name;
+            return vm.reasons.filter(function(reason) {
+                return reason.id === id;
+            })[0].name;
         }
     }
 }());

@@ -110,7 +110,7 @@
                     <td>{{fulfillingLineItem.quantityRejected}}</td>
                     <td ng-if="vm.canEdit">
                         <select ng-model="fulfillingLineItem.rejectionReasonId"
-                            ng-options="assignment.reason.id as assignment.reason.name for assignment in vm.reasonAssignments"
+                            ng-options="reason.id as reason.name for reason in vm.reasons"
                             openlmis-invalid="{{fulfillingLineItem.validate().rejectionReasonId | message}}">
                         </select>
                     </td>

@@ -16,7 +16,7 @@
 describe('PodViewController', function() {
 
     var vm, $controller, ProofOfDeliveryDataBuilder, OrderDataBuilder, proofOfDelivery, order,
-        reasonAssignments, ValidReasonAssignmentDataBuilder, VVM_STATUS, messageService,
+        reasons, ReasonDataBuilder, VVM_STATUS, messageService,
         orderLineItems;
 
     beforeEach(function() {
@@ -26,17 +26,17 @@ describe('PodViewController', function() {
             $controller = $injector.get('$controller');
             OrderDataBuilder = $injector.get('OrderDataBuilder');
             ProofOfDeliveryDataBuilder = $injector.get('ProofOfDeliveryDataBuilder');
-            ValidReasonAssignmentDataBuilder = $injector.get('ValidReasonAssignmentDataBuilder');
+            ReasonDataBuilder = $injector.get('ReasonDataBuilder');
             VVM_STATUS = $injector.get('VVM_STATUS');
             messageService = $injector.get('messageService');
         });
 
         proofOfDelivery = new ProofOfDeliveryDataBuilder().build();
         order = new OrderDataBuilder().build();
-        reasonAssignments = [
-            new ValidReasonAssignmentDataBuilder().build(),
-            new ValidReasonAssignmentDataBuilder().build(),
-            new ValidReasonAssignmentDataBuilder().build()
+        reasons = [
+            new ReasonDataBuilder().build(),
+            new ReasonDataBuilder().build(),
+            new ReasonDataBuilder().build()
         ];
         orderLineItems = [
             {
@@ -51,7 +51,7 @@ describe('PodViewController', function() {
         vm = $controller('ProofOfDeliveryViewController', {
             proofOfDelivery: proofOfDelivery,
             order: order,
-            reasonAssignments: reasonAssignments,
+            reasons: reasons,
             orderLineItems: orderLineItems,
             canEdit: true
         });
@@ -69,10 +69,10 @@ describe('PodViewController', function() {
         expect(vm.order).toBe(order);
     });
 
-    it('should expose reasonAssignments', function() {
+    it('should expose reasons', function() {
         vm.$onInit();
 
-        expect(vm.reasonAssignments).toBe(reasonAssignments);
+        expect(vm.reasons).toBe(reasons);
     });
 
     it('should check if VVM Status column should be shown', function() {
@@ -94,7 +94,7 @@ describe('PodViewController', function() {
         vm = $controller('ProofOfDeliveryViewController', {
             proofOfDelivery: proofOfDelivery,
             order: order,
-            reasonAssignments: reasonAssignments,
+            reasons: reasons,
             orderLineItems: orderLineItems,
             canEdit: false
         });
@@ -127,9 +127,9 @@ describe('PodViewController', function() {
         });
 
         it('should return name for reason ID', function() {
-            var result = vm.getReasonName(reasonAssignments[2].reason.id);
+            var result = vm.getReasonName(reasons[2].id);
 
-            expect(result).toEqual(reasonAssignments[2].reason.name);
+            expect(result).toEqual(reasons[2].name);
         });
 
         it('should return undefined if ID is not given', function() {

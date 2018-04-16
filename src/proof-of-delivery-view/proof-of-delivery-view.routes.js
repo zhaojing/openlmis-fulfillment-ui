@@ -45,7 +45,7 @@
                         order: function(proofOfDelivery) {
                             return proofOfDelivery.shipment.order;
                         },
-                        reasonAssignments: function(stockReasonsFactory, order) {
+                        reasons: function(stockReasonsFactory, order) {
                             return stockReasonsFactory.getReasons(order.program.id, order.facility.type.id, 'DEBIT');
                         },
                         orderLineItems: function(proofOfDelivery, order, fulfillingLineItemFactory) {

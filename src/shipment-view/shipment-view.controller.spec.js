@@ -15,7 +15,7 @@
 
 describe('ShipmentViewController', function() {
 
-    var vm, $q, $controller, ShipmentDataBuilder, shipment, tableLineItems, OrderDataBuilder,
+    var vm, $q, $controller, ShipmentDataBuilder, shipment, tableLineItems, OrderDataBuilder, fulfillmentUrlFactory,
         QUANTITY_UNIT, order, messageService, $window, $rootScope;
 
     beforeEach(function() {
@@ -30,6 +30,7 @@ describe('ShipmentViewController', function() {
             messageService = $injector.get('messageService');
             $window = $injector.get('$window');
             $rootScope = $injector.get('$rootScope');
+            fulfillmentUrlFactory = $injector.get('fulfillmentUrlFactory');
         });
 
         shipment = new ShipmentDataBuilder().build();
@@ -145,7 +146,7 @@ describe('ShipmentViewController', function() {
             $rootScope.$apply();
 
             expect(popup.location.href)
-                .toEqual('/api/reports/templates/common/583ccc35-88b7-48a8-9193-6c4857d3ff60/pdf?shipmentDraftId=' + shipment.id);
+                .toEqual(fulfillmentUrlFactory('/api/reports/templates/common/583ccc35-88b7-48a8-9193-6c4857d3ff60/pdf?shipmentDraftId=' + shipment.id));
         });
 
     });
