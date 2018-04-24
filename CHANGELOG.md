@@ -1,5 +1,5 @@
-6.0.0 / WIP
-===========
+6.0.0 / 2018-04-24
+==================
 
 Breaking changes:
 * [OLMIS-3995](https://openlmis.atlassian.net/browse/OLMIS-3995): Reworked View Proof of Delivery screen.
