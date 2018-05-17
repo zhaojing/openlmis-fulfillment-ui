@@ -55,11 +55,11 @@
                     <i ng-class="{'icon-ok': order.emergency}"></i>
                 </td>
                 <td>
-                    <button class="primary" ng-click="vm.printPod(order.id)">
-                        {{'proofOfDeliveryManage.print' | message}}
+                    <button class="primary" ng-click="vm.openPod(order.id)">
+                        {{'proofOfDeliveryManage.manage' | message}}
                     </button>
-                    <button ng-click="vm.openPod(order.id)">
-                        {{'proofOfDeliveryManage.view' | message}}
+                    <button ng-click="vm.printPod(order.id)">
+                        {{'proofOfDeliveryManage.print' | message}}
                     </button>
                 </td>
             </tr>

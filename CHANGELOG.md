@@ -1,3 +1,9 @@
+6.0.1 / WIP
+===========
+
+Improvements:
+* [OLMIS-4722](https://openlmis.atlassian.net/browse/OLMIS-4722): Change primary button from "Print" to "Manage" on POD list screen.
+
 6.0.0 / 2018-04-24
 ==================
 
