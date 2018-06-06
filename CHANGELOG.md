@@ -4,6 +4,7 @@
 Improvements:
 * [OLMIS-4722](https://openlmis.atlassian.net/browse/OLMIS-4722): Change primary button from "Print" to "Manage" on POD list screen.
 * [OLMIS-4739](https://openlmis.atlassian.net/browse/OLMIS-4739): Added Jenkinsfile.
+* [OLMIS-4795](https://openlmis.atlassian.net/browse/OLMIS-4795): Updated dev-ui to version 8.
 
 6.0.0 / 2018-04-24
 ==================
