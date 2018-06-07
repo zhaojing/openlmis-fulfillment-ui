@@ -148,9 +148,7 @@
             <dt>{{'proofOfDeliveryView.receivedDate' | message}}</dt>
             <dd>
                 <div ng-if="vm.canEdit">
-                    <openlmis-datepicker input-id="receivedDate" value="vm.proofOfDelivery.receivedDate"
-                        required="true">
-                    </openlmis-datepicker>
+                    <input id="receivedDate" type="date" ng-model="vm.proofOfDelivery.receivedDate" required/>
                 </div>
                 <div ng-if="!vm.canEdit">
                     {{vm.proofOfDelivery.receivedDate | openlmisDate}}
