@@ -1,5 +1,7 @@
 6.0.1 / WIP
 ===========
+New functionality added in a backwards-compatible manner:
+* [OLMIS-4867](https://openlmis.atlassian.net/browse/OLMIS-4867): A new button added to retry uploading orders to FTP.
 
 Improvements:
 * [OLMIS-4722](https://openlmis.atlassian.net/browse/OLMIS-4722): Change primary button from "Print" to "Manage" on POD list screen.
