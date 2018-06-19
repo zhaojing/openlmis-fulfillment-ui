@@ -35,6 +35,7 @@
         Order.prototype.isFulfilling = isFulfilling;
         Order.prototype.isOrdered = isOrdered;
         Order.prototype.isShipped = isShipped;
+        Order.prototype.transferFailed = transferFailed;
 
         return Order;
 
@@ -63,6 +64,10 @@
 
         function isShipped() {
             return this.status === ORDER_STATUS.SHIPPED;
+        }
+
+        function transferFailed() {
+            return this.status === ORDER_STATUS.TRANSFER_FAILED;
         }
     }
 

@@ -64,6 +64,31 @@ describe('orderService', function() {
         });
     });
 
+    describe('retry', function(){
+
+        var order;
+
+        beforeEach(function() {
+            order = new OrderResponseDataBuilder().build();
+
+            $httpBackend.whenGET(fulfillmentUrlFactory('/api/orders/' + order.id + '/retry'))
+                .respond(200, {});
+        });
+
+        it('should call /api/orders/{id}/retry endpoint', function() {
+            $httpBackend.expectGET(fulfillmentUrlFactory('/api/orders/' + order.id + '/retry'));
+
+            orderService.retryTransfer(order.id).then(function(response){
+                result = response;
+            });
+
+            $httpBackend.flush();
+            $rootScope.$apply();
+
+            expect(angular.toJson(result)).toEqual(angular.toJson({}));
+        });
+    });
+
     describe('search', function() {
 
         var searchParams, someId, page;

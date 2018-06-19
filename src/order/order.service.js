@@ -40,11 +40,16 @@
             get: {
                 method: 'GET',
                 url: fulfillmentUrlFactory('/api/orders/:id')
+            },
+            retry: {
+                method: 'GET',
+                url: fulfillmentUrlFactory('/api/orders/:id/retry')
             }
         });
 
         this.search = search;
         this.get = get;
+        this.retryTransfer = retryTransfer;
 
         /**
          * @ngdoc method
@@ -82,6 +87,22 @@
             };
             return resource.get(params).$promise;
         }
+
+        /**
+         * @ngdoc method
+         * @methodOf order.orderService
+         * @name retryTransfer
+         *
+         * @description
+         * Retry the transfer of an order that previously failed to transfer.
+         *
+         * @param  {String} orderId
+         * @return {Promise}
+         */
+        function retryTransfer(orderId) {
+            return resource.retry({id: orderId}).$promise;
+        }
+
     }
 
 })();

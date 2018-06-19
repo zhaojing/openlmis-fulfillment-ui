@@ -33,6 +33,7 @@
         BasicOrderResponseDataBuilder.prototype.buildFulfilling = buildFulfilling;
         BasicOrderResponseDataBuilder.prototype.buildShipped = buildShipped;
         BasicOrderResponseDataBuilder.prototype.buildReceived = buildReceived;
+        BasicOrderResponseDataBuilder.prototype.buildTransferFailed = buildTransferFailed;
 
         BasicOrderResponseDataBuilder.prototype.withId = withId;
         BasicOrderResponseDataBuilder.prototype.withCreatedDate = withCreatedDate;
@@ -117,6 +118,12 @@
         function buildReceived() {
             return new BasicOrderResponseDataBuilder()
                 .withStatus(ORDER_STATUS.RECEIVED)
+                .build();
+        }
+
+        function buildTransferFailed() {
+            return new BasicOrderResponseDataBuilder()
+                .withStatus(ORDER_STATUS.TRANSFER_FAILED)
                 .build();
         }
 

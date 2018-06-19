@@ -55,6 +55,25 @@
                 programs: function(programService, authorizationService) {
                     return programService.getAll();
                 },
+                canRetryTransfer: function(authorizationService, permissionService, $stateParams){
+                    if($stateParams.supplyingFacilityId) {
+                        return permissionService
+                            .hasPermissionWithAnyProgram(authorizationService.getUser().user_id,
+                                                         {
+                                                             right: FULFILLMENT_RIGHTS.ORDERS_TRANSFER,
+                                                             facilityId: $stateParams.supplyingFacilityId
+                                                         })
+                            .then(function() {
+                                return true;
+                            })
+                            .catch(function() {
+                                return false;
+                            });
+                    }else{
+                        return false;
+                    }
+
+                },
                 orders: function(paginationService, orderRepository, $stateParams) {
 					return paginationService.registerUrl($stateParams, function(stateParams) {
                         if (stateParams.supplyingFacilityId) {

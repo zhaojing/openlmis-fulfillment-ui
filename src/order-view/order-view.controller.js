@@ -32,12 +32,12 @@
     controller.$inject = [
         'supplyingFacilities', 'requestingFacilities', 'programs', 'requestingFacilityFactory',
         'loadingModalService', 'notificationService', 'fulfillmentUrlFactory', 'orders',
-        '$stateParams', '$filter', '$state', '$scope'
+        'orderService', 'canRetryTransfer', '$stateParams', '$filter', '$state', '$scope'
     ];
 
     function controller(supplyingFacilities, requestingFacilities, programs, requestingFacilityFactory,
-        loadingModalService, notificationService, fulfillmentUrlFactory, orders, $stateParams, $filter,
-        $state, $scope) {
+        loadingModalService, notificationService, fulfillmentUrlFactory, orders, orderService,
+        canRetryTransfer, $stateParams, $filter, $state, $scope) {
 
         var vm = this;
 
@@ -45,6 +45,7 @@
         vm.loadOrders = loadOrders;
         vm.getPrintUrl = getPrintUrl;
         vm.getDownloadUrl = getDownloadUrl;
+        vm.retryTransfer = retryTransfer;
 
         /**
          * @ngdoc property
@@ -113,6 +114,17 @@
         vm.orders = undefined;
 
         /**
+         * @ngdoc property
+         * @propertyOf order-view.controller:OrderViewController
+         * @name canRetryTransfer
+         * @type {Boolean}
+         *
+         * @description
+         * Becomes true if user has permission to retry transfer of failed order.
+         */
+        vm.canRetryTransfer = undefined;
+
+        /**
          * @ngdoc method
          * @methodOf order-view.controller:OrderViewController
          * @name $onInit
@@ -124,6 +136,7 @@
         function onInit() {
             vm.supplyingFacilities = supplyingFacilities;
             vm.requestingFacilities = requestingFacilities;
+            vm.canRetryTransfer = canRetryTransfer;
             vm.programs = programs;
 
             vm.orders = orders;
@@ -221,6 +234,30 @@
          */
         function getDownloadUrl(order) {
             return fulfillmentUrlFactory('/api/orders/' + order.id + '/export?type=csv');
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf order-view.controller:OrderViewController
+         * @name retryTransfer
+         *
+         * @description
+         * For an order that failed to transfer correctly, retry the transfer of order file.
+         *
+         * @param  {Object} order the order to retry the transfer for
+         */
+        function retryTransfer(order){
+            loadingModalService.open();
+            orderService.retryTransfer(order.id).then(function(response){
+                if(response.result){
+                    notificationService.success('orderView.transferComplete');
+                    $state.reload();
+                }else{
+                    notificationService.error('orderView.transferFailed');
+                }
+            }).catch(function(error){
+                notificationService.error(error.description);
+            }).finally(loadingModalService.close);
         }
 
         function loadRequestingFacilities(supplyingFacilityId) {

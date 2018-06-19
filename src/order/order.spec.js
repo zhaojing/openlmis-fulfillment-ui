@@ -124,4 +124,20 @@ describe('Order', function() {
 
     });
 
+    describe('transferFailed', function() {
+
+        it('should return true if order is in transfer failed status', function() {
+            order = new Order(new BasicOrderResponseDataBuilder().buildTransferFailed());
+
+            expect(order.transferFailed()).toBe(true);
+        });
+
+        it('should return false if order is past shipped status', function() {
+            order = new Order(new BasicOrderResponseDataBuilder().buildReceived());
+
+            expect(order.transferFailed()).toBe(false);
+        });
+
+    });
+
 });

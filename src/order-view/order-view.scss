@@ -14,4 +14,8 @@
 	button.download {
 		@include button-icon-inherit('download');
 	}
+
+	button.retry {
+		@include button-icon-inherit('refresh');
+	}
 }

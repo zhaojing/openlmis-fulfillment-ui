@@ -16,7 +16,8 @@
 
 describe('openlmis.orders.view state', function() {
 
-    var $q, $state, $rootScope, requestingFacilityFactory, state, minimalFacilities, FULFILLMENT_RIGHTS, $stateParams;
+    var $q, $state, $rootScope, requestingFacilityFactory, state, minimalFacilities, FULFILLMENT_RIGHTS,
+        permissionService, authorizationService, $stateParams;
 
     beforeEach(function() {
         loadModules();
@@ -43,6 +44,52 @@ describe('openlmis.orders.view state', function() {
         expect(state.accessRights).toEqual([FULFILLMENT_RIGHTS.PODS_MANAGE, FULFILLMENT_RIGHTS.ORDERS_VIEW]);
     });
 
+    it('should not try to check permission if supplyingFacilityId is undefined', function(){
+       spyOn(permissionService, 'hasPermissionWithAnyProgram').andReturn();
+
+        $stateParams.supplyingFacilityId = undefined;
+
+        state.resolve.canRetryTransfer(authorizationService,
+                                                    permissionService, $stateParams);
+        $rootScope.$apply();
+
+        expect(permissionService.hasPermissionWithAnyProgram).not.toHaveBeenCalled();
+
+    });
+
+    it('should return false if supplying facility is not selected', function() {
+        $stateParams.supplyingFacilityId = undefined;
+
+        var result = state.resolve.canRetryTransfer(authorizationService,
+                                                    permissionService, $stateParams);
+        $rootScope.$apply();
+        expect(result).toEqual(false);
+    });
+
+    it('should return false if user cannot retry to transfer order', function() {
+
+        $stateParams.supplyingFacilityId = undefined;
+        spyOn(authorizationService, 'getUser').andReturn({user_id: '123'});
+        spyOn(permissionService, 'hasPermissionWithAnyProgram').andReturn($q.when(false));
+
+        var result = state.resolve.canRetryTransfer(authorizationService, permissionService, $stateParams);
+
+        expect(result).toEqual(false);
+    });
+
+    it('should return true if user can retry transfer order', function() {
+
+        $stateParams.supplyingFacilityId = undefined;
+        spyOn(authorizationService, 'getUser').andReturn({user_id: '123'});
+        spyOn(permissionService, 'hasPermissionWithAnyProgram').andReturn($q.when(true));
+
+        var result = state.resolve.canRetryTransfer(authorizationService, permissionService, $stateParams);
+
+        expect(result).toEqual(false);
+    });
+
+
+
     function loadModules() {
         module('openlmis-main-state');
         module('order');
@@ -55,6 +102,8 @@ describe('openlmis.orders.view state', function() {
             $state = $injector.get('$state');
             $rootScope = $injector.get('$rootScope');
             requestingFacilityFactory = $injector.get('requestingFacilityFactory');
+            permissionService = $injector.get('permissionService');
+            authorizationService = $injector.get('authorizationService');
             FULFILLMENT_RIGHTS = $injector.get('FULFILLMENT_RIGHTS');
         });
     }
