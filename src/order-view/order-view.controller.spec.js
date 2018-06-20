@@ -18,7 +18,8 @@ describe('OrderViewController', function() {
     var vm, $rootScope, fulfillmentUrlFactoryMock, supplyingFacilities, requestingFacilities,
         programs, orders, $controller, $stateParams, scope, requestingFacilityFactory, $state,
         BasicOrderResponseDataBuilder, ORDER_STATUS, orderService, canRetryTransfer, $q,
-        notificationService, loadingModalService, ProgramDataBuilder, FacilityDataBuilder;
+        notificationService, loadingModalService, orderStatusFactory, ProgramDataBuilder,
+        FacilityDataBuilder;
 
     beforeEach(function() {
         module('order-view');
@@ -40,6 +41,7 @@ describe('OrderViewController', function() {
             notificationService = $injector.get('notificationService');
             loadingModalService = $injector.get('loadingModalService');
             ORDER_STATUS = $injector.get('ORDER_STATUS');
+            orderStatusFactory = $injector.get('orderStatusFactory');
         });
 
         supplyingFacilities = [
@@ -81,6 +83,7 @@ describe('OrderViewController', function() {
                 canRetryTransfer: canRetryTransfer,
                 notificationService: notificationService,
                 loadingModalService: loadingModalService,
+                orderStatusFactory: orderStatusFactory,
                 $scope: scope
             });
 
@@ -180,6 +183,7 @@ describe('OrderViewController', function() {
                 supplyingFacilityId: null,
                 programId: vm.program.id,
                 requestingFacilityId: null,
+                status: null,
                 periodStartDate: null,
                 periodEndDate: null,
                 sort: 'createdDate,desc'
@@ -195,6 +199,7 @@ describe('OrderViewController', function() {
                 supplyingFacilityId: vm.supplyingFacility.id,
                 programId: null,
                 requestingFacilityId: null,
+                status: null,
                 periodStartDate: null,
                 periodEndDate: null,
                 sort: 'createdDate,desc'
@@ -210,6 +215,7 @@ describe('OrderViewController', function() {
                 supplyingFacilityId: null,
                 programId: null,
                 requestingFacilityId: vm.requestingFacility.id,
+                status: null,
                 periodStartDate: null,
                 periodEndDate: null,
                 sort: 'createdDate,desc'
@@ -225,6 +231,7 @@ describe('OrderViewController', function() {
                 supplyingFacilityId: null,
                 programId: null,
                 requestingFacilityId: null,
+                status: null,
                 periodStartDate: '2017-01-31',
                 periodEndDate: null,
                 sort: 'createdDate,desc'
@@ -240,6 +247,7 @@ describe('OrderViewController', function() {
                 supplyingFacilityId: null,
                 programId: null,
                 requestingFacilityId: null,
+                status: null,
                 periodStartDate: null,
                 periodEndDate: '2017-01-31',
                 sort: 'createdDate,desc'
@@ -268,6 +276,7 @@ describe('OrderViewController', function() {
                 orders: orders,
                 canRetryTransfer: canRetryTransfer,
                 fulfillmentUrlFactory: fulfillmentUrlFactoryMock,
+                orderStatusFactory: orderStatusFactory,
                 $scope: scope
             });
         });
@@ -293,6 +302,7 @@ describe('OrderViewController', function() {
                 orders: orders,
                 fulfillmentUrlFactory: fulfillmentUrlFactoryMock,
                 canRetryTransfer: canRetryTransfer,
+                orderStatusFactory: orderStatusFactory,
                 $scope: scope
             });
         });
@@ -324,6 +334,7 @@ describe('OrderViewController', function() {
                 notificationService: notificationService,
                 loadingModalService: loadingModalService,
                 fulfillmentUrlFactory: fulfillmentUrlFactoryMock,
+                orderStatusFactory: orderStatusFactory,
                 $scope: scope
             });
             order = new BasicOrderResponseDataBuilder()
@@ -373,6 +384,7 @@ describe('OrderViewController', function() {
             notificationService: notificationService,
             loadingModalService: loadingModalService,
             orderService: orderService,
+            orderStatusFactory: orderStatusFactory,
             $scope: scope
         });
         vm.$onInit();

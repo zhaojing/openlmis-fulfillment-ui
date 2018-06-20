@@ -32,12 +32,12 @@
     controller.$inject = [
         'supplyingFacilities', 'requestingFacilities', 'programs', 'requestingFacilityFactory',
         'loadingModalService', 'notificationService', 'fulfillmentUrlFactory', 'orders',
-        'orderService', 'canRetryTransfer', '$stateParams', '$filter', '$state', '$scope'
+        'orderService', 'orderStatusFactory', 'canRetryTransfer', '$stateParams', '$filter', '$state', '$scope'
     ];
 
     function controller(supplyingFacilities, requestingFacilities, programs, requestingFacilityFactory,
-        loadingModalService, notificationService, fulfillmentUrlFactory, orders, orderService,
-        canRetryTransfer, $stateParams, $filter, $state, $scope) {
+                        loadingModalService, notificationService, fulfillmentUrlFactory, orders, orderService,
+                        orderStatusFactory, canRetryTransfer, $stateParams, $filter, $state, $scope) {
 
         var vm = this;
 
@@ -125,6 +125,17 @@
         vm.canRetryTransfer = undefined;
 
         /**
+         * @ngdoc property
+         * @propertyOf order-view.controller:OrderViewController
+         * @name orderStatus
+         * @type {Array}
+         *
+         * @description
+         * Contains a list of possible order statuses to allow filtering.
+         */
+        vm.orderStatus = undefined;
+
+        /**
          * @ngdoc method
          * @methodOf order-view.controller:OrderViewController
          * @name $onInit
@@ -138,6 +149,7 @@
             vm.requestingFacilities = requestingFacilities;
             vm.canRetryTransfer = canRetryTransfer;
             vm.programs = programs;
+            vm.orderStatus = orderStatusFactory.getAll();
 
             vm.orders = orders;
 
@@ -166,6 +178,10 @@
 
             if ($stateParams.periodEndDate) {
                 vm.periodEndDate = $stateParams.periodEndDate;
+            }
+
+            if ($stateParams.status) {
+                vm.status = $stateParams.status;
             }
 
             $scope.$watch(function() {
@@ -197,6 +213,7 @@
             stateParams.supplyingFacilityId = vm.supplyingFacility ? vm.supplyingFacility.id : null;
             stateParams.requestingFacilityId = vm.requestingFacility ? vm.requestingFacility.id : null;
             stateParams.programId = vm.program ? vm.program.id : null;
+            stateParams.status = vm.status ? vm.status : null;
             stateParams.periodStartDate = vm.periodStartDate ? $filter('isoDate')(vm.periodStartDate) : null;
             stateParams.periodEndDate = vm.periodEndDate ? $filter('isoDate')(vm.periodEndDate) : null;
             stateParams.sort = 'createdDate,desc';

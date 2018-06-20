@@ -1,3 +1,11 @@
 {
-    "order.orders": "Orders"
+    "order.orders": "Orders",
+
+    "orderStatus.ORDERED": "Ordered",
+    "orderStatus.FULFILLING": "Fulfilling",
+    "orderStatus.SHIPPED": "Shipped",
+    "orderStatus.RECEIVED": "Received",
+    "orderStatus.TRANSFER_FAILED": "Transfer Failed",
+    "orderStatus.IN_ROUTE": "In Route",
+    "orderStatus.READY_TO_PACK": "Ready to pack"
 }
