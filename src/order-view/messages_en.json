@@ -13,7 +13,7 @@
     "orderView.print": "Print",
     "orderView.retry": "Retry transfer",
     "orderView.transferComplete": "Transfer successful.",
-    "orderView.transferFailed": "Transfer Failed. You can retry again.",
+    "orderView.transferFailed": "Transfer failed again. Please contact the administrator or retry at a later time.",
     "orderView.program": "Program",
     "orderView.requestingFacility": "Requesting facility",
     "orderView.search": "Search",

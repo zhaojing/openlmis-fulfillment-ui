@@ -132,8 +132,26 @@ describe('Order', function() {
             expect(order.transferFailed()).toBe(true);
         });
 
-        it('should return false if order is past shipped status', function() {
+        it('should return false if order is in received status', function() {
             order = new Order(new BasicOrderResponseDataBuilder().buildReceived());
+
+            expect(order.transferFailed()).toBe(false);
+        });
+
+        it('should return false if order is in ordered status', function() {
+            order = new Order(new BasicOrderResponseDataBuilder().buildOrdered());
+
+            expect(order.transferFailed()).toBe(false);
+        });
+
+        it('should return false if order is in fulfilling status', function() {
+            order = new Order(new BasicOrderResponseDataBuilder().buildFulfilling());
+
+            expect(order.transferFailed()).toBe(false);
+        });
+
+        it('should return false if order is in shipped status', function() {
+            order = new Order(new BasicOrderResponseDataBuilder().buildShipped());
 
             expect(order.transferFailed()).toBe(false);
         });
