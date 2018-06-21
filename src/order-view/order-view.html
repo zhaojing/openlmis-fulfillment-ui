@@ -20,7 +20,7 @@
         <label>{{'orderView.status' | message}}</label>
         <select id="status"
                 ng-model="vm.status"
-                ng-options="status.value as status.name for status in vm.orderStatus track by status.value"></select>
+                ng-options="status.value as status.name for status in vm.orderStatuses track by status.value"></select>
         <label for=periodStartDate>{{'orderView.periodStart' | message}}</label>
         <input id="periodStartDate" type="date" ng-model="vm.periodStartDate" max-date="vm.periodEndDate"/>
         <label for=periodEndDate>{{'orderView.periodEnd' | message}}</label>

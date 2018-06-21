@@ -127,13 +127,13 @@
         /**
          * @ngdoc property
          * @propertyOf order-view.controller:OrderViewController
-         * @name orderStatus
+         * @name orderStatuses
          * @type {Array}
          *
          * @description
          * Contains a list of possible order statuses to allow filtering.
          */
-        vm.orderStatus = undefined;
+        vm.orderStatuses = undefined;
 
         /**
          * @ngdoc method
@@ -149,7 +149,7 @@
             vm.requestingFacilities = requestingFacilities;
             vm.canRetryTransfer = canRetryTransfer;
             vm.programs = programs;
-            vm.orderStatus = orderStatusFactory.getAll();
+            vm.orderStatuses = orderStatusFactory.getAll();
 
             vm.orders = orders;
 
