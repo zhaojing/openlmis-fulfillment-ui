@@ -356,7 +356,7 @@ describe('OrderViewController', function() {
             expect(notificationService.success).toHaveBeenCalledWith('orderView.transferComplete');
         });
 
-        it('should show error message when transfer not complete', function(){
+        it('should show error message when server responded with OK but transfer was not complete', function(){
             vm.retryTransfer(order);
             retryTransferDeferred.resolve({result: false});
             $rootScope.$apply();
@@ -364,7 +364,7 @@ describe('OrderViewController', function() {
             expect(notificationService.error).toHaveBeenCalledWith('orderView.transferFailed');
         });
 
-        it('should show error message when retry not successful but server responded with error message', function(){
+        it('should show error message when server responded with error message', function(){
             vm.retryTransfer(order);
             retryTransferDeferred.reject({description: 'some-other-error'});
             $rootScope.$apply();
