@@ -60,7 +60,7 @@
 
                 minimalFacilities.forEach(function(minimalFacility) {
                     requestingFacilities.forEach(function(facility) {
-                        if (facility == minimalFacility.id) {
+                        if (facility === minimalFacility.id) {
                             minRequestingFacilities.push(minimalFacility);
                         }
                     });

@@ -52,7 +52,7 @@
                     }
                     return undefined;
                 },
-                programs: function(programService, authorizationService) {
+                programs: function(programService) {
                     return programService.getAll();
                 },
                 canRetryTransfer: function(authorizationService, permissionService, $stateParams){
@@ -75,14 +75,14 @@
 
                 },
                 orders: function(paginationService, orderRepository, $stateParams) {
-					return paginationService.registerUrl($stateParams, function(stateParams) {
+                    return paginationService.registerUrl($stateParams, function(stateParams) {
                         if (stateParams.supplyingFacilityId) {
                             stateParams.sort = 'createdDate,desc';
                             return orderRepository.search(stateParams);
                         }
                         return undefined;
-					});
-				}
+                    });
+                }
             }
         });
 

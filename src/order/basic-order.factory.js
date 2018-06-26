@@ -58,7 +58,6 @@
             return new Order(response);
         }
 
-        // TODO: This should be part of the ProcessingPeriodFactory class
         function buildProcessingPeriodFromResponse(response) {
             var processingPeriod = angular.copy(response);
             processingPeriod.startDate = dateUtils.toDate(processingPeriod.startDate);

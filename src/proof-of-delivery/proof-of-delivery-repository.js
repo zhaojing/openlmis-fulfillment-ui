@@ -78,7 +78,7 @@
             return this.impl.update(proofOfDelivery)
             .then(function(json) {
                 return new ProofOfDelivery(json, repository);
-            })
+            });
         }
     }
 

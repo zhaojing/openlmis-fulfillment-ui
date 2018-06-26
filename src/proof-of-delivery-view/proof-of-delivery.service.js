@@ -106,7 +106,7 @@
                     return $q.reject();
                 })
                 .finally(loadingModalService.close);
-            }
+            };
         }
     }
 
