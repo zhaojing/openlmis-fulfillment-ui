@@ -190,7 +190,7 @@
                 if (newValue && hasSupplyingFacilityChange(newValue, oldValue)) {
                     loadRequestingFacilities(vm.supplyingFacility.id);
                 }
-                if (!newValue){
+                if (!newValue) {
                     vm.requestingFacilities = undefined;
                 }
             }, true);
@@ -263,25 +263,28 @@
          *
          * @param  {Object} order the order to retry the transfer for
          */
-        function retryTransfer(order){
+        function retryTransfer(order) {
             loadingModalService.open();
-            orderService.retryTransfer(order.id).then(function(response){
-                if(response.result){
+            orderService.retryTransfer(order.id).then(function(response) {
+                if (response.result) {
                     notificationService.success('orderView.transferComplete');
                     $state.reload();
-                }else{
+                } else {
                     notificationService.error('orderView.transferFailed');
                 }
-            }).catch(function(error){
-                notificationService.error(error.description);
-            }).finally(loadingModalService.close);
+            })
+                .catch(function(error) {
+                    notificationService.error(error.description);
+                })
+                .finally(loadingModalService.close);
         }
 
         function loadRequestingFacilities(supplyingFacilityId) {
             loadingModalService.open();
             requestingFacilityFactory.loadRequestingFacilities(supplyingFacilityId).then(function(facilities) {
                 vm.requestingFacilities = facilities;
-            }).finally(loadingModalService.close);
+            })
+                .finally(loadingModalService.close);
         }
 
         function hasSupplyingFacilityChange(newValue, oldValue) {

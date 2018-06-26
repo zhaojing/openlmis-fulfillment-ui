@@ -56,9 +56,9 @@
         function get(id) {
             var repository = this;
             return this.impl.get(id)
-            .then(function(json) {
-                return new ProofOfDelivery(json, repository);
-            });
+                .then(function(json) {
+                    return new ProofOfDelivery(json, repository);
+                });
         }
 
         /**
@@ -76,9 +76,9 @@
         function update(proofOfDelivery) {
             var repository = this;
             return this.impl.update(proofOfDelivery)
-            .then(function(json) {
-                return new ProofOfDelivery(json, repository);
-            });
+                .then(function(json) {
+                    return new ProofOfDelivery(json, repository);
+                });
         }
     }
 

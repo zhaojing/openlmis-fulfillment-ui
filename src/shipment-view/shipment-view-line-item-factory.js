@@ -60,35 +60,35 @@
             var shipmentLineItemMap = mapByOrderableAndLot(shipment.lineItems);
 
             var shipmentViewLineItemGroups = shipment.order.orderLineItems
-            .map(function(orderLineItem) {
-                var orderableId = orderLineItem.orderable.id,
-                    summary = findSummaryByOrderableId(summaries, orderableId),
-                    shipmentLineItem = findShipmentLineItemByOrderableIdAndLotId(
-                        shipmentLineItemMap,
-                        orderableId,
-                        undefined
-                    );
+                .map(function(orderLineItem) {
+                    var orderableId = orderLineItem.orderable.id,
+                        summary = findSummaryByOrderableId(summaries, orderableId),
+                        shipmentLineItem = findShipmentLineItemByOrderableIdAndLotId(
+                            shipmentLineItemMap,
+                            orderableId,
+                            undefined
+                        );
 
-                if (isForGenericOrderable(summary) && shipmentLineItem) {
-                    return new ShipmentViewLineItem({
+                    if (isForGenericOrderable(summary) && shipmentLineItem) {
+                        return new ShipmentViewLineItem({
+                            productCode: orderLineItem.orderable.productCode,
+                            productName: orderLineItem.orderable.fullProductName,
+                            shipmentLineItem: shipmentLineItem,
+                            orderQuantity: orderLineItem.orderedQuantity,
+                            netContent: orderLineItem.orderable.netContent
+                        });
+                    }
+
+                    var tradeItemLineItems = summary ? buildTradeItems(summary, shipmentLineItemMap) : [];
+                    return new ShipmentViewLineItemGroup({
                         productCode: orderLineItem.orderable.productCode,
                         productName: orderLineItem.orderable.fullProductName,
-                        shipmentLineItem: shipmentLineItem,
+                        lineItems: tradeItemLineItems,
                         orderQuantity: orderLineItem.orderedQuantity,
+                        isMainGroup: true,
                         netContent: orderLineItem.orderable.netContent
                     });
-                }
-
-                var tradeItemLineItems = summary ? buildTradeItems(summary, shipmentLineItemMap) : [];
-                return new ShipmentViewLineItemGroup({
-                    productCode: orderLineItem.orderable.productCode,
-                    productName: orderLineItem.orderable.fullProductName,
-                    lineItems: tradeItemLineItems,
-                    orderQuantity: orderLineItem.orderedQuantity,
-                    isMainGroup: true,
-                    netContent: orderLineItem.orderable.netContent
                 });
-            });
 
             sortLotLineItems(shipmentViewLineItemGroups);
 
@@ -243,7 +243,7 @@
                 compareVvmStatuses(left.vvmStatus, right.vvmStatus) ||
                 compareExpirationDate(getExpirationDate(left), getExpirationDate(right)) ||
                 compare(left.shipmentLineItem.stockOnHand, right.shipmentLineItem.stockOnHand);
-            }
+        }
 
         function compareVvmStatuses(left, right) {
             if (left === right) {

@@ -66,9 +66,10 @@
                     });
                 });
                 deferred.resolve(minRequestingFacilities);
-            }).catch(function(){
-                deferred.reject(minRequestingFacilities);
-            });
+            })
+                .catch(function() {
+                    deferred.reject(minRequestingFacilities);
+                });
 
             return deferred.promise;
         }

@@ -25,8 +25,8 @@
      * Controller that drives the POD view screen.
      */
     angular
-    .module('proof-of-delivery-view')
-    .controller('ProofOfDeliveryViewController', ProofOfDeliveryViewController);
+        .module('proof-of-delivery-view')
+        .controller('ProofOfDeliveryViewController', ProofOfDeliveryViewController);
 
     ProofOfDeliveryViewController.$inject = [
         'proofOfDelivery', 'order', 'reasons', 'messageService', 'VVM_STATUS',
@@ -36,7 +36,7 @@
     function ProofOfDeliveryViewController(proofOfDelivery, order, reasons,
                                            messageService, VVM_STATUS, orderLineItems,
                                            fulfillmentUrlFactory, canEdit) {
-                                               
+
         var vm = this;
 
         vm.$onInit = onInit;

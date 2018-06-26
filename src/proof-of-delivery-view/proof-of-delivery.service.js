@@ -57,11 +57,11 @@
         function get(id) {
             if (id) {
                 return repository.get(id)
-                .then(function(proofOfDelivery) {
-                    decorateSave(proofOfDelivery);
-                    decorateConfirm(proofOfDelivery);
-                    return proofOfDelivery;
-                });
+                    .then(function(proofOfDelivery) {
+                        decorateSave(proofOfDelivery);
+                        decorateConfirm(proofOfDelivery);
+                        return proofOfDelivery;
+                    });
             }
             return $q.reject();
         }
@@ -73,23 +73,23 @@
                     'proofOfDeliveryView.confirm.message',
                     'proofOfDeliveryView.confirm.label'
                 )
-                .then(function() {
-                    loadingModalService.open();
-                    return originalConfirm.apply(proofOfDelivery)
                     .then(function() {
-                        notificationService.success(
-                            'proofOfDeliveryView.proofOfDeliveryHasBeenConfirmed'
-                        );
-                        stateTrackerService.goToPreviousState('openlmis.orders.podManage');
-                    })
-                    .catch(function() {
-                        notificationService.error(
-                            'proofOfDeliveryView.failedToConfirmProofOfDelivery'
-                        );
-                        return $q.reject();
-                    })
-                    .finally(loadingModalService.close);
-                });
+                        loadingModalService.open();
+                        return originalConfirm.apply(proofOfDelivery)
+                            .then(function() {
+                                notificationService.success(
+                                    'proofOfDeliveryView.proofOfDeliveryHasBeenConfirmed'
+                                );
+                                stateTrackerService.goToPreviousState('openlmis.orders.podManage');
+                            })
+                            .catch(function() {
+                                notificationService.error(
+                                    'proofOfDeliveryView.failedToConfirmProofOfDelivery'
+                                );
+                                return $q.reject();
+                            })
+                            .finally(loadingModalService.close);
+                    });
             };
         }
 
@@ -98,14 +98,14 @@
             proofOfDelivery.save = function() {
                 loadingModalService.open();
                 return originalSave.apply(this)
-                .then(function() {
-                    notificationService.success('proofOfDeliveryView.proofOfDeliveryHasBeenSaved');
-                })
-                .catch(function() {
-                    notificationService.error('proofOfDeliveryView.failedToSaveProofOfDelivery');
-                    return $q.reject();
-                })
-                .finally(loadingModalService.close);
+                    .then(function() {
+                        notificationService.success('proofOfDeliveryView.proofOfDeliveryHasBeenSaved');
+                    })
+                    .catch(function() {
+                        notificationService.error('proofOfDeliveryView.failedToSaveProofOfDelivery');
+                        return $q.reject();
+                    })
+                    .finally(loadingModalService.close);
             };
         }
     }

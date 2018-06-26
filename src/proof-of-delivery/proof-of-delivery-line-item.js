@@ -96,7 +96,7 @@
         }
 
         function validateQuantityAccepted(lineItem, errors) {
-            if(lineItem.quantityAccepted === undefined || lineItem.quantityAccepted === null) {
+            if (lineItem.quantityAccepted === undefined || lineItem.quantityAccepted === null) {
                 errors.quantityAccepted = 'proofOfDelivery.required';
             }
 

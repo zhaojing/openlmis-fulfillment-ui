@@ -46,7 +46,8 @@
                 requestingFacilities: function(requestingFacilityFactory, $stateParams) {
                     if ($stateParams.supplyingFacilityId) {
                         return requestingFacilityFactory.loadRequestingFacilities(
-                        $stateParams.supplyingFacilityId).then(function(requestingFacilities) {
+                            $stateParams.supplyingFacilityId
+                        ).then(function(requestingFacilities) {
                             return requestingFacilities;
                         });
                     }
@@ -55,23 +56,22 @@
                 programs: function(programService) {
                     return programService.getAll();
                 },
-                canRetryTransfer: function(authorizationService, permissionService, $stateParams){
-                    if($stateParams.supplyingFacilityId) {
+                canRetryTransfer: function(authorizationService, permissionService, $stateParams) {
+                    if ($stateParams.supplyingFacilityId) {
                         return permissionService
                             .hasPermissionWithAnyProgram(authorizationService.getUser().user_id,
-                                                         {
-                                                             right: FULFILLMENT_RIGHTS.ORDERS_TRANSFER,
-                                                             facilityId: $stateParams.supplyingFacilityId
-                                                         })
+                                {
+                                    right: FULFILLMENT_RIGHTS.ORDERS_TRANSFER,
+                                    facilityId: $stateParams.supplyingFacilityId
+                                })
                             .then(function() {
                                 return true;
                             })
                             .catch(function() {
                                 return false;
                             });
-                    }else{
-                        return false;
                     }
+                    return false;
 
                 },
                 orders: function(paginationService, orderRepository, $stateParams) {

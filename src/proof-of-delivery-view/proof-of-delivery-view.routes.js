@@ -58,12 +58,12 @@
                                 facilityId: order.requestingFacility.id,
                                 programId: order.program.id
                             })
-                            .then(function() {
-                                return proofOfDelivery.isInitiated();
-                            })
-                            .catch(function() {
-                                return false;
-                            });
+                                .then(function() {
+                                    return proofOfDelivery.isInitiated();
+                                })
+                                .catch(function() {
+                                    return false;
+                                });
                         }
                     }
                 }

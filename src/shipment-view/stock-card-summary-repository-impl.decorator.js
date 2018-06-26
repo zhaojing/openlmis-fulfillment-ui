@@ -53,32 +53,32 @@
          */
         function queryWithStockCards(params) {
             return this.query(params)
-            .then(function(page) {
-                var stockCardIds = new Set();
-                page.content.forEach(function(summary) {
-                    summary.canFulfillForMe.forEach(function(canFulfillForMe) {
-                        stockCardIds.add(canFulfillForMe.stockCard.id);
-                    });
-                });
-                
-                return new StockCardResource().query({
-                    id: Array.from(stockCardIds)
-                })
-                .then(function(response) {
-                    var stockCardsMap = response.content.reduce(function(stockCardsMap, stockCard) {
-                        stockCardsMap[stockCard.id] = stockCard;
-                        return stockCardsMap;
-                    }, {});
-
+                .then(function(page) {
+                    var stockCardIds = new Set();
                     page.content.forEach(function(summary) {
                         summary.canFulfillForMe.forEach(function(canFulfillForMe) {
-                            canFulfillForMe.stockCard = stockCardsMap[canFulfillForMe.stockCard.id];
+                            stockCardIds.add(canFulfillForMe.stockCard.id);
                         });
                     });
 
-                    return page;
+                    return new StockCardResource().query({
+                        id: Array.from(stockCardIds)
+                    })
+                        .then(function(response) {
+                            var stockCardsMap = response.content.reduce(function(stockCardsMap, stockCard) {
+                                stockCardsMap[stockCard.id] = stockCard;
+                                return stockCardsMap;
+                            }, {});
+
+                            page.content.forEach(function(summary) {
+                                summary.canFulfillForMe.forEach(function(canFulfillForMe) {
+                                    canFulfillForMe.stockCard = stockCardsMap[canFulfillForMe.stockCard.id];
+                                });
+                            });
+
+                            return page;
+                        });
                 });
-            });
         }
     }
 

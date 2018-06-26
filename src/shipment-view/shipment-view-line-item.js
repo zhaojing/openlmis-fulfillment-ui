@@ -30,7 +30,7 @@
         .factory('ShipmentViewLineItem', ShipmentViewLineItem);
 
     function ShipmentViewLineItem() {
-        
+
         ShipmentViewLineItem.prototype.getAvailableSoh = getAvailableSoh;
         ShipmentViewLineItem.prototype.getFillQuantity = getFillQuantity;
         ShipmentViewLineItem.prototype.getRemainingSoh = getRemainingSoh;

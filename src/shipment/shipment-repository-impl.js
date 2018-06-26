@@ -79,9 +79,9 @@
                 stockCardSummaryRepositoryImpl = this.stockCardSummaryRepositoryImpl;
 
             return this.shipmentResource.create(json)
-            .then(function(shipmentJson) {
-                return extendResponse(shipmentJson, orderResource, stockCardSummaryRepositoryImpl);
-            });
+                .then(function(shipmentJson) {
+                    return extendResponse(shipmentJson, orderResource, stockCardSummaryRepositoryImpl);
+                });
         }
 
         /**
@@ -101,11 +101,10 @@
                 stockCardSummaryRepositoryImpl = this.stockCardSummaryRepositoryImpl;
 
             return this.shipmentDraftResource.create(json)
-            .then(function(shipmentJson) {
-                return extendResponse(shipmentJson, orderResource, stockCardSummaryRepositoryImpl);
-             });
+                .then(function(shipmentJson) {
+                    return extendResponse(shipmentJson, orderResource, stockCardSummaryRepositoryImpl);
+                });
         }
-
 
         /**
          * @ngdoc method
@@ -146,9 +145,9 @@
             return this.shipmentResource.query({
                 orderId: orderId
             })
-            .then(function(page) {
-                return extendResponse(page.content[0], orderResource, stockCardSummaryRepositoryImpl);
-            });
+                .then(function(page) {
+                    return extendResponse(page.content[0], orderResource, stockCardSummaryRepositoryImpl);
+                });
         }
 
         /**
@@ -170,31 +169,31 @@
             return this.shipmentDraftResource.query({
                 orderId: orderId
             })
-            .then(function(page) {
-                return extendResponse(page.content[0], orderResource, stockCardSummaryRepositoryImpl);
-            });
+                .then(function(page) {
+                    return extendResponse(page.content[0], orderResource, stockCardSummaryRepositoryImpl);
+                });
         }
 
         function extendResponse(shipmentJson, orderResource, stockCardSummaryRepositoryImpl) {
             return orderResource.get(shipmentJson.order.id)
-            .then(function(orderJson) {
-                var orderableIds = orderJson.orderLineItems.map(function(lineItem) {
-                    return lineItem.orderable.id;
-                });
+                .then(function(orderJson) {
+                    var orderableIds = orderJson.orderLineItems.map(function(lineItem) {
+                        return lineItem.orderable.id;
+                    });
 
-                return stockCardSummaryRepositoryImpl.query({
-                    programId: orderJson.program.id,
-                    facilityId: orderJson.supplyingFacility.id,
-                    orderableId: orderableIds
-                })
-                .then(function(page) {
-                    return page.content;
-                })
-                .then(mapCanFulfillForMe)
-                .then(function(canFulfillForMeMap) {
-                    return combineResponses(shipmentJson, orderJson, canFulfillForMeMap);
+                    return stockCardSummaryRepositoryImpl.query({
+                        programId: orderJson.program.id,
+                        facilityId: orderJson.supplyingFacility.id,
+                        orderableId: orderableIds
+                    })
+                        .then(function(page) {
+                            return page.content;
+                        })
+                        .then(mapCanFulfillForMe)
+                        .then(function(canFulfillForMeMap) {
+                            return combineResponses(shipmentJson, orderJson, canFulfillForMeMap);
+                        });
                 });
-            });
         }
 
         function combineResponses(shipment, order, canFulfillForMeMap) {

@@ -53,7 +53,7 @@
             }
 
             return orderService.get(orderId)
-            .then(orderFactory.buildFromResponse);
+                .then(orderFactory.buildFromResponse);
         }
 
         /**
@@ -74,10 +74,10 @@
          */
         function search(searchParams) {
             return orderService.search(searchParams)
-            .then(function(response) {
-                response.content = basicOrderFactory.buildFromResponseArray(response.content);
-                return response;
-            });
+                .then(function(response) {
+                    response.content = basicOrderFactory.buildFromResponseArray(response.content);
+                    return response;
+                });
         }
     }
 

@@ -58,23 +58,23 @@
             }
 
             return getShipmentBasedOnOrderStatus(order)
-            .then(function(shipment) {
-                
-                shipment.save = decorateSave(shipment.save);
-                shipment.confirm = decorateConfirm(shipment.confirm);
-                shipment.delete = decorateDelete(shipment.delete);
+                .then(function(shipment) {
 
-                return shipment;
-            });
+                    shipment.save = decorateSave(shipment.save);
+                    shipment.confirm = decorateConfirm(shipment.confirm);
+                    shipment.delete = decorateDelete(shipment.delete);
+
+                    return shipment;
+                });
         }
 
         function getShipmentBasedOnOrderStatus(order) {
             if (order.isOrdered()) {
                 return new ShipmentFactory()
-                .buildFromOrder(order)
-                .then(function(shipment) {
-                    return shipmentRepository.createDraft(shipment);
-                });
+                    .buildFromOrder(order)
+                    .then(function(shipment) {
+                        return shipmentRepository.createDraft(shipment);
+                    });
             }
 
             if (order.isFulfilling()) {
@@ -91,17 +91,17 @@
                 loadingModalService.open();
 
                 return originalSave.apply(this, arguments)
-                .then(function(response) {
-                    notificationService.success('shipmentView.draftHasBeenSaved');
-                    $state.reload();
+                    .then(function(response) {
+                        notificationService.success('shipmentView.draftHasBeenSaved');
+                        $state.reload();
 
-                    return response;
-                })
-                .catch(function() {
-                    notificationService.error('shipmentView.failedToSaveDraft');
-                    loadingModalService.close();
-                    return $q.reject();
-                });
+                        return response;
+                    })
+                    .catch(function() {
+                        notificationService.error('shipmentView.failedToSaveDraft');
+                        loadingModalService.close();
+                        return $q.reject();
+                    });
             };
         }
 
@@ -112,19 +112,19 @@
                     'shipmentView.confirmShipment.question',
                     'shipmentView.confirmShipment'
                 )
-                .then(function() {
-                    loadingModalService.open();
-
-                    return originalConfirm.apply(shipment)
                     .then(function() {
-                        notificationService.success('shipmentView.shipmentHasBeenConfirmed');
-                        stateTrackerService.goToPreviousState('openlmis.orders.view');
-                    })
-                    .catch(function() {
-                        notificationService.error('shipmentView.failedToConfirmShipment');
-                        loadingModalService.close();
+                        loadingModalService.open();
+
+                        return originalConfirm.apply(shipment)
+                            .then(function() {
+                                notificationService.success('shipmentView.shipmentHasBeenConfirmed');
+                                stateTrackerService.goToPreviousState('openlmis.orders.view');
+                            })
+                            .catch(function() {
+                                notificationService.error('shipmentView.failedToConfirmShipment');
+                                loadingModalService.close();
+                            });
                     });
-                });
             };
         }
 
@@ -135,23 +135,22 @@
                     'shipmentView.deleteDraftConfirmation',
                     'shipmentView.deleteDraft'
                 )
-                .then(function() {
-                    loadingModalService.open();
-
-                    return originalDelete.apply(shipment)
                     .then(function() {
-                        notificationService.success('shipmentView.draftHasBeenDeleted');
-                        stateTrackerService.goToPreviousState('openlmis.orders.view');
-                    })
-                    .catch(function() {
-                        notificationService.error('shipmentView.failedToDeleteDraft');
-                        loadingModalService.close();
+                        loadingModalService.open();
+
+                        return originalDelete.apply(shipment)
+                            .then(function() {
+                                notificationService.success('shipmentView.draftHasBeenDeleted');
+                                stateTrackerService.goToPreviousState('openlmis.orders.view');
+                            })
+                            .catch(function() {
+                                notificationService.error('shipmentView.failedToDeleteDraft');
+                                loadingModalService.close();
+                            });
                     });
-                });
             };
         }
 
-        
     }
 
 })();

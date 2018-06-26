@@ -51,9 +51,9 @@
                         facilityId: order.supplyingFacility.id,
                         orderableId: orderableIds
                     })
-                    .then(function(page) {
-                        return page.content;
-                    });
+                        .then(function(page) {
+                            return page.content;
+                        });
                 },
                 shipment: function(shipmentViewService, order) {
                     return shipmentViewService.getShipmentForOrder(order);

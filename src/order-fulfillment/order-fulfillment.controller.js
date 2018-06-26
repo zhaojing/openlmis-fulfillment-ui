@@ -34,7 +34,7 @@
     ];
 
     function controller(orderingFacilities, programs, loadingModalService, orders,
-        $stateParams, $state, ORDER_STATUS) {
+                        $stateParams, $state, ORDER_STATUS) {
 
         var vm = this;
 

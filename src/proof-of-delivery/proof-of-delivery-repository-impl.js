@@ -80,24 +80,24 @@
                 id: id,
                 expand: 'shipment.order'
             }).$promise
-            .then(function(proofOfDeliveryJson) {
-                var lotIds = getIdsFromListByObjectName(proofOfDeliveryJson.lineItems, 'lot'),
-                    orderableIds = getIdsFromListByObjectName(proofOfDeliveryJson.lineItems, 'orderable');
+                .then(function(proofOfDeliveryJson) {
+                    var lotIds = getIdsFromListByObjectName(proofOfDeliveryJson.lineItems, 'lot'),
+                        orderableIds = getIdsFromListByObjectName(proofOfDeliveryJson.lineItems, 'orderable');
 
-                return $q.all([
-                    lotRepositoryImpl.query({
-                        id: lotIds
-                    }),
-                    orderableResource.query({
-                        id: orderableIds
-                    })
-                ])
-                .then(function(responses) {
-                    var lotPage = responses[0],
-                        orderablePage = responses[1];
-                    return combineResponses(proofOfDeliveryJson, lotPage.content, orderablePage.content);
+                    return $q.all([
+                        lotRepositoryImpl.query({
+                            id: lotIds
+                        }),
+                        orderableResource.query({
+                            id: orderableIds
+                        })
+                    ])
+                        .then(function(responses) {
+                            var lotPage = responses[0],
+                                orderablePage = responses[1];
+                            return combineResponses(proofOfDeliveryJson, lotPage.content, orderablePage.content);
+                        });
                 });
-            });
         }
 
         /**

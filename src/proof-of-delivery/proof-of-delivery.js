@@ -13,7 +13,7 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-(function(){
+(function() {
 
     'use strict';
 
@@ -32,7 +32,7 @@
         'accessTokenFactory', 'fulfillmentUrlFactory'];
 
     function factory(ProofOfDeliveryLineItem, $q, PROOF_OF_DELIVERY_STATUS, $window,
-        accessTokenFactory, fulfillmentUrlFactory) {
+                     accessTokenFactory, fulfillmentUrlFactory) {
 
         ProofOfDelivery.prototype.validate = validate;
         ProofOfDelivery.prototype.save = save;
@@ -100,9 +100,9 @@
             copy.status = PROOF_OF_DELIVERY_STATUS.CONFIRMED;
 
             return copy.repository.update(copy)
-            .then(function() {
-                proofOfDelivery.status = PROOF_OF_DELIVERY_STATUS.CONFIRMED;
-            });
+                .then(function() {
+                    proofOfDelivery.status = PROOF_OF_DELIVERY_STATUS.CONFIRMED;
+                });
         }
 
         /**
@@ -188,12 +188,12 @@
         function print() {
             if (this.isInitiated()) {
                 return save.apply(this)
-                .then(function(response) {
-                    return getPrintUrl(response.id);
-                });
-            } else {
-                return $q.resolve(getPrintUrl(this.id));
+                    .then(function(response) {
+                        return getPrintUrl(response.id);
+                    });
             }
+            return $q.resolve(getPrintUrl(this.id));
+
         }
 
         function getPrintUrl(podId) {

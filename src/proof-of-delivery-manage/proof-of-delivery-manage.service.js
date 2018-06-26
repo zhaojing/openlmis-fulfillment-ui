@@ -57,9 +57,9 @@
             return proofOfDeliveryRepositoryImpl.query({
                 orderId: orderId
             })
-            .then(function(page) {
-                return page.content[0];
-            });
+                .then(function(page) {
+                    return page.content[0];
+                });
         }
     }
 })();

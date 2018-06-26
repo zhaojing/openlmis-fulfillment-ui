@@ -146,9 +146,9 @@
             popup.document.write(messageService.get('shipmentView.saveDraftPending'));
 
             return shipment.save()
-            .then(function(response) {
-                popup.location.href = accessTokenFactory.addAccessToken(getPrintUrl(response.id));
-            });
+                .then(function(response) {
+                    popup.location.href = accessTokenFactory.addAccessToken(getPrintUrl(response.id));
+                });
         }
 
         function getPrintUrl(shipmentId) {

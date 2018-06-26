@@ -45,15 +45,15 @@
          * @return  {BasicOrder}                the instance of BasicOrder class built based on the
          *                                      server response
          */
-        function buildFromResponse (response) {
+        function buildFromResponse(response) {
             var createdDate = dateUtils.toDate(response.createdDate),
                 lastUpdatedDate = dateUtils.toDate(response.lastUpdatedDate),
 
                 processingPeriod = buildProcessingPeriodFromResponse(response.processingPeriod);
 
-                response.createdDate = createdDate;
-                response.lastUpdatedDate = lastUpdatedDate;
-                response.processingPeriod = processingPeriod;
+            response.createdDate = createdDate;
+            response.lastUpdatedDate = lastUpdatedDate;
+            response.processingPeriod = processingPeriod;
 
             return new Order(response);
         }

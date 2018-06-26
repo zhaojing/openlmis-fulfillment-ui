@@ -50,7 +50,7 @@
          * @return {Object}                          the map of fulfilling line items
          */
         function groupByOrderable(proofOfDeliveryLineItems, orderLineItems) {
-            
+
             var orderableIds = orderLineItems.map(function(lineItem) {
                 return lineItem.orderable.id;
             });
@@ -58,30 +58,30 @@
             return new OrderableFulfillsResource().query({
                 id: orderableIds
             })
-            .then(function(orderableFulfills) {
-                var groupedFulfillingLineItems = groupLineItemsByOrderable(proofOfDeliveryLineItems);
-                orderLineItems.forEach(function(orderLineItem) {
-                    var canFulfillForMe = orderableFulfills[orderLineItem.orderable.id] ? 
-                        orderableFulfills[orderLineItem.orderable.id].canFulfillForMe : 
-                        [];
+                .then(function(orderableFulfills) {
+                    var groupedFulfillingLineItems = groupLineItemsByOrderable(proofOfDeliveryLineItems);
+                    orderLineItems.forEach(function(orderLineItem) {
+                        var canFulfillForMe = orderableFulfills[orderLineItem.orderable.id] ?
+                            orderableFulfills[orderLineItem.orderable.id].canFulfillForMe :
+                            [];
 
-                    orderLineItem.groupedLineItems = [];
-                    canFulfillForMe.forEach(function(fulfillingOrderableId) {
-                        var fulfillingLineItemsGroup = groupedFulfillingLineItems[fulfillingOrderableId];
+                        orderLineItem.groupedLineItems = [];
+                        canFulfillForMe.forEach(function(fulfillingOrderableId) {
+                            var fulfillingLineItemsGroup = groupedFulfillingLineItems[fulfillingOrderableId];
+                            if (fulfillingLineItemsGroup) {
+                                orderLineItem.groupedLineItems.push(fulfillingLineItemsGroup);
+                            }
+                        });
+                        var fulfillingLineItemsGroup = groupedFulfillingLineItems[orderLineItem.orderable.id];
                         if (fulfillingLineItemsGroup) {
                             orderLineItem.groupedLineItems.push(fulfillingLineItemsGroup);
                         }
                     });
-                    var fulfillingLineItemsGroup = groupedFulfillingLineItems[orderLineItem.orderable.id];
-                    if (fulfillingLineItemsGroup) {
-                        orderLineItem.groupedLineItems.push(fulfillingLineItemsGroup);
-                    }
-                });
 
-                return orderLineItems.filter(function(orderLineItem) {
-                    return orderLineItem.groupedLineItems.length;
+                    return orderLineItems.filter(function(orderLineItem) {
+                        return orderLineItem.groupedLineItems.length;
+                    });
                 });
-            });
         }
 
         function groupLineItemsByOrderable(lineItems) {
@@ -91,7 +91,7 @@
                 }
 
                 groupedByOrderable[lineItem.orderable.id].push(lineItem);
-                
+
                 return groupedByOrderable;
             }, {});
         }

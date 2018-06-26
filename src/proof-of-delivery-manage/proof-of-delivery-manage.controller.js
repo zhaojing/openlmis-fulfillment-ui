@@ -200,15 +200,15 @@
         function openPod(orderId) {
             loadingModalService.open();
             proofOfDeliveryManageService.getByOrderId(orderId)
-            .then(function(pod) {
-                $state.go('openlmis.orders.podManage.podView', {
-                    podId: pod.id
+                .then(function(pod) {
+                    $state.go('openlmis.orders.podManage.podView', {
+                        podId: pod.id
+                    });
+                })
+                .catch(function() {
+                    notificationService.error('proofOfDeliveryManage.noOrderFound');
+                    loadingModalService.close();
                 });
-            })
-            .catch(function() {
-                notificationService.error('proofOfDeliveryManage.noOrderFound');
-                loadingModalService.close();
-            });
         }
 
         /**
@@ -228,13 +228,13 @@
 
             loadingModalService.open();
             proofOfDeliveryManageService.getByOrderId(orderId)
-            .then(function(pod) {
-                popup.location.href = accessTokenFactory.addAccessToken(getPrintUrl(pod.id));
-            })
-            .catch(function() {
-                notificationService.error('proofOfDeliveryManage.noOrderFound');
-            })
-            .finally(loadingModalService.close);
+                .then(function(pod) {
+                    popup.location.href = accessTokenFactory.addAccessToken(getPrintUrl(pod.id));
+                })
+                .catch(function() {
+                    notificationService.error('proofOfDeliveryManage.noOrderFound');
+                })
+                .finally(loadingModalService.close);
         }
 
         function getPrintUrl(podId) {

@@ -60,25 +60,25 @@
                 facilityId: order.supplyingFacility.id,
                 orderableId: orderableIds
             })
-            .then(function(page) {
-                var summaries = page.content,
-                    shipmentViewLineItems = summaries.reduce(function(shipmentViewLineItems, summary) {
-                        return shipmentViewLineItems.concat(
-                            summary.canFulfillForMe.map(function(canFulfillForMe) {
-                                return {
-                                    orderable: canFulfillForMe.orderable,
-                                    lot: canFulfillForMe.lot,
-                                    quantityShipped: 0
-                                };
-                            })
-                        );
-                    }, []);
+                .then(function(page) {
+                    var summaries = page.content,
+                        shipmentViewLineItems = summaries.reduce(function(shipmentViewLineItems, summary) {
+                            return shipmentViewLineItems.concat(
+                                summary.canFulfillForMe.map(function(canFulfillForMe) {
+                                    return {
+                                        orderable: canFulfillForMe.orderable,
+                                        lot: canFulfillForMe.lot,
+                                        quantityShipped: 0
+                                    };
+                                })
+                            );
+                        }, []);
 
-                return {
-                    order: order,
-                    lineItems: shipmentViewLineItems
-                };
-            });
+                    return {
+                        order: order,
+                        lineItems: shipmentViewLineItems
+                    };
+                });
         }
     }
 

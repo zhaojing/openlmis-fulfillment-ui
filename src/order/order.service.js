@@ -100,7 +100,9 @@
          * @return {Promise}
          */
         function retryTransfer(orderId) {
-            return resource.retry({id: orderId}).$promise;
+            return resource.retry({
+                id: orderId
+            }).$promise;
         }
 
     }

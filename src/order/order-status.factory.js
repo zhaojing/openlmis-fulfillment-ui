@@ -46,13 +46,34 @@
          */
         function getAll() {
             return [
-                {name: messageService.get("orderStatus.ORDERED"), value: ORDER_STATUS.ORDERED},
-                {name: messageService.get("orderStatus.FULFILLING"), value: ORDER_STATUS.FULFILLING},
-                {name: messageService.get("orderStatus.SHIPPED"), value: ORDER_STATUS.SHIPPED},
-                {name: messageService.get("orderStatus.RECEIVED"), value: ORDER_STATUS.RECEIVED},
-                {name: messageService.get("orderStatus.TRANSFER_FAILED"), value: ORDER_STATUS.TRANSFER_FAILED},
-                {name: messageService.get("orderStatus.IN_ROUTE"), value: ORDER_STATUS.IN_ROUTE},
-                {name: messageService.get("orderStatus.READY_TO_PACK"), value: ORDER_STATUS.READY_TO_PACK}
+                {
+                    name: messageService.get('orderStatus.ORDERED'),
+                    value: ORDER_STATUS.ORDERED
+                },
+                {
+                    name: messageService.get('orderStatus.FULFILLING'),
+                    value: ORDER_STATUS.FULFILLING
+                },
+                {
+                    name: messageService.get('orderStatus.SHIPPED'),
+                    value: ORDER_STATUS.SHIPPED
+                },
+                {
+                    name: messageService.get('orderStatus.RECEIVED'),
+                    value: ORDER_STATUS.RECEIVED
+                },
+                {
+                    name: messageService.get('orderStatus.TRANSFER_FAILED'),
+                    value: ORDER_STATUS.TRANSFER_FAILED
+                },
+                {
+                    name: messageService.get('orderStatus.IN_ROUTE'),
+                    value: ORDER_STATUS.IN_ROUTE
+                },
+                {
+                    name: messageService.get('orderStatus.READY_TO_PACK'),
+                    value: ORDER_STATUS.READY_TO_PACK
+                }
             ];
         }
     }
