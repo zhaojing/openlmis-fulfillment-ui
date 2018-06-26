@@ -34,7 +34,7 @@
 
         var fulfillmentUrl = '@@FULFILLMENT_SERVICE_URL';
 
-        if (fulfillmentUrl.substr(0, 2) == '@@') {
+        if (fulfillmentUrl.substr(0, 2) === '@@') {
             fulfillmentUrl = '';
         }
 

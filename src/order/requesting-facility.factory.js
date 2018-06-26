@@ -22,7 +22,8 @@
      * @name order.requestingFacilityFactory
      *
      * @description
-     * Manages requesting facilities and serves as an abstraction layer between requestingFacilityService and controllers.
+     * Manages requesting facilities and serves as an abstraction layer between requestingFacilityService and
+     * controllers.
      */
     angular
         .module('order')
@@ -45,7 +46,8 @@
          * Gets the UUIDs and names of the available requesting facilities from the cache.
          *
          * @param  {String} supplyingFacilityIds    (optional) the ID of the given supplying facility
-         * @return {Promise}                        the promise resolving to requesting facilities for the given supplying facility
+         * @return {Promise}                        the promise resolving to requesting facilities for the given
+         *                                          supplying facility
          */
         function loadRequestingFacilities(supplyingFacilityIds) {
             var minRequestingFacilities = [],

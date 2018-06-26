@@ -152,7 +152,9 @@
         }
 
         function getPrintUrl(shipmentId) {
-            return fulfillmentUrlFactory('/api/reports/templates/common/583ccc35-88b7-48a8-9193-6c4857d3ff60/pdf?shipmentDraftId=' + shipmentId);
+            return fulfillmentUrlFactory(
+                '/api/reports/templates/common/583ccc35-88b7-48a8-9193-6c4857d3ff60/pdf?shipmentDraftId=' + shipmentId
+            );
         }
     }
 })();

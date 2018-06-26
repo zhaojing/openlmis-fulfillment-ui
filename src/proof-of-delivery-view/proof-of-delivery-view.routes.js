@@ -49,7 +49,8 @@
                             return stockReasonsFactory.getReasons(order.program.id, order.facility.type.id, 'DEBIT');
                         },
                         orderLineItems: function(proofOfDelivery, order, fulfillingLineItemFactory) {
-                            return fulfillingLineItemFactory.groupByOrderable(proofOfDelivery.lineItems, order.orderLineItems);
+                            return fulfillingLineItemFactory
+                                .groupByOrderable(proofOfDelivery.lineItems, order.orderLineItems);
                         },
                         canEdit: function(authorizationService, permissionService, order, proofOfDelivery) {
                             var user = authorizationService.getUser();

@@ -289,7 +289,8 @@
 
         function hasSupplyingFacilityChange(newValue, oldValue) {
             return newValue.id !== $stateParams.supplyingFacilityId
-                || (newValue.id === $stateParams.supplyingFacilityId && oldValue && oldValue.id !== $stateParams.supplyingFacilityId);
+                || (newValue.id === $stateParams.supplyingFacilityId &&
+                    oldValue && oldValue.id !== $stateParams.supplyingFacilityId);
         }
 
     }

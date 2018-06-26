@@ -251,7 +251,7 @@
             }
 
             if (!left || !right) {
-                return !left ? 1 : -1;
+                return left ? -1 : 1;
             }
 
             return left > right ? -1 : 1;
@@ -263,7 +263,7 @@
             }
 
             if (!left || !right) {
-                return !left ? -1 : 1;
+                return left ? 1 : -1;
             }
 
             if (left.getTime() === right.getTime()) {
@@ -286,7 +286,7 @@
                 return 0;
             }
 
-            return !left ? -1 : 1;
+            return left ? 1 : -1;
         }
 
         function getVvmStatus(canFulfillForMe) {
