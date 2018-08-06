@@ -11,6 +11,9 @@ Improvements:
 * [OLMIS-4813](https://openlmis.atlassian.net/browse/OLMIS-4813): Updated datepickers to use the new syntax.
 * [OLMIS-4813](https://openlmis.atlassian.net/browse/OLMIS-4813): Updated ui-components to version 6.0.0.
 
+Bug fixes:
+* [OLMIS-5173](https://openlmis.atlassian.net/browse/OLMIS-5173): Fixed broken Print button on the View Proof of Delivery screen.
+
 6.0.0 / 2018-04-24
 ==================
 
