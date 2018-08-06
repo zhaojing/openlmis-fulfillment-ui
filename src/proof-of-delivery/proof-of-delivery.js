@@ -186,13 +186,21 @@
          * status or the INITIATED status and successfully saved
          */
         function print() {
+            var printUrlPromise;
             if (this.isInitiated()) {
-                return save.apply(this)
+                printUrlPromise =  save.apply(this)
                     .then(function(response) {
                         return getPrintUrl(response.id);
                     });
+            } else {
+                printUrlPromise = $q.resolve(getPrintUrl(this.id));
             }
-            return $q.resolve(getPrintUrl(this.id));
+
+            return printUrlPromise
+                .then(function(printUrl) {
+                    var popup = $window.open('', '_blank');
+                    popup.location.href = printUrl;
+                });
 
         }
 

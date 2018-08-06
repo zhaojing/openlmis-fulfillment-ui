@@ -337,7 +337,7 @@ describe('ProofOfDelivery', function() {
             proofOfDelivery.print();
             $rootScope.$apply();
 
-            expect($window.open).toHaveBeenCalled();
+            expect($window.open).toHaveBeenCalledWith('', '_blank');
         });
 
         it('should attempt to save proof of delivery', function() {
