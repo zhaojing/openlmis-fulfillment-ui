@@ -13,6 +13,7 @@ Improvements:
 
 Bug fixes:
 * [OLMIS-5173](https://openlmis.atlassian.net/browse/OLMIS-5173): Fixed broken Print button on the View Proof of Delivery screen.
+* [OLMIS-5159](https://openlmis.atlassian.net/browse/OLMIS-5159): Fixed blank order quantity on Shipment view for products for which requested quantity was 0.
 
 6.0.0 / 2018-04-24
 ==================

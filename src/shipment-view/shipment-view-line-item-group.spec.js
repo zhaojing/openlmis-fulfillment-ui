@@ -37,4 +37,27 @@ describe('ShipmentViewLineItemGroup', function() {
     
     });
 
+    describe('getOrderQuantity', function() {
+
+        it('should return 0 if order quantity is equal to zero', function() {
+            var lineItemGroup = new ShipmentViewLineItemGroup({
+                orderQuantity: 0,
+                lineItems: []
+            });
+
+            var result = lineItemGroup.getOrderQuantity(false);
+            expect(result).toBe(0);
+        });
+
+        it('should return undefined if order quantity is undefined', function() {
+            var lineItemGroup = new ShipmentViewLineItemGroup({
+                lineItems: []
+            });
+
+            var result = lineItemGroup.getOrderQuantity(false);
+            expect(result).toBeUndefined();
+        });
+
+    });
+
 });
