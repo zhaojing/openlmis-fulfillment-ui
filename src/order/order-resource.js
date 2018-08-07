@@ -29,16 +29,16 @@
         .module('shipment')
         .factory('OrderResource', OrderResource);
 
-    OrderResource.$inject = ['fulfillmentUrlFactory', 'OpenlmisResource', 'classExtender'];
+    OrderResource.$inject = ['OpenlmisResource', 'classExtender'];
 
-    function OrderResource(fulfillmentUrlFactory, OpenlmisResource, classExtender) {
+    function OrderResource(OpenlmisResource, classExtender) {
 
         classExtender.extend(OrderResource, OpenlmisResource);
 
         return OrderResource;
 
         function OrderResource() {
-            this.super(fulfillmentUrlFactory('/api/orders'));
+            this.super('/api/orders');
         }
     }
 })();

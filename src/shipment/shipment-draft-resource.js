@@ -29,17 +29,17 @@
         .factory('ShipmentDraftResource', ShipmentDraftResource);
 
     ShipmentDraftResource.$inject = [
-        'fulfillmentUrlFactory', 'OpenlmisResource', 'classExtender'
+        'OpenlmisResource', 'classExtender'
     ];
 
-    function ShipmentDraftResource(fulfillmentUrlFactory, OpenlmisResource, classExtender) {
+    function ShipmentDraftResource(OpenlmisResource, classExtender) {
 
         classExtender.extend(ShipmentDraftResource, OpenlmisResource);
 
         return ShipmentDraftResource;
 
         function ShipmentDraftResource() {
-            this.super(fulfillmentUrlFactory('/api/shipmentDrafts'));
+            this.super('/api/shipmentDrafts');
         }
     }
 })();

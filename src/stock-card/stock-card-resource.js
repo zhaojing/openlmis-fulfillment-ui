@@ -21,16 +21,16 @@
         .module('stock-card')
         .factory('StockCardResource', StockCardResource);
 
-    StockCardResource.inject = ['OpenlmisResource', 'classExtender', 'stockmanagementUrlFactory'];
+    StockCardResource.inject = ['OpenlmisResource', 'classExtender'];
 
-    function StockCardResource(OpenlmisResource, classExtender, stockmanagementUrlFactory) {
+    function StockCardResource(OpenlmisResource, classExtender) {
 
         classExtender.extend(StockCardResource, OpenlmisResource);
 
         return StockCardResource;
 
         function StockCardResource() {
-            this.super(stockmanagementUrlFactory('/api/stockCards'));
+            this.super('/api/stockCards');
         }
 
     }
