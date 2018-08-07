@@ -58,6 +58,16 @@ describe('ShipmentViewLineItemGroup', function() {
             expect(result).toBeUndefined();
         });
 
+        it('should return undefined if order quantity is null', function() {
+            var lineItemGroup = new ShipmentViewLineItemGroup({
+                orderQuantity: null,
+                lineItems: []
+            });
+
+            var result = lineItemGroup.getOrderQuantity(false);
+            expect(result).toBeUndefined();
+        });
+
     });
 
 });

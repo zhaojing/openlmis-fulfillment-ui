@@ -110,7 +110,7 @@
          *                           line item
          */
         function getOrderQuantity(inDoses) {
-            if (this.orderQuantity === undefined) {
+            if (this.orderQuantity === undefined || this.orderQuantity === null) {
                 return;
             }
             return this.recalculateQuantity(this.orderQuantity, inDoses);
