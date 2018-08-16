@@ -1,5 +1,5 @@
-6.0.1 / WIP
-===========
+6.0.1 / 2018-08-16
+==================
 New functionality added in a backwards-compatible manner:
 * [OLMIS-4867](https://openlmis.atlassian.net/browse/OLMIS-4867): A new button added to retry uploading orders to FTP.
 * [OLMIS-4868](https://openlmis.atlassian.net/browse/OLMIS-4868): Added a new dropdown to allow orders to be filtered by order status on view orders page.
