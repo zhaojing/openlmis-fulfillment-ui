@@ -1,3 +1,9 @@
+6.0.2 / WIP
+==================
+
+Bug fixes:
+* [OLMIS-5249](https://openlmis.atlassian.net/browse/OLMIS-5249): Fixed typo on the Manage Proof of Delivery screen
+
 6.0.1 / 2018-08-16
 ==================
 New functionality added in a backwards-compatible manner:
