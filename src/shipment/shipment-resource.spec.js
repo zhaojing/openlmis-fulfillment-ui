@@ -15,7 +15,7 @@
 
 describe('ShipmentResource', function() {
 
-    var ShipmentResource, OpenlmisResourceMock, fulfillmentUrlFactory;
+    var ShipmentResource, OpenlmisResourceMock;
 
     beforeEach(function() {
         module('shipment', function($provide) {
@@ -27,7 +27,6 @@ describe('ShipmentResource', function() {
         });
 
         inject(function($injector) {
-            fulfillmentUrlFactory = $injector.get('fulfillmentUrlFactory');
             ShipmentResource = $injector.get('ShipmentResource');
         });
     });
@@ -35,8 +34,6 @@ describe('ShipmentResource', function() {
     it('should extend OpenlmisResource', function() {
         new ShipmentResource();
 
-        expect(OpenlmisResourceMock).toHaveBeenCalledWith(
-            fulfillmentUrlFactory('/api/shipments')
-        );
+        expect(OpenlmisResourceMock).toHaveBeenCalledWith('/api/shipments');
     });
 });
