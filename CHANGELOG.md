@@ -2,7 +2,8 @@
 ==================
 
 Bug fixes:
-* [OLMIS-5249](https://openlmis.atlassian.net/browse/OLMIS-5249): Fixed typo on the Manage Proof of Delivery screen
+* [OLMIS-5249](https://openlmis.atlassian.net/browse/OLMIS-5249): Fixed typo on the Manage Proof of Delivery screen.
+* [OLMIS-5224](https://openlmis.atlassian.net/browse/OLMIS-5224): Fixed a bug with printing Proof of Delivery.
 
 6.0.1 / 2018-08-16
 ==================

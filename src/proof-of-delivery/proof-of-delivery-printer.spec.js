@@ -13,28 +13,31 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-(function() {
+describe('ProofOfDeliveryPrinter', function() {
 
-    'use strict';
+    var ProofOfDeliveryPrinter, OpenlmisPrinterSpy;
 
-    /**
-     * @module proof-of-delivery
-     *
-     * @description
-     * Provides Proof of Delivery domain class along with a repository.
-     */
-    angular.module('proof-of-delivery', [
-        'ngResource',
-        'fulfillment',
-        'order',
-        'openlmis-date',
-        'openlmis-i18n',
-        'openlmis-date',
-        'shipment',
-        'openlmis-repository',
-        'referencedata-lot',
-        'referencedata-orderable',
-        'openlmis-printer'
-    ]);
+    beforeEach(function() {
+        module('proof-of-delivery', function($provide) {
+            OpenlmisPrinterSpy = jasmine.createSpy('OpenlmisPrinter');
 
-})();
+            $provide.factory('OpenlmisPrinter', function() {
+                return OpenlmisPrinterSpy;
+            });
+        });
+
+        inject(function($injector) {
+            ProofOfDeliveryPrinter = $injector.get('ProofOfDeliveryPrinter');
+        });
+    });
+
+    it('should extend OpenlmisPrinter', function() {
+        new ProofOfDeliveryPrinter('some-id');
+
+        expect(OpenlmisPrinterSpy).toHaveBeenCalledWith({
+            resourceUri: '/api/proofsOfDelivery/',
+            loadingMessage: 'proofOfDelivery.preparingProofOfDelivery',
+            id: 'some-id'
+        });
+    });
+});

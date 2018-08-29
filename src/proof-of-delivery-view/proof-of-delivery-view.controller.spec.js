@@ -15,20 +15,23 @@
 
 describe('PodViewController', function() {
 
-    var vm, $controller, ProofOfDeliveryDataBuilder, OrderDataBuilder, proofOfDelivery, order,
-        reasons, ReasonDataBuilder, VVM_STATUS, messageService,
-        orderLineItems;
+    var vm, $controller, ProofOfDeliveryDataBuilder, OrderDataBuilder, proofOfDelivery, order, reasons, $rootScope, $q,
+        ReasonDataBuilder, VVM_STATUS, messageService, orderLineItems, PROOF_OF_DELIVERY_STATUS, ProofOfDeliveryPrinter;
 
     beforeEach(function() {
         module('proof-of-delivery-view');
 
         inject(function($injector) {
+            $q = $injector.get('$q');
             $controller = $injector.get('$controller');
             OrderDataBuilder = $injector.get('OrderDataBuilder');
             ProofOfDeliveryDataBuilder = $injector.get('ProofOfDeliveryDataBuilder');
             ReasonDataBuilder = $injector.get('ReasonDataBuilder');
             VVM_STATUS = $injector.get('VVM_STATUS');
             messageService = $injector.get('messageService');
+            PROOF_OF_DELIVERY_STATUS = $injector.get('PROOF_OF_DELIVERY_STATUS');
+            $rootScope = $injector.get('$rootScope');
+            ProofOfDeliveryPrinter = $injector.get('ProofOfDeliveryPrinter');
         });
 
         proofOfDelivery = new ProofOfDeliveryDataBuilder().build();
@@ -47,6 +50,11 @@ describe('PodViewController', function() {
         ];
 
         spyOn(messageService, 'get');
+        spyOn(ProofOfDeliveryPrinter.prototype, 'closeTab');
+        spyOn(ProofOfDeliveryPrinter.prototype, 'openTab');
+        spyOn(ProofOfDeliveryPrinter.prototype, 'print');
+        spyOn(proofOfDelivery, 'save').andReturn($q.resolve(proofOfDelivery));
+        spyOn(proofOfDelivery, 'isInitiated');
 
         vm = $controller('ProofOfDeliveryViewController', {
             proofOfDelivery: proofOfDelivery,
@@ -142,5 +150,58 @@ describe('PodViewController', function() {
             }).toThrow();
         });
 
+    });
+
+    describe('printProofOfDelivery', function() {
+
+        beforeEach(function() {
+            vm.$onInit();
+        });
+
+        it('should open the window', function() {
+            vm.printProofOfDelivery();
+
+            expect(ProofOfDeliveryPrinter.prototype.openTab).toHaveBeenCalled();
+        });
+
+        it('should close the window when save proof of delivery failed', function() {
+            proofOfDelivery.isInitiated.andReturn(true);
+            proofOfDelivery.save.andReturn($q.reject());
+
+            vm.printProofOfDelivery();
+            $rootScope.$apply();
+
+            expect(ProofOfDeliveryPrinter.prototype.closeTab).toHaveBeenCalled();
+        });
+
+        it('should attempt to save proof of delivery if it is initiated', function() {
+            proofOfDelivery.isInitiated.andReturn(true);
+
+            vm.printProofOfDelivery();
+            $rootScope.$apply();
+
+            expect(proofOfDelivery.save).toHaveBeenCalled();
+        });
+
+        it('should not call save if the pod is confirmed', function() {
+            proofOfDelivery.isInitiated.andReturn(false);
+
+            vm.printProofOfDelivery();
+            $rootScope.$apply();
+
+            expect(proofOfDelivery.save).not.toHaveBeenCalled();
+        });
+
+        it('should open the window if the pod is confirmed', function() {
+            proofOfDelivery.isInitiated.andReturn(true);
+
+            vm.printProofOfDelivery();
+
+            expect(ProofOfDeliveryPrinter.prototype.print).not.toHaveBeenCalled();
+
+            $rootScope.$apply();
+
+            expect(ProofOfDeliveryPrinter.prototype.print).toHaveBeenCalled();
+        });
     });
 });

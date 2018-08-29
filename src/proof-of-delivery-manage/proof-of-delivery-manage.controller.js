@@ -30,19 +30,18 @@
 
     controller.$inject = [
         'proofOfDeliveryManageService', '$state', 'loadingModalService', 'notificationService', 'pods',
-        '$stateParams', 'programs', 'requestingFacilities', 'supplyingFacilities', 'fulfillmentUrlFactory',
-        '$window', 'accessTokenFactory'
+        '$stateParams', 'programs', 'requestingFacilities', 'supplyingFacilities', 'ProofOfDeliveryPrinter'
     ];
 
     function controller(proofOfDeliveryManageService, $state, loadingModalService, notificationService,
                         pods, $stateParams, programs, requestingFacilities, supplyingFacilities,
-                        fulfillmentUrlFactory, $window, accessTokenFactory) {
+                        ProofOfDeliveryPrinter) {
         var vm = this;
 
         vm.$onInit = onInit;
         vm.openPod = openPod;
         vm.loadOrders = loadOrders;
-        vm.printPod = printPod;
+        vm.printProofOfDelivery = printProofOfDelivery;
 
         /**
          * @ngdoc property
@@ -215,7 +214,7 @@
          *
          * @ngdoc method
          * @methodOf proof-of-delivery-manage.controller:ProofOfDeliveryManageController
-         * @name printPod
+         * @name printProofOfDelivery
          *
          * @description
          * Prints the given proof of delivery.
@@ -223,22 +222,22 @@
          * @param  {Object} orderId the UUID of order to find it's POD
          * @return {String}         the prepared URL
          */
-        function printPod(orderId) {
-            var popup = $window.open('', '_blank');
+        function printProofOfDelivery(orderId) {
+            var printer = new ProofOfDeliveryPrinter();
+
+            printer.openTab();
 
             loadingModalService.open();
             proofOfDeliveryManageService.getByOrderId(orderId)
                 .then(function(pod) {
-                    popup.location.href = accessTokenFactory.addAccessToken(getPrintUrl(pod.id));
+                    printer.setId(pod.id);
+                    printer.print();
                 })
                 .catch(function() {
+                    printer.closeTab();
                     notificationService.error('proofOfDeliveryManage.noOrderFound');
                 })
                 .finally(loadingModalService.close);
-        }
-
-        function getPrintUrl(podId) {
-            return fulfillmentUrlFactory('/api/proofsOfDelivery/' + podId + '/print?format=pdf');
         }
     }
 

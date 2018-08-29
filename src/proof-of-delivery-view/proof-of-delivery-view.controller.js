@@ -19,7 +19,7 @@
 
     /**
      * @ngdoc controller
-     * @name proof-of-delivery-view.controller:PodViewController
+     * @name proof-of-delivery-view.controller:ProofOfDeliveryViewController
      *
      * @description
      * Controller that drives the POD view screen.
@@ -29,23 +29,23 @@
         .controller('ProofOfDeliveryViewController', ProofOfDeliveryViewController);
 
     ProofOfDeliveryViewController.$inject = [
-        'proofOfDelivery', 'order', 'reasons', 'messageService', 'VVM_STATUS',
-        'orderLineItems', 'fulfillmentUrlFactory', 'canEdit'
+        'proofOfDelivery', 'order', 'reasons', 'messageService', 'VVM_STATUS', 'orderLineItems', 'canEdit',
+        'ProofOfDeliveryPrinter', '$q'
     ];
 
-    function ProofOfDeliveryViewController(proofOfDelivery, order, reasons,
-                                           messageService, VVM_STATUS, orderLineItems,
-                                           fulfillmentUrlFactory, canEdit) {
+    function ProofOfDeliveryViewController(proofOfDelivery, order, reasons, messageService, VVM_STATUS, orderLineItems,
+                                           canEdit, ProofOfDeliveryPrinter, $q) {
 
         var vm = this;
 
         vm.$onInit = onInit;
         vm.getStatusDisplayName = getStatusDisplayName;
         vm.getReasonName = getReasonName;
+        vm.printProofOfDelivery = printProofOfDelivery;
 
         /**
          * @ngdoc property
-         * @propertyOf proof-of-delivery-view.controller:PodViewController
+         * @propertyOf proof-of-delivery-view.controller:ProofOfDeliveryViewController
          * @name proofOfDelivery
          * @type {Object}
          *
@@ -56,7 +56,7 @@
 
         /**
          * @ngdoc property
-         * @propertyOf proof-of-delivery-view.controller:PodViewController
+         * @propertyOf proof-of-delivery-view.controller:ProofOfDeliveryViewController
          * @name order
          * @type {Object}
          *
@@ -67,7 +67,7 @@
 
         /**
          * @ngdoc property
-         * @propertyOf proof-of-delivery-view.controller:PodViewController
+         * @propertyOf proof-of-delivery-view.controller:ProofOfDeliveryViewController
          * @name orderLineItems
          * @type {Object}
          *
@@ -78,7 +78,7 @@
 
         /**
          * @ngdoc property
-         * @propertyOf proof-of-delivery-view.controller:PodViewController
+         * @propertyOf proof-of-delivery-view.controller:ProofOfDeliveryViewController
          * @name showVvmColumn
          * @type {boolean}
          *
@@ -89,7 +89,7 @@
 
         /**
          * @ngdoc property
-         * @propertyOf proof-of-delivery-view.controller:PodViewController
+         * @propertyOf proof-of-delivery-view.controller:ProofOfDeliveryViewController
          * @name canEdit
          * @type {boolean}
          *
@@ -100,7 +100,7 @@
 
         /**
          * @ngdoc property
-         * @propertyOf proof-of-delivery-view.controller:PodViewController
+         * @propertyOf proof-of-delivery-view.controller:ProofOfDeliveryViewController
          * @name reasons
          * @type {Array}
          *
@@ -111,11 +111,11 @@
 
         /**
          * @ngdoc method
-         * @methodOf proof-of-delivery-view.controller:PodViewController
+         * @methodOf proof-of-delivery-view.controller:ProofOfDeliveryViewController
          * @name $onInit
          *
          * @description
-         * Initialization method of the PodViewController.
+         * Initialization method of the ProofOfDeliveryViewController.
          */
         function onInit() {
             vm.order = order;
@@ -129,7 +129,7 @@
 
         /**
          * @ngdoc method
-         * @methodOf proof-of-delivery-view.controller:PodViewController
+         * @methodOf proof-of-delivery-view.controller:ProofOfDeliveryViewController
          * @name getStatusDisplayName
          *
          * @description
@@ -141,7 +141,7 @@
 
         /**
          * @ngdoc method
-         * @methodOf proof-of-delivery-view.controller:PodViewController
+         * @methodOf proof-of-delivery-view.controller:ProofOfDeliveryViewController
          * @name getReasonName
          *
          * @description
@@ -158,6 +158,30 @@
             return vm.reasons.filter(function(reason) {
                 return reason.id === id;
             })[0].name;
+        }
+
+        /**
+         *
+         * @ngdoc method
+         * @methodOf proof-of-delivery-view.controller:ProofOfDeliveryViewController
+         * @name printProofOfDelivery
+         *
+         * @description
+         * Prints the proof of delivery.
+         */
+        function printProofOfDelivery() {
+            var printer = new ProofOfDeliveryPrinter();
+
+            printer.openTab();
+
+            (vm.proofOfDelivery.isInitiated() ? vm.proofOfDelivery.save() : $q.resolve(vm.proofOfDelivery))
+                .then(function(proofOfDelivery) {
+                    printer.setId(proofOfDelivery.id);
+                    printer.print();
+                })
+                .catch(function() {
+                    printer.closeTab();
+                });
         }
     }
 }());

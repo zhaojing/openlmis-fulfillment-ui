@@ -15,10 +15,9 @@
 
 describe('ProofOfDeliveryManageController', function() {
 
-    var proofOfDeliveryManageService, $rootScope, $state, $q, $controller, ProgramDataBuilder,
-        FacilityDataBuilder, ProofOfDeliveryDataBuilder, fulfillmentUrlFactoryMock, vm, deferred,
-        pod, stateParams, supplyingFacilities, programs, requestingFacilities, loadingModalService,
-        notificationService, loadingDeferred, $window;
+    var proofOfDeliveryManageService, $rootScope, $state, $q, $controller, ProgramDataBuilder, FacilityDataBuilder,
+        ProofOfDeliveryDataBuilder, vm, deferred, pod, stateParams, supplyingFacilities, programs, requestingFacilities,
+        loadingModalService, notificationService, loadingDeferred, $window, ProofOfDeliveryPrinter;
 
     beforeEach(function() {
         module('proof-of-delivery-manage');
@@ -36,6 +35,7 @@ describe('ProofOfDeliveryManageController', function() {
             ProofOfDeliveryDataBuilder = $injector.get('ProofOfDeliveryDataBuilder');
             loadingModalService = $injector.get('loadingModalService');
             notificationService = $injector.get('notificationService');
+            ProofOfDeliveryPrinter = $injector.get('ProofOfDeliveryPrinter');
         });
 
         pod = new ProofOfDeliveryDataBuilder().build();
@@ -56,7 +56,7 @@ describe('ProofOfDeliveryManageController', function() {
             size: 10,
             programId: programs[0].id,
             requestingFacilityId: requestingFacilities[0].id,
-            supplyingFacilityId: supplyingFacilities[0].id,
+            supplyingFacilityId: supplyingFacilities[0].id
         };
 
         vm = $controller('ProofOfDeliveryManageController', {
@@ -73,6 +73,9 @@ describe('ProofOfDeliveryManageController', function() {
         spyOn(notificationService, 'success');
         spyOn(notificationService, 'error');
         spyOn($window, 'open').andCallThrough();
+        spyOn(ProofOfDeliveryPrinter.prototype, 'closeTab');
+        spyOn(ProofOfDeliveryPrinter.prototype, 'openTab');
+        spyOn(ProofOfDeliveryPrinter.prototype, 'print');
 
         spyOn(loadingModalService, 'open').andReturn(loadingDeferred.promise);
     });
@@ -81,49 +84,49 @@ describe('ProofOfDeliveryManageController', function() {
 
         it('should expose pod', function() {
             vm.$onInit();
-    
+
             expect(vm.pods).toEqual([pod]);
         });
 
         it('should expose programs', function() {
             vm.$onInit();
-    
+
             expect(vm.programs).toEqual(programs);
         });
 
         it('should expose requesting facilities', function() {
             vm.$onInit();
-    
+
             expect(vm.requestingFacilities).toEqual(requestingFacilities);
         });
 
         it('should expose supplying facilities', function() {
             vm.$onInit();
-    
+
             expect(vm.supplyingFacilities).toEqual(supplyingFacilities);
         });
 
         it('should select program', function() {
             vm.$onInit();
-    
+
             expect(vm.program).toEqual(programs[0]);
         });
 
         it('should select requesting facility', function() {
             vm.$onInit();
-    
+
             expect(vm.requestingFacility).toEqual(requestingFacilities[0]);
         });
 
         it('should select supplying facility', function() {
             vm.$onInit();
-    
+
             expect(vm.supplyingFacility).toEqual(supplyingFacilities[0]);
         });
 
         it('should set program name', function() {
             vm.$onInit();
-            
+
             expect(vm.facilityName).toEqual(vm.requestingFacility.name);
         });
 
@@ -171,36 +174,22 @@ describe('ProofOfDeliveryManageController', function() {
         });
     });
 
-    describe('printPod', function() {
+    describe('printProofOfDelivery', function() {
 
         beforeEach(function() {
-            fulfillmentUrlFactoryMock = jasmine.createSpy();
-            fulfillmentUrlFactoryMock.andCallFake(function(url) {
-                return 'http://some.url' + url;
-            });
-
-            vm = $controller('ProofOfDeliveryManageController', {
-                programs: programs,
-                requestingFacilities: requestingFacilities,
-                supplyingFacilities: supplyingFacilities,
-                pods: [pod],
-                $stateParams: stateParams,
-                fulfillmentUrlFactory: fulfillmentUrlFactoryMock
-            });
-
+            vm.$onInit();
             spyOn(proofOfDeliveryManageService, 'getByOrderId').andReturn(deferred.promise);
         });
 
         it('should open loading modal', function() {
-            vm.printPod(pod.id);
-            $rootScope.$apply();
+            vm.printProofOfDelivery(pod.id);
 
             expect(loadingModalService.open).toHaveBeenCalled();
             expect(loadingModalService.close).not.toHaveBeenCalled();
         });
 
         it('should attempt to get proof of delivery', function() {
-            vm.printPod(pod.id);
+            vm.printProofOfDelivery(pod.id);
             $rootScope.$apply();
 
             expect(loadingModalService.open).toHaveBeenCalled();
@@ -209,7 +198,7 @@ describe('ProofOfDeliveryManageController', function() {
         });
 
         it('should open window after proof of delivery was found', function() {
-            vm.printPod(pod.id);
+            vm.printProofOfDelivery(pod.id);
 
             expect(loadingModalService.open).toHaveBeenCalled();
             expect(proofOfDeliveryManageService.getByOrderId).toHaveBeenCalledWith(pod.id);
@@ -217,14 +206,14 @@ describe('ProofOfDeliveryManageController', function() {
             deferred.resolve(pod);
             $rootScope.$apply();
 
-            expect($window.open).toHaveBeenCalled();
+            expect(ProofOfDeliveryPrinter.prototype.openTab).toHaveBeenCalled();
             expect(notificationService.error).not.toHaveBeenCalled();
             expect(notificationService.success).not.toHaveBeenCalled();
             expect(loadingModalService.close).toHaveBeenCalled();
         });
 
         it('should close loading modal after pod failed to get', function() {
-            vm.printPod(pod.id);
+            vm.printProofOfDelivery(pod.id);
 
             expect(loadingModalService.open).toHaveBeenCalled();
             expect(proofOfDeliveryManageService.getByOrderId).toHaveBeenCalledWith(pod.id);
@@ -236,8 +225,21 @@ describe('ProofOfDeliveryManageController', function() {
             expect(loadingModalService.close).toHaveBeenCalled();
         });
 
+        it('should close the window after pod failed to get', function() {
+            vm.printProofOfDelivery(pod.id);
+
+            expect(loadingModalService.open).toHaveBeenCalled();
+            expect(proofOfDeliveryManageService.getByOrderId).toHaveBeenCalledWith(pod.id);
+            expect(loadingModalService.close).not.toHaveBeenCalled();
+
+            deferred.reject();
+            $rootScope.$apply();
+
+            expect(ProofOfDeliveryPrinter.prototype.closeTab).toHaveBeenCalled();
+        });
+
         it('should show notification after pod failed to get and loading modal was closed', function() {
-            vm.printPod(pod.id);
+            vm.printProofOfDelivery(pod.id);
 
             expect(loadingModalService.open).toHaveBeenCalled();
             expect(proofOfDeliveryManageService.getByOrderId).toHaveBeenCalledWith(pod.id);
@@ -253,6 +255,7 @@ describe('ProofOfDeliveryManageController', function() {
 
             expect(notificationService.error).toHaveBeenCalledWith('proofOfDeliveryManage.noOrderFound');
         });
+
     });
 
 });

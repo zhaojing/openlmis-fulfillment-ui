@@ -16,7 +16,7 @@
 describe('ProofOfDelivery', function() {
 
     var ProofOfDelivery, ProofOfDeliveryLineItem, ProofOfDeliveryDataBuilder, $q, $rootScope, json,
-        ProofOfDeliveryLineItemDataBuilder, PROOF_OF_DELIVERY_STATUS, $window;
+        ProofOfDeliveryLineItemDataBuilder, PROOF_OF_DELIVERY_STATUS;
 
     beforeEach(function() {
         module('proof-of-delivery');
@@ -24,7 +24,6 @@ describe('ProofOfDelivery', function() {
         inject(function($injector) {
             $q = $injector.get('$q');
             $rootScope = $injector.get('$rootScope');
-            $window = $injector.get('$window');
             ProofOfDelivery = $injector.get('ProofOfDelivery');
             ProofOfDeliveryLineItem = $injector.get('ProofOfDeliveryLineItem');
             PROOF_OF_DELIVERY_STATUS = $injector.get('PROOF_OF_DELIVERY_STATUS');
@@ -72,9 +71,9 @@ describe('ProofOfDelivery', function() {
 
             var saved;
             proofOfDelivery.save()
-            .then(function() {
-                saved = true;
-            });
+                .then(function() {
+                    saved = true;
+                });
             $rootScope.$apply();
 
             expect(saved).toBe(true);
@@ -85,9 +84,9 @@ describe('ProofOfDelivery', function() {
 
             var saved;
             proofOfDelivery.save()
-            .catch(function() {
-                saved = false;
-            });
+                .catch(function() {
+                    saved = false;
+                });
             $rootScope.$apply();
 
             expect(saved).toBe(false);
@@ -109,9 +108,9 @@ describe('ProofOfDelivery', function() {
 
             var result;
             proofOfDelivery.confirm()
-            .catch(function(errors) {
-                result = errors;
-            });
+                .catch(function(errors) {
+                    result = errors;
+                });
             $rootScope.$apply();
 
             expect(result).toEqual({
@@ -122,7 +121,7 @@ describe('ProofOfDelivery', function() {
         it('should not call repository if Proof of Delivery is invalid', function() {
             proofOfDelivery.receivedBy = undefined;
 
-            proofOfDelivery.confirm()
+            proofOfDelivery.confirm();
             $rootScope.$apply();
 
             expect(proofOfDeliveryRepositoryMock.update).not.toHaveBeenCalled();
@@ -142,9 +141,9 @@ describe('ProofOfDelivery', function() {
 
             var rejected;
             proofOfDelivery.confirm()
-            .catch(function(errors) {
-                rejected = !errors;
-            });
+                .catch(function(errors) {
+                    rejected = !errors;
+                });
             $rootScope.$apply();
 
             expect(rejected).toBe(true);
@@ -177,9 +176,9 @@ describe('ProofOfDelivery', function() {
 
             var confirmed;
             proofOfDelivery.confirm()
-            .then(function() {
-                confirmed = true;
-            });
+                .then(function() {
+                    confirmed = true;
+                });
             $rootScope.$apply();
 
             expect(confirmed).toBe(true);
@@ -289,11 +288,11 @@ describe('ProofOfDelivery', function() {
 
         beforeEach(function() {
             proofOfDelivery = new ProofOfDeliveryDataBuilder()
-            .withLineItems([
-                new ProofOfDeliveryLineItemDataBuilder().withUseVvm(false).buildJson(),
-                new ProofOfDeliveryLineItemDataBuilder().withUseVvm(false).buildJson()
-            ])
-            .build();
+                .withLineItems([
+                    new ProofOfDeliveryLineItemDataBuilder().withUseVvm(false).buildJson(),
+                    new ProofOfDeliveryLineItemDataBuilder().withUseVvm(false).buildJson()
+                ])
+                .build();
         });
 
         it('should return true if Proof of Delivery Line Item uses VVM', function() {
@@ -303,68 +302,6 @@ describe('ProofOfDelivery', function() {
 
         it('should return false if Proof of Delivery Line Items do not use VVM', function() {
             expect(proofOfDelivery.hasProductsUseVvmStatus()).toBe(false);
-        });
-    });
-
-    describe('printPod', function() {
-
-        var proofOfDelivery, proofOfDeliveryRepositoryMock,saveDeferred;
-
-        beforeEach(function() {
-            proofOfDeliveryRepositoryMock = jasmine.createSpyObj('repository', ['update']);
-            proofOfDelivery = new ProofOfDelivery(json, proofOfDeliveryRepositoryMock);
-
-            spyOn($window, 'open').andCallThrough();
-
-            saveDeferred = $q.defer();
-            spyOn(proofOfDelivery.save, 'apply').andCallThrough();
-            proofOfDelivery.save.apply.andReturn(saveDeferred.promise);
-        });
-
-        it('should not open the window when save proof of delivery failed', function() {
-            saveDeferred.reject();
-
-            proofOfDelivery.print();
-            $rootScope.$apply();
-
-            expect(proofOfDelivery.save.apply).toHaveBeenCalled();
-            expect($window.open).not.toHaveBeenCalled();
-        });
-
-        it('should open the window after successful save proof of delivery', function() {
-            saveDeferred.resolve(proofOfDelivery);
-
-            proofOfDelivery.print();
-            $rootScope.$apply();
-
-            expect($window.open).toHaveBeenCalledWith('', '_blank');
-        });
-
-        it('should attempt to save proof of delivery', function() {
-            saveDeferred.resolve(proofOfDelivery);
-
-            proofOfDelivery.print();
-            $rootScope.$apply();
-
-            expect(proofOfDelivery.save.apply).toHaveBeenCalled();
-        });
-
-        it('should not call save if the pod is confirmed', function() {
-            proofOfDelivery.status = PROOF_OF_DELIVERY_STATUS.CONFIRMED;
-
-            proofOfDelivery.print();
-            $rootScope.$apply();
-
-            expect(proofOfDelivery.save.apply).not.toHaveBeenCalled();
-        });
-
-        it('should open the window if the pod is confirmed', function() {
-            proofOfDelivery.status = PROOF_OF_DELIVERY_STATUS.CONFIRMED;
-
-            proofOfDelivery.print();
-            $rootScope.$apply();
-
-            expect($window.open).toHaveBeenCalled();
         });
     });
 });

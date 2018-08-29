@@ -31,15 +31,13 @@
     factory.$inject = ['ProofOfDeliveryLineItem', '$q', 'PROOF_OF_DELIVERY_STATUS', '$window',
         'accessTokenFactory', 'fulfillmentUrlFactory'];
 
-    function factory(ProofOfDeliveryLineItem, $q, PROOF_OF_DELIVERY_STATUS, $window,
-                     accessTokenFactory, fulfillmentUrlFactory) {
+    function factory(ProofOfDeliveryLineItem, $q, PROOF_OF_DELIVERY_STATUS) {
 
         ProofOfDelivery.prototype.validate = validate;
         ProofOfDelivery.prototype.save = save;
         ProofOfDelivery.prototype.confirm = confirm;
         ProofOfDelivery.prototype.isInitiated = isInitiated;
         ProofOfDelivery.prototype.hasProductsUseVvmStatus = hasProductsUseVvmStatus;
-        ProofOfDelivery.prototype.print = print;
 
         return ProofOfDelivery;
 
@@ -171,42 +169,6 @@
             }
 
             return angular.equals(errors, {}) ? undefined : errors;
-        }
-
-        /**
-         *
-         * @ngdoc method
-         * @methodOf proof-of-delivery.ProofOfDelivery
-         * @name print
-         *
-         * @description
-         * Saves and prints if proof of delivery is initiated or prints if confirmed.
-         *
-         * @return {Promise} the promise resolving to the proof of delivery that has the CONFIRMED
-         * status or the INITIATED status and successfully saved
-         */
-        function print() {
-            var printUrlPromise;
-            if (this.isInitiated()) {
-                printUrlPromise =  save.apply(this)
-                    .then(function(response) {
-                        return getPrintUrl(response.id);
-                    });
-            } else {
-                printUrlPromise = $q.resolve(getPrintUrl(this.id));
-            }
-
-            return printUrlPromise
-                .then(function(printUrl) {
-                    var popup = $window.open('', '_blank');
-                    popup.location.href = printUrl;
-                });
-
-        }
-
-        function getPrintUrl(podId) {
-            var url = fulfillmentUrlFactory('/api/proofsOfDelivery/' + podId + '/print?format=pdf');
-            $window.open(accessTokenFactory.addAccessToken(url), '_blank');
         }
 
         function createLineItems(jsonLineItems) {

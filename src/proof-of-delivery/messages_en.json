@@ -4,5 +4,6 @@
     "proofOfDelivery.canNotAcceptMoreThanShipped": "You can't accept more stock than was shipped",
     "proofOfDelivery.canNotSpecifyReasonForRejectionIfNotRejectingAnything": "You can't specify reason for rejections if not rejecting anything",
     "proofOfDelivery.vvmStatusIsRequired": "VVM status is required when some products were accepted",
-    "proofOfDelivery.cannotSelectVvmStatusWhenNothingAccepted": "Cannot select VVM Status when nothing was accepted"
+    "proofOfDelivery.cannotSelectVvmStatusWhenNothingAccepted": "Cannot select VVM Status when nothing was accepted",
+    "proofOfDelivery.preparingProofOfDelivery": "Preparing Proof of Delivery..."
 }

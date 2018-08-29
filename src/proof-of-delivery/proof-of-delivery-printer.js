@@ -18,23 +18,32 @@
     'use strict';
 
     /**
-     * @module proof-of-delivery
+     * @ngdoc service
+     * @name proof-of-delivery.ProofOfDeliveryPrinter
      *
      * @description
-     * Provides Proof of Delivery domain class along with a repository.
+     * Responsible for printing an instance of the Proof of Delivery with the specified ID.
      */
-    angular.module('proof-of-delivery', [
-        'ngResource',
-        'fulfillment',
-        'order',
-        'openlmis-date',
-        'openlmis-i18n',
-        'openlmis-date',
-        'shipment',
-        'openlmis-repository',
-        'referencedata-lot',
-        'referencedata-orderable',
-        'openlmis-printer'
-    ]);
+    angular
+        .module('proof-of-delivery')
+        .factory('ProofOfDeliveryPrinter', ProofOfDeliveryPrinter);
+
+    ProofOfDeliveryPrinter.$inject = ['classExtender', 'OpenlmisPrinter'];
+
+    function ProofOfDeliveryPrinter(classExtender, OpenlmisPrinter) {
+
+        classExtender.extend(ProofOfDeliveryPrinter, OpenlmisPrinter);
+
+        return ProofOfDeliveryPrinter;
+
+        function ProofOfDeliveryPrinter(proofOfDeliveryId) {
+            this.super({
+                resourceUri: '/api/proofsOfDelivery/',
+                loadingMessage: 'proofOfDelivery.preparingProofOfDelivery',
+                id: proofOfDeliveryId
+            });
+        }
+
+    }
 
 })();
