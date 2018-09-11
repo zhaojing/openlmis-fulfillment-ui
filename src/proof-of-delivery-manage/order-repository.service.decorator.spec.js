@@ -15,7 +15,7 @@
 
 describe('orderRepository decorator', function() {
 
-    var orderRepository, orderServiceMock, ORDER_STATUS;
+    var orderRepository, orderServiceMock, ORDER_STATUS, $q;
 
     beforeEach(function() {
         module('proof-of-delivery-manage', function($provide) {
@@ -25,6 +25,7 @@ describe('orderRepository decorator', function() {
         inject(function($injector) {
             ORDER_STATUS = $injector.get('ORDER_STATUS');
             orderRepository = $injector.get('orderRepository');
+            $q = $injector.get('$q');
         });
     });
 
