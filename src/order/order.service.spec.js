@@ -40,7 +40,7 @@ describe('orderService', function() {
             order = new OrderResponseDataBuilder().build();
 
             $httpBackend.whenGET(fulfillmentUrlFactory('/api/orders/' + order.id))
-            .respond(200, order);
+                .respond(200, order);
         });
 
         it('should call /api/orders endpoint', function() {
@@ -54,9 +54,9 @@ describe('orderService', function() {
         it('should return response', function() {
             var result;
             orderService.get(order.id)
-            .then(function(order) {
-                result = order;
-            });
+                .then(function(order) {
+                    result = order;
+                });
             $httpBackend.flush();
             $rootScope.$apply();
 
@@ -64,7 +64,7 @@ describe('orderService', function() {
         });
     });
 
-    describe('retry', function(){
+    describe('retry', function() {
 
         var order;
 
@@ -78,7 +78,8 @@ describe('orderService', function() {
         it('should call /api/orders/{id}/retry endpoint', function() {
             $httpBackend.expectGET(fulfillmentUrlFactory('/api/orders/' + order.id + '/retry'));
 
-            orderService.retryTransfer(order.id).then(function(response){
+            var result;
+            orderService.retryTransfer(order.id).then(function(response) {
                 result = response;
             });
 
@@ -122,9 +123,9 @@ describe('orderService', function() {
         it('should return page', function() {
             var result;
             orderService.search(searchParams)
-            .then(function(page) {
-                result = page;
-            });
+                .then(function(page) {
+                    result = page;
+                });
             $httpBackend.flush();
             $rootScope.$apply();
 

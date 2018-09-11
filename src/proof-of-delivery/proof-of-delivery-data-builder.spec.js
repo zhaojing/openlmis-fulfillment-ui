@@ -30,7 +30,7 @@
                                         ObjectReferenceDataBuilder, ShipmentDataBuilder,
                                         ShipmentLineItemDataBuilder, PROOF_OF_DELIVERY_STATUS) {
 
-        ProofOfDeliveryDataBuilder.prototype.build = build
+        ProofOfDeliveryDataBuilder.prototype.build = build;
         ProofOfDeliveryDataBuilder.prototype.buildJson = buildJson;
         ProofOfDeliveryDataBuilder.prototype.withReceivedDate = withReceivedDate;
         ProofOfDeliveryDataBuilder.prototype.withLineItems = withLineItems;

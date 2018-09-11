@@ -51,8 +51,9 @@ describe('ShipmentRepositoryImpl', function() {
 
             stockCardSummaryRepositoryImplMock = jasmine.createSpyObj(
                 'stockCardSummaryRepositoryImpl', [
-                'query'
-            ]);
+                    'query'
+                ]
+            );
             $provide.factory('StockCardSummaryRepositoryImpl', function() {
                 return function() {
                     return stockCardSummaryRepositoryImplMock;
@@ -111,9 +112,9 @@ describe('ShipmentRepositoryImpl', function() {
 
             var rejected;
             shipmentRepositoryImpl.create(shipment)
-            .catch(function() {
-                rejected = true;
-            });
+                .catch(function() {
+                    rejected = true;
+                });
             $rootScope.$apply();
 
             expect(rejected).toBe(true);
@@ -173,9 +174,9 @@ describe('ShipmentRepositoryImpl', function() {
 
             var result;
             shipmentRepositoryImpl.create(shipment)
-            .then(function(response) {
-                result = response;
-            });
+                .then(function(response) {
+                    result = response;
+                });
             $rootScope.$apply();
 
             expect(result.order).toEqual(order);
@@ -196,7 +197,7 @@ describe('ShipmentRepositoryImpl', function() {
             });
 
         });
-    
+
     });
 
     describe('createDraft', function() {
@@ -315,9 +316,9 @@ describe('ShipmentRepositoryImpl', function() {
 
             var result;
             shipmentRepositoryImpl.updateDraft(shipment)
-            .then(function(response) {
-                result = response;
-            });
+                .then(function(response) {
+                    result = response;
+                });
             $rootScope.$apply();
 
             expect(result).toEqual(shipment);

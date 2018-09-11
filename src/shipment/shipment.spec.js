@@ -84,9 +84,9 @@ describe('Shipment', function() {
 
             var result;
             shipment.save()
-            .then(function(response) {
-                result = response;
-            });
+                .then(function(response) {
+                    result = response;
+                });
             $rootScope.$apply();
 
             expect(result).toEqual(updatedShipment);
@@ -97,9 +97,9 @@ describe('Shipment', function() {
 
             var rejected;
             shipment.save()
-            .catch(function() {
-                rejected = true;
-            });
+                .catch(function() {
+                    rejected = true;
+                });
             $rootScope.$apply();
 
             expect(rejected).toBe(true);
@@ -110,9 +110,9 @@ describe('Shipment', function() {
 
             var rejected;
             shipment.save()
-            .catch(function() {
-                rejected = true;
-            });
+                .catch(function() {
+                    rejected = true;
+                });
             $rootScope.$apply();
 
             expect(rejected).toBe(true);
@@ -131,9 +131,9 @@ describe('Shipment', function() {
 
             var rejected;
             shipment.confirm()
-            .catch(function() {
-                rejected = true;
-            });
+                .catch(function() {
+                    rejected = true;
+                });
             $rootScope.$apply();
 
             expect(rejected).toBe(true);
@@ -144,9 +144,9 @@ describe('Shipment', function() {
 
             var rejected;
             shipment.confirm()
-            .catch(function() {
-                rejected = true;
-            });
+                .catch(function() {
+                    rejected = true;
+                });
             $rootScope.$apply();
 
             expect(rejected).toBe(true);
@@ -160,9 +160,9 @@ describe('Shipment', function() {
 
             var confirmed;
             shipment.confirm()
-            .then(function() {
-                confirmed = true;
-            });
+                .then(function() {
+                    confirmed = true;
+                });
             $rootScope.$apply();
 
             expect(confirmed).toBe(true);
@@ -173,9 +173,9 @@ describe('Shipment', function() {
 
             var rejected;
             shipment.confirm()
-            .catch(function() {
-                rejected = true;
-            });
+                .catch(function() {
+                    rejected = true;
+                });
             $rootScope.$apply();
 
             expect(rejected).toBe(true);
@@ -186,9 +186,9 @@ describe('Shipment', function() {
 
             var rejected;
             shipment.confirm()
-            .catch(function() {
-                rejected = true;
-            });
+                .catch(function() {
+                    rejected = true;
+                });
             $rootScope.$apply();
 
             expect(rejected).toBe(true);
@@ -203,9 +203,9 @@ describe('Shipment', function() {
 
             var deleted;
             shipment.delete()
-            .then(function() {
-                deleted = true;
-            });
+                .then(function() {
+                    deleted = true;
+                });
             $rootScope.$apply();
 
             expect(deleted).toBe(true);
@@ -216,9 +216,9 @@ describe('Shipment', function() {
 
             var rejected;
             shipment.delete()
-            .catch(function() {
-                rejected = true;
-            });
+                .catch(function() {
+                    rejected = true;
+                });
             $rootScope.$apply();
 
             expect(rejected).toBe(true);
@@ -229,9 +229,9 @@ describe('Shipment', function() {
 
             var rejected;
             shipment.delete()
-            .catch(function() {
-                rejected = true;
-            });
+                .catch(function() {
+                    rejected = true;
+                });
             $rootScope.$apply();
 
             expect(rejected).toBe(true);

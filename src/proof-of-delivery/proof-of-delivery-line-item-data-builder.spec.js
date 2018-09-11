@@ -71,7 +71,7 @@
                 rejectionReasonId: this.rejectionReasonId,
                 notes: this.notes,
                 useVvm: this.useVvm
-            }
+            };
         }
 
         function withQuantityAccepted(quantityAccepted) {
@@ -90,12 +90,12 @@
         }
 
         function withOrderable(orderable) {
-            this.orderable = orderable
+            this.orderable = orderable;
             return this;
         }
 
         function withRejectionReasonId(rejectionReasonId) {
-            this.rejectionReasonId = rejectionReasonId
+            this.rejectionReasonId = rejectionReasonId;
             return this;
         }
 

@@ -23,7 +23,7 @@ describe('ProofOfDeliveryRepositoryImpl', function() {
     beforeEach(function() {
         module('proof-of-delivery', function($provide) {
             $provide.factory('OpenLMISRepositoryImpl', function() {
-                return function(url) {
+                return function() {
                     lotRepositoryImplMock = jasmine.createSpyObj(
                         'lotRepositoryImpl', ['query']
                     );
@@ -32,7 +32,7 @@ describe('ProofOfDeliveryRepositoryImpl', function() {
             });
 
             $provide.factory('OrderableResource', function() {
-                return function(url) {
+                return function() {
                     orderableResourceMock = jasmine.createSpyObj(
                         'OrderableResource', ['query']
                     );
@@ -95,25 +95,23 @@ describe('ProofOfDeliveryRepositoryImpl', function() {
         beforeEach(function() {
             lotRepositoryImplMock.query.andReturn($q.resolve(new PageDataBuilder()
                 .withContent(lotJsons)
-                .build()
-            ));
+                .build()));
 
             orderableResourceMock.query.andReturn($q.resolve(new PageDataBuilder()
                 .withContent(orderableJsons)
-                .build()
-            ));
+                .build()));
         });
 
         it('should resolve to combined server responses if requests were successful', function() {
             $httpBackend
-            .expectGET(fulfillmentUrlFactory('/api/proofsOfDelivery/proof-of-delivery-id?expand=shipment.order'))
-            .respond(200, angular.copy(proofOfDeliveryJson));
+                .expectGET(fulfillmentUrlFactory('/api/proofsOfDelivery/proof-of-delivery-id?expand=shipment.order'))
+                .respond(200, angular.copy(proofOfDeliveryJson));
 
             var result;
             proofOfDeliveryRepositoryImpl.get('proof-of-delivery-id')
-            .then(function(response) {
-                result = response;
-            });
+                .then(function(response) {
+                    result = response;
+                });
             $httpBackend.flush();
             $rootScope.$apply();
 
@@ -147,14 +145,14 @@ describe('ProofOfDeliveryRepositoryImpl', function() {
 
         it('should reject if request was unsuccessful', function() {
             $httpBackend
-            .expectGET(fulfillmentUrlFactory('/api/proofsOfDelivery/proof-of-delivery-id?expand=shipment.order'))
-            .respond(400);
+                .expectGET(fulfillmentUrlFactory('/api/proofsOfDelivery/proof-of-delivery-id?expand=shipment.order'))
+                .respond(400);
 
             var rejected;
             proofOfDeliveryRepositoryImpl.get('proof-of-delivery-id')
-            .catch(function() {
-                rejected = true;
-            });
+                .catch(function() {
+                    rejected = true;
+                });
             $httpBackend.flush();
 
             expect(rejected).toBe(true);
@@ -162,16 +160,16 @@ describe('ProofOfDeliveryRepositoryImpl', function() {
 
         it('should reject if lot repository rejects', function() {
             $httpBackend
-            .expectGET(fulfillmentUrlFactory('/api/proofsOfDelivery/proof-of-delivery-id?expand=shipment.order'))
-            .respond(200, angular.copy(proofOfDeliveryJson));
+                .expectGET(fulfillmentUrlFactory('/api/proofsOfDelivery/proof-of-delivery-id?expand=shipment.order'))
+                .respond(200, angular.copy(proofOfDeliveryJson));
 
             lotRepositoryImplMock.query.andReturn($q.reject());
 
             var rejected;
             proofOfDeliveryRepositoryImpl.get('proof-of-delivery-id')
-            .catch(function() {
-                rejected = true;
-            });
+                .catch(function() {
+                    rejected = true;
+                });
             $httpBackend.flush();
 
             expect(rejected).toBe(true);
@@ -179,16 +177,16 @@ describe('ProofOfDeliveryRepositoryImpl', function() {
 
         it('should reject if orderable repository rejects', function() {
             $httpBackend
-            .expectGET(fulfillmentUrlFactory('/api/proofsOfDelivery/proof-of-delivery-id?expand=shipment.order'))
-            .respond(200, angular.copy(proofOfDeliveryJson));
+                .expectGET(fulfillmentUrlFactory('/api/proofsOfDelivery/proof-of-delivery-id?expand=shipment.order'))
+                .respond(200, angular.copy(proofOfDeliveryJson));
 
             orderableResourceMock.query.andReturn($q.reject());
 
             var rejected;
             proofOfDeliveryRepositoryImpl.get('proof-of-delivery-id')
-            .catch(function() {
-                rejected = true;
-            });
+                .catch(function() {
+                    rejected = true;
+                });
             $httpBackend.flush();
 
             expect(rejected).toBe(true);
@@ -199,14 +197,17 @@ describe('ProofOfDeliveryRepositoryImpl', function() {
 
         it('should resolve to server response if request was successful', function() {
             $httpBackend
-            .expectPUT(fulfillmentUrlFactory('/api/proofsOfDelivery/' + proofOfDeliveryJson.id), proofOfDeliveryJson)
-            .respond(200, proofOfDeliveryJson);
+                .expectPUT(
+                    fulfillmentUrlFactory('/api/proofsOfDelivery/' + proofOfDeliveryJson.id),
+                    proofOfDeliveryJson
+                )
+                .respond(200, proofOfDeliveryJson);
 
             var result;
             proofOfDeliveryRepositoryImpl.update(proofOfDeliveryJson)
-            .then(function(response) {
-                result = response;
-            });
+                .then(function(response) {
+                    result = response;
+                });
             $httpBackend.flush();
 
             expect(angular.toJson(result)).toEqual(angular.toJson(proofOfDeliveryJson));
@@ -214,14 +215,17 @@ describe('ProofOfDeliveryRepositoryImpl', function() {
 
         it('should reject if request was unsuccessful', function() {
             $httpBackend
-            .expectPUT(fulfillmentUrlFactory('/api/proofsOfDelivery/' + proofOfDeliveryJson.id), proofOfDeliveryJson)
-            .respond(400);
+                .expectPUT(
+                    fulfillmentUrlFactory('/api/proofsOfDelivery/' + proofOfDeliveryJson.id),
+                    proofOfDeliveryJson
+                )
+                .respond(400);
 
             var rejected;
             proofOfDeliveryRepositoryImpl.update(proofOfDeliveryJson)
-            .catch(function() {
-                rejected = true;
-            });
+                .catch(function() {
+                    rejected = true;
+                });
             $httpBackend.flush();
 
             expect(rejected).toBe(true);

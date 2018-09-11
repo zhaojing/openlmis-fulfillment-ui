@@ -14,7 +14,7 @@
  */
 
 describe('ShipmentViewLineItemGroup', function() {
-    
+
     var ShipmentViewLineItemGroup;
 
     beforeEach(function() {
@@ -26,7 +26,7 @@ describe('ShipmentViewLineItemGroup', function() {
     });
 
     describe('constructor', function() {
-    
+
         it('should set isLot to false', function() {
             var result = new ShipmentViewLineItemGroup({
                 lineItems: []
@@ -34,7 +34,7 @@ describe('ShipmentViewLineItemGroup', function() {
 
             expect(result.isLot).toBe(false);
         });
-    
+
     });
 
     describe('getOrderQuantity', function() {

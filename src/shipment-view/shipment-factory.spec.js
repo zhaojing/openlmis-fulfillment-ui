@@ -61,15 +61,15 @@ describe('ShipmentFactory', function() {
     });
 
     describe('buildFromOrder', function() {
-    
+
         it('should reject if stock card summary repository reject', function() {
             stockCardRepositoryImplMock.query.andReturn($q.reject());
 
             var rejected;
             shipmentFactory.buildFromOrder(order)
-            .catch(function() {
-                rejected = true;
-            });
+                .catch(function() {
+                    rejected = true;
+                });
             $rootScope.$apply();
 
             expect(rejected).toEqual(true);
@@ -97,9 +97,9 @@ describe('ShipmentFactory', function() {
 
             var result;
             shipmentFactory.buildFromOrder(order)
-            .then(function(response) {
-                result = response;
-            });
+                .then(function(response) {
+                    result = response;
+                });
             $rootScope.$apply();
 
             expect(result.order).toEqual(order);
@@ -124,7 +124,7 @@ describe('ShipmentFactory', function() {
                 quantityShipped: 0
             });
         });
-    
+
     });
 
 });

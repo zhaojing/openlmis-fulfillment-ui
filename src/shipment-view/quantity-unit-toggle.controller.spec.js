@@ -29,7 +29,7 @@ describe('QuantityUnitToggleController', function() {
 
         vm = $controller('QuantityUnitToggleController', {
             messageService: messageService,
-            localStorageService: localStorageService,
+            localStorageService: localStorageService
         });
     });
 

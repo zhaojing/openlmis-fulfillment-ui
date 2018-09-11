@@ -43,9 +43,9 @@ describe('ProofOfDeliveryRepository', function() {
 
             var result;
             proofOfDeliveryRepository.get('proof-of-delivery-id')
-            .then(function(proofOfDelivery) {
-                result = proofOfDelivery;
-            });
+                .then(function(proofOfDelivery) {
+                    result = proofOfDelivery;
+                });
             $rootScope.$apply();
 
             expect(result instanceof ProofOfDelivery).toBe(true);
@@ -58,9 +58,9 @@ describe('ProofOfDeliveryRepository', function() {
 
             var rejected;
             proofOfDeliveryRepository.get('proof-of-delivery-id')
-            .catch(function() {
-                rejected = true;
-            });
+                .catch(function() {
+                    rejected = true;
+                });
             $rootScope.$apply();
 
             expect(rejected).toBe(true);
@@ -71,17 +71,17 @@ describe('ProofOfDeliveryRepository', function() {
     describe('update', function() {
 
         it('should resolve to updated proof of delivery', function() {
-            proofOfDelivery = new ProofOfDelivery(json, proofOfDeliveryRepository);
+            var proofOfDelivery = new ProofOfDelivery(json, proofOfDeliveryRepository);
 
-            implMock.update.andCallFake(function(proofOfDelivery) {
+            implMock.update.andCallFake(function() {
                 return $q.resolve(json);
             });
 
             var result;
             proofOfDeliveryRepository.update(proofOfDelivery)
-            .then(function(proofOfDelivery) {
-                result = proofOfDelivery;
-            });
+                .then(function(proofOfDelivery) {
+                    result = proofOfDelivery;
+                });
             $rootScope.$apply();
 
             expect(result instanceof ProofOfDelivery).toBe(true);
@@ -95,9 +95,9 @@ describe('ProofOfDeliveryRepository', function() {
 
             var rejected;
             proofOfDeliveryRepository.update(proofOfDelivery)
-            .catch(function() {
-                rejected = true;
-            });
+                .catch(function() {
+                    rejected = true;
+                });
             $rootScope.$apply();
 
             expect(rejected).toBe(true);

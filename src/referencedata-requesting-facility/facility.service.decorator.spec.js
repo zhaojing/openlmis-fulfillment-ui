@@ -19,7 +19,7 @@ describe('Facility service decorator', function() {
     beforeEach(function() {
         module('referencedata-requesting-facility');
 
-        inject(function($injector){
+        inject(function($injector) {
             $rootScope = $injector.get('$rootScope');
             $httpBackend = $injector.get('$httpBackend');
             facilityService = $injector.get('facilityService');
@@ -38,10 +38,11 @@ describe('Facility service decorator', function() {
             var requestingFacilities;
 
             $httpBackend.when('GET', fulfillmentUrlFactory(
-                '/api/orders/requestingFacilities?supplyingFacilityId=facility-1'))
+                '/api/orders/requestingFacilities?supplyingFacilityId=facility-1'
+            ))
                 .respond(200, facilities);
 
-            facilityService.getRequestingFacilities('facility-1').then(function(response){
+            facilityService.getRequestingFacilities('facility-1').then(function(response) {
                 requestingFacilities = response;
             });
 
@@ -57,10 +58,11 @@ describe('Facility service decorator', function() {
             var requestingFacilities;
 
             $httpBackend.when('GET', fulfillmentUrlFactory(
-                '/api/orders/requestingFacilities?supplyingFacilityId=facility-1&supplyingFacilityId=facility-2'))
+                '/api/orders/requestingFacilities?supplyingFacilityId=facility-1&supplyingFacilityId=facility-2'
+            ))
                 .respond(200, facilities);
 
-            facilityService.getRequestingFacilities(['facility-1', 'facility-2']).then(function(response){
+            facilityService.getRequestingFacilities(['facility-1', 'facility-2']).then(function(response) {
                 requestingFacilities = response;
             });
 
@@ -78,7 +80,7 @@ describe('Facility service decorator', function() {
             $httpBackend.when('GET', fulfillmentUrlFactory('/api/orders/requestingFacilities'))
                 .respond(200, facilities);
 
-            facilityService.getRequestingFacilities().then(function(response){
+            facilityService.getRequestingFacilities().then(function(response) {
                 requestingFacilities = response;
             });
 

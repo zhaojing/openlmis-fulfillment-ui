@@ -58,8 +58,8 @@
 
             this.program = new ProgramDataBuilder().build();
             this.requestingFacility = new FacilityDataBuilder().build();
-            this.orderCode = "ORDER-" + BasicOrderResponseDataBuilder.instanceNumber;
-            this.status = "ORDERED";
+            this.orderCode = 'ORDER-' + BasicOrderResponseDataBuilder.instanceNumber;
+            this.status = 'ORDERED';
             this.facility = new FacilityDataBuilder().build();
             this.receivingFacility = new FacilityDataBuilder().build();
             this.supplyingFacility = new FacilityDataBuilder().build();

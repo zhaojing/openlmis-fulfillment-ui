@@ -158,7 +158,9 @@ describe('ProofOfDeliveryManageController', function() {
             programId: vm.program.id,
             page: 0,
             size: 10
-        }, {reload: true});
+        }, {
+            reload: true
+        });
     });
 
     describe('openPod', function() {
@@ -170,7 +172,9 @@ describe('ProofOfDeliveryManageController', function() {
             deferred.resolve(pod);
             $rootScope.$apply();
 
-            expect($state.go).toHaveBeenCalledWith('openlmis.orders.podManage.podView', {podId: pod.id});
+            expect($state.go).toHaveBeenCalledWith('openlmis.orders.podManage.podView', {
+                podId: pod.id
+            });
         });
     });
 

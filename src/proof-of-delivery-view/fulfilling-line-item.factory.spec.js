@@ -58,7 +58,7 @@ describe('fulfillingLineItemFactory', function() {
         };
         orderableFulfills[orderLineItems[1].orderable.id] = {
             canFulfillForMe: [
-                proofOfDeliveryLineItems[2].orderable.id 
+                proofOfDeliveryLineItems[2].orderable.id
             ],
             canBeFulfilledByMe: []
         };
@@ -73,7 +73,7 @@ describe('fulfillingLineItemFactory', function() {
             OrderableFulfillsResource.query.andReturn($q.reject());
 
             fulfillingLineItemFactory.groupByOrderable(proofOfDeliveryLineItems, orderLineItems)
-            .catch(spy);
+                .catch(spy);
             $rootScope.$apply();
 
             expect(spy).toHaveBeenCalled();
@@ -84,9 +84,9 @@ describe('fulfillingLineItemFactory', function() {
             orderLineItems = [];
 
             fulfillingLineItemFactory.groupByOrderable(proofOfDeliveryLineItems, [])
-            .then(function(response) {
-                result = response;
-            });
+                .then(function(response) {
+                    result = response;
+                });
             $rootScope.$apply();
 
             expect(result).toEqual([]);
@@ -96,9 +96,9 @@ describe('fulfillingLineItemFactory', function() {
             var result;
 
             fulfillingLineItemFactory.groupByOrderable([], orderLineItems)
-            .then(function(response) {
-                result = response;
-            });
+                .then(function(response) {
+                    result = response;
+                });
             $rootScope.$apply();
 
             expect(result.length).toEqual(0);
@@ -106,11 +106,11 @@ describe('fulfillingLineItemFactory', function() {
 
         it('should group proof of delivery line items by order line items', function() {
             var result;
-            
+
             fulfillingLineItemFactory.groupByOrderable(proofOfDeliveryLineItems, orderLineItems)
-            .then(function(response) {
-                result = response;
-            });
+                .then(function(response) {
+                    result = response;
+                });
             $rootScope.$apply();
 
             expect(result[0].groupedLineItems).toEqual([
@@ -128,11 +128,11 @@ describe('fulfillingLineItemFactory', function() {
 
             var newPodLineItem = angular.copy(proofOfDeliveryLineItems[0]);
             proofOfDeliveryLineItems.push(newPodLineItem);
-            
+
             fulfillingLineItemFactory.groupByOrderable(proofOfDeliveryLineItems, orderLineItems)
-            .then(function(response) {
-                result = response;
-            });
+                .then(function(response) {
+                    result = response;
+                });
             $rootScope.$apply();
 
             expect(result[0].groupedLineItems).toEqual([
@@ -151,9 +151,9 @@ describe('fulfillingLineItemFactory', function() {
             proofOfDeliveryLineItems = [proofOfDeliveryLineItems[0], proofOfDeliveryLineItems[1]];
 
             fulfillingLineItemFactory.groupByOrderable(proofOfDeliveryLineItems, orderLineItems)
-            .then(function(response) {
-                result = response;
-            });
+                .then(function(response) {
+                    result = response;
+                });
             $rootScope.$apply();
 
             expect(result.length).toEqual(1);

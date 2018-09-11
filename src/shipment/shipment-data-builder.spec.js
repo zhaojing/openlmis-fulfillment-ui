@@ -73,7 +73,7 @@
                 notes: this.notes,
                 lineItems: this.lineItems,
                 extraData: this.extraData
-            }
+            };
         }
 
         function buildResponse() {

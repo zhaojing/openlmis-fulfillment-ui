@@ -17,7 +17,6 @@
 
     'use strict';
 
-
     angular
         .module('order')
         .factory('BasicOrderDataBuilder', BasicOrderDataBuilder);

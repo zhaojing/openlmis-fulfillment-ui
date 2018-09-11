@@ -146,7 +146,8 @@ describe('ShipmentViewController', function() {
             $rootScope.$apply();
 
             expect(popup.location.href)
-                .toEqual(fulfillmentUrlFactory('/api/reports/templates/common/583ccc35-88b7-48a8-9193-6c4857d3ff60/pdf?shipmentDraftId=' + shipment.id));
+                .toEqual(fulfillmentUrlFactory('/api/reports/templates/common/583ccc35-88b7-48a8-9193-6c4857d3ff60/' +
+                    'pdf?shipmentDraftId=' + shipment.id));
         });
 
     });

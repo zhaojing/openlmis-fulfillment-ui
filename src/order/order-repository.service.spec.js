@@ -15,9 +15,8 @@
 
 describe('orderRepository', function() {
 
-    var orderRepository, Order, OrderResponseDataBuilder, OrderDataBuilder, orderFactory,
-        orderService, $q, $rootScope, PageDataBuilder, BasicOrderResponseDataBuilder,
-        BasicOrderDataBuilder, basicOrderFactory;
+    var orderRepository, OrderResponseDataBuilder, OrderDataBuilder, orderFactory, orderService, $q, $rootScope,
+        PageDataBuilder, BasicOrderResponseDataBuilder, BasicOrderDataBuilder, basicOrderFactory;
 
     beforeEach(function() {
         module('order');
@@ -55,9 +54,9 @@ describe('orderRepository', function() {
 
             var result;
             orderRepository.get(order.id)
-            .then(function(order) {
-                result = order;
-            });
+                .then(function(order) {
+                    result = order;
+                });
             $rootScope.$apply();
 
             expect(result).toEqual(order);
@@ -71,9 +70,9 @@ describe('orderRepository', function() {
 
             var rejected;
             orderRepository.get(order.id)
-            .catch(function() {
-                rejected = true;
-            });
+                .catch(function() {
+                    rejected = true;
+                });
             $rootScope.$apply();
 
             expect(rejected).toBe(true);
@@ -84,9 +83,9 @@ describe('orderRepository', function() {
 
             var rejected;
             orderRepository.get(order.id)
-            .catch(function() {
-                rejected = true;
-            });
+                .catch(function() {
+                    rejected = true;
+                });
             $rootScope.$apply();
 
             expect(rejected).toBe(true);
@@ -131,9 +130,9 @@ describe('orderRepository', function() {
 
             var result;
             orderRepository.search(searchParams)
-            .then(function(page) {
-                result = page;
-            });
+                .then(function(page) {
+                    result = page;
+                });
             $rootScope.$apply();
 
             expect(result.content.length).toBe(2);
@@ -150,9 +149,9 @@ describe('orderRepository', function() {
 
             var result;
             orderRepository.search(undefined)
-            .then(function(page) {
-                result = page;
-            });
+                .then(function(page) {
+                    result = page;
+                });
             $rootScope.$apply();
 
             expect(result).toBeDefined();
@@ -164,9 +163,9 @@ describe('orderRepository', function() {
 
             var rejected;
             orderRepository.search(searchParams)
-            .catch(function() {
-                rejected = true;
-            });
+                .catch(function() {
+                    rejected = true;
+                });
             $rootScope.$apply();
 
             expect(rejected).toBe(true);
@@ -177,9 +176,9 @@ describe('orderRepository', function() {
 
             var rejected;
             orderRepository.search(searchParams)
-            .catch(function() {
-                rejected = true;
-            });
+                .catch(function() {
+                    rejected = true;
+                });
             $rootScope.$apply();
 
             expect(rejected).toBe(true);

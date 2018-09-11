@@ -63,12 +63,11 @@ describe('ShipmentLineItem', function() {
                 .withQuantityShipped(20)
                 .withCanFulfillForMe(
                     new CanFulfillForMeEntryDataBuilder()
-                    .withOrderable(new OrderableDataBuilder()
-                        .withNetContent(6)
+                        .withOrderable(new OrderableDataBuilder()
+                            .withNetContent(6)
+                            .buildJson())
+                        .withStockOnHand(45)
                         .buildJson()
-                    )
-                    .withStockOnHand(45)
-                    .buildJson()
                 )
                 .buildJson();
 
@@ -90,8 +89,7 @@ describe('ShipmentLineItem', function() {
                     new CanFulfillForMeEntryDataBuilder()
                         .withOrderable(new OrderableDataBuilder()
                             .withNetContent(6)
-                            .buildJson()
-                        )
+                            .buildJson())
                         .withStockOnHand(45)
                         .buildJson()
                 )

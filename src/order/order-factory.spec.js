@@ -77,7 +77,7 @@ describe('orderFactory', function() {
         });
 
         it('should set status', function() {
-            var result = orderFactory.buildFromResponse(response)
+            var result = orderFactory.buildFromResponse(response);
 
             expect(result.status).toEqual(response.status);
         });

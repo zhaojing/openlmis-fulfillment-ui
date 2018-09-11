@@ -237,9 +237,9 @@ describe('shipmentViewService', function() {
 
             var rejected;
             shipment.save()
-            .catch(function() {
-                rejected = true;
-            });
+                .catch(function() {
+                    rejected = true;
+                });
             $rootScope.$apply();
 
             expect(rejected).toEqual(true);
@@ -266,7 +266,9 @@ describe('shipmentViewService', function() {
 
             originalSave.andReturn($q.resolve(shipment));
 
-            shipment.save().then(function (response) { result = response; });
+            shipment.save().then(function(response) {
+                result = response;
+            });
             $rootScope.$apply();
 
             expect(loadingModalService.open).toHaveBeenCalled();
@@ -303,9 +305,9 @@ describe('shipmentViewService', function() {
 
             var rejected;
             shipment.confirm()
-            .catch(function() {
-                rejected = true;
-            });
+                .catch(function() {
+                    rejected = true;
+                });
             $rootScope.$apply();
 
             expect(rejected).toEqual(true);

@@ -13,7 +13,6 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-
 describe('openlmis.orders.view state', function() {
 
     var $q, $state, $rootScope, requestingFacilityFactory, state, minimalFacilities, FULFILLMENT_RIGHTS,
@@ -31,7 +30,7 @@ describe('openlmis.orders.view state', function() {
 
         var result;
 
-        state.resolve.requestingFacilities(requestingFacilityFactory, $stateParams).then(function(facilities){
+        state.resolve.requestingFacilities(requestingFacilityFactory, $stateParams).then(function(facilities) {
             result = facilities;
         });
         $rootScope.$apply();
@@ -44,13 +43,13 @@ describe('openlmis.orders.view state', function() {
         expect(state.accessRights).toEqual([FULFILLMENT_RIGHTS.PODS_MANAGE, FULFILLMENT_RIGHTS.ORDERS_VIEW]);
     });
 
-    it('should not try to check permission if supplyingFacilityId is undefined', function(){
-       spyOn(permissionService, 'hasPermissionWithAnyProgram').andReturn();
+    it('should not try to check permission if supplyingFacilityId is undefined', function() {
+        spyOn(permissionService, 'hasPermissionWithAnyProgram').andReturn();
 
         $stateParams.supplyingFacilityId = undefined;
 
         state.resolve.canRetryTransfer(authorizationService,
-                                                    permissionService, $stateParams);
+            permissionService, $stateParams);
         $rootScope.$apply();
 
         expect(permissionService.hasPermissionWithAnyProgram).not.toHaveBeenCalled();
@@ -61,7 +60,7 @@ describe('openlmis.orders.view state', function() {
         $stateParams.supplyingFacilityId = undefined;
 
         var result = state.resolve.canRetryTransfer(authorizationService,
-                                                    permissionService, $stateParams);
+            permissionService, $stateParams);
         $rootScope.$apply();
         expect(result).toEqual(false);
     });
@@ -69,7 +68,10 @@ describe('openlmis.orders.view state', function() {
     it('should return false if user cannot retry to transfer order', function() {
 
         $stateParams.supplyingFacilityId = undefined;
-        spyOn(authorizationService, 'getUser').andReturn({user_id: '123'});
+        spyOn(authorizationService, 'getUser').andReturn({
+            //eslint-disable-next-line camelcase
+            user_id: '123'
+        });
         spyOn(permissionService, 'hasPermissionWithAnyProgram').andReturn($q.when(false));
 
         var result = state.resolve.canRetryTransfer(authorizationService, permissionService, $stateParams);
@@ -80,15 +82,16 @@ describe('openlmis.orders.view state', function() {
     it('should return true if user can retry transfer order', function() {
 
         $stateParams.supplyingFacilityId = undefined;
-        spyOn(authorizationService, 'getUser').andReturn({user_id: '123'});
+        spyOn(authorizationService, 'getUser').andReturn({
+            //eslint-disable-next-line camelcase
+            user_id: '123'
+        });
         spyOn(permissionService, 'hasPermissionWithAnyProgram').andReturn($q.when(true));
 
         var result = state.resolve.canRetryTransfer(authorizationService, permissionService, $stateParams);
 
         expect(result).toEqual(false);
     });
-
-
 
     function loadModules() {
         module('openlmis-main-state');
@@ -111,7 +114,6 @@ describe('openlmis.orders.view state', function() {
     function prepareTestData() {
         state = $state.get('openlmis.orders.view');
         $stateParams = {};
-        facilities = ['facility-1', 'facility-2'];
         minimalFacilities = [
             {
                 id: 'facility-1',

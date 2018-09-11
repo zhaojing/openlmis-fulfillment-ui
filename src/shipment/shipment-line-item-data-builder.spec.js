@@ -27,7 +27,7 @@
     ];
 
     function ShipmentLineItemDataBuilder(ShipmentLineItem, ObjectReferenceDataBuilder,
-        CanFulfillForMeEntryDataBuilder, OrderableDataBuilder) {
+                                         CanFulfillForMeEntryDataBuilder, OrderableDataBuilder) {
 
         ShipmentLineItemDataBuilder.buildForProofOfDeliveryLineItem =
             buildForProofOfDeliveryLineItem;
@@ -60,8 +60,8 @@
             this.canFulfillForMe = new CanFulfillForMeEntryDataBuilder()
                 .withOrderable(
                     new OrderableDataBuilder()
-                    .withNetContent(1)
-                    .buildJson()
+                        .withNetContent(1)
+                        .buildJson()
                 )
                 .buildJson();
         }

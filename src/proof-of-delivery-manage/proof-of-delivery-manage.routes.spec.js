@@ -15,9 +15,9 @@
 
 describe('openlmis.orders.podManage state', function() {
 
-    var $q, $state, $rootScope, $location, $templateCache, orderRepository, paginationService, programService, facilityFactory,
-        authorizationService, FULFILLMENT_RIGHTS, ProofOfDeliveryDataBuilder, ProgramDataBuilder, FacilityDataBuilder,
-        pods, programs, requestingFacilities, supplyingFacilities, state;
+    var $q, $state, $rootScope, $location, $templateCache, orderRepository, paginationService, programService,
+        facilityFactory, authorizationService, FULFILLMENT_RIGHTS, ProofOfDeliveryDataBuilder, ProgramDataBuilder,
+        FacilityDataBuilder, pods, programs, requestingFacilities, supplyingFacilities, state;
 
     beforeEach(function() {
         loadModules();
@@ -89,8 +89,8 @@ describe('openlmis.orders.podManage state', function() {
 
     it('should require requisition create and pods manage rights to enter', function() {
         expect(state.accessRights).toEqual([
-            FULFILLMENT_RIGHTS.PODS_MANAGE, 
-            FULFILLMENT_RIGHTS.PODS_VIEW, 
+            FULFILLMENT_RIGHTS.PODS_MANAGE,
+            FULFILLMENT_RIGHTS.PODS_VIEW,
             FULFILLMENT_RIGHTS.SHIPMENTS_EDIT
         ]);
     });
@@ -155,6 +155,7 @@ describe('openlmis.orders.podManage state', function() {
             return $q.when([]);
         });
         spyOn(authorizationService, 'getUser').andReturn($q.when({
+            //eslint-disable-next-line camelcase
             user_id: 'user-id'
         }));
         spyOn(paginationService, 'registerUrl').andCallFake(function(stateParams, method) {

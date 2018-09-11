@@ -33,13 +33,13 @@ describe('ShipmentViewLineItem', function() {
     });
 
     describe('constructor', function() {
-    
+
         it('should set net content', function() {
             var result = new ShipmentViewLineItem(orderable);
 
             expect(result.netContent).toEqual(orderable.netContent);
         });
-    
+
     });
 
     describe('getRemainingSoh', function() {
@@ -48,7 +48,7 @@ describe('ShipmentViewLineItem', function() {
             spyOn(shipmentViewLineItem, 'getAvailableSoh');
             spyOn(shipmentViewLineItem, 'getFillQuantity');
         });
-    
+
         it('should return quantity in packs by default', function() {
             shipmentViewLineItem.getAvailableSoh.andReturn(160);
             shipmentViewLineItem.getFillQuantity.andReturn(33);
@@ -66,7 +66,7 @@ describe('ShipmentViewLineItem', function() {
 
             expect(result).toEqual(75);
         });
-    
+
     });
 
 });

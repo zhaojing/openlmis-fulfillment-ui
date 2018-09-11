@@ -289,8 +289,10 @@ describe('ProofOfDelivery', function() {
         beforeEach(function() {
             proofOfDelivery = new ProofOfDeliveryDataBuilder()
                 .withLineItems([
-                    new ProofOfDeliveryLineItemDataBuilder().withUseVvm(false).buildJson(),
-                    new ProofOfDeliveryLineItemDataBuilder().withUseVvm(false).buildJson()
+                    new ProofOfDeliveryLineItemDataBuilder().withUseVvm(false)
+                        .buildJson(),
+                    new ProofOfDeliveryLineItemDataBuilder().withUseVvm(false)
+                        .buildJson()
                 ])
                 .build();
         });

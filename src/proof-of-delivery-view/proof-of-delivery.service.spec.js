@@ -51,9 +51,9 @@ describe('proofOfDeliveryService', function() {
 
             var result;
             proofOfDeliveryService.get(PROOF_OF_DELIVERY_ID)
-            .then(function(proofOfDelivery) {
-                result = proofOfDelivery;
-            });
+                .then(function(proofOfDelivery) {
+                    result = proofOfDelivery;
+                });
             $rootScope.$apply();
 
             expect(result).toEqual(proofOfDelivery);
@@ -68,9 +68,9 @@ describe('proofOfDeliveryService', function() {
 
             var result;
             proofOfDeliveryService.get(PROOF_OF_DELIVERY_ID)
-            .then(function(proofOfDelivery) {
-                result = proofOfDelivery;
-            });
+                .then(function(proofOfDelivery) {
+                    result = proofOfDelivery;
+                });
             $rootScope.$apply();
 
             expect(result.save).not.toBe(saveSpy);
@@ -84,9 +84,9 @@ describe('proofOfDeliveryService', function() {
 
             var result;
             proofOfDeliveryService.get(PROOF_OF_DELIVERY_ID)
-            .then(function(proofOfDelivery) {
-                result = proofOfDelivery;
-            });
+                .then(function(proofOfDelivery) {
+                    result = proofOfDelivery;
+                });
             $rootScope.$apply();
 
             expect(result.confirm).not.toBe(confirmSpy);
@@ -97,9 +97,9 @@ describe('proofOfDeliveryService', function() {
 
             var rejected;
             proofOfDeliveryService.get(PROOF_OF_DELIVERY_ID)
-            .catch(function() {
-                rejected = true;
-            });
+                .catch(function() {
+                    rejected = true;
+                });
             $rootScope.$apply();
 
             expect(rejected).toEqual(true);
@@ -108,9 +108,9 @@ describe('proofOfDeliveryService', function() {
         it('should reject if ID was not given', function() {
             var rejected;
             proofOfDeliveryService.get()
-            .catch(function() {
-                rejected = true;
-            });
+                .catch(function() {
+                    rejected = true;
+                });
             $rootScope.$apply();
 
             expect(rejected).toEqual(true);
@@ -129,9 +129,9 @@ describe('proofOfDeliveryService', function() {
             saveSpy = proofOfDeliveryMock.save;
 
             proofOfDeliveryService.get(PROOF_OF_DELIVERY_ID)
-            .then(function(result) {
-                proofOfDelivery = result;
-            });
+                .then(function(result) {
+                    proofOfDelivery = result;
+                });
             $rootScope.$apply();
 
             spyOn(notificationService, 'success');
@@ -161,9 +161,9 @@ describe('proofOfDeliveryService', function() {
 
             var saved;
             proofOfDelivery.save()
-            .then(function() {
-                saved = true;
-            });
+                .then(function() {
+                    saved = true;
+                });
 
             expect(saved).toBeUndefined();
             expect(notificationService.success).not.toHaveBeenCalled();
@@ -193,9 +193,9 @@ describe('proofOfDeliveryService', function() {
 
             var saved;
             proofOfDelivery.save()
-            .catch(function() {
-                saved = false;
-            });
+                .catch(function() {
+                    saved = false;
+                });
 
             expect(saved).toBeUndefined();
             expect(notificationService.error).not.toHaveBeenCalled();
@@ -233,9 +233,9 @@ describe('proofOfDeliveryService', function() {
             confirmSpy = proofOfDeliveryMock.confirm;
 
             proofOfDeliveryService.get(PROOF_OF_DELIVERY_ID)
-            .then(function(result) {
-                proofOfDelivery = result;
-            });
+                .then(function(result) {
+                    proofOfDelivery = result;
+                });
             $rootScope.$apply();
 
             spyOn(notificationService, 'success');
@@ -305,9 +305,9 @@ describe('proofOfDeliveryService', function() {
 
             var confirmed;
             proofOfDelivery.confirm()
-            .then(function() {
-                confirmed = true;
-            });
+                .then(function() {
+                    confirmed = true;
+                });
 
             expect(confirmed).toBeUndefined();
             expect(notificationService.success).not.toHaveBeenCalled();
@@ -352,9 +352,9 @@ describe('proofOfDeliveryService', function() {
 
             var confirmed;
             proofOfDelivery.confirm()
-            .catch(function() {
-                confirmed = false;
-            });
+                .catch(function() {
+                    confirmed = false;
+                });
 
             expect(confirmed).toBeUndefined();
             expect(notificationService.error).not.toHaveBeenCalled();

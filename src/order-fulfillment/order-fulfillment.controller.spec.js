@@ -34,13 +34,17 @@ describe('OrderFulfillmentController', function() {
         });
 
         orderingFacilities = [
-            new FacilityDataBuilder().withId('facility-three').build(),
-            new FacilityDataBuilder().withId('facility-four').build(),
-            new FacilityDataBuilder().withId('facility-five').build()
+            new FacilityDataBuilder().withId('facility-three')
+                .build(),
+            new FacilityDataBuilder().withId('facility-four')
+                .build(),
+            new FacilityDataBuilder().withId('facility-five')
+                .build()
         ];
 
         programs = [
-            new ProgramDataBuilder().withId('program-one').build()
+            new ProgramDataBuilder().withId('program-one')
+                .build()
         ];
 
         orders = [
@@ -49,9 +53,9 @@ describe('OrderFulfillmentController', function() {
                 .withId('order-one')
                 .build(),
             new BasicOrderResponseDataBuilder()
-            .withStatus(ORDER_STATUS.FULFILLING)
-            .withId('order-two')
-            .build()
+                .withStatus(ORDER_STATUS.FULFILLING)
+                .withId('order-two')
+                .build()
         ];
     });
 
@@ -116,7 +120,9 @@ describe('OrderFulfillmentController', function() {
 
             expect($state.go).toHaveBeenCalledWith('openlmis.orders.fulfillment', {
                 status: [ORDER_STATUS.FULFILLING, ORDER_STATUS.ORDERED]
-            }, {notify: false});
+            }, {
+                notify: false
+            });
         });
 
     });
@@ -138,7 +144,9 @@ describe('OrderFulfillmentController', function() {
                 status: null,
                 requestingFacilityId: null,
                 programId: vm.program.id
-            }, {reload: true});
+            }, {
+                reload: true
+            });
         });
 
         it('should set status', function() {
@@ -150,7 +158,9 @@ describe('OrderFulfillmentController', function() {
                 status: ORDER_STATUS.FULFILLING,
                 requestingFacilityId: null,
                 programId: null
-            }, {reload: true});
+            }, {
+                reload: true
+            });
         });
 
         it('should set requesting facility id', function() {
@@ -162,12 +172,14 @@ describe('OrderFulfillmentController', function() {
                 status: null,
                 requestingFacilityId: vm.orderingFacility.id,
                 programId: null
-            }, {reload: true});
+            }, {
+                reload: true
+            });
         });
 
         it('should reload state', function() {
-           vm.loadOrders();
-           expect($state.go).toHaveBeenCalled();
+            vm.loadOrders();
+            expect($state.go).toHaveBeenCalled();
         });
 
     });

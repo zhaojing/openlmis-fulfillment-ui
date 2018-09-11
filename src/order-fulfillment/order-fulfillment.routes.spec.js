@@ -13,7 +13,6 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-
 describe('openlmis.orders.fulfillment state', function() {
 
     var $q, $state, state, $rootScope, requestingFacilityFactory, minimalFacilities,
@@ -53,13 +52,18 @@ describe('openlmis.orders.fulfillment state', function() {
         };
 
         facilities = [
-            new FacilityDataBuilder().withId('facility-1').build(),
-            new FacilityDataBuilder().withId('facility-2').build()
+            new FacilityDataBuilder().withId('facility-1')
+                .build(),
+            new FacilityDataBuilder().withId('facility-2')
+                .build()
         ];
         minimalFacilities = [
-            new MinimalFacilityDataBuilder().withId('facility-1').build(),
-            new MinimalFacilityDataBuilder().withId('facility-2').build(),
-            new MinimalFacilityDataBuilder().withId('facility-3').build()
+            new MinimalFacilityDataBuilder().withId('facility-1')
+                .build(),
+            new MinimalFacilityDataBuilder().withId('facility-2')
+                .build(),
+            new MinimalFacilityDataBuilder().withId('facility-3')
+                .build()
         ];
         programs = [
             new ProgramDataBuilder().build(),
@@ -124,7 +128,8 @@ describe('openlmis.orders.fulfillment state', function() {
     it('should require FULFILLMENT_RIGHTS right to enter', function() {
         state = $state.get('openlmis.orders.fulfillment');
         expect(state.accessRights).toEqual(
-            [FULFILLMENT_RIGHTS.SHIPMENTS_VIEW, FULFILLMENT_RIGHTS.SHIPMENTS_EDIT]);
+            [FULFILLMENT_RIGHTS.SHIPMENTS_VIEW, FULFILLMENT_RIGHTS.SHIPMENTS_EDIT]
+        );
     });
 
     function goToState() {

@@ -49,7 +49,7 @@
                 id: this.id,
                 filledQuantity: this.filledQuantity,
                 orderable: this.orderable,
-                orderedQuantity: this.orderedQuantity,
+                orderedQuantity: this.orderedQuantity
             };
         }
     }

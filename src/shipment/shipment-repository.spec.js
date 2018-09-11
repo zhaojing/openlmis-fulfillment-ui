@@ -26,13 +26,13 @@ describe('ShipmentRepository', function() {
             $provide.factory('ShipmentRepositoryImpl', function() {
                 return function() {
                     return shipmentRepositoryImplMock;
-                }
+                };
             });
 
             ShipmentMock = jasmine.createSpy('Shipment');
             $provide.factory('Shipment', function() {
                 return ShipmentMock;
-            })
+            });
         });
 
         inject(function($injector) {
@@ -42,7 +42,7 @@ describe('ShipmentRepository', function() {
             $rootScope = $injector.get('$rootScope');
             Shipment = $injector.get('Shipment');
         });
-        
+
         shipmentRepository = new ShipmentRepository();
 
         var shipmentBuilder = new ShipmentDataBuilder();
@@ -50,7 +50,7 @@ describe('ShipmentRepository', function() {
         shipmentResponse = shipmentBuilder.buildResponse();
         shipment = shipmentBuilder.build();
     });
-    
+
     describe('createDraft', function() {
 
         it('should return a shipment', function() {
@@ -59,9 +59,9 @@ describe('ShipmentRepository', function() {
 
             var result;
             shipmentRepository.createDraft(shipmentResponse)
-            .then(function(response) {
-                result = response;
-            });
+                .then(function(response) {
+                    result = response;
+                });
             $rootScope.$apply();
 
             expect(result).toBe(shipment);
@@ -73,15 +73,15 @@ describe('ShipmentRepository', function() {
 
             var rejected;
             shipmentRepository.createDraft(shipmentResponse)
-            .catch(function() {
-                rejected = true;
-            });
+                .catch(function() {
+                    rejected = true;
+                });
             $rootScope.$apply();
 
             expect(rejected).toBe(true);
             expect(shipmentRepositoryImplMock.createDraft).toHaveBeenCalledWith(shipmentResponse);
         });
-    
+
     });
 
     describe('getByOrderId', function() {
@@ -92,9 +92,9 @@ describe('ShipmentRepository', function() {
 
             var result;
             shipmentRepository.getByOrderId(shipmentJson.order.id)
-            .then(function(response) {
-                result = response;
-            });
+                .then(function(response) {
+                    result = response;
+                });
             $rootScope.$apply();
 
             expect(result).toBe(shipment);
@@ -106,15 +106,15 @@ describe('ShipmentRepository', function() {
 
             var rejected;
             shipmentRepository.getByOrderId(shipmentJson.order.id)
-            .catch(function() {
-                rejected = true;
-            });
+                .catch(function() {
+                    rejected = true;
+                });
             $rootScope.$apply();
 
             expect(rejected).toBe(true);
             expect(shipmentRepositoryImplMock.getByOrderId).toHaveBeenCalledWith(shipmentJson.order.id);
         });
-    
+
     });
 
     describe('getDraftByOrderId', function() {
@@ -125,9 +125,9 @@ describe('ShipmentRepository', function() {
 
             var result;
             shipmentRepository.getDraftByOrderId(shipmentJson.order.id)
-            .then(function(response) {
-                result = response;
-            });
+                .then(function(response) {
+                    result = response;
+                });
             $rootScope.$apply();
 
             expect(result).toEqual(shipment);
@@ -140,9 +140,9 @@ describe('ShipmentRepository', function() {
 
             var result;
             shipmentRepository.getDraftByOrderId(shipmentJson.order.id)
-            .then(function(response) {
-                result = response;
-            });
+                .then(function(response) {
+                    result = response;
+                });
             $rootScope.$apply();
 
             expect(result instanceof Shipment).toBe(true);
@@ -154,28 +154,28 @@ describe('ShipmentRepository', function() {
 
             var rejected;
             shipmentRepository.getDraftByOrderId(shipmentJson.order.id)
-            .catch(function() {
-                rejected = true;
-            });
+                .catch(function() {
+                    rejected = true;
+                });
             $rootScope.$apply();
 
             expect(rejected).toBe(true);
             expect(shipmentRepositoryImplMock.getDraftByOrderId).toHaveBeenCalledWith(shipmentJson.order.id);
         });
-    
+
     });
 
     describe('updateDraft', function() {
-    
+
         it('should resolve if update was successful', function() {
             shipmentRepositoryImplMock.updateDraft.andReturn($q.resolve(shipmentJson));
             ShipmentMock.andReturn(shipment);
 
             var resolved;
             shipmentRepository.updateDraft(shipmentResponse)
-            .then(function() {
-                resolved = true;
-            });
+                .then(function() {
+                    resolved = true;
+                });
             $rootScope.$apply();
 
             expect(resolved).toEqual(true);
@@ -187,15 +187,15 @@ describe('ShipmentRepository', function() {
 
             var rejected;
             shipmentRepository.updateDraft(shipmentResponse)
-            .catch(function() {
-                rejected = true;
-            });
+                .catch(function() {
+                    rejected = true;
+                });
             $rootScope.$apply();
 
             expect(rejected).toBe(true);
             expect(shipmentRepositoryImplMock.updateDraft).toHaveBeenCalledWith(shipmentResponse);
         });
-    
+
     });
 
 });

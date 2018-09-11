@@ -45,18 +45,24 @@ describe('OrderViewController', function() {
         });
 
         supplyingFacilities = [
-            new FacilityDataBuilder().withId('facility-one').build(),
-            new FacilityDataBuilder().withId('facility-two').build()
+            new FacilityDataBuilder().withId('facility-one')
+                .build(),
+            new FacilityDataBuilder().withId('facility-two')
+                .build()
         ];
 
         requestingFacilities = [
-            new FacilityDataBuilder().withId('facility-three').build(),
-            new FacilityDataBuilder().withId('facility-four').build(),
-            new FacilityDataBuilder().withId('facility-five').build()
+            new FacilityDataBuilder().withId('facility-three')
+                .build(),
+            new FacilityDataBuilder().withId('facility-four')
+                .build(),
+            new FacilityDataBuilder().withId('facility-five')
+                .build()
         ];
 
         programs = [
-            new ProgramDataBuilder().withId('program-one').build()
+            new ProgramDataBuilder().withId('program-one')
+                .build()
         ];
 
         orders = [
@@ -65,11 +71,11 @@ describe('OrderViewController', function() {
                 .withId('order-one')
                 .build(),
             new BasicOrderResponseDataBuilder()
-            .withStatus(ORDER_STATUS.FULFILLING)
-            .withId('order-two')
-            .build()
+                .withStatus(ORDER_STATUS.FULFILLING)
+                .withId('order-two')
+                .build()
         ];
-        canRetryTransfer =true;
+        canRetryTransfer = true;
     });
 
     describe('initialization', function() {
@@ -89,13 +95,13 @@ describe('OrderViewController', function() {
 
             spyOn(scope, '$watch').andCallThrough();
             spyOn(requestingFacilityFactory, 'loadRequestingFacilities').andCallFake(function(supplyingFacilityId) {
-                if (supplyingFacilityId == 'facility-one') {
+                if (supplyingFacilityId === 'facility-one') {
                     vm.requestingFacilities = [requestingFacilities[0], requestingFacilities[1]];
                     return $q.when([requestingFacilities[0], requestingFacilities[1]]);
-                } else {
-                    vm.requestingFacilities = [requestingFacilities[2]];
-                    return $q.when([requestingFacilities[2]]);
                 }
+                vm.requestingFacilities = [requestingFacilities[2]];
+                return $q.when([requestingFacilities[2]]);
+
             });
         });
 
@@ -175,7 +181,9 @@ describe('OrderViewController', function() {
         });
 
         it('should set program', function() {
-            vm.program = {id: 'program-one'};
+            vm.program = {
+                id: 'program-one'
+            };
 
             vm.loadOrders();
 
@@ -187,11 +195,15 @@ describe('OrderViewController', function() {
                 periodStartDate: null,
                 periodEndDate: null,
                 sort: 'createdDate,desc'
-            }, {reload: true});
+            }, {
+                reload: true
+            });
         });
 
         it('should set supplying facility', function() {
-            vm.supplyingFacility = {id: 'facility-one'};
+            vm.supplyingFacility = {
+                id: 'facility-one'
+            };
 
             vm.loadOrders();
 
@@ -203,11 +215,15 @@ describe('OrderViewController', function() {
                 periodStartDate: null,
                 periodEndDate: null,
                 sort: 'createdDate,desc'
-            }, {reload: true});
+            }, {
+                reload: true
+            });
         });
 
         it('should set requesting facility', function() {
-            vm.requestingFacility = {id: 'facility-one'};
+            vm.requestingFacility = {
+                id: 'facility-one'
+            };
 
             vm.loadOrders();
 
@@ -219,7 +235,9 @@ describe('OrderViewController', function() {
                 periodStartDate: null,
                 periodEndDate: null,
                 sort: 'createdDate,desc'
-            }, {reload: true});
+            }, {
+                reload: true
+            });
         });
 
         it('should set periodStartDate', function() {
@@ -235,7 +253,9 @@ describe('OrderViewController', function() {
                 periodStartDate: '2017-01-31',
                 periodEndDate: null,
                 sort: 'createdDate,desc'
-            }, {reload: true});
+            }, {
+                reload: true
+            });
         });
 
         it('should set periodEndDate', function() {
@@ -251,12 +271,14 @@ describe('OrderViewController', function() {
                 periodStartDate: null,
                 periodEndDate: '2017-01-31',
                 sort: 'createdDate,desc'
-            }, {reload: true});
+            }, {
+                reload: true
+            });
         });
 
         it('should reload state', function() {
-           vm.loadOrders();
-           expect($state.go).toHaveBeenCalled();
+            vm.loadOrders();
+            expect($state.go).toHaveBeenCalled();
         });
 
     });
@@ -313,10 +335,10 @@ describe('OrderViewController', function() {
         });
     });
 
-    describe('retryTransfer', function(){
+    describe('retryTransfer', function() {
         var order, retryTransferDeferred;
 
-        beforeEach(function(){
+        beforeEach(function() {
             retryTransferDeferred = $q.defer();
             spyOn(loadingModalService, 'open').andReturn();
             spyOn(loadingModalService, 'close').andReturn();
@@ -343,30 +365,36 @@ describe('OrderViewController', function() {
                 .build();
         });
 
-        it('should call retry transfer service', function(){
+        it('should call retry transfer service', function() {
             vm.retryTransfer(order);
             expect(orderService.retryTransfer).toHaveBeenCalledWith(order.id);
         });
 
-        it('should show successful message when transfer is complete', function(){
+        it('should show successful message when transfer is complete', function() {
             vm.retryTransfer(order);
-            retryTransferDeferred.resolve({result: true});
+            retryTransferDeferred.resolve({
+                result: true
+            });
             $rootScope.$apply();
 
             expect(notificationService.success).toHaveBeenCalledWith('orderView.transferComplete');
         });
 
-        it('should show error message when server responded with OK but transfer was not complete', function(){
+        it('should show error message when server responded with OK but transfer was not complete', function() {
             vm.retryTransfer(order);
-            retryTransferDeferred.resolve({result: false});
+            retryTransferDeferred.resolve({
+                result: false
+            });
             $rootScope.$apply();
 
             expect(notificationService.error).toHaveBeenCalledWith('orderView.transferFailed');
         });
 
-        it('should show error message when server responded with error message', function(){
+        it('should show error message when server responded with error message', function() {
             vm.retryTransfer(order);
-            retryTransferDeferred.reject({description: 'some-other-error'});
+            retryTransferDeferred.reject({
+                description: 'some-other-error'
+            });
             $rootScope.$apply();
 
             expect(notificationService.error).toHaveBeenCalledWith('some-other-error');

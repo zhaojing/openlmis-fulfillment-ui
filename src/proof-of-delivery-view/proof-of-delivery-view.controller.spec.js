@@ -16,7 +16,7 @@
 describe('PodViewController', function() {
 
     var vm, $controller, ProofOfDeliveryDataBuilder, OrderDataBuilder, proofOfDelivery, order, reasons, $rootScope, $q,
-        ReasonDataBuilder, VVM_STATUS, messageService, orderLineItems, PROOF_OF_DELIVERY_STATUS, ProofOfDeliveryPrinter;
+        ReasonDataBuilder, VVM_STATUS, messageService, orderLineItems, ProofOfDeliveryPrinter;
 
     beforeEach(function() {
         module('proof-of-delivery-view');
@@ -29,7 +29,6 @@ describe('PodViewController', function() {
             ReasonDataBuilder = $injector.get('ReasonDataBuilder');
             VVM_STATUS = $injector.get('VVM_STATUS');
             messageService = $injector.get('messageService');
-            PROOF_OF_DELIVERY_STATUS = $injector.get('PROOF_OF_DELIVERY_STATUS');
             $rootScope = $injector.get('$rootScope');
             ProofOfDeliveryPrinter = $injector.get('ProofOfDeliveryPrinter');
         });
