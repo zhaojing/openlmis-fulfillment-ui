@@ -71,11 +71,13 @@ describe('OrderFulfillmentController', function() {
 
         it('should expose requesting facilities', function() {
             vm.$onInit();
+
             expect(vm.orderingFacilities).toEqual(orderingFacilities);
         });
 
         it('should expose programs', function() {
             vm.$onInit();
+
             expect(vm.programs).toEqual(programs);
         });
 
@@ -179,6 +181,7 @@ describe('OrderFulfillmentController', function() {
 
         it('should reload state', function() {
             vm.loadOrders();
+
             expect($state.go).toHaveBeenCalled();
         });
 

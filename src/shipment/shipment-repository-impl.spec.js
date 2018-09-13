@@ -182,6 +182,7 @@ describe('ShipmentRepositoryImpl', function() {
             expect(result.order).toEqual(order);
             expect(result.lineItems[0].canFulfillForMe)
                 .toEqual(stockCardSummaries[0].canFulfillForMe[1]);
+
             expect(result.lineItems[1].canFulfillForMe)
                 .toEqual(stockCardSummaries[1].canFulfillForMe[1]);
 
@@ -277,6 +278,7 @@ describe('ShipmentRepositoryImpl', function() {
             expect(result.order).toEqual(order);
             expect(result.lineItems[0].canFulfillForMe)
                 .toEqual(stockCardSummaries[0].canFulfillForMe[1]);
+
             expect(result.lineItems[1].canFulfillForMe)
                 .toEqual(stockCardSummaries[1].canFulfillForMe[1]);
 
@@ -343,6 +345,7 @@ describe('ShipmentRepositoryImpl', function() {
             expect(shipmentResourceMock.query).toHaveBeenCalledWith({
                 orderId: shipment.order.id
             });
+
             expect(orderResourceMock.get).not.toHaveBeenCalled();
             expect(stockCardSummaryRepositoryImplMock.query).not.toHaveBeenCalled();
         });
@@ -364,6 +367,7 @@ describe('ShipmentRepositoryImpl', function() {
             expect(shipmentResourceMock.query).toHaveBeenCalledWith({
                 orderId: shipment.order.id
             });
+
             expect(orderResourceMock.get).toHaveBeenCalledWith(shipment.order.id);
             expect(stockCardSummaryRepositoryImplMock.query).not.toHaveBeenCalled();
         });
@@ -386,6 +390,7 @@ describe('ShipmentRepositoryImpl', function() {
             expect(shipmentResourceMock.query).toHaveBeenCalledWith({
                 orderId: shipment.order.id
             });
+
             expect(orderResourceMock.get).toHaveBeenCalledWith(shipment.order.id);
             expect(stockCardSummaryRepositoryImplMock.query).toHaveBeenCalledWith({
                 programId: order.program.id,
@@ -416,12 +421,14 @@ describe('ShipmentRepositoryImpl', function() {
             expect(result.order).toEqual(order);
             expect(result.lineItems[0].canFulfillForMe)
                 .toEqual(stockCardSummaries[0].canFulfillForMe[1]);
+
             expect(result.lineItems[1].canFulfillForMe)
                 .toEqual(stockCardSummaries[1].canFulfillForMe[1]);
 
             expect(shipmentResourceMock.query).toHaveBeenCalledWith({
                 orderId: shipment.order.id
             });
+
             expect(orderResourceMock.get).toHaveBeenCalledWith(shipment.order.id);
             expect(stockCardSummaryRepositoryImplMock.query).toHaveBeenCalledWith({
                 programId: order.program.id,
@@ -452,6 +459,7 @@ describe('ShipmentRepositoryImpl', function() {
             expect(shipmentDraftResourceMock.query).toHaveBeenCalledWith({
                 orderId: shipment.order.id
             });
+
             expect(orderResourceMock.get).not.toHaveBeenCalled();
             expect(stockCardSummaryRepositoryImplMock.query).not.toHaveBeenCalled();
         });
@@ -473,6 +481,7 @@ describe('ShipmentRepositoryImpl', function() {
             expect(shipmentDraftResourceMock.query).toHaveBeenCalledWith({
                 orderId: shipment.order.id
             });
+
             expect(orderResourceMock.get).toHaveBeenCalledWith(shipment.order.id);
             expect(stockCardSummaryRepositoryImplMock.query).not.toHaveBeenCalled();
         });
@@ -495,6 +504,7 @@ describe('ShipmentRepositoryImpl', function() {
             expect(shipmentDraftResourceMock.query).toHaveBeenCalledWith({
                 orderId: shipment.order.id
             });
+
             expect(orderResourceMock.get).toHaveBeenCalledWith(shipment.order.id);
             expect(stockCardSummaryRepositoryImplMock.query).toHaveBeenCalledWith({
                 programId: order.program.id,
@@ -525,12 +535,14 @@ describe('ShipmentRepositoryImpl', function() {
             expect(result.order).toEqual(order);
             expect(result.lineItems[0].canFulfillForMe)
                 .toEqual(stockCardSummaries[0].canFulfillForMe[1]);
+
             expect(result.lineItems[1].canFulfillForMe)
                 .toEqual(stockCardSummaries[1].canFulfillForMe[1]);
 
             expect(shipmentDraftResourceMock.query).toHaveBeenCalledWith({
                 orderId: shipment.order.id
             });
+
             expect(orderResourceMock.get).toHaveBeenCalledWith(shipment.order.id);
             expect(stockCardSummaryRepositoryImplMock.query).toHaveBeenCalledWith({
                 programId: order.program.id,

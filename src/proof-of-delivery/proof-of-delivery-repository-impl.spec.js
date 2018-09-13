@@ -134,6 +134,7 @@ describe('ProofOfDeliveryRepositoryImpl', function() {
 
             lineItem = result.lineItems[1];
             expected = proofOfDeliveryJson.lineItems[1];
+
             expect(lineItem.id).toEqual(expected.id);
             expect(lineItem.orderable).toEqual(orderableJsons[1]);
             expect(lineItem.lot).toEqual(lotJsons[1]);

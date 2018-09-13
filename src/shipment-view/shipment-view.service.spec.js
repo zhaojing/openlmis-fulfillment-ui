@@ -276,6 +276,7 @@ describe('shipmentViewService', function() {
             expect($state.reload).toHaveBeenCalled();
             expect(notificationService.success)
                 .toHaveBeenCalledWith('shipmentView.draftHasBeenSaved');
+
             expect(result).toEqual(shipment);
 
             expect(notificationService.error).not.toHaveBeenCalled();
@@ -334,6 +335,7 @@ describe('shipmentViewService', function() {
                 'shipmentView.confirmShipment.question',
                 'shipmentView.confirmShipment'
             );
+
             expect(loadingModalService.open).toHaveBeenCalled();
             expect(originalConfirm).toHaveBeenCalledWith();
 
@@ -354,10 +356,12 @@ describe('shipmentViewService', function() {
                 'shipmentView.confirmShipment.question',
                 'shipmentView.confirmShipment'
             );
+
             expect(loadingModalService.open).toHaveBeenCalled();
             expect(originalConfirm).toHaveBeenCalledWith();
             expect(notificationService.error)
                 .toHaveBeenCalledWith('shipmentView.failedToConfirmShipment');
+
             expect(loadingModalService.close).toHaveBeenCalled();
 
             expect(notificationService.success).not.toHaveBeenCalled();
@@ -375,10 +379,12 @@ describe('shipmentViewService', function() {
                 'shipmentView.confirmShipment.question',
                 'shipmentView.confirmShipment'
             );
+
             expect(loadingModalService.open).toHaveBeenCalled();
             expect(originalConfirm).toHaveBeenCalledWith();
             expect(notificationService.success).
                 toHaveBeenCalledWith('shipmentView.shipmentHasBeenConfirmed');
+
             expect(stateTrackerService.goToPreviousState).
                 toHaveBeenCalledWith('openlmis.orders.view');
 
@@ -438,6 +444,7 @@ describe('shipmentViewService', function() {
                 'shipmentView.deleteDraftConfirmation',
                 'shipmentView.deleteDraft'
             );
+
             expect(loadingModalService.open).toHaveBeenCalled();
             expect(originalDelete).toHaveBeenCalledWith();
 
@@ -458,10 +465,12 @@ describe('shipmentViewService', function() {
                 'shipmentView.deleteDraftConfirmation',
                 'shipmentView.deleteDraft'
             );
+
             expect(loadingModalService.open).toHaveBeenCalled();
             expect(originalDelete).toHaveBeenCalledWith();
             expect(notificationService.error)
                 .toHaveBeenCalledWith('shipmentView.failedToDeleteDraft');
+
             expect(loadingModalService.close).toHaveBeenCalled();
 
             expect(notificationService.success).not.toHaveBeenCalled();
@@ -479,10 +488,12 @@ describe('shipmentViewService', function() {
                 'shipmentView.deleteDraftConfirmation',
                 'shipmentView.deleteDraft'
             );
+
             expect(loadingModalService.open).toHaveBeenCalled();
             expect(originalDelete).toHaveBeenCalledWith();
             expect(notificationService.success).
                 toHaveBeenCalledWith('shipmentView.draftHasBeenDeleted');
+
             expect(stateTrackerService.goToPreviousState).
                 toHaveBeenCalledWith('openlmis.orders.view');
 

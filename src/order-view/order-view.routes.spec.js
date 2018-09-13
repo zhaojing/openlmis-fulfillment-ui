@@ -62,6 +62,7 @@ describe('openlmis.orders.view state', function() {
         var result = state.resolve.canRetryTransfer(authorizationService,
             permissionService, $stateParams);
         $rootScope.$apply();
+
         expect(result).toEqual(false);
     });
 

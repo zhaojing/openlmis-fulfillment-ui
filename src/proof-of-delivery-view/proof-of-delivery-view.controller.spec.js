@@ -96,6 +96,7 @@ describe('PodViewController', function() {
 
     it('should expose canEdit', function() {
         vm.$onInit();
+
         expect(vm.canEdit).toEqual(true);
 
         vm = $controller('ProofOfDeliveryViewController', {
@@ -106,6 +107,7 @@ describe('PodViewController', function() {
             canEdit: false
         });
         vm.$onInit();
+
         expect(vm.canEdit).toEqual(false);
     });
 

@@ -53,6 +53,7 @@ describe('requestingFacilityFactory', function() {
             spyOn(facilityService, 'getRequestingFacilities').andReturn($q.when(requestingFacilities));
 
             var result = requestingFacilityFactory.loadRequestingFacilities();
+
             expect(angular.isFunction(result.then)).toBe(true);
         });
 
@@ -60,6 +61,7 @@ describe('requestingFacilityFactory', function() {
             spyOn(facilityService, 'getRequestingFacilities').andReturn($q.when(requestingFacilities));
 
             requestingFacilityFactory.loadRequestingFacilities();
+
             expect(facilityService.getAllMinimal).toHaveBeenCalled();
             expect(facilityService.getRequestingFacilities).toHaveBeenCalled();
         });

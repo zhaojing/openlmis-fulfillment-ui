@@ -37,6 +37,7 @@ describe('QuantityUnitToggleController', function() {
 
         it('should expose quantityUnits', function() {
             vm.$onInit();
+
             expect(vm.quantityUnits).toEqual([
                 QUANTITY_UNIT.PACKS,
                 QUANTITY_UNIT.DOSES

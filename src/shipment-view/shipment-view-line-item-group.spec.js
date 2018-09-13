@@ -46,6 +46,7 @@ describe('ShipmentViewLineItemGroup', function() {
             });
 
             var result = lineItemGroup.getOrderQuantity(false);
+
             expect(result).toBe(0);
         });
 
@@ -55,6 +56,7 @@ describe('ShipmentViewLineItemGroup', function() {
             });
 
             var result = lineItemGroup.getOrderQuantity(false);
+
             expect(result).toBeUndefined();
         });
 
@@ -65,6 +67,7 @@ describe('ShipmentViewLineItemGroup', function() {
             });
 
             var result = lineItemGroup.getOrderQuantity(false);
+
             expect(result).toBeUndefined();
         });
 

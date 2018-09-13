@@ -70,6 +70,7 @@ describe('openlmis.orders.podManage state', function() {
         expect(getResolvedValue('pods')).toEqual({
             content: pods
         });
+
         expect(orderRepository.searchOrdersForManagePod).toHaveBeenCalledWith({
             page: '0',
             size: '10',

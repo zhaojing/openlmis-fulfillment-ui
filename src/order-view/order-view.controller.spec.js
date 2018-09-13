@@ -107,16 +107,19 @@ describe('OrderViewController', function() {
 
         it('should expose supplying facilities', function() {
             vm.$onInit();
+
             expect(vm.supplyingFacilities).toEqual(supplyingFacilities);
         });
 
         it('should expose requesting facilities', function() {
             vm.$onInit();
+
             expect(vm.requestingFacilities).toEqual(requestingFacilities);
         });
 
         it('should expose programs', function() {
             vm.$onInit();
+
             expect(vm.programs).toEqual(programs);
         });
 
@@ -278,6 +281,7 @@ describe('OrderViewController', function() {
 
         it('should reload state', function() {
             vm.loadOrders();
+
             expect($state.go).toHaveBeenCalled();
         });
 
@@ -367,6 +371,7 @@ describe('OrderViewController', function() {
 
         it('should call retry transfer service', function() {
             vm.retryTransfer(order);
+
             expect(orderService.retryTransfer).toHaveBeenCalledWith(order.id);
         });
 

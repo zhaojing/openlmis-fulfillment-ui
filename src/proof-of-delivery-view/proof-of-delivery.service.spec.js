@@ -255,6 +255,7 @@ describe('proofOfDeliveryService', function() {
                 'proofOfDeliveryView.confirm.message',
                 'proofOfDeliveryView.confirm.label'
             );
+
             expect(confirmSpy).not.toHaveBeenCalled();
             expect(notificationService.success).not.toHaveBeenCalled();
             expect(notificationService.error).not.toHaveBeenCalled();
@@ -272,6 +273,7 @@ describe('proofOfDeliveryService', function() {
                 'proofOfDeliveryView.confirm.message',
                 'proofOfDeliveryView.confirm.label'
             );
+
             expect(confirmSpy).not.toHaveBeenCalled();
             expect(notificationService.success).not.toHaveBeenCalled();
             expect(notificationService.error).not.toHaveBeenCalled();
@@ -365,6 +367,7 @@ describe('proofOfDeliveryService', function() {
             expect(notificationService.success).not.toHaveBeenCalled();
             expect(notificationService.error)
                 .toHaveBeenCalledWith('proofOfDeliveryView.failedToConfirmProofOfDelivery');
+
             expect(stateTrackerService.goToPreviousState).not.toHaveBeenCalled();
         });
 

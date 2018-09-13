@@ -186,6 +186,7 @@ describe('ProofOfDelivery', function() {
 
         it('should set status as confirmed if confirm was successful', function() {
             proofOfDeliveryRepositoryMock.update.andReturn($q.resolve());
+
             expect(proofOfDelivery.status).toBe(PROOF_OF_DELIVERY_STATUS.INITIATED);
 
             proofOfDelivery.confirm();
@@ -299,6 +300,7 @@ describe('ProofOfDelivery', function() {
 
         it('should return true if Proof of Delivery Line Item uses VVM', function() {
             proofOfDelivery.lineItems[0].useVvm = true;
+
             expect(proofOfDelivery.hasProductsUseVvmStatus()).toBe(true);
         });
 

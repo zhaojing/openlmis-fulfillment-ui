@@ -108,16 +108,19 @@ describe('ShipmentFactory', function() {
                 lot: stockCardSummaries[0].canFulfillForMe[0].lot,
                 quantityShipped: 0
             });
+
             expect(result.lineItems[1]).toEqual({
                 orderable: stockCardSummaries[0].canFulfillForMe[1].orderable,
                 lot: stockCardSummaries[0].canFulfillForMe[1].lot,
                 quantityShipped: 0
             });
+
             expect(result.lineItems[2]).toEqual({
                 orderable: stockCardSummaries[1].canFulfillForMe[0].orderable,
                 lot: stockCardSummaries[1].canFulfillForMe[0].lot,
                 quantityShipped: 0
             });
+
             expect(result.lineItems[3]).toEqual({
                 orderable: stockCardSummaries[1].canFulfillForMe[1].orderable,
                 lot: stockCardSummaries[1].canFulfillForMe[1].lot,
