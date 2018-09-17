@@ -33,7 +33,7 @@
             templateUrl: 'order-fulfillment/order-fulfillment.html',
             url: '/fulfillment?requestingFacilityId&programId&status&page&size',
             params: {
-                sort: 'createdDate,desc'
+                sort: ['createdDate,desc']
             },
             accessRights: [
                 FULFILLMENT_RIGHTS.SHIPMENTS_VIEW,

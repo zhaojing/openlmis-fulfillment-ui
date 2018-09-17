@@ -127,6 +127,13 @@ describe('OrderFulfillmentController', function() {
             });
         });
 
+        it('should expose sort options', function() {
+            expect(vm.options).toEqual({
+                'orderFulfillment.createdDateDesc': ['createdDate,desc'],
+                'orderFulfillment.createdDateAsc': ['createdDate,asc']
+            });
+        });
+
     });
 
     describe('loadOrders', function() {

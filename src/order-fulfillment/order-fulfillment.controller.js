@@ -95,8 +95,8 @@
          * Holds options for sorting order list.
          */
         vm.options = {
-            'createdDate,desc': 'orderFulfillment.createdDateDesc',
-            'createdDate,asc': 'orderFulfillment.createdDateAsc'
+            'orderFulfillment.createdDateDesc': ['createdDate,desc'],
+            'orderFulfillment.createdDateAsc': ['createdDate,asc']
         };
 
         /**
