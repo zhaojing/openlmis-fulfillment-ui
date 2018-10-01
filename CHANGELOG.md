@@ -3,6 +3,7 @@
 
 Improvements:
 * [OLMIS-5409](https://openlmis.atlassian.net/browse/OLMIS-5409): Updated ui-components to version 7.0.0.
+* [OLMIS-3696](https://openlmis.atlassian.net/browse/OLMIS-3696): Added dependency and development dependency locking.
 
 Bug fixes:
 * [OLMIS-5249](https://openlmis.atlassian.net/browse/OLMIS-5249): Fixed typo on the Manage Proof of Delivery screen.
