@@ -98,8 +98,9 @@
             proofOfDelivery.save = function() {
                 loadingModalService.open();
                 return originalSave.apply(this)
-                    .then(function() {
+                    .then(function(proofOfDelivery) {
                         notificationService.success('proofOfDeliveryView.proofOfDeliveryHasBeenSaved');
+                        return proofOfDelivery;
                     })
                     .catch(function() {
                         notificationService.error('proofOfDeliveryView.failedToSaveProofOfDelivery');

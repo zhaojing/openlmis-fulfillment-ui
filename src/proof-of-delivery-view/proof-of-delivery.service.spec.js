@@ -220,6 +220,19 @@ describe('proofOfDeliveryService', function() {
             expect(loadingModalService.close).toHaveBeenCalled();
         });
 
+        it('should resolve to a proof of delivery', function() {
+            saveSpy.andReturn($q.resolve(proofOfDelivery));
+
+            var result;
+            proofOfDelivery.save()
+                .then(function(proofOfDelivery) {
+                    result = proofOfDelivery;
+                });
+            $rootScope.$apply();
+
+            expect(result).toEqual(proofOfDelivery);
+        });
+
     });
 
     describe('decorated confirm', function() {
