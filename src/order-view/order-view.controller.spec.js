@@ -156,6 +156,14 @@ describe('OrderViewController', function() {
             expect(this.vm.periodEndDate).toBeUndefined();
         });
 
+        it('should set status if it was selected', function() {
+            $stateParams.status = 'SHIPPED';
+
+            vm.$onInit();
+
+            expect(vm.status).toBe(vm.orderStatuses[2]);
+        });
+
         it('should call watch', function() {
             this.vm.$onInit();
 
@@ -276,6 +284,24 @@ describe('OrderViewController', function() {
                 status: null,
                 periodStartDate: null,
                 periodEndDate: '2017-01-31',
+                sort: 'createdDate,desc'
+            }, {
+                reload: true
+            });
+        });
+
+        it('should set status', function() {
+            this.vm.status = this.vm.orderStatuses[1];
+
+            this.vm.loadOrders();
+
+            expect(this.$state.go).toHaveBeenCalledWith('openlmis.orders.view', {
+                supplyingFacilityId: null,
+                programId: null,
+                requestingFacilityId: null,
+                status: this.vm.orderStatuses[1].value,
+                periodStartDate: null,
+                periodEndDate: null,
                 sort: 'createdDate,desc'
             }, {
                 reload: true

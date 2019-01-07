@@ -1,3 +1,9 @@
+6.0.3 / 2018-12-12
+==================
+
+Bug fixes:
+* [OLMIS-5818](https://openlmis.atlassian.net/browse/OLMIS-5818): Fixed a bug with the selected status not being shown on the View Orders page.
+
 6.0.2 / 2018-12-12
 ==================
 
