@@ -73,6 +73,7 @@ describe('OrderViewController', function() {
         this.canRetryTransfer = true;
 
         this.initController = initController;
+        this.orderStatuses = this.orderStatusFactory.getAll();
     });
 
     describe('initialization', function() {
@@ -157,11 +158,11 @@ describe('OrderViewController', function() {
         });
 
         it('should set status if it was selected', function() {
-            $stateParams.status = 'SHIPPED';
+            this.$stateParams.status = this.orderStatuses[2].value;
 
-            vm.$onInit();
+            this.vm.$onInit();
 
-            expect(vm.status).toBe(vm.orderStatuses[2]);
+            expect(this.vm.status).toBe(this.vm.orderStatuses[2]);
         });
 
         it('should call watch', function() {
