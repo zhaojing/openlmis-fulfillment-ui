@@ -1,9 +1,6 @@
 6.0.3 / Work in Progress
 ========================
 
-Improvements:
-* [OLMIS-5976](https://openlmis.atlassian.net/browse/OLMIS-5976): Updated auth-ui to version 6.2.0.
-
 Bug fixes:
 * [OLMIS-5818](https://openlmis.atlassian.net/browse/OLMIS-5818): Fixed a bug with the selected status not being shown on the View Orders page.
 
