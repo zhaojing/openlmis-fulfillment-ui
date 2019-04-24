@@ -32,7 +32,7 @@ services:
     volumes:
       - '/openlmis-referencedata-ui'
   stockmanagement-ui:
-    image: openlmis/stockmanagement-ui:2.0.3-SNAPSHOT
+    image: openlmis/stockmanagement-ui:2.0.3-RC2
     volumes:
      - '/openlmis-stockmanagement-ui'
   ui-components:
@@ -44,7 +44,7 @@ services:
     volumes:
       - '/openlmis-ui-layout'
   cce-ui:
-    image: openlmis/cce-ui:1.0.3-SNAPSHOT
+    image: openlmis/cce-ui:1.0.3-RC2
     volumes:
       - '/openlmis-cce-ui'
   image:
