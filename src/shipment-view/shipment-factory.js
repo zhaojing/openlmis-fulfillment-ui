@@ -66,7 +66,10 @@
                             return shipmentViewLineItems.concat(
                                 summary.canFulfillForMe.map(function(canFulfillForMe) {
                                     return {
-                                        orderable: canFulfillForMe.orderable,
+                                        orderable: {
+                                            id: canFulfillForMe.orderable.id,
+                                            versionNumber: canFulfillForMe.orderable.meta.versionNumber,
+                                        },
                                         lot: canFulfillForMe.lot,
                                         quantityShipped: 0
                                     };
