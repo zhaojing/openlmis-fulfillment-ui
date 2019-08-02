@@ -17,7 +17,7 @@ describe('ShipmentFactory', function() {
 
     var shipmentFactory, ShipmentFactory, stockCardRepositoryImplMock, $q, $rootScope,
         OrderDataBuilder, order, StockCardSummaryDataBuilder, CanFulfillForMeEntryDataBuilder,
-        stockCardSummaries;
+        stockCardSummaries, OrderableDataBuilder;
 
     beforeEach(function() {
         module('shipment-view', function($provide) {
@@ -38,6 +38,7 @@ describe('ShipmentFactory', function() {
             OrderDataBuilder = $injector.get('OrderDataBuilder');
             StockCardSummaryDataBuilder = $injector.get('StockCardSummaryDataBuilder');
             CanFulfillForMeEntryDataBuilder = $injector.get('CanFulfillForMeEntryDataBuilder');
+            OrderableDataBuilder = $injector.get('OrderableDataBuilder');
         });
 
         shipmentFactory = new ShipmentFactory();
@@ -47,14 +48,22 @@ describe('ShipmentFactory', function() {
         stockCardSummaries = [
             new StockCardSummaryDataBuilder()
                 .withCanFulfillForMe([
-                    new CanFulfillForMeEntryDataBuilder().buildJson(),
-                    new CanFulfillForMeEntryDataBuilder().buildJson()
+                    new CanFulfillForMeEntryDataBuilder()
+                        .withOrderable(new OrderableDataBuilder().build())
+                        .buildJson(),
+                    new CanFulfillForMeEntryDataBuilder()
+                        .withOrderable(new OrderableDataBuilder().build())
+                        .buildJson()
                 ])
                 .build(),
             new StockCardSummaryDataBuilder()
                 .withCanFulfillForMe([
-                    new CanFulfillForMeEntryDataBuilder().buildJson(),
-                    new CanFulfillForMeEntryDataBuilder().buildJson()
+                    new CanFulfillForMeEntryDataBuilder()
+                        .withOrderable(new OrderableDataBuilder().build())
+                        .buildJson(),
+                    new CanFulfillForMeEntryDataBuilder()
+                        .withOrderable(new OrderableDataBuilder().build())
+                        .buildJson()
                 ])
                 .build()
         ];
@@ -104,25 +113,37 @@ describe('ShipmentFactory', function() {
 
             expect(result.order).toEqual(order);
             expect(result.lineItems[0]).toEqual({
-                orderable: stockCardSummaries[0].canFulfillForMe[0].orderable,
+                orderable: {
+                    id: stockCardSummaries[0].canFulfillForMe[0].orderable.id,
+                    versionNumber: stockCardSummaries[0].canFulfillForMe[0].orderable.meta.versionNumber
+                },
                 lot: stockCardSummaries[0].canFulfillForMe[0].lot,
                 quantityShipped: 0
             });
 
             expect(result.lineItems[1]).toEqual({
-                orderable: stockCardSummaries[0].canFulfillForMe[1].orderable,
+                orderable: {
+                    id: stockCardSummaries[0].canFulfillForMe[1].orderable.id,
+                    versionNumber: stockCardSummaries[0].canFulfillForMe[1].orderable.meta.versionNumber
+                },
                 lot: stockCardSummaries[0].canFulfillForMe[1].lot,
                 quantityShipped: 0
             });
 
             expect(result.lineItems[2]).toEqual({
-                orderable: stockCardSummaries[1].canFulfillForMe[0].orderable,
+                orderable: {
+                    id: stockCardSummaries[1].canFulfillForMe[0].orderable.id,
+                    versionNumber: stockCardSummaries[1].canFulfillForMe[0].orderable.meta.versionNumber
+                },
                 lot: stockCardSummaries[1].canFulfillForMe[0].lot,
                 quantityShipped: 0
             });
 
             expect(result.lineItems[3]).toEqual({
-                orderable: stockCardSummaries[1].canFulfillForMe[1].orderable,
+                orderable: {
+                    id: stockCardSummaries[1].canFulfillForMe[1].orderable.id,
+                    versionNumber: stockCardSummaries[1].canFulfillForMe[1].orderable.meta.versionNumber
+                },
                 lot: stockCardSummaries[1].canFulfillForMe[1].lot,
                 quantityShipped: 0
             });

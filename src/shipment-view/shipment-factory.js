@@ -68,7 +68,7 @@
                                     return {
                                         orderable: {
                                             id: canFulfillForMe.orderable.id,
-                                            versionNumber: canFulfillForMe.orderable.meta.versionNumber,
+                                            versionNumber: canFulfillForMe.orderable.meta.versionNumber
                                         },
                                         lot: canFulfillForMe.lot,
                                         quantityShipped: 0

@@ -1,6 +1,9 @@
 6.0.3 / 2019-05-27
 ==================
 
+New functionality added in a backwards-compatible manner:
+* [OLMIS-6392](https://openlmis.atlassian.net/browse/OLMIS-6392): Adjusted shipment line item to use orderable versioning.
+
 Bug fixes:
 * [OLMIS-5818](https://openlmis.atlassian.net/browse/OLMIS-5818): Fixed a bug with the selected status not being shown on the View Orders page.
 * [OLMIS-6330](https://openlmis.atlassian.net/browse/OLMIS-6330): fixed trigerring reference-ui build.
