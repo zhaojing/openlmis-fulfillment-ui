@@ -1,3 +1,15 @@
+6.0.4 / 2019-10-17
+==================
+
+Improvements:
+* Updated dev-ui version to 9.0.1.
+* Updated ui-components version to 7.2.0.
+* Updated auth-ui version to 6.2.1.
+* Updated ui-layout version to 5.1.4.
+* Updated referencedata-ui version to 5.6.0.
+* Updated stockmanagement-ui version to 2.0.4.
+* Updated cce-ui version to 1.0.4.
+
 6.0.3 / 2019-05-27
 ==================
 
