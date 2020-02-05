@@ -1,9 +1,9 @@
 {
-    "proofOfDelivery.positive": "This field must be a non-negative number",
-    "proofOfDelivery.required": "This field is required",
-    "proofOfDelivery.canNotAcceptMoreThanShipped": "You can't accept more stock than was shipped",
-    "proofOfDelivery.canNotSpecifyReasonForRejectionIfNotRejectingAnything": "You can't specify reason for rejections if not rejecting anything",
-    "proofOfDelivery.vvmStatusIsRequired": "VVM status is required when some products were accepted",
-    "proofOfDelivery.cannotSelectVvmStatusWhenNothingAccepted": "Cannot select VVM Status when nothing was accepted",
-    "proofOfDelivery.preparingProofOfDelivery": "Preparing Proof of Delivery..."
+    "proofOfDelivery.positive": "此项只能填入正数",
+    "proofOfDelivery.required": "此项为必填项",
+    "proofOfDelivery.canNotAcceptMoreThanShipped": "您所接收的库存量不能超过运输量",
+    "proofOfDelivery.canNotSpecifyReasonForRejectionIfNotRejectingAnything": "无法填写拒绝原因，因为您还没有拒收过任何申请",
+    "proofOfDelivery.vvmStatusIsRequired": "接收部分产品时，须确认疫苗温度检测卡状态",
+    "proofOfDelivery.cannotSelectVvmStatusWhenNothingAccepted": "您没有接收产品，则不可选择疫苗温度检测卡状态",
+    "proofOfDelivery.preparingProofOfDelivery": "正在准备交货证明..."
 }

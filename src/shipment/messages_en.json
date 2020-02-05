@@ -1,4 +1,4 @@
 {
-    "shipment.fillQuantityCannotExceedStockOnHand": "Can't exceed available stock on hand",
-    "shipment.required": "This field is required"
+    "shipment.fillQuantityCannotExceedStockOnHand": "此数量不可超过当前可用库存",
+    "shipment.required": "此项为必填项"
 }

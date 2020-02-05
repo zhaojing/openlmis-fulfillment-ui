@@ -1,11 +1,11 @@
 {
-    "order.orders": "Orders",
+    "order.orders": "订单",
 
-    "orderStatus.ORDERED": "Ordered",
-    "orderStatus.FULFILLING": "Fulfilling",
-    "orderStatus.SHIPPED": "Shipped",
-    "orderStatus.RECEIVED": "Received",
-    "orderStatus.TRANSFER_FAILED": "Transfer Failed",
-    "orderStatus.IN_ROUTE": "In Route",
-    "orderStatus.READY_TO_PACK": "Ready to pack"
+    "orderStatus.ORDERED": "已订购",
+    "orderStatus.FULFILLING": "执行中",
+    "orderStatus.SHIPPED": "已运输",
+    "orderStatus.RECEIVED": "已收到",
+    "orderStatus.TRANSFER_FAILED": "转换失败",
+    "orderStatus.IN_ROUTE": "在途",
+    "orderStatus.READY_TO_PACK": "准备打包"
 }
